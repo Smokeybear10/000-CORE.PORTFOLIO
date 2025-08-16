@@ -1,0 +1,2169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thomas Ou • Education & Experience</title>
+  <!-- Google Fonts for modern look -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:900,700,400|Inter:400,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton:wght@400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- GSAP -->
+  <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
+  <!-- Model Viewer for 3D GLB files -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <!-- Three.js and Vanta.js for animated backgrounds -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://unpkg.com/vanta/dist/vanta.net.min.js"></script>
+  <script src="https://unpkg.com/vanta/dist/vanta.dots.min.js"></script>
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Base styles to prevent bounce scrolling */
+    html, body {
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      overscroll-behavior: none;
+      -webkit-overscroll-behavior: none;
+      opacity: 0;
+      animation: easeIn 0.8s ease-out forwards;
+    }
+
+    @keyframes easeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* STARTUP PRELOADER */
+    .startup-preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      z-index: 9999;
+      display: flex;
+      background: #000000;
+      overflow: hidden;
+    }
+
+    .preloader-bar {
+      width: 10%;
+      height: 100%;
+      background: #000000;
+      transform: translateY(0);
+      will-change: transform;
+      position: relative;
+    }
+
+    .startup-name-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
+      font-size: clamp(8rem, 20vw, 12rem);
+      font-weight: 400;
+      color: #ffffff;
+      line-height: 1;
+      overflow: hidden;
+      letter-spacing: 0.1em;
+    }
+
+    .startup-name-text span {
+      display: inline-block;
+      transform: translateY(100%);
+    }
+
+    /* Custom container for experience page */
+    .experience-container {
+      width: 100%;
+      min-height: 320vh;
+      margin: 0;
+      padding: 2rem;
+      border: none;
+      background: #000000;
+      box-sizing: border-box;
+      cursor: auto !important;
+      position: relative;
+    }
+
+    /* Vaporwave grid overlay */
+    .experience-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(255, 165, 0, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 165, 0, 0.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+      background-position: 0 0;
+      animation: gridMoveContained 8s linear infinite;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+    
+    @keyframes gridMoveContained {
+      0% {
+        background-position: 0px 0px;
+      }
+      100% {
+        background-position: 60px 60px;
+      }
+    }
+
+    @keyframes gradientShift {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+
+    
+
+
+    /* Full width content */
+    .content-section {
+      width: 100%;
+      height: 300vh;
+      padding: 2rem 2rem 0 2rem;
+      overflow: visible;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      cursor: auto !important;
+      position: relative;
+      z-index: 2;
+      border: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    /* Section titles */
+    .section-title {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      line-height: 0.9;
+    }
+
+    .title-subtitle {
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: 'Fira Mono', 'Consolas', monospace;
+      color: #ffffff;
+      text-align: left;
+      letter-spacing: 0.1em;
+      margin-top: 1rem;
+      opacity: 1;
+      text-transform: uppercase;
+    }
+
+    .title-experience-white {
+      font-size: 8rem;
+      font-weight: 900;
+      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
+      color: #ffffff;
+      text-align: left;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 10;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .title-experience {
+      font-size: 8rem;
+      font-weight: 900;
+      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
+      background: linear-gradient(90deg, #ff00ff, #00ffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-align: left;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin: 0;
+    }
+
+    .title-journey {
+      font-size: 30rem;
+      font-weight: 900;
+      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
+      background: linear-gradient(90deg, #ff00ff, #00ffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-align: left;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin: 0;
+    }
+
+    /* Left half - Thomas section */
+    .left-section {
+      position: fixed;
+      top: 5vh;
+      right: 50%;
+      width: min(50%, 600px);
+      height: 90vh;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      text-align: center;
+      padding-top: 5vh;
+      border: none;
+    }
+
+    /* 3D Bull Head Container */
+    .bull-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      display: none; /* Hide the bull head */
+    }
+
+    /* 3D Horse Head Container */
+    .horse-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      z-index: 5;
+      border: none;
+    }
+
+    .horse-container.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+
+
+
+
+
+
+    /* Dropdown Container in left section */
+    .left-section .dropdown-container {
+      position: relative;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      z-index: 3;
+      background: rgba(0, 0, 0, 0.1);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      border-radius: 15px;
+    }
+
+    /* Top Container */
+    .top-container {
+      position: absolute;
+      top: 25vh;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(100%, 1200px);
+      height: 50vh;
+      padding: 0;
+      z-index: 3;
+      border: none;
+    }
+
+    /* Right half - Content */
+    .right-section {
+      position: absolute;
+      top: 70vh;
+      left: 50%;
+      width: min(50%, 600px);
+      min-height: 100vh;
+      padding: 0;
+      overflow-y: visible;
+      z-index: 2;
+    }
+
+    /* Section dim effect when not in focus */
+    .timeline-container,
+    .cards-container {
+      opacity: 0.3;
+      transition: opacity 0.6s ease;
+    }
+
+    .timeline-container.in-view,
+    .cards-container.in-view {
+      opacity: 1 !important;
+    }
+
+    /* Timeline styles */
+    .timeline-container {
+      position: relative;
+      padding: 2rem 0;
+      margin: 3rem 0;
+    }
+
+    .timeline-track {
+      position: absolute;
+      left: 49px;
+      top: 76px;
+      height: calc(100% - 150px);
+      width: 3px;
+      background: linear-gradient(180deg, #ffffff 0%, #ffffff 70%, rgba(255, 255, 255, 0.5) 85%, rgba(255, 255, 255, 0) 100%);
+      border-radius: 2px;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-left: 80px;
+      padding-bottom: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: 42px;
+      top: 30px;
+      width: 16px;
+      height: 16px;
+      background: linear-gradient(135deg, #ff00ff, #00ffff);
+      border: 3px solid #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+      z-index: 2;
+    }
+
+    .timeline-content {
+      background: transparent;
+      border-radius: 12px;
+      padding: 1.5rem;
+      border-left: none;
+      transition: all 0.3s ease;
+    }
+
+    .timeline-content:hover {
+      background: rgba(255, 0, 255, 0.08);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(255, 0, 255, 0.2);
+    }
+
+    .timeline-content h3 {
+      margin: 0 0 0.5rem 0;
+      color: #ffffff;
+      font-family: 'Fira Mono', 'Consolas', monospace;
+      font-size: 1.125rem;
+    }
+
+    .timeline-school {
+      font-weight: 600;
+      color: #00ffff;
+      margin-bottom: 1rem;
+      font-family: 'Fira Mono', 'Consolas', monospace;
+      text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    }
+
+    .course-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .course-pill {
+      background: transparent;
+      color: #ffffff;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      font-family: 'Fira Mono', 'Consolas', monospace;
+      border: 1px solid #ffffff;
+      box-shadow: none;
+      text-shadow: none;
+    }
+
+    /* Section titles */
+    .section-title {
+      font-size: 3rem;
+      font-weight: 900;
+      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
+      color: #ffffff;
+      margin: 4rem 0 1rem 0;
+      text-align: left;
+      transform: scaleY(1.7);
+      line-height: 1.05;
+    }
+
+    /* First section title */
+    .section-title:first-of-type {
+      margin-top: 1rem;
+    }
+
+    /* Card styles for experience and research */
+    .cards-container {
+      display: grid;
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .card {
+      background: transparent;
+      border: none;
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      border-color: #ff00ff;
+      box-shadow: 0 4px 30px rgba(255, 0, 255, 0.4), 0 0 20px rgba(0, 255, 255, 0.2);
+      background: rgba(255, 0, 255, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .card:hover .card-arrow {
+      transform: scale(1.8);
+    }
+
+    .card-header h3 {
+      margin: 0 0 0.5rem 0;
+      color: #ffffff;
+      font-family: 'Fira Mono', 'Consolas', monospace;
+      font-size: 1.125rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-arrow {
+      color: #00ffff;
+      font-size: 1.2rem;
+      text-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
+      transition: transform 0.3s ease;
+    }
+
+    .card-company {
+      font-weight: 600;
+      color: #00ffff;
+      margin-bottom: 0.25rem;
+      font-family: 'Fira Mono', 'Consolas', monospace;
+      text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    }
+
+    .card-location {
+      color: #f5f5f5;
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+      font-family: 'Fira Mono', 'Consolas', monospace;
+    }
+
+    .card-preview p {
+      margin: 0;
+      color: #ffffff;
+      line-height: 1.6;
+      font-family: 'Fira Mono', 'Consolas', monospace;
+      text-align: left;
+    }
+
+    /* Override Thomas text to be white */
+    .left-section .hello-i-am,
+    .left-section .thomas-name {
+      color: #ffffff !important;
+    }
+
+    /* Summary text - white with different font */
+    .left-section .about-hi-sub {
+      color: #ffffff !important;
+      font-family: 'Inter', Arial, sans-serif !important;
+      font-weight: 400 !important;
+    }
+
+    /* Add vertical stretch transform to navigation and icons */
+    .left-section .education-nav-subtitle {
+      transform: scaleY(1) !important;
+      margin-top: 2rem;
+    }
+
+    .left-section .thomas-ou-social-links {
+      transform: scaleY(1) !important;
+    }
+
+    /* CUSTOM CURSOR */
+    #custom-cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      opacity: 1;
+      z-index: 999999;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: normal;
+      transition: opacity 0.3s ease;
+      display: block;
+    }
+
+    /* Hide default cursor globally - FORCE HIDE ALL CURSORS */
+    * {
+      cursor: none !important;
+    }
+    
+    *:hover {
+      cursor: none !important;
+    }
+    
+    html {
+      cursor: none !important;
+    }
+    
+    body {
+      cursor: none !important;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    body * {
+      cursor: none !important;
+    }
+    
+    /* Override all possible cursor styles */
+    a, button, input, textarea, select, [role="button"], .clickable,
+    .card, .nav-link, .tech, .mute-container, .vaporwave-arrow,
+    .stack-text, .modal, .close, svg, path {
+      cursor: none !important;
+    }
+    
+    a:hover, button:hover, input:hover, textarea:hover, select:hover,
+    [role="button"]:hover, .clickable:hover, .card:hover,
+    .nav-link:hover, .tech:hover, .mute-container:hover, .vaporwave-arrow:hover,
+    .stack-text:hover, .modal:hover, .close:hover, svg:hover, path:hover {
+      cursor: none !important;
+    }
+
+    /* MY JOURNEY Title */
+    .journey-title {
+      position: absolute;
+      top: 0.5rem;
+      left: 0.5rem;
+      z-index: 10;
+      opacity: 1;
+    }
+
+    .journey-text {
+      font-size: min(8rem, 15vw);
+      font-weight: 900;
+      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
+      background: linear-gradient(90deg, #ff00ff, #00ffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-align: left;
+      letter-spacing: 0.005em;
+      text-transform: uppercase;
+      margin: 0;
+      line-height: 0.9;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .journey-text div {
+      font-size: min(8rem, 15vw);
+      font-weight: 900;vw
+      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
+      background: linear-gradient(90deg, #ff00ff, #00ffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-align: left;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin: 0;
+    }
+
+    /* SCROLL PROGRESS INDICATOR */
+    .scroll-progress {
+      position: fixed;
+      top: 50%;
+      right: 2%;
+      transform: translateY(-50%);
+      width: 6px;
+      height: 100px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+      z-index: 100;
+    }
+
+    .scroll-progress-bar {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, #ff00ff 0%, #00ffff 100%);
+      border-radius: 3px;
+      transform: translateY(-100%);
+      transition: transform 0.1s ease-out;
+      box-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+    }
+
+    /* Navigation menu bottom right */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0rem;
+      right: 0rem;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      align-items: flex-end;
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      padding: 1rem 2rem;
+      border-radius: 15px;
+      border: none;
+    }
+
+    .nav-link {
+      color: #ffffff;
+      font-family: 'Fira Mono', 'Consolas', monospace;
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      white-space: nowrap;
+      position: relative;
+    }
+
+
+    .nav-link::before {
+      content: '';
+      position: absolute;
+      left: -2.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 40px;
+      height: 40px;
+      background-image: url('Hand.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .nav-link:nth-child(3)::before {
+      background-image: url('Dophin.png');
+    }
+
+    .nav-link:hover {
+      color: #00ffff;
+    }
+
+    .nav-link:hover::before {
+      opacity: 1;
+    }
+
+    /* Mute icon and vaporwave text */
+    .mute-container {
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+    }
+
+    .mute-icon {
+      width: 24px;
+      height: 24px;
+      fill: #ffffff;
+      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+      transition: all 0.3s ease;
+    }
+
+    .mute-text {
+      color: #ffffff;
+      font-family: 'Inter', Arial, sans-serif;
+      font-size: 1rem;
+      font-weight: 400;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .mute-text::before {
+      content: '';
+      position: absolute;
+      right: calc(100% + 2rem);
+      top: 50%;
+      transform: translateY(-50%);
+      width: 30px;
+      height: 30px;
+      background-image: url('Hand.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 10;
+    }
+
+    .mute-text:hover::before {
+      opacity: 1;
+    }
+
+    .mute-container:hover .mute-icon {
+      fill: #ff00ff;
+      filter: drop-shadow(0 0 15px rgba(255, 0, 255, 0.8));
+    }
+
+    .mute-container:hover .mute-text {
+      color: #ff00ff;
+      text-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+    }
+
+    /* Table of Contents */
+    .table-of-contents {
+      position: relative;
+      margin: 0 0 0.5rem 0;
+      width: 100%;
+      border: 1px solid #ffffff;
+    }
+
+    .toc-header {
+      display: block;
+      width: 100%;
+      padding: 0;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .toc-title {
+      color: #ffffff;
+      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
+      font-size: 2rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      text-align: center;
+      transition: color 0.3s ease;
+      margin-left: 0;
+      padding-left: 0;
+    }
+
+    .toc-title:hover {
+      color: #00ffff;
+    }
+
+
+    .toc-dropdown {
+      background: transparent;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      border: none;
+      border-radius: 0;
+      padding: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      z-index: 100;
+    }
+
+    .table-of-contents:hover .toc-dropdown {
+      max-height: 500px;
+    }
+
+
+    .table-of-contents:hover .toc-header {
+      border-radius: 15px 15px 0 0;
+      border-bottom-color: transparent;
+    }
+
+    .toc-item {
+      color: #ffffff;
+      font-family: 'Fira Mono', 'Consolas', monospace;
+      font-size: 1.25rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      padding: 0;
+      text-align: left;
+      border-left: 3px solid transparent;
+      padding-left: 0;
+      display: block;
+    }
+
+    .toc-item:hover {
+      color: #ff00ff;
+      text-shadow: 0 0 15px rgba(255, 0, 255, 0.8);
+      border-left-color: #ff00ff;
+      padding-left: 2rem;
+    }
+
+    .toc-item:nth-child(2):hover {
+      color: #00ffff;
+      text-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+      border-left-color: #00ffff;
+    }
+
+    .toc-item:nth-child(3):hover {
+      color: #ffa500;
+      text-shadow: 0 0 15px rgba(255, 165, 0, 0.8);
+      border-left-color: #ffa500;
+    }
+
+    /* Left Navigation */
+    .left-nav {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      width: 100%;
+      margin-bottom: 2rem;
+    }
+
+    .nav-item {
+      color: #ffffff;
+      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
+      font-size: 1.5rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      opacity: 0.6;
+    }
+
+    .nav-item:hover {
+      color: #00ffff;
+      opacity: 1;
+      text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    }
+
+    .nav-item.active {
+      color: #ff00ff;
+      opacity: 1;
+      text-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+    }
+
+    /* Profile Photo */
+    .profile-photo {
+      width: 35vh;
+      height: 35vh;
+      margin: 0;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid #ff00ff;
+      box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+      transition: all 0.3s ease;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    .profile-photo:hover {
+      border-color: #00ffff;
+      box-shadow: 0 0 25px rgba(0, 255, 255, 0.6);
+    }
+
+    .profile-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Navigation Buttons */
+    .nav-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 2rem 0;
+      width: 80%;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: 2px solid #ffffff;
+      color: #ffffff;
+      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .nav-btn:hover {
+      background: transparent;
+      border-color: #00ffff;
+      color: #ffffff;
+      text-shadow: none;
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+    }
+
+    .nav-btn.active {
+      background: transparent;
+      border-color: #ff00ff;
+      color: #ffffff !important;
+      text-shadow: none !important;
+      box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
+    }
+
+    /* Hello navigation buttons base styles */
+    .hello-nav-btn {
+      cursor: none !important;
+      pointer-events: auto !important;
+      position: relative !important;
+      z-index: 20 !important;
+      transition: all 0.3s ease !important;
+    }
+
+    /* Resume link hover effects */
+    .resume-link:hover {
+      background: linear-gradient(135deg, rgba(255, 0, 255, 0.4), rgba(0, 255, 255, 0.4)) !important;
+      border-image: linear-gradient(45deg, #00ffff, #ff00ff, #00ffff) 1 !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 50px rgba(255, 0, 255, 0.8), 0 0 30px rgba(0, 255, 255, 0.6), inset 0 0 30px rgba(255, 255, 255, 0.2) !important;
+      transform: translateY(-5px) scale(1.08) !important;
+    }
+
+    .resume-link:hover div {
+      left: 100% !important;
+    }
+
+    /* Hello visible elements */
+    .hello-visible {
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      position: absolute;
+      z-index: 15;
+    }
+
+    .hello-visible.show {
+      opacity: 1;
+    }
+
+         /* Position photo and buttons specifically */
+     .profile-photo.hello-visible {
+       top: 5vh;
+       left: 3rem;
+       transform: none;
+     }
+
+    .nav-buttons.hello-visible {
+      top: 80vh;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .nav-buttons.permanent-buttons {
+      position: absolute;
+      top: 80vh;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      z-index: 15;
+    }
+
+    .nav-buttons.permanent-buttons.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* EDUCATION Title fade effect */
+    .education-title {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .education-title.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Navigation buttons fade effect */
+    .nav-buttons.permanent-buttons {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .nav-buttons.permanent-buttons.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Hide profile photo and remove margins in mobile/vertical mode */
+    @media (orientation: portrait), (max-width: 768px) {
+      .profile-photo {
+        display: none !important;
+      }
+      
+      /* Hide green container (left-section) in vertical mode */
+      .left-section {
+        display: none !important;
+      }
+      
+      /* Hide mute container in vertical mode */
+      .mute-container {
+        display: none !important;
+      }
+      
+      /* Make yellow container (top-container) 90vw and center it */
+      .top-container {
+        width: 90vw !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        padding: 1rem !important;
+        box-sizing: border-box !important;
+        top: 28vh !important;
+      }
+      
+      /* Make text and buttons fit inside the yellow container */
+      .hello-section {
+        margin: 1rem 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+      }
+      
+      /* Navigation buttons section - fit inside container */
+      .hello-section:last-of-type {
+        margin: 1rem 0 !important;
+        width: 100% !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+      }
+      
+      /* Make orange container (right-section) 90vw and center it */
+      .right-section {
+        width: 90vw !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        padding: 1rem !important;
+        box-sizing: border-box !important;
+      }
+      
+      /* Add section titles above each section */
+      .timeline-container::before {
+        content: 'EDUCATION';
+        display: block;
+        font-size: 3rem;
+        font-weight: 900;
+        font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
+        background: linear-gradient(90deg, #ff00ff, #00ffff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-align: center;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        margin: 0 0 1.5rem 0;
+        line-height: 1;
+      }
+      
+      .experience-cards::before {
+        content: 'EXPERIENCE';
+        display: block;
+        font-size: 3rem;
+        font-weight: 900;
+        font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
+        background: linear-gradient(90deg, #ff00ff, #00ffff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-align: center;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        margin: 0 0 0 0;
+        line-height: 1;
+      }
+      
+      .research-cards::before {
+        content: 'RESEARCH';
+        display: block;
+        font-size: 3rem;
+        font-weight: 900;
+        font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
+        background: linear-gradient(90deg, #ff00ff, #00ffff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-align: center;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        margin: 0 0 0 0
+        line-height: 1;
+      }
+      
+      /* Make red container (experience-container) extend to bottom of orange container */
+      .experience-container {
+        min-height: 100vh !important;
+        height: 350vh !important;
+      }
+      
+      /* Fix timeline alignment in vertical mode */
+      .timeline-track {
+        left: 38px !important;
+        top: 160px !important;
+        height: calc(100% - 280px) !important;
+      }
+      
+      .timeline-item {
+        padding-left: 60px !important;
+        margin-bottom: 2rem !important;
+      }
+      
+      .timeline-dot {
+        left: 32px !important;
+        top: 40px;
+        width: 14px !important;
+        height: 14px !important;
+      }
+      
+      /* Reduce spacer between sections in vertical mode */
+      .right-section > div[style*="height: 2rem"] {
+        height: 1rem !important;
+        margin: 0rem 0 !important;
+      }
+      
+    }
+
+    /* Show container outlines for debugging layout - DISABLED */
+    /*
+    .experience-container {
+      border: 2px solid red !important;
+    }
+    
+    .content-section {
+      border: 2px solid blue !important;
+    }
+    
+    .left-section {
+      border: 2px solid green !important;
+    }
+    
+    .top-container {
+      border: 2px solid yellow !important;
+    }
+    
+    .right-section {
+      border: 2px solid orange !important;
+    }
+    
+    .timeline-container {
+      border: 2px solid purple !important;
+    }
+    
+    .cards-container {
+      border: 2px solid cyan !important;
+    }
+    */
+    
+    /* Show timeline container border for debugging - DISABLED */
+    /*
+    .timeline-container {
+      border: 2px solid purple !important;
+    }
+    */
+
+  </style>
+<script defer src="script.js"></script>
+</head>
+<body>
+
+  <!-- Custom Cursor -->
+  <svg id="custom-cursor" width="27" height="30" viewBox="0 0 27 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20.0995 11.0797L3.72518 1.13204C2.28687 0.258253 0.478228 1.44326 0.704999 3.11083L3.28667 22.0953C3.58333 24.2768 7.33319 24.6415 8.3792 22.7043C9.5038 20.6215 10.8639 18.7382 12.43 17.7122C13.996 16.6861 16.2658 16.1911 18.6244 15.9918C20.8181 15.8063 21.9811 12.2227 20.0995 11.0797Z" fill="#ff00ff" stroke="rgba(255,0,255,0.5)" stroke-width="1"/>
+  </svg>
+
+  <!-- Startup Preloader -->
+  <div id="startup-preloader" class="startup-preloader">
+    <!-- Vertical bars -->
+    <div class="preloader-bar bar-1"></div>
+    <div class="preloader-bar bar-2"></div>
+    <div class="preloader-bar bar-3"></div>
+    <div class="preloader-bar bar-4"></div>
+    <div class="preloader-bar bar-5"></div>
+    <div class="preloader-bar bar-6"></div>
+    <div class="preloader-bar bar-7"></div>
+    <div class="preloader-bar bar-8"></div>
+    <div class="preloader-bar bar-9"></div>
+    <div class="preloader-bar bar-10"></div>
+    
+    <!-- Name animation -->
+    <div class="startup-name-text">
+      <span>E</span>
+      <span>X</span>
+      <span>P</span>
+      <span>E</span>
+      <span>R</span>
+      <span>I</span>
+      <span>E</span>
+      <span>N</span>
+      <span>C</span>
+      <span>E</span>
+    </div>
+  </div>
+
+  <!-- Scroll Progress Indicator -->
+  <div class="scroll-progress">
+    <div class="scroll-progress-bar"></div>
+  </div>
+  
+  <!-- Experience Container -->
+  <div class="experience-container">
+    
+
+    
+    <!-- Full Width Content -->
+    <div class="content-section">
+      
+      <!-- PROFESSIONAL EXPERIENCE Title -->
+      <div class="journey-title">
+        <div class="journey-text">
+          <div>PROFESSIONAL</div>
+          <div>EXPERIENCE</div>
+        </div>
+        <div style="font-size: 1rem; font-weight: 600; font-family: 'Fira Mono', 'Consolas', monospace; color: #ffffff; text-align: left; letter-spacing: 0.1em; margin-top: 1rem; opacity: 1; text-transform: uppercase;">
+          scroll down to learn more
+        </div>
+      </div>
+
+      
+      <!-- Left Half - Horse Model -->
+      <div class="left-section">
+        
+        <!-- RESEARCH Title (in front of all) -->
+        <div class="research-title" style="position: fixed; top: 5vh; right: 50%; width: min(50%, 600px); z-index: 3; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;">
+          <div class="research-text" style="font-size: min(9vw, 8rem); font-weight: 900; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; background: linear-gradient(90deg, #ff00ff, #00ffff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-align: center; letter-spacing: 0.05em; text-transform: uppercase; margin: 0; line-height: 0.9; width: 100%;">
+            <div>RESEARCH</div>
+          </div>
+        </div>
+        
+        <!-- EXPERIENCE Title (in front) -->
+        <div class="experience-title" style="position: fixed; top: 5vh; right: 50%; width: min(50%, 600px); z-index: 2; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;">
+          <div class="experience-text" style="font-size: min(9vw, 8rem); font-weight: 900; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; background: linear-gradient(90deg, #ff00ff, #00ffff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-align: center; letter-spacing: -0.02em; text-transform: uppercase; margin: 0; line-height: 0.9; width: 100%;">
+            <div>EXPERIENCE</div>
+          </div>
+        </div>
+        
+        <!-- EDUCATION Title -->
+        <div class="education-title" style="position: fixed; top: 5vh; right: 50%; width: min(50%, 600px); z-index: 1;">
+          <div class="education-text" style="font-size: min(9vw, 8rem); font-weight: 900; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; background: linear-gradient(90deg, #ff00ff, #00ffff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-align: center; letter-spacing: -0.02em; text-transform: uppercase; margin: 0; line-height: 0.9; width: 100%;">
+            <div>EDUCATION</div>
+          </div>
+        </div>
+        
+        
+        <!-- 3D Lion Head (in front of all) -->
+        <div class="lion-container-new" style="position: fixed; top: 5vh; right: 50%; width: min(50%, 600px); height: 80vh; margin-top: 0; z-index: 7; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; border: none;">
+          <model-viewer
+            src="lion_head_4k.glb"
+            alt="3D Lion Head"
+            auto-rotate
+            rotation-per-second="30deg"
+            camera-orbit="0deg 75deg 115%"
+            field-of-view="30deg"
+            shadow-intensity="1"
+            environment-image="neutral"
+            exposure="1"
+            shadow-softness="0.5"
+            style="width: 100%; height: 100%;">
+          </model-viewer>
+        </div>
+        
+        <!-- 3D Bull Head (in front) -->
+        <div class="bull-container-new" style="position: fixed; top: 5vh; right: 50%; width: min(50%, 600px); height: 80vh; margin-top: 0; z-index: 6; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; border: none;">
+          <model-viewer
+            src="bull_head_4k.glb"
+            alt="3D Bull Head"
+            auto-rotate
+            rotation-per-second="30deg"
+            camera-orbit="0deg 75deg 115%"
+            field-of-view="30deg"
+            shadow-intensity="1"
+            environment-image="neutral"
+            exposure="1"
+            shadow-softness="0.5"
+            style="width: 100%; height: 100%;">
+          </model-viewer>
+        </div>
+        
+        <!-- 3D Horse Head -->
+        <div class="horse-container" style="position: fixed; top: 0vh; right: 50%; width: min(50%, 600px); height: 90vh; margin-top: 0;">
+          <model-viewer
+            src="horse_head_4k.glb"
+            alt="3D Horse Head"
+            auto-rotate
+            rotation-per-second="30deg"
+            camera-orbit="0deg 75deg 85%"
+            field-of-view="30deg"
+            shadow-intensity="1"
+            environment-image="neutral"
+            exposure="1"
+            shadow-softness="0.5"
+            style="width: 100%; height: 100%;">
+          </model-viewer>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="nav-buttons permanent-buttons" style="position: absolute; top: 70vh; left: 50%; transform: translateX(-50%); z-index: 15;">
+          <button class="nav-btn">About</button>
+          <button class="nav-btn">Education</button>
+          <button class="nav-btn">Experience</button>
+          <button class="nav-btn">Research</button>
+        </div>
+      </div>
+
+
+      <!-- Top Container -->
+      <div class="top-container">
+        <!-- Hello Thomas Section -->
+        <div class="hello-section" style="font-size: 3rem; font-weight: 900; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; color: #ffffff; margin: 4rem 0 2rem 45vh; text-align: left; transform: scaleY(1.7); line-height: 1.05; opacity: 0.3; transition: opacity 0.6s ease;">Hello. I am Thomas</div>
+        
+        <!-- Profile Photo -->
+        <div class="profile-photo hello-visible">
+          <img src="SchoolPortrait.jpg" alt="Thomas Ou" />
+        </div>
+        
+        <!-- Bio Section -->
+        <div class="hello-section" style="color: #ffffff; font-family: 'Inter', Arial, sans-serif; font-size: 1rem; line-height: 1.6; margin: 0 2rem 2rem 45vh; opacity: 0.3; transition: opacity 0.6s ease;">I’m a mathematician turned software engineer, with experience in data analysis, full-stack web development, and finance. I’m completing my undergraduate degree alongside an accelerated master’s in Philadelphia, while also doing some side research with my professors.</div>
+        
+        <!-- Contact Section -->
+        <div class="hello-section" style="color: #ffffff; font-family: 'Inter', Arial, sans-serif; font-size: 1rem; line-height: 1.6; margin: 0 2rem 2rem 45vh; opacity: 0.3; transition: opacity 0.6s ease;">In the past, I've always found great success in collaborating and connecting with new people. At the moment, I’m working on projects in artificial intelligence and blockchain/Web3. I'd love to connect, so don't hesitate to reach out at contact[at]thomasou[dot]com</div>
+        
+                  <!-- Navigation Buttons under second paragraph -->
+          <div class="hello-section" style="margin: 0 0 2rem 45vh; width: calc(100% - 45vh - 2rem); display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.5rem; opacity: 0.3; transition: opacity 0.6s ease;">
+            <button class="hello-nav-btn" data-section="about" style="background: transparent; border: 2px solid #ffffff; color: #ffffff; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">About</button>
+            <button class="hello-nav-btn" data-section="education" style="background: transparent; border: 2px solid #ffffff; color: #ffffff; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">Education</button>
+            <button class="hello-nav-btn" data-section="experience" style="background: transparent; border: 2px solid #ffffff; color: #ffffff; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">Experience</button>
+            <button class="hello-nav-btn" data-section="research" style="background: transparent; border: 2px solid #ffffff; color: #ffffff; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">Research</button>
+          </div>
+        
+        <!-- Divider -->
+        <div class="hello-section" style="width: 250px; height: 2px; background: linear-gradient(90deg, #ff00ff, #00ffff); margin: 2rem 0 2rem 45vh; border-radius: 1px; box-shadow: 0 0 8px rgba(255, 0, 255, 0.4); opacity: 0.3; transition: opacity 0.6s ease;"></div>
+      </div>
+
+      <!-- Right Half - Content -->
+      <div class="right-section">
+        
+        <!-- Education Section -->
+        <div class="timeline-container">
+          <div class="timeline-track"></div>
+          
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <h3>Accelerated Masters in Computer Science</h3>
+              <div class="timeline-school">University of Pennsylvania</div>
+              <div class="timeline-details">
+                <div class="course-grid">
+                  <span class="course-pill">Machine Learning</span>
+                  <span class="course-pill">Algorithms & Data Structures</span>
+                  <span class="course-pill">Computer Systems</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <h3>Bachelor of Science in Mathematics</h3>
+              <div class="timeline-school">University of Pennsylvania</div>
+              <div class="timeline-details">
+                <div class="course-grid">
+                  <span class="course-pill">Real Analysis</span>
+                  <span class="course-pill">Abstract Algebra</span>
+                  <span class="course-pill">Probability Theory</span>
+                  <span class="course-pill">Statistical Inference</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <h3>High School Diploma</h3>
+              <div class="timeline-school">University of Connecticut</div>
+              <div class="timeline-details">
+                <div class="course-grid">
+                  <span class="course-pill">Multivariable Calculus</span>
+                  <span class="course-pill">Linear Algebra</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Experience Section -->
+        <div class="cards-container experience-cards">
+          
+          <div class="card">
+            <div class="card-header">
+              <h3>Data & Analytics <span class="card-arrow">↗</span></h3>
+              <div class="card-company">Flushing CPA Tax Center</div>
+              <div class="card-location">Spring 2024</div>
+            </div>
+            <div class="card-preview">
+              <p>Engineered ETL pipelines automating high-volume data ingestion, improved projection accuracy by 15%.</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3>Legal Research & NLP <span class="card-arrow">↗</span></h3>
+              <div class="card-company">Offices of Jonathan Spodnick</div>
+              <div class="card-location">Fall 2023</div>
+            </div>
+            <div class="card-preview">
+              <p>Conducted legal research and prepared discovery documentation for state-level personal injury cases.</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3>Fintech Analyst <span class="card-arrow">↗</span></h3>
+              <div class="card-company">CITIC Securities</div>
+              <div class="card-location">Summer 2023</div>
+            </div>
+            <div class="card-preview">
+              <p>Contributed to listing proposal for $11B spaceflight network company by analyzing growth metrics.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Spacer between sections -->
+        <div style="height: 2rem; margin: 1rem 0;"></div>
+
+        <!-- Research Section -->
+        <div class="cards-container research-cards">
+          
+          <div class="card">
+            <div class="card-header">
+              <h3>Research Assistant <span class="card-arrow">↗</span></h3>
+              <div class="card-company">Department of Defense</div>
+              <div class="card-location">Summer 2025</div>
+            </div>
+            <div class="card-preview">
+              <p>Research assistant position with the Department of Defense focusing on advanced technological applications.</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3>Research Assistant <span class="card-arrow">↗</span></h3>
+              <div class="card-company">Princeton Plasma Physics Lab (PPPL)</div>
+              <div class="card-location">Summer 2024</div>
+            </div>
+            <div class="card-preview">
+              <p>Simulated charged particle behavior in tokamak reactors under varied magnetic/plasma conditions.</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Resume Link beneath research -->
+        <div style="text-align: center; margin: 4rem 0;">
+          <a href="#" class="resume-link" style="display: inline-block; background: linear-gradient(135deg, rgba(255, 0, 255, 0.2), rgba(0, 255, 255, 0.2)); border: 3px solid transparent; border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff00ff) 1; color: #ffffff; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-size: 1.3rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.15em; padding: 1.5rem 3rem; border-radius: 0; text-decoration: none; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 30px rgba(255, 0, 255, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.1); position: relative; overflow: hidden;">
+            <span style="position: relative; z-index: 2;">See My Resume</span>
+            <div style="position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent); transition: left 0.6s ease;"></div>
+          </a>
+        </div>
+
+        <!-- Spacer beneath research -->
+        <div style="height: 2rem; margin: 1rem 0;"></div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Custom cursor animation
+    document.addEventListener('DOMContentLoaded', () => {
+      const customCursor = document.getElementById('custom-cursor');
+
+      // Show cursor on all devices
+      // Mouse move handler for custom cursor
+      function handleMouseMove(e) {
+        if (!customCursor) return;
+        
+        gsap.set(customCursor, {
+          x: e.clientX,
+          y: e.clientY,
+          opacity: 1,
+        });
+      }
+      
+      // Touch move handler for mobile
+      function handleTouchMove(e) {
+        if (!customCursor) return;
+        const touch = e.touches[0];
+        
+        gsap.set(customCursor, {
+          x: touch.clientX,
+          y: touch.clientY,
+          opacity: 1,
+        });
+      }
+      
+      // Hide cursor when mouse leaves window
+      function handleMouseLeave() {
+        if (!customCursor) return;
+        gsap.to(customCursor, {
+          opacity: 0,
+          duration: 0.2
+        });
+      }
+      
+      // Force show cursor initially
+      if (customCursor) {
+        customCursor.style.opacity = '1';
+        customCursor.style.display = 'block';
+        customCursor.style.visibility = 'visible';
+      }
+      
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('touchmove', handleTouchMove);
+      window.addEventListener('mouseleave', handleMouseLeave);
+    });
+
+    // Scroll progress indicator
+    document.addEventListener('DOMContentLoaded', () => {
+      const scrollProgressBar = document.querySelector('.scroll-progress-bar');
+
+      function updateScrollProgress() {
+        if (!scrollProgressBar) return;
+        
+        const { scrollHeight, clientHeight } = document.documentElement;
+        const scrollableHeight = scrollHeight - clientHeight;
+        const scrollY = window.scrollY;
+        const scrollProgress = (scrollY / scrollableHeight) * 100;
+        
+        scrollProgressBar.style.transform = `translateY(-${100 - scrollProgress}%)`;
+      }
+
+      // Initial call and scroll listener
+      updateScrollProgress();
+      window.addEventListener('scroll', updateScrollProgress);
+    });
+
+    // Experience text fade effect
+    document.addEventListener('DOMContentLoaded', () => {
+      const experienceWhite = document.querySelector('.title-experience-white');
+      
+      function updateExperienceWhiteOpacity() {
+        const scrollY = window.scrollY;
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight;
+        
+        // Only fade in when reaching the bottom
+        const fadeInPoint = documentHeight - windowHeight - 100; // Start fading in 100px before bottom
+        
+        let opacity = 0;
+        if (scrollY >= fadeInPoint) {
+          opacity = Math.min(1, (scrollY - fadeInPoint) / 100);
+        }
+        
+        if (experienceWhite) {
+          experienceWhite.style.opacity = opacity;
+        }
+      }
+      
+      // Initial call and scroll listeners
+      updateExperienceWhiteOpacity();
+      window.addEventListener('scroll', updateExperienceWhiteOpacity);
+    });
+
+    // Animal containers fade in/out based on section focus
+    document.addEventListener('DOMContentLoaded', () => {
+      const horseContainer = document.querySelector('.horse-container');
+      const bullContainer = document.querySelector('.bull-container-new');
+      const lionContainer = document.querySelector('.lion-container-new');
+      const educationTitle = document.querySelector('.education-title');
+      const navButtons = document.querySelector('.nav-buttons.permanent-buttons');
+      
+      function updateAnimalVisibility() {
+        // Check which section is in focus
+        const timelineContainer = document.querySelector('.timeline-container');
+        const experienceContainer = document.querySelector('.experience-cards');
+        const researchContainer = document.querySelector('.research-cards');
+        
+        const isEducationInFocus = timelineContainer && timelineContainer.classList.contains('in-view');
+        const isExperienceInFocus = experienceContainer && experienceContainer.classList.contains('in-view');
+        const isResearchInFocus = researchContainer && researchContainer.classList.contains('in-view');
+        
+        // Horse shows for education
+        if (horseContainer) {
+          if (isEducationInFocus) {
+            horseContainer.classList.add('visible');
+          } else {
+            horseContainer.classList.remove('visible');
+          }
+        }
+        
+        // Bull shows for experience
+        if (bullContainer) {
+          if (isExperienceInFocus) {
+            bullContainer.style.opacity = '1';
+            bullContainer.style.visibility = 'visible';
+          } else {
+            bullContainer.style.opacity = '0';
+            bullContainer.style.visibility = 'hidden';
+          }
+        }
+        
+        // Lion shows for research
+        if (lionContainer) {
+          if (isResearchInFocus) {
+            lionContainer.style.opacity = '1';
+            lionContainer.style.visibility = 'visible';
+          } else {
+            lionContainer.style.opacity = '0';
+            lionContainer.style.visibility = 'hidden';
+          }
+        }
+        
+        // Research title shows when research is in focus
+        const researchTitle = document.querySelector('.research-title');
+        if (researchTitle) {
+          if (isResearchInFocus) {
+            researchTitle.style.opacity = '1';
+            researchTitle.style.visibility = 'visible';
+          } else {
+            researchTitle.style.opacity = '0';
+            researchTitle.style.visibility = 'hidden';
+          }
+        }
+        
+        // Experience title shows when experience is in focus
+        const experienceTitle = document.querySelector('.experience-title');
+        if (experienceTitle) {
+          if (isExperienceInFocus) {
+            experienceTitle.style.opacity = '1';
+            experienceTitle.style.visibility = 'visible';
+          } else {
+            experienceTitle.style.opacity = '0';
+            experienceTitle.style.visibility = 'hidden';
+          }
+        }
+        
+        // Education title shows when education is in focus
+        if (isEducationInFocus) {
+          if (educationTitle) educationTitle.classList.add('visible');
+        } else {
+          if (educationTitle) educationTitle.classList.remove('visible');
+        }
+        
+        // Nav buttons show when education, experience, OR research is in focus (don't fade out until footer)
+        if (isEducationInFocus || isExperienceInFocus || isResearchInFocus) {
+          if (navButtons) navButtons.classList.add('visible');
+        } else {
+          if (navButtons) navButtons.classList.remove('visible');
+        }
+      }
+      
+      // Initial call and scroll listener
+      updateAnimalVisibility();
+      window.addEventListener('scroll', updateAnimalVisibility);
+      window.addEventListener('resize', updateAnimalVisibility);
+    });
+
+
+    // Single section focus - only one section can be in focus at a time
+    document.addEventListener('DOMContentLoaded', () => {
+      const timelineContainer = document.querySelector('.timeline-container');
+      const experienceContainer = document.querySelector('.experience-cards');
+      const researchContainer = document.querySelector('.research-cards');
+      const helloSection = document.querySelector('.top-container .hello-section'); // Hello I am Thomas section
+      
+      const sections = [
+        { element: timelineContainer, name: 'education' },
+        { element: experienceContainer, name: 'experience' },
+        { element: researchContainer, name: 'research' }
+      ].filter(section => section.element);
+      
+      function updateSectionVisibility() {
+        const windowHeight = window.innerHeight;
+        let activeSection = null;
+        let maxVisibility = 0;
+        
+        // Handle Hello section visibility
+        const helloSections = document.querySelectorAll('.hello-section');
+        const helloVisibleElements = document.querySelectorAll('.hello-visible');
+        let helloInView = false;
+        
+        if (helloSection) {
+          const helloRect = helloSection.getBoundingClientRect();
+          const helloVisibleTop = Math.max(0, helloRect.top);
+          const helloVisibleBottom = Math.min(windowHeight, helloRect.bottom);
+          const helloVisibleHeight = Math.max(0, helloVisibleBottom - helloVisibleTop);
+          const helloVisibilityRatio = helloRect.height > 0 ? helloVisibleHeight / helloRect.height : 0;
+          
+          // If Hello section is significantly visible
+          if (helloVisibilityRatio > 0.3) {
+            helloInView = true;
+            // Brighten hello sections
+            helloSections.forEach(section => {
+              section.style.opacity = '1';
+            });
+            // Show photo and buttons
+            helloVisibleElements.forEach(element => {
+              element.classList.add('show');
+            });
+            // Dim all other sections
+            sections.forEach(section => {
+              section.element.classList.remove('in-view');
+            });
+            // Update hello button styling when hello section is in view
+            if (window.updateHelloButtonStyling) {
+              window.updateHelloButtonStyling('about', true);
+            }
+            return;
+          } else {
+            // Dim hello sections
+            helloSections.forEach(section => {
+              section.style.opacity = '0.3';
+            });
+            // Hide photo and buttons
+            helloVisibleElements.forEach(element => {
+              element.classList.remove('show');
+            });
+          }
+        }
+        
+        // Find which section is most visible
+        sections.forEach(section => {
+          const rect = section.element.getBoundingClientRect();
+          const visibleTop = Math.max(0, rect.top);
+          const visibleBottom = Math.min(windowHeight, rect.bottom);
+          const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+          const totalHeight = rect.height;
+          const visibilityRatio = totalHeight > 0 ? visibleHeight / totalHeight : 0;
+          
+          // Different thresholds for different sections
+          let threshold = 0.3; // Default for education and experience
+          if (section.name === 'research') {
+            threshold = 0.5; // Higher threshold for research - needs more visibility to stay in focus
+          }
+          
+          // Check if we're close to footer for research section
+          let finalVisibilityRatio = visibilityRatio;
+          if (section.name === 'research') {
+            const footer = document.querySelector('footer');
+            if (footer) {
+              const footerRect = footer.getBoundingClientRect();
+              const distanceToFooter = footerRect.top - windowHeight;
+              
+              // If footer is within 200px of viewport, reduce research visibility
+              if (distanceToFooter < 50) {
+                const footerProximity = Math.max(0, (50 - distanceToFooter) / 50);
+                finalVisibilityRatio = visibilityRatio * (1 - footerProximity * 0.8);
+              }
+            }
+          }
+          
+          if (finalVisibilityRatio > maxVisibility && finalVisibilityRatio > threshold) {
+            maxVisibility = finalVisibilityRatio;
+            activeSection = section;
+          }
+        });
+        
+        // Apply focus to most visible section, dim others
+        sections.forEach(section => {
+          if (section === activeSection) {
+            section.element.classList.add('in-view');
+            console.log('Setting as active:', section.name); // Debug
+          } else {
+            section.element.classList.remove('in-view');
+          }
+        });
+
+        // Update navigation button highlighting
+        const navButtons = document.querySelectorAll('.nav-buttons.permanent-buttons .nav-btn');
+        if (navButtons.length >= 4) {
+          // Remove active class from all buttons
+          navButtons.forEach(btn => btn.classList.remove('active'));
+          
+          // Add active class based on current section
+          let currentSectionName = 'about'; // default (top section is About)
+          if (activeSection) {
+            if (activeSection.name === 'education') {
+              navButtons[1]?.classList.add('active'); // Education button
+              currentSectionName = 'education';
+            } else if (activeSection.name === 'experience') {
+              navButtons[2]?.classList.add('active'); // Experience button
+              currentSectionName = 'experience';
+            } else if (activeSection.name === 'research') {
+              navButtons[3]?.classList.add('active'); // Research button
+              currentSectionName = 'research';
+            }
+          } else {
+            // When no section is active, we're in the About section (top)
+            navButtons[0]?.classList.add('active'); // About button
+          }
+          
+          // Store current section globally
+          window.currentSection = currentSectionName;
+          
+          // Update button styling based on new active states
+          if (window.updateButtonStyling) {
+            window.updateButtonStyling();
+          }
+          
+          // Update hello button styling based on current section and hello visibility
+          if (window.updateHelloButtonStyling) {
+            window.updateHelloButtonStyling(currentSectionName, false); // Not in hello section when other sections are active
+          }
+        }
+      }
+      
+      // Initial call and scroll listener
+      updateSectionVisibility();
+      window.addEventListener('scroll', updateSectionVisibility);
+      window.addEventListener('resize', updateSectionVisibility);
+    });
+
+         // Navigation button click handlers
+     document.addEventListener('DOMContentLoaded', () => {
+       const navButtons = document.querySelectorAll('.nav-buttons.permanent-buttons .nav-btn');
+       
+       // Function to update button styling based on active state
+       window.updateButtonStyling = function() {
+         navButtons.forEach((button) => {
+           if (button.classList.contains('active')) {
+             button.style.borderColor = '#ff00ff';
+             button.style.boxShadow = '0 0 15px rgba(255, 0, 255, 0.6)';
+           } else {
+             button.style.borderColor = '#ffffff';
+             button.style.boxShadow = 'none';
+           }
+         });
+       }
+       
+       // Initial styling update
+       window.updateButtonStyling();
+       
+       navButtons.forEach((button, index) => {
+         // Mouse enter event
+         button.addEventListener('mouseenter', () => {
+           if (button.classList.contains('active')) {
+             // Active button gets stronger glow on hover
+             button.style.boxShadow = '0 0 25px rgba(255, 0, 255, 0.8)';
+           } else {
+             // Other buttons get cyan glow on hover
+             button.style.borderColor = '#00ffff';
+             button.style.boxShadow = '0 0 20px rgba(0, 255, 255, 0.6)';
+           }
+           button.style.transform = 'translateY(-2px) scale(1.05)';
+         });
+         
+         // Mouse leave event
+         button.addEventListener('mouseleave', () => {
+           if (button.classList.contains('active')) {
+             // Active button returns to normal magenta glow
+             button.style.borderColor = '#ff00ff';
+             button.style.boxShadow = '0 0 15px rgba(255, 0, 255, 0.6)';
+           } else {
+             // Other buttons return to white
+             button.style.borderColor = '#ffffff';
+             button.style.boxShadow = 'none';
+           }
+           button.style.transform = 'none';
+         });
+         
+         // Click handler
+         button.addEventListener('click', () => {
+           let targetElement = null;
+           
+           // Map buttons to sections (About=0, Education=1, Experience=2, Research=3)
+           switch(index) {
+             case 0: // About - scroll to top
+               window.scrollTo({ top: 0, behavior: 'smooth' });
+               return;
+             case 1: // Education
+               targetElement = document.querySelector('.timeline-container');
+               break;
+             case 2: // Experience
+               targetElement = document.querySelector('.experience-cards');
+               break;
+             case 3: // Research
+               targetElement = document.querySelector('.research-cards');
+               break;
+           }
+           
+           if (targetElement) {
+             targetElement.scrollIntoView({ 
+               behavior: 'smooth',
+               block: 'center'
+             });
+           }
+         });
+       });
+
+       // Hello navigation button click handlers
+       const helloNavButtons = document.querySelectorAll('.hello-nav-btn');
+       
+       // Function to update hello button styling - only About button is magenta when hello section is in view
+       window.updateHelloButtonStyling = function(currentSection, isHelloInView) {
+         helloNavButtons.forEach((button) => {
+           const section = button.getAttribute('data-section');
+           
+           // About button is magenta only when the hello section is actually in view
+           if (isHelloInView && section === 'about') {
+             button.style.borderColor = '#ff00ff';
+             button.style.boxShadow = '0 0 15px rgba(255, 0, 255, 0.6)';
+           } else {
+             button.style.borderColor = '#ffffff';
+             button.style.boxShadow = 'none';
+           }
+         });
+       }
+       
+       // Add hover effects with JavaScript
+       helloNavButtons.forEach((button) => {
+         const section = button.getAttribute('data-section');
+         
+         // Mouse enter event
+         button.addEventListener('mouseenter', () => {
+           if (button.style.borderColor === 'rgb(255, 0, 255)') {
+             // Active button gets stronger glow on hover
+             button.style.boxShadow = '0 0 25px rgba(255, 0, 255, 0.8)';
+           } else {
+             // Other buttons get cyan glow on hover
+             button.style.borderColor = '#00ffff';
+             button.style.boxShadow = '0 0 20px rgba(0, 255, 255, 0.6)';
+           }
+           button.style.transform = 'translateY(-2px) scale(1.05)';
+         });
+         
+         // Mouse leave event
+         button.addEventListener('mouseleave', () => {
+           // Restore the current section styling
+           const isHelloVisible = document.querySelector('.hello-section') && 
+                                 document.querySelector('.hello-section').style.opacity === '1';
+           window.updateHelloButtonStyling(window.currentSection || 'about', isHelloVisible);
+           button.style.transform = 'none';
+         });
+         
+         // Click handler
+         button.addEventListener('click', () => {
+           const section = button.getAttribute('data-section');
+           let targetElement = null;
+           
+           switch(section) {
+             case 'about':
+               window.scrollTo({ top: 0, behavior: 'smooth' });
+               return;
+             case 'education':
+               targetElement = document.querySelector('.timeline-container');
+               break;
+             case 'experience':
+               targetElement = document.querySelector('.experience-cards');
+               break;
+             case 'research':
+               targetElement = document.querySelector('.research-cards');
+               break;
+           }
+           
+           if (targetElement) {
+             targetElement.scrollIntoView({ 
+               behavior: 'smooth',
+               block: 'center'
+             });
+           }
+         });
+       });
+     });
+
+     // Startup Preloader Animation
+     document.addEventListener('DOMContentLoaded', function() {
+       // Force scroll to top on page load/reload
+       window.scrollTo(0, 0);
+       
+       // Startup Preloader Animation
+       const preloader = document.getElementById('startup-preloader');
+       const bars = document.querySelectorAll('.preloader-bar');
+       
+       console.log('Preloader found:', preloader);
+       console.log('Bars found:', bars.length);
+       
+       if (preloader && bars.length > 0) {
+         const tl = gsap.timeline({
+           defaults: {
+             ease: 'power1.inOut',
+           }
+         });
+         
+         // First animate the name letters up (slower)
+         tl.to('.startup-name-text span', {
+           y: 0,
+           stagger: 0.08,
+           duration: 0.3,
+         });
+         
+         // Then animate all bars fading out together
+         tl.to(preloader, {
+           delay: 0.3,
+           autoAlpha: 0,
+           duration: 0.5,
+           ease: 'power2.inOut',
+           onComplete: () => {
+             preloader.style.display = 'none';
+             // Re-enable scrolling after animation completes
+             document.body.style.overflow = 'auto';
+           }
+         })
+       }
+     });
+
+     // Simple navigation with ease-out
+     document.addEventListener('DOMContentLoaded', () => {
+       const navLinks = document.querySelectorAll('.nav-link');
+       
+       navLinks.forEach(link => {
+         link.addEventListener('click', (e) => {
+           e.preventDefault();
+           
+           const linkText = link.textContent.toLowerCase().trim();
+           let targetPage = '';
+           
+           // Map navigation to target pages
+           switch(linkText) {
+             case 'home':
+               targetPage = 'home.html';
+               break;
+             case 'about':
+               targetPage = 'home.html';
+               break;
+             case 'projects':
+               targetPage = 'Projects.html';
+               break;
+             case 'contact':
+               targetPage = 'home.html';
+               break;
+             default:
+               return;
+           }
+           
+           if (targetPage) {
+             // Slow ease-out transition
+             document.body.style.transition = 'opacity 0.8s ease-out';
+             document.body.style.opacity = '0';
+             
+             // Navigate after ease-out
+             setTimeout(() => {
+               window.location.href = targetPage;
+             }, 800);
+           }
+         });
+       });
+     });
+  </script>
+
+  <!-- Mute icon and vaporwave text -->
+  <div class="mute-container">
+    <svg class="mute-icon" viewBox="0 0 24 24">
+      <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+    </svg>
+    <span class="mute-text">vaporwave</span>
+  </div>
+
+  <!-- Bottom navigation -->
+  <div class="bottom-nav" style="background: solid black !important; display: flex !important; flex-direction: column !important; width: 190px !important; height: auto !important; position: fixed !important; bottom: 0.5rem !important; right: 0.5rem !important; margin: 0 !important; padding: 0 !important; border-radius: 15px !important; gap: 0 !important; align-items: stretch !important; border: none !important;">
+    <a href="home.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-size: 1.6rem !important; color: white !important; text-decoration: none !important;">home</a>
+    <a href="home.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-size: 1.6rem !important; color: white !important; text-decoration: none !important;">about</a>
+    <a href="experience.html" class="nav-link active" style="background: none !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-size: 1.6rem !important; color: #00ffff !important; text-decoration: none !important; text-shadow: 0 0 10px rgba(0, 255, 255, 0.8) !important; user-select: none !important; -webkit-user-select: none !important; -moz-user-select: none !important; -ms-user-select: none !important; pointer-events: none !important;">experience</a>
+    <a href="Projects.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-size: 1.6rem !important; color: white !important; text-decoration: none !important;">projects</a>
+    <a href="home.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-size: 1.6rem !important; color: white !important; text-decoration: none !important;">contact</a>
+  </div>
+
+  <style>
+    /* Override hand cursor hover effects for navigation buttons */
+    .bottom-nav .nav-link::before {
+      display: none !important;
+    }
+    
+    .bottom-nav .nav-link:hover::before {
+      display: none !important;
+    }
+    
+    /* Add hover highlighting for nav text */
+    .bottom-nav .nav-link:hover {
+      background: rgba(0, 0, 0, 0.3) !important;
+      color: #00ffff !important;
+      text-shadow: 0 0 10px rgba(0, 255, 255, 0.8) !important;
+      border-radius: 8px !important;
+      transform: scale(1.05) !important;
+      transition: all 0.2s ease !important;
+      backdrop-filter: blur(10px) !important;
+      -webkit-backdrop-filter: blur(10px) !important;
+    }
+    
+    /* Disable hover effects for active nav item */
+    .bottom-nav .nav-link.active:hover {
+      background: none !important;
+      transform: none !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      border-radius: 0 !important;
+    }
+  </style>
+
+
+
+</body>
+</html>
