@@ -21,6 +21,7 @@
     /* Base styles to prevent bounce scrolling */
     html, body {
       overflow-x: hidden;
+      overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       scroll-behavior: smooth;
     }
@@ -45,7 +46,7 @@
     /* Custom container for projects page */
     .projects-container {
       width: 100vw;
-      height: 130vh;
+      min-height: 130vh;
       margin: 0;
       padding: 2rem;
       border: none;
@@ -53,7 +54,8 @@
       background-size: 300% 300%;
       animation: gradientShift 8s ease infinite;
       box-sizing: border-box;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
       cursor: auto !important;
       position: relative;
     }
@@ -179,10 +181,10 @@
       right: 0;
       bottom: 0;
       background-image: 
-        linear-gradient(rgba(255, 0, 255, 0.1) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 0, 255, 0.1) 1px, transparent 1px);
+        linear-gradient(rgba(0, 255, 255, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 0, 255, 0.08) 1px, transparent 1px);
       background-size: 50px 50px;
-      animation: gridMove 5s linear infinite;
+      animation: gridMove 12s linear infinite;
       pointer-events: none;
       z-index: 1;
     }
@@ -980,41 +982,49 @@
     }
 
 
-    /* Hide default cursor globally - FORCE HIDE ALL CURSORS */
-    * {
-      cursor: none !important;
+    /* Hide default cursor on desktop only */
+    @media (hover: hover) and (pointer: fine) {
+      * {
+        cursor: none !important;
+      }
+      
+      *:hover {
+        cursor: none !important;
+      }
+      
+      html {
+        cursor: none !important;
+      }
+      
+      body {
+        cursor: none !important;
+      }
+
+      body * {
+        cursor: none !important;
+      }
     }
     
-    *:hover {
-      cursor: none !important;
-    }
-    
-    html {
-      cursor: none !important;
-    }
-    
+    /* Scrollbar styling */
     body {
-      cursor: none !important;
       scrollbar-width: none;
       -ms-overflow-style: none;
     }
-
-    body * {
-      cursor: none !important;
-    }
     
-    /* Override all possible cursor styles */
-    a, button, input, textarea, select, [role="button"], .clickable,
-    .project-card, .nav-link, .tech, .mute-container, .vaporwave-arrow,
-    .stack-text, .modal, .close, svg, path {
-      cursor: none !important;
-    }
-    
-    a:hover, button:hover, input:hover, textarea:hover, select:hover,
-    [role="button"]:hover, .clickable:hover, .project-card:hover,
-    .nav-link:hover, .tech:hover, .mute-container:hover, .vaporwave-arrow:hover,
-    .stack-text:hover, .modal:hover, .close:hover, svg:hover, path:hover {
-      cursor: none !important;
+    /* Override all possible cursor styles on desktop only */
+    @media (hover: hover) and (pointer: fine) {
+      a, button, input, textarea, select, [role="button"], .clickable,
+      .project-card, .nav-link, .tech, .mute-container, .vaporwave-arrow,
+      .stack-text, .modal, .close, svg, path {
+        cursor: none !important;
+      }
+      
+      a:hover, button:hover, input:hover, textarea:hover, select:hover,
+      [role="button"]:hover, .clickable:hover, .project-card:hover,
+      .nav-link:hover, .tech:hover, .mute-container:hover, .vaporwave-arrow:hover,
+      .stack-text:hover, .modal:hover, .close:hover, svg:hover, path:hover {
+        cursor: none !important;
+      }
     }
 
     /* SCROLL PROGRESS INDICATOR */
@@ -1339,21 +1349,25 @@
         }
       }
       
-      /* Remove ALL pointer cursors from navigation and interactive elements */
-      * {
-        cursor: none !important;
-      }
-      
-      *:hover {
-        cursor: none !important;
-      }
-      
-      /* Force remove cursor on all interactive elements */
+      /* Ensure mobile interactions work properly */
       a, button, input, textarea, select, option, [role="button"], .clickable,
       .bottom-nav, .nav-link, .dropdown, .dropdown-menu, .dropdown-item,
-      .modal, .close {
-        cursor: none !important;
+      .modal, .close, .tech, .project-card {
         pointer-events: auto !important;
+        touch-action: manipulation !important;
+        cursor: pointer !important;
+      }
+      
+      /* Enable scrolling on mobile */
+      body, html {
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        touch-action: pan-y !important;
+      }
+      
+      .projects-container {
+        overflow-y: auto !important;
+        touch-action: pan-y !important;
       }
       
       /* Remove all hand images from ::before pseudo-elements */
