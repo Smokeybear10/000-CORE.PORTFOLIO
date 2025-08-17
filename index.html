@@ -687,7 +687,7 @@
     });
 
 
-    // 3D Cube Setup with Drag Controls
+    // 3D Cube Setup
     document.addEventListener('DOMContentLoaded', async () => {
       const cubeCanvas = document.getElementById('cube-canvas');
       const cubeContainer = document.getElementById('cube-container');
@@ -695,7 +695,7 @@
       if (cubeCanvas && cubeContainer) {
         try {
           // Import Three.js modules for cube
-          const { Scene, PerspectiveCamera, WebGLRenderer, BoxGeometry, Mesh, ShaderMaterial, Color, Vector3, Quaternion } = await import('three');
+          const { Scene, PerspectiveCamera, WebGLRenderer, BoxGeometry, Mesh, ShaderMaterial, Color } = await import('three');
           
           // Cube scene setup
           const cubeScene = new Scene();
@@ -777,121 +777,6 @@
           cubeCamera.position.z = 8;
           cubeCamera.position.y = 0;
           
-          // Drag control variables
-          let isDragging = false;
-          let previousMousePosition = { x: 0, y: 0 };
-          let autoRotation = true;
-          let dragRotationX = 0;
-          let dragRotationY = 0;
-          let baseRotationX = 0;
-          let baseRotationY = 0;
-          let baseRotationZ = 0;
-          
-          // Mouse event handlers for drag controls
-          function onMouseDown(event) {
-            isDragging = true;
-            autoRotation = false;
-            previousMousePosition = {
-              x: event.clientX,
-              y: event.clientY
-            };
-            cubeContainer.style.cursor = 'grabbing';
-          }
-          
-          function onMouseMove(event) {
-            if (!isDragging) return;
-            
-            const deltaMove = {
-              x: event.clientX - previousMousePosition.x,
-              y: event.clientY - previousMousePosition.y
-            };
-            
-            // Sensitivity for rotation
-            const rotationSpeed = 0.01;
-            
-            dragRotationY += deltaMove.x * rotationSpeed;
-            dragRotationX += deltaMove.y * rotationSpeed;
-            
-            // Clamp vertical rotation to prevent flipping
-            dragRotationX = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, dragRotationX));
-            
-            previousMousePosition = {
-              x: event.clientX,
-              y: event.clientY
-            };
-          }
-          
-          function onMouseUp() {
-            isDragging = false;
-            cubeContainer.style.cursor = 'grab';
-            
-            // Resume auto-rotation after a delay
-            setTimeout(() => {
-              if (!isDragging) {
-                autoRotation = true;
-              }
-            }, 2000);
-          }
-          
-          // Touch event handlers for mobile
-          function onTouchStart(event) {
-            if (event.touches.length === 1) {
-              isDragging = true;
-              autoRotation = false;
-              previousMousePosition = {
-                x: event.touches[0].clientX,
-                y: event.touches[0].clientY
-              };
-            }
-          }
-          
-          function onTouchMove(event) {
-            if (!isDragging || event.touches.length !== 1) return;
-            
-            event.preventDefault();
-            
-            const deltaMove = {
-              x: event.touches[0].clientX - previousMousePosition.x,
-              y: event.touches[0].clientY - previousMousePosition.y
-            };
-            
-            const rotationSpeed = 0.01;
-            
-            dragRotationY += deltaMove.x * rotationSpeed;
-            dragRotationX += deltaMove.y * rotationSpeed;
-            
-            dragRotationX = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, dragRotationX));
-            
-            previousMousePosition = {
-              x: event.touches[0].clientX,
-              y: event.touches[0].clientY
-            };
-          }
-          
-          function onTouchEnd() {
-            isDragging = false;
-            
-            setTimeout(() => {
-              if (!isDragging) {
-                autoRotation = true;
-              }
-            }, 2000);
-          }
-          
-          // Add event listeners
-          cubeContainer.addEventListener('mousedown', onMouseDown);
-          cubeContainer.addEventListener('mousemove', onMouseMove);
-          cubeContainer.addEventListener('mouseup', onMouseUp);
-          cubeContainer.addEventListener('mouseleave', onMouseUp);
-          
-          cubeContainer.addEventListener('touchstart', onTouchStart, { passive: false });
-          cubeContainer.addEventListener('touchmove', onTouchMove, { passive: false });
-          cubeContainer.addEventListener('touchend', onTouchEnd);
-          
-          // Set initial cursor style
-          cubeContainer.style.cursor = 'grab';
-          cubeContainer.style.pointerEvents = 'auto';
-          
           // Animation loop for cube
           let cubeTime = 0;
           let isCubeVisible = true; // Track cube visibility
@@ -903,23 +788,14 @@
             if (isCubeVisible) {
               cubeTime += 0.02;
               
-              if (autoRotation) {
-                // Auto-rotation when not dragging
-                baseRotationX = cubeTime * 0.5;
-                baseRotationY = cubeTime * 0.8;
-                baseRotationZ = cubeTime * 0.3;
-              }
+              // Rotate cube
+              cube.rotation.x = cubeTime * 0.5;
+              cube.rotation.y = cubeTime * 0.8;
+              cube.rotation.z = cubeTime * 0.3;
               
-              // Apply both auto-rotation and drag rotation
-              cube.rotation.x = baseRotationX + dragRotationX;
-              cube.rotation.y = baseRotationY + dragRotationY;
-              cube.rotation.z = baseRotationZ;
-              
-              // Floating motion (only when not dragging)
-              if (!isDragging) {
-                cube.position.y = Math.sin(cubeTime * 0.6) * 0.5;
-                cube.position.x = Math.cos(cubeTime * 0.4) * 0.3;
-              }
+              // Floating motion
+              cube.position.y = Math.sin(cubeTime * 0.6) * 0.5;
+              cube.position.x = Math.cos(cubeTime * 0.4) * 0.3;
               
               // Update material with pulsing effect
               cubeMaterial.uniforms.time.value = cubeTime;
