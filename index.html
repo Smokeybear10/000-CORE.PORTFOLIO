@@ -1309,6 +1309,15 @@
             },
             function (error) {
               console.error(`Error loading ${modelType} model:`, error);
+              console.error(`Failed URL: ${new URL(modelFile, window.location.href).href}`);
+              console.error(`Model file: ${modelFile}`);
+              console.error(`Model type: ${modelType}`);
+              
+              // Try to provide more specific error information
+              if (error.target) {
+                console.error(`HTTP Status: ${error.target.status}`);
+                console.error(`HTTP Status Text: ${error.target.statusText}`);
+              }
             }
           );
         } catch (error) {
@@ -1340,8 +1349,9 @@
         if (navLink && cubeContainer && modelContainer) {
           console.log(`Setting up ${linkName} hover functionality`);
           
-          navLink.addEventListener('mouseenter', () => {
-            console.log(`Hovering over ${linkName} - loading 3D model`);
+          // Function to show the model (works for both hover and touch)
+          function showModel() {
+            console.log(`Showing ${linkName} model - loading 3D model`);
             
             // Clear any pending hide timeout immediately
             if (window.hideModelTimeout) {
@@ -1368,15 +1378,7 @@
             if (window.setCubeVisible) window.setCubeVisible(false);
             
             // Show gradient overlay for all nav items
-            if (linkName === 'projects') {
-              document.body.classList.add('projects-hover');
-            } else if (linkName === 'about') {
-              document.body.classList.add('projects-hover');
-            } else if (linkName === 'experience') {
-              document.body.classList.add('projects-hover');
-            } else if (linkName === 'contact') {
-              document.body.classList.add('projects-hover');
-            }
+            document.body.classList.add('projects-hover');
             
             // Force model to stay visible after a small delay (in case of race conditions)
             setTimeout(() => {
@@ -1387,7 +1389,16 @@
               }
             }, 200);
             
-            console.log(`After ${linkName} hover - Model visible`);
+            console.log(`After ${linkName} show - Model visible`);
+          }
+
+          // Desktop hover events
+          navLink.addEventListener('mouseenter', showModel);
+          
+          // Touch events for mobile (especially horizontal mode)
+          navLink.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // Prevent double-firing with mouse events
+            showModel();
           });
           
           navLink.addEventListener('mouseleave', () => {

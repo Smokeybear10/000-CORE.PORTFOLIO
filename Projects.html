@@ -1363,10 +1363,17 @@
         overflow-y: auto !important;
         -webkit-overflow-scrolling: touch !important;
         touch-action: pan-y !important;
+        overscroll-behavior-y: auto !important;
       }
       
       .projects-container {
         overflow-y: auto !important;
+        touch-action: pan-y !important;
+        overscroll-behavior-y: auto !important;
+      }
+      
+      /* Allow scrolling outside wheel area */
+      body > *:not(.projects-wheel) {
         touch-action: pan-y !important;
       }
       
@@ -1574,6 +1581,11 @@
       }
       
       function startDrag(e) {
+        // Only start dragging if touching the wheel area
+        if (e.type === 'touchstart' && !e.target.closest('.projects-wheel')) {
+          return;
+        }
+        
         isDragging = true;
         startX = e.type === 'mousedown' ? e.clientX : e.touches[0].clientX;
         lastMoveTime = Date.now();
@@ -1585,7 +1597,11 @@
         }
         
         wheelContainer.style.cursor = 'grabbing';
-        e.preventDefault();
+        
+        // Only prevent default for wheel interactions
+        if (e.target.closest('.projects-wheel')) {
+          e.preventDefault();
+        }
       }
       
       function drag(e) {
@@ -1608,7 +1624,11 @@
         startX = currentX;
         lastMoveTime = now;
         updateWheel();
-        e.preventDefault();
+        
+        // Only prevent default if actively dragging the wheel
+        if (e.target.closest('.projects-wheel') || isDragging) {
+          e.preventDefault();
+        }
       }
       
       function endDrag() {
@@ -1650,8 +1670,8 @@
       document.addEventListener('mousemove', drag);
       document.addEventListener('mouseup', endDrag);
       
-      // Touch events for mobile - listen on document for full screen dragging
-      document.addEventListener('touchstart', startDrag, { passive: false });
+      // Touch events for mobile - only on wheel container
+      wheelContainer.addEventListener('touchstart', startDrag, { passive: false });
       document.addEventListener('touchmove', drag, { passive: false });
       document.addEventListener('touchend', endDrag);
       
