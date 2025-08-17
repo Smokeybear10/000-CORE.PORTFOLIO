@@ -181,8 +181,8 @@
       right: 0;
       bottom: 0;
       background-image: 
-        linear-gradient(rgba(0, 255, 255, 0.08) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 0, 255, 0.08) 1px, transparent 1px);
+        linear-gradient(rgba(0, 255, 255, 0.15) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 0, 255, 0.15) 1px, transparent 1px);
       background-size: 50px 50px;
       animation: gridMove 12s linear infinite;
       pointer-events: none;
@@ -1370,14 +1370,16 @@
         touch-action: pan-y !important;
       }
       
-      /* Remove all hand images from ::before pseudo-elements */
-      *::before {
+      /* Remove all hand images from ::before pseudo-elements (excluding grid backgrounds) */
+      .nav-link::before, .mute-text::before, .tech::before, .stack-text::before, 
+      .vaporwave-arrow::before, .modal::before, .close::before {
         background-image: none !important;
         display: none !important;
       }
       
-      /* Completely hide all hand images */
-      *::before, *::after {
+      /* Completely hide all hand images from specific elements */
+      .nav-link::before, .nav-link::after, .mute-text::before, .mute-text::after,
+      .tech::before, .tech::after {
         background-image: none !important;
       }
       

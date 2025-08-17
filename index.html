@@ -874,6 +874,8 @@
         let model = null;
         
         console.log('Starting to load Projects.glb model...');
+        console.log('Current location:', window.location.href);
+        console.log('Attempting to load from:', new URL('Projects.glb', window.location.href).href);
         loader.load(
            'Projects.glb',
            function (gltf) {
@@ -1097,9 +1099,9 @@
       // Model file mapping
       const modelFiles = {
         'projects': 'Projects.glb',
-        'experience': 'experience.glb',  // Using experience.glb as requested
-        'about': 'about.glb',
-        'contact': 'contact.glb'
+        'experience': 'Experience.glb',
+        'about': 'About.glb',
+        'contact': 'Contact.glb'
       };
       
       let currentScene = null;
@@ -1167,6 +1169,9 @@
           // Load model
           const loader = new GLTFLoader();
           const modelFile = modelFiles[modelType] || modelFiles['projects'];
+          
+          console.log(`Attempting to load: ${modelFile}`);
+          console.log(`Full URL: ${new URL(modelFile, window.location.href).href}`);
           
           loader.load(
             modelFile,
