@@ -41,47 +41,6 @@
       }
     }
 
-    /* STARTUP PRELOADER */
-    .startup-preloader {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
-      z-index: 9999;
-      display: flex;
-      background: #000000;
-      overflow: hidden;
-    }
-
-    .preloader-bar {
-      width: 10%;
-      height: 100%;
-      background: #000000;
-      transform: translateY(0);
-      will-change: transform;
-      position: relative;
-    }
-
-    .startup-name-text {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      display: flex;
-      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
-      font-size: clamp(8rem, 20vw, 12rem);
-      font-weight: 400;
-      color: #ffffff;
-      line-height: 1;
-      overflow: hidden;
-      letter-spacing: 0.1em;
-    }
-
-    .startup-name-text span {
-      display: inline-block;
-      transform: translateY(100%);
-    }
 
     /* Custom container for projects page */
     .projects-container {
@@ -280,7 +239,7 @@
     }
 
     .title-featured-projects-white {
-      font-size: 8rem;
+      font-size: min(22vw, 8rem); text-emphasis: none;
       font-weight: 900;
       font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
       color: #ffffff;
@@ -297,7 +256,7 @@
     }
 
     .title-featured {
-      font-size: 8rem;
+      font-size: min(22vw, 8rem);
       font-weight: 900;
       font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
       background: linear-gradient(90deg, #ff00ff, #00ffff);
@@ -311,7 +270,7 @@
     }
 
     .title-projects {
-      font-size: 8rem;
+      font-size: min(22vw, 8rem);
       font-weight: 900;
       font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
       background: linear-gradient(90deg, #ff00ff, #00ffff);
@@ -393,8 +352,8 @@
 
     .project-card {
       position: absolute;
-      width: clamp(275px, 28vw, 440px);
-      height: clamp(200px, 25vh, 350px);
+      width: clamp(250px, 28vw, 440px);
+      height: clamp(0px, 25vh, 350px);
       background: linear-gradient(145deg, #1a0d2e, #16213e);
       border: none;
       border-radius: 12px;
@@ -403,7 +362,7 @@
       cursor: pointer !important;
       left: 50%;
       top: 50%;
-      margin-left: calc(clamp(275px, 28vw, 440px) / -2);
+      margin-left: calc(clamp(250px, 28vw, 440px) / -2);
       margin-top: calc(clamp(200px, 25vh, 350px) / -2);
       backface-visibility: visible;
       box-shadow: 
@@ -427,27 +386,27 @@
 
     /* Position cards in 3D circle */
     .project-card:nth-child(1) {
-      transform: rotateY(0deg) translateZ(clamp(300px, 33vw, 460px));
+      transform: rotateY(0deg) translateZ(clamp(250px, 33vw, 460px));
     }
 
     .project-card:nth-child(2) {
-      transform: rotateY(60deg) translateZ(clamp(300px, 33vw, 460px));
+      transform: rotateY(60deg) translateZ(clamp(250px, 33vw, 460px));
     }
 
     .project-card:nth-child(3) {
-      transform: rotateY(120deg) translateZ(clamp(300px, 33vw, 460px));
+      transform: rotateY(120deg) translateZ(clamp(250px, 33vw, 460px));
     }
 
     .project-card:nth-child(4) {
-      transform: rotateY(180deg) translateZ(clamp(300px, 33vw, 460px));
+      transform: rotateY(180deg) translateZ(clamp(250px, 33vw, 460px));
     }
 
     .project-card:nth-child(5) {
-      transform: rotateY(240deg) translateZ(clamp(300px, 33vw, 460px));
+      transform: rotateY(240deg) translateZ(clamp(250px, 33vw, 460px));
     }
 
     .project-card:nth-child(6) {
-      transform: rotateY(300deg) translateZ(clamp(300px, 33vw, 460px));
+      transform: rotateY(300deg) translateZ(clamp(250px, 33vw, 460px));
     }
 
 
@@ -1093,32 +1052,6 @@
     <path d="M20.0995 11.0797L3.72518 1.13204C2.28687 0.258253 0.478228 1.44326 0.704999 3.11083L3.28667 22.0953C3.58333 24.2768 7.33319 24.6415 8.3792 22.7043C9.5038 20.6215 10.8639 18.7382 12.43 17.7122C13.996 16.6861 16.2658 16.1911 18.6244 15.9918C20.8181 15.8063 21.9811 12.2227 20.0995 11.0797Z" fill="#ff00ff" stroke="rgba(255,0,255,0.5)" stroke-width="1"/>
   </svg>
 
-  <!-- Startup Preloader -->
-  <div id="startup-preloader" class="startup-preloader">
-    <!-- Vertical bars -->
-    <div class="preloader-bar bar-1"></div>
-    <div class="preloader-bar bar-2"></div>
-    <div class="preloader-bar bar-3"></div>
-    <div class="preloader-bar bar-4"></div>
-    <div class="preloader-bar bar-5"></div>
-    <div class="preloader-bar bar-6"></div>
-    <div class="preloader-bar bar-7"></div>
-    <div class="preloader-bar bar-8"></div>
-    <div class="preloader-bar bar-9"></div>
-    <div class="preloader-bar bar-10"></div>
-    
-    <!-- Name animation -->
-    <div class="startup-name-text">
-      <span>P</span>
-      <span>R</span>
-      <span>O</span>
-      <span>J</span>
-      <span>E</span>
-      <span>C</span>
-      <span>T</span>
-      <span>S</span>
-    </div>
-  </div>
 
   <!-- Scroll Progress Indicator -->
   <div class="scroll-progress">
@@ -1397,12 +1330,12 @@
         .projects-container {
           padding: 0 !important;
           margin: 0 !important;
-          height: 135vh !important;
+          height: 140vh !important;
         }
         
         /* Adjust bottom section height in vertical mode */
         .bottom-section {
-          height: 32vh !important;
+          height: 37vh !important;
         }
       }
       
@@ -1429,12 +1362,22 @@
         display: none !important;
       }
       
-      /* Specifically target hand image elements */
+      /* Completely hide all hand images */
+      *::before, *::after {
+        background-image: none !important;
+      }
+      
+      /* Specifically target all possible hand image elements */
       .nav-link::before, .tech::before, .stack-text::before,
-      .mute-text::before, .my-stack-text::before {
+      .mute-text::before, .my-stack-text::before,
+      .dropdown-item::before, .stack-category h3::before,
+      .stack-category .tech::before, .stack-category::before,
+      .dropdown-content .tech::before, .dropdown-content::before,
+      .stack-section *::before {
         display: none !important;
         background-image: none !important;
         opacity: 0 !important;
+        content: none !important;
       }
     </style>
 
@@ -1761,12 +1704,12 @@
         const windowHeight = window.innerHeight;
         const documentHeight = document.documentElement.scrollHeight;
         
-        // Only fade in when reaching the bottom
-        const fadeInPoint = documentHeight - windowHeight - 100; // Start fading in 100px before bottom
+        // Fade in much sooner - start halfway through the page
+        const fadeInPoint = (documentHeight - windowHeight) * 0.5; // Start fading in at 50% scroll
         
         let opacity = 0;
         if (scrollY >= fadeInPoint) {
-          opacity = Math.min(1, (scrollY - fadeInPoint) / 100);
+          opacity = Math.min(1, (scrollY - fadeInPoint) / 200);
         }
         
         if (myStackText) {
@@ -1776,12 +1719,10 @@
       
       function updateStackTextAndArrowOpacity() {
         const scrollY = window.scrollY;
-        const windowHeight = window.innerHeight;
-        const documentHeight = document.documentElement.scrollHeight;
         
-        // Start fading when we begin scrolling, fully fade out at bottom
+        // Super fast fade - fade out completely within first 50px of scroll
         const fadeStart = 0;
-        const fadeEnd = documentHeight - windowHeight;
+        const fadeEnd = 50;
         
         let opacity = 1;
         if (scrollY >= fadeStart && scrollY <= fadeEnd) {
@@ -1841,16 +1782,11 @@
         });
       }
       
-      // Touch move handler for mobile
-      function handleTouchMove(e) {
-        if (!customCursor) return;
-        const touch = e.touches[0];
-        
-        gsap.set(customCursor, {
-          x: touch.clientX,
-          y: touch.clientY,
-          opacity: 1,
-        });
+      // Touch device detection - hide custom cursor on touch devices
+      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      if (isTouchDevice && customCursor) {
+        customCursor.style.display = 'none';
+        return;
       }
       
       // Hide cursor when mouse leaves window
@@ -1870,7 +1806,7 @@
       }
       
       window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('touchmove', handleTouchMove);
+      // Touch events removed - allow normal touch interaction
       window.addEventListener('mouseleave', handleMouseLeave);
     });
 
@@ -1978,46 +1914,6 @@
       });
     });
 
-    // Startup Preloader Animation
-    document.addEventListener('DOMContentLoaded', function() {
-      // Force scroll to top on page load/reload
-      window.scrollTo(0, 0);
-      
-      // Startup Preloader Animation
-      const preloader = document.getElementById('startup-preloader');
-      const bars = document.querySelectorAll('.preloader-bar');
-      
-      console.log('Preloader found:', preloader);
-      console.log('Bars found:', bars.length);
-      
-      if (preloader && bars.length > 0) {
-        const tl = gsap.timeline({
-          defaults: {
-            ease: 'power1.inOut',
-          }
-        });
-        
-        // First animate the name letters up (slower)
-        tl.to('.startup-name-text span', {
-          y: 0,
-          stagger: 0.08,
-          duration: 0.3,
-        });
-        
-                 // Then animate all bars fading out together
-         tl.to(preloader, {
-           delay: 0.3,
-           autoAlpha: 0,
-           duration: 0.5,
-           ease: 'power2.inOut',
-           onComplete: () => {
-             preloader.style.display = 'none';
-             // Re-enable scrolling after animation completes
-             document.body.style.overflow = 'auto';
-           }
-         })
-      }
-    });
 
   </script>
 
