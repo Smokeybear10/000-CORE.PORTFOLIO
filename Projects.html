@@ -20,15 +20,37 @@
   <style>
     /* Base styles to prevent bounce scrolling */
     html, body {
-      overflow-x: hidden;
-      overflow-y: auto;
       -webkit-overflow-scrolling: touch;
-      scroll-behavior: smooth;
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    /* Hide scrollbar */
+    ::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+    
+    html, body {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    
+    * {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    
+    *::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
     }
     
     body {
-      overscroll-behavior: none;
-      -webkit-overscroll-behavior: none;
+      overscroll-behavior: auto;
+      -webkit-overscroll-behavior: auto;
       opacity: 0;
       animation: easeIn 0.8s ease-out forwards;
     }
@@ -46,34 +68,20 @@
     /* Custom container for projects page */
     .projects-container {
       width: 100vw;
-      min-height: 130vh;
+      height: 100vh;
       margin: 0;
-      padding: 2rem;
+      padding: 0rem;
       border: none;
       background: linear-gradient(135deg, #000000 0%, #0a0a0a 20%, #001122 40%, #000611 60%, #050505 80%, #000000 100%);
       background-size: 300% 300%;
       animation: gradientShift 8s ease infinite;
       box-sizing: border-box;
-      overflow-x: hidden;
-      overflow-y: auto;
+      overflow: hidden;
       cursor: auto !important;
       position: relative;
-    }
-
-    /* Bottom section within main container */
-    .bottom-section {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 30vh;
-      padding: 0;
-      box-sizing: border-box;
-      z-index: 2;
-      border: none;
-      border-radius: 0;
-      background: transparent;
-      box-shadow: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0rem;
     }
 
     /* Stack section styling */
@@ -172,7 +180,7 @@
       }
     }
     
-    /* Vaporwave grid overlay */
+    /* Static Vaporwave grid overlay - no animation to avoid scroll interference */
     .projects-container::before {
       content: '';
       position: absolute;
@@ -184,48 +192,37 @@
         linear-gradient(rgba(0, 255, 255, 0.15) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 0, 255, 0.15) 1px, transparent 1px);
       background-size: 50px 50px;
-      animation: gridMove 12s linear infinite;
       pointer-events: none;
       z-index: 1;
     }
     
-    @keyframes gridMove {
-      0% {
-        transform: translate(0, 0);
-      }
-      100% {
-        transform: translate(50px, 50px);
-      }
-    }
 
-    /* Full width content */
-    .content-section {
-      width: 100%;
-      height: 100vh;
-      padding: 2rem 2rem 0 2rem;
-      overflow: hidden;
+
+
+    /* Top section container for featured projects and dropdown side by side */
+    .top-section {
       display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      cursor: auto !important;
-      position: relative;
-      z-index: 2;
-      border: none;
-      position: absolute;
-      top: 0;
-      left: 0;
+      flex-direction: row;
+      gap: 0;
+      width: 100%;
+      align-items: flex-start;
     }
 
     /* Section titles */
     .section-title {
-      position: fixed;
-      top: 0.5rem;
-      left: 0.5rem;
-      z-index: 1;
+      position: relative;
+      top: 0;
+      left: 0;
+      z-index: 10;
       display: flex;
       flex-direction: column;
       line-height: 0.9;
+      border: none;
+      padding: 0;
+      margin: 0;
+      background: transparent;
+      text-align: left;
+      flex-shrink: 0;
     }
 
     .title-subtitle {
@@ -240,25 +237,8 @@
       text-transform: uppercase;
     }
 
-    .title-featured-projects-white {
-      font-size: min(22vw, 8rem); text-emphasis: none;
-      font-weight: 900;
-      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
-      color: #ffffff;
-      text-align: left;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      margin: 0;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 10;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
     .title-featured {
-      font-size: min(22vw, 8rem);
+      font-size: min(8rem, 15vw, 13vh);
       font-weight: 900;
       font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
       background: linear-gradient(90deg, #ff00ff, #00ffff);
@@ -272,7 +252,7 @@
     }
 
     .title-projects {
-      font-size: min(22vw, 8rem);
+      font-size: min(8rem, 15vw, 13vh);
       font-weight: 900;
       font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
       background: linear-gradient(90deg, #ff00ff, #00ffff);
@@ -319,13 +299,14 @@
     .projects-wheel {
       position: relative;
       width: 100%;
-      height: 500px;
-      margin: 4rem auto;
+      height: min(500px, 50vh);
+      margin: 0 auto;
       perspective: 1000px;
       perspective-origin: center 80%;
       transform-style: preserve-3d;
       cursor: auto !important;
       border: none;
+      background: transparent;
     }
 
     .wheel-container {
@@ -466,7 +447,7 @@
       border-radius: 12px;
       width: 70vw;
       height: 75vh;
-      max-width: 800px;
+      max-width: 60vw;
       position: absolute;
       top: 50%;
       left: 50%;
@@ -530,137 +511,12 @@
       box-shadow: none;
     }
 
-    /* 3D Vaporwave Arrow */
-    .vaporwave-arrow {
-      position: absolute;
-      left: calc(5% + 13rem);
-      top: 85vh;
-      z-index: 3;
-      width: 75px;
-      height: 85px;
-      transform-style: preserve-3d;
-      animation: float3d 3s ease-in-out infinite;
-      cursor: pointer;
-    }
-
-    @keyframes float3d {
-      0%, 100% {
-        transform: translateY(0) rotateX(-15deg) rotateY(20deg);
-      }
-      50% {
-        transform: translateY(-10px) rotateX(-15deg) rotateY(20deg);
-      }
-    }
-
-    .arrow-body {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      transform-style: preserve-3d;
-    }
-
-    .arrow-shaft {
-      position: absolute;
-      width: 12px;
-      height: 55px;
-      left: 50%;
-      top: 0;
-      margin-left: -6px;
-      background: #ffffff;
-      border-radius: 6px;
-      transform: translateZ(10px);
-      transition: all 0.3s ease;
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
-    }
-
-    .arrow-head {
-      position: absolute;
-      width: 0;
-      height: 0;
-      left: 50%;
-      top: 52px;
-      margin-left: -16px;
-      border-left: 16px solid transparent;
-      border-right: 16px solid transparent;
-      border-top: 26px solid #ffffff;
-      transform: translateZ(15px);
-      transition: all 0.3s ease;
-      filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.6));
-    }
-
-    .arrow-head::before {
-      content: '';
-      position: absolute;
-      top: -26px;
-      left: -16px;
-      width: 0;
-      height: 0;
-      border-left: 16px solid transparent;
-      border-right: 16px solid transparent;
-      border-top: 26px solid #ffffff;
-      transform: translateZ(-5px) scale(0.8);
-      opacity: 0.7;
-      transition: all 0.3s ease;
-    }
-
-    .vaporwave-arrow:hover,
-    .vaporwave-arrow.hover-effect {
-      animation-duration: 1.5s;
-    }
-
-    .vaporwave-arrow:hover .arrow-shaft,
-    .vaporwave-arrow.hover-effect .arrow-shaft {
-      background: linear-gradient(135deg, #ff00ff, #00ffff);
-      box-shadow: 
-        0 0 15px rgba(255, 0, 255, 0.8),
-        0 0 30px rgba(0, 255, 255, 0.6),
-        inset 0 2px 0 rgba(255, 255, 255, 0.5);
-    }
-
-    .vaporwave-arrow:hover .arrow-head,
-    .vaporwave-arrow.hover-effect .arrow-head {
-      border-top-color: #ff00ff;
-      filter: drop-shadow(0 0 15px rgba(255, 0, 255, 1)) drop-shadow(0 0 30px rgba(0, 255, 255, 0.6));
-    }
-
-    .vaporwave-arrow:hover .arrow-head::before,
-    .vaporwave-arrow.hover-effect .arrow-head::before {
-      border-top-color: #00ffff;
-    }
-
-    /* See my stack text */
-    .stack-text {
-      position: absolute;
-      left: 5%;
-      top: 85vh;
-      transform: translateX(-50%);
-      z-index: 3;
-      color: #ffffff;
-      font-family: 'Fira Mono', 'Consolas', monospace;
-      font-size: 3rem;
-      font-weight: 700;
-      animation: float3d 3s ease-in-out infinite;
-      cursor: pointer;
-      transform-style: preserve-3d;
-      transition: all 0.3s ease;
-      text-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
-    }
-
-    .stack-text:hover,
-    .stack-text.hover-effect {
-      background: linear-gradient(135deg, #ff00ff, #00ffff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      filter: drop-shadow(0 0 15px rgba(255, 0, 255, 1)) drop-shadow(0 0 30px rgba(0, 255, 255, 0.6));
-      animation-duration: 1.5s;
-    }
 
     /* Mute icon and vaporwave text */
     .mute-container {
       position: fixed;
-      top: 2rem;
-      right: 2rem;
+      bottom: 2rem;
+      left: 2rem;
       z-index: 3;
       display: flex;
       align-items: center;
@@ -696,7 +552,7 @@
       transform: translateY(-50%);
       width: 30px;
       height: 30px;
-      background-image: url('Hand.png');
+      background-image: url('Images/Hand.png');
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
@@ -768,7 +624,7 @@
     }
 
     .nav-link:nth-child(4)::before {
-      background-image: url('Dophin.png');
+      background-image: url('Images/Dophin.png');
     }
 
     .nav-link:hover {
@@ -779,27 +635,19 @@
       opacity: 1;
     }
 
-    /* My Stack text */
-    .my-stack-text {
-      position: absolute;
-      bottom: 0rem;
-      left: 2rem;
-      z-index: 3;
-      background: linear-gradient(135deg, #ff00ff, #00ffff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      font-family: 'Fira Mono', 'Consolas', monospace;
-      font-size: 5rem;
-      font-weight: 700;
-      animation: float3d 3s ease-in-out infinite;
-      transform-style: preserve-3d;
-      transform: rotateX(-15deg) rotateY(20deg);
-    }
 
-    .my-stack-text {
-      opacity: 0;
-      transition: opacity 0.3s ease;
+    /* My Stack title styling */
+    .my-stack-title {
+      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
+      font-size: clamp(1.5rem, 5vw, 3rem);
+      font-weight: 900;
+      color: #ffffff;
+      text-align: right;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin: 1rem 0 0rem 0;
+      padding: 0;
+      transform: perspective(500px) rotateX(15deg) skew(-5deg);
     }
 
     /* Dropdown styles */
@@ -807,10 +655,13 @@
       display: flex;
       flex-direction: column;
       gap: 1rem;
-      width: 100%;
-      height: 100%;
+      width: auto;
+      height: auto;
       padding: 0 1rem 0 1rem;
-      margin-left: 2rem;
+      margin: 0;
+      border: none;
+      background: transparent;
+      flex: 1;
     }
 
     .dropdown-section {
@@ -819,7 +670,7 @@
       border-radius: 0;
       overflow: hidden;
       transition: all 0.3s ease;
-      padding-right: 4rem;
+      padding-right: 0;
     }
 
     .dropdown-section:hover {
@@ -830,7 +681,7 @@
 
     .dropdown-header {
       display: flex;
-      justify-content: flex-start;
+      justify-content: flex-end;
       align-items: center;
       gap: 0.5rem;
       padding: 0;
@@ -859,26 +710,6 @@
       position: relative;
     }
 
-    .dropdown-header h3::after {
-      content: '';
-      position: absolute;
-      left: calc(100% + 0.5rem);
-      top: 50%;
-      transform: translateY(-50%) scaleX(-1);
-      width: 40px;
-      height: 40px;
-      background-image: url('Hand.png');
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: 10;
-    }
-
-    .dropdown-header:hover h3::after {
-      opacity: 1;
-    }
 
     .dropdown-arrow {
       color: #ff00ff;
@@ -899,10 +730,11 @@
       flex-wrap: wrap;
       gap: 1.5rem;
       padding: 0;
+      justify-content: flex-end;
     }
 
     .dropdown-section.active .dropdown-content {
-      max-height: 60px;
+      max-height: 200px;
       padding: 0;
     }
 
@@ -1004,52 +836,24 @@
         cursor: none !important;
       }
     }
-    
-    /* Scrollbar styling */
-    body {
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
+
     
     /* Override all possible cursor styles on desktop only */
     @media (hover: hover) and (pointer: fine) {
       a, button, input, textarea, select, [role="button"], .clickable,
-      .project-card, .nav-link, .tech, .mute-container, .vaporwave-arrow,
-      .stack-text, .modal, .close, svg, path {
+      .project-card, .nav-link, .tech, .mute-container,
+      .modal, .close, svg, path {
         cursor: none !important;
       }
       
       a:hover, button:hover, input:hover, textarea:hover, select:hover,
       [role="button"]:hover, .clickable:hover, .project-card:hover,
-      .nav-link:hover, .tech:hover, .mute-container:hover, .vaporwave-arrow:hover,
-      .stack-text:hover, .modal:hover, .close:hover, svg:hover, path:hover {
+      .nav-link:hover, .tech:hover, .mute-container:hover,
+      .modal:hover, .close:hover, svg:hover, path:hover {
         cursor: none !important;
       }
     }
 
-    /* SCROLL PROGRESS INDICATOR */
-    .scroll-progress {
-      position: fixed;
-      top: 50%;
-      right: 2%;
-      transform: translateY(-50%);
-      width: 6px;
-      height: 100px;
-      border-radius: 3px;
-      background: rgba(255, 255, 255, 0.1);
-      overflow: hidden;
-      z-index: 100;
-    }
-
-    .scroll-progress-bar {
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(180deg, #ff00ff 0%, #00ffff 100%);
-      border-radius: 3px;
-      transform: translateY(-100%);
-      transition: transform 0.1s ease-out;
-      box-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
-    }
 
   </style>
   <!-- Your scripts -->
@@ -1063,80 +867,21 @@
   </svg>
 
 
-  <!-- Scroll Progress Indicator -->
-  <div class="scroll-progress">
-    <div class="scroll-progress-bar"></div>
-  </div>
 
   <!-- Projects Container -->
-  <div class="projects-container">
-    
-    <!-- Featured Projects Section -->
-    <div class="section-title">
-      <div class="title-featured-projects-white">Featured Projects</div>
-      <div class="title-featured">Featured</div>
-      <div class="title-projects">Projects</div>
-      <div class="title-subtitle">Click on a project to view details</div>
-    </div>
-    
-    <!-- Full Width Content -->
-    <div class="content-section">
-      <div class="projects-wheel">
-        <div class="wheel-container">
-          <div class="project-card" data-project="verilog">
-            <div class="project-image" style="background-image: url('ProjectPhotos/Verilog.png');"></div>
-            <div class="project-header">
-              <h3>Verilog-Based ALU for 16-bit RISC-V Processor</h3>
-            </div>
-          </div>
-          
-          <div class="project-card" data-project="flywheel">
-            <div class="project-image" style="background-image: url('ProjectPhotos/MagneticallyLevitating.png');"></div>
-            <div class="project-header">
-              <h3>Magnetically Levitating Flywheel Generator</h3>
-            </div>
-          </div>
-          
-          <div class="project-card" data-project="foosball">
-            <div class="project-image" style="background-image: url('ProjectPhotos/SmartTable.png');"></div>
-            <div class="project-header">
-              <h3>SmartTable System for Competitive Foosball</h3>
-            </div>
-          </div>
-          
-          <div class="project-card" data-project="website">
-            <div class="project-image" style="background-color: rgba(249, 115, 22, 0.1);"></div>
-            <div class="project-header">
-              <h3>Portfolio Website with Interactive Design</h3>
-            </div>
-          </div>
-          
-          <div class="project-card" data-project="poker">
-            <div class="project-image" style="background-image: url('ProjectPhotos/ThreeVariable.png');"></div>
-            <div class="project-header">
-              <h3>Bayesian Poker Analysis Engine</h3>
-            </div>
-          </div>
-          
-          <div class="project-card" data-project="spikeball">
-            <div class="project-image" style="background-image: url('ProjectPhotos/IMG_8763 [MacMini] [2025-07-24] [11.57.19 AM].JPG');"></div>
-            <div class="project-header">
-              <h3>Spike Sure Rim Detection for Spikeball</h3>
-            </div>
-          </div>
-        </div>
+      <div class="projects-container">
+  
+      <!-- Top section with featured projects and dropdown side by side -->
+      <div class="top-section">
+        <!-- Featured Projects Section -->
+        <div class="section-title">
+        <div class="title-featured">Featured</div>
+        <div class="title-projects">Projects</div>
+        <div class="title-subtitle">Click on a project to view details</div>
       </div>
-
-      <!-- My Stack text -->
-      <div class="my-stack-text">
-        <span>My Stack</span>
-      </div>
-
-    </div>
-
-        <!-- Bottom section within main container -->
-    <div class="bottom-section">
+      
       <div class="dropdown-container">
+        <div class="my-stack-title">MY STACK</div>
         <div class="dropdown-section">
           <div class="dropdown-header">
             <span class="dropdown-arrow">▼</span>
@@ -1185,7 +930,7 @@
         <div class="dropdown-section">
           <div class="dropdown-header">
             <span class="dropdown-arrow">▼</span>
-            <h3>Frameworks & Libraries</h3>
+            <h3>Frameworks</h3>
           </div>
           <div class="dropdown-content">
             <div class="icon-container">
@@ -1197,7 +942,7 @@
               <span class="icon-tooltip">Pandas</span>
             </div>
             <div class="icon-container">
-              <img src="Icons/Sckit.png" alt="Scikit-learn">
+              <img src="Images/Icons/Sckit.png" alt="Scikit-learn">
               <span class="icon-tooltip">Scikit-learn</span>
             </div>
             <div class="icon-container">
@@ -1222,7 +967,7 @@
         <div class="dropdown-section">
           <div class="dropdown-header">
             <span class="dropdown-arrow">▼</span>
-            <h3>Databases & Data</h3>
+            <h3>Databases</h3>
           </div>
           <div class="dropdown-content">
             <div class="icon-container">
@@ -1248,20 +993,57 @@
           </div>
         </div>
       </div>
-    </div>
-
-  </div>
-
-  <!-- 3D Vaporwave Arrow -->
-  <div class="vaporwave-arrow">
-    <div class="arrow-body">
-      <div class="arrow-shaft"></div>
-      <div class="arrow-head"></div>
-    </div>
-  </div>
+      </div>
+      
+      <!-- Projects Wheel -->
+      <div class="projects-wheel">
+        <div class="wheel-container">
+          <div class="project-card" data-project="verilog">
+            <div class="project-image" style="background-image: url('Images/ProjectPhotos/Verilog.png');"></div>
+            <div class="project-header">
+              <h3>Verilog-Based ALU for 16-bit RISC-V Processor</h3>
+            </div>
+          </div>
+          
+          <div class="project-card" data-project="flywheel">
+            <div class="project-image" style="background-image: url('Images/ProjectPhotos/MagneticallyLevitating.png');"></div>
+            <div class="project-header">
+              <h3>Magnetically Levitating Flywheel Generator</h3>
+            </div>
+          </div>
+          
+          <div class="project-card" data-project="foosball">
+            <div class="project-image" style="background-image: url('Images/ProjectPhotos/SmartTable.png');"></div>
+            <div class="project-header">
+              <h3>SmartTable System for Competitive Foosball</h3>
+            </div>
+          </div>
+          
+          <div class="project-card" data-project="website">
+            <div class="project-image" style="background-color: rgba(249, 115, 22, 0.1);"></div>
+            <div class="project-header">
+              <h3>Portfolio Website with Interactive Design</h3>
+            </div>
+          </div>
+          
+          <div class="project-card" data-project="poker">
+            <div class="project-image" style="background-image: url('Images/ProjectPhotos/ThreeVariable.png');"></div>
+            <div class="project-header">
+              <h3>Bayesian Poker Analysis Engine</h3>
+            </div>
+          </div>
+          
+          <div class="project-card" data-project="spikeball">
+            <div class="project-image" style="background-image: url('Images/ProjectPhotos/IMG_8763 [MacMini] [2025-07-24] [11.57.19 AM].JPG');"></div>
+            <div class="project-header">
+              <h3>Spike Sure Rim Detection for Spikeball</h3>
+            </div>
+          </div>
+        </div>
+      </div>
   
-  <!-- Stack text -->
-  <div class="stack-text">my stack</div>
+    </div>
+
 
   <!-- Mute icon and vaporwave text -->
   <div class="mute-container">
@@ -1313,39 +1095,62 @@
       
       /* Hide mute container in vertical mode */
       @media (orientation: portrait), (max-width: 768px) {
-        .mute-container {
-          display: none !important;
-        }
         
         /* Reduce spinning wheel container size in vertical mode */
         .projects-wheel {
-          height: 200px !important;
+          height: clamp(0px, 20vh, 200px) !important;
           width: 70% !important;
           margin: 0 auto !important;
         }
-        
-        /* Remove fixed positioning from featured projects title in vertical mode */
-        .section-title {
-          position: static !important;
-          top: 0 !important;
-          left: 0 !important;
-          margin: 0 !important;
-          text-align: left !important;
-          border: none !important;
-          padding: 0 !important;
-          background: transparent !important;
-        }
+
         
         /* Remove any padding/margin from projects container in vertical mode */
         .projects-container {
           padding: 0 !important;
           margin: 0 !important;
-          height: 140vh !important;
+          height: 100vh !important;
         }
-        
-        /* Adjust bottom section height in vertical mode */
-        .bottom-section {
-          height: 37vh !important;
+
+        /* Reduce project card height in vertical mode */
+        .project-card {
+          height: clamp(0px, 20vh, 200px) !important;
+        }
+
+        /* Stack dropdown below featured projects in vertical mode */
+        .top-section {
+          flex-direction: column !important;
+        }
+
+        .dropdown-container {
+          position: relative !important;
+          left: auto !important;
+          top: auto !important;
+          width: 100% !important;
+          max-width: none !important;
+        }
+
+        /* Hide MY STACK title in vertical mode */
+        .my-stack-title {
+          display: none !important;
+        }
+
+        /* Add gap between dropdown and wheel in vertical mode */
+        .dropdown-container {
+          margin-bottom: 9vh !important;
+        }
+
+        /* Left align dropdown content in vertical mode */
+        .dropdown-header {
+          justify-content: flex-start !important;
+        }
+
+        .dropdown-content {
+          justify-content: flex-start !important;
+        }
+
+        /* Add spacing between subtitle and dropdown in vertical mode */
+        .dropdown-container {
+          margin-top: 2rem !important;
         }
       }
       
@@ -1357,29 +1162,11 @@
         touch-action: manipulation !important;
         cursor: pointer !important;
       }
-      
-      /* Enable scrolling on mobile */
-      body, html {
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch !important;
-        touch-action: pan-y !important;
-        overscroll-behavior-y: auto !important;
-      }
-      
-      .projects-container {
-        overflow-y: auto !important;
-        touch-action: pan-y !important;
-        overscroll-behavior-y: auto !important;
-      }
-      
-      /* Allow scrolling outside wheel area */
-      body > *:not(.projects-wheel) {
-        touch-action: pan-y !important;
-      }
+
       
       /* Remove all hand images from ::before pseudo-elements (excluding grid backgrounds) */
-      .nav-link::before, .mute-text::before, .tech::before, .stack-text::before, 
-      .vaporwave-arrow::before, .modal::before, .close::before {
+      .nav-link::before, .mute-text::before, .tech::before,
+      .modal::before, .close::before {
         background-image: none !important;
         display: none !important;
       }
@@ -1391,8 +1178,8 @@
       }
       
       /* Specifically target all possible hand image elements */
-      .nav-link::before, .tech::before, .stack-text::before,
-      .mute-text::before, .my-stack-text::before,
+      .nav-link::before, .tech::before,
+      .mute-text::before,
       .dropdown-item::before, .stack-category h3::before,
       .stack-category .tech::before, .stack-category::before,
       .dropdown-content .tech::before, .dropdown-content::before,
@@ -1433,19 +1220,19 @@
           title: "Verilog-Based ALU for 16-bit RISC-V Processor",
           description: "Designed and implemented a comprehensive Arithmetic Logic Unit (ALU) in Verilog for a 16-bit RISC-V processor architecture. The project involved creating modular components for arithmetic operations, logical operations, and control logic while ensuring optimal timing and resource utilization.",
           tech: ["Verilog", "RISC-V", "Digital Design", "FPGA", "ModelSim", "Quartus"],
-          image: "ProjectPhotos/Verilog.png"
+          image: "Images/ProjectPhotos/Verilog.png"
         },
         flywheel: {
           title: "Magnetically Levitating Flywheel Generator",
           description: "Developed an innovative energy storage system using magnetic levitation technology to reduce friction losses in flywheel energy storage. The project integrated electromagnetic controls, power electronics, and real-time monitoring systems to achieve stable levitation and energy conversion.",
           tech: ["Electromagnetic Design", "Power Electronics", "Control Systems", "MATLAB/Simulink", "PCB Design", "Embedded Systems"],
-          image: "ProjectPhotos/MagneticallyLevitating.png"
+          image: "Images/ProjectPhotos/MagneticallyLevitating.png"
         },
         foosball: {
           title: "SmartTable System for Competitive Foosball",
           description: "Created an intelligent foosball table system with real-time score tracking, game analytics, and competitive features. The system uses computer vision for ball tracking, embedded sensors for goal detection, and a web interface for tournament management and player statistics.",
           tech: ["Computer Vision", "OpenCV", "Raspberry Pi", "Node.js", "React", "WebSocket", "3D Printing"],
-          image: "ProjectPhotos/SmartTable.png"
+          image: "Images/ProjectPhotos/SmartTable.png"
         },
         website: {
           title: "Portfolio Website with Interactive Design",
@@ -1456,13 +1243,13 @@
           title: "Bayesian Poker Analysis Engine",
           description: "Implemented a sophisticated Bayesian inference system for analyzing poker gameplay and opponent behavior patterns. The engine uses probabilistic models to estimate bluffing tendencies, betting patterns, and optimal decision-making strategies across multi-street poker scenarios.",
           tech: ["Python", "Bayesian Inference", "Statistical Modeling", "Game Theory", "Data Analysis", "Machine Learning"],
-          image: "ProjectPhotos/ThreeVariable.png"
+          image: "Images/ProjectPhotos/ThreeVariable.png"
         },
         spikeball: {
           title: "Spike Sure Rim Detection for Spikeball",
           description: "Developed an automated rim detection system for competitive Spikeball using computer vision and machine learning. The system provides real-time analysis of ball-rim interactions to assist with officiating and player training, improving game accuracy and fairness.",
           tech: ["Computer Vision", "Machine Learning", "OpenCV", "Python", "Real-time Processing", "Sports Analytics"],
-          image: "ProjectPhotos/IMG_8763 [MacMini] [2025-07-24] [11.57.19 AM].JPG"
+          image: "Images/ProjectPhotos/IMG_8763 [MacMini] [2025-07-24] [11.57.19 AM].JPG"
         }
       };
 
@@ -1581,8 +1368,12 @@
       }
       
       function startDrag(e) {
-        // Only start dragging if touching the wheel area
-        if (e.type === 'touchstart' && !e.target.closest('.projects-wheel')) {
+        // Skip if clicking on navigation, modal, or interactive elements
+        if (e.target.closest('.bottom-nav') || 
+            e.target.closest('.modal') || 
+            e.target.closest('.mute-container') ||
+            e.target.closest('.section-title') ||
+            e.target.closest('.dropdown-container')) {
           return;
         }
         
@@ -1596,12 +1387,8 @@
           animationId = null;
         }
         
-        wheelContainer.style.cursor = 'grabbing';
-        
-        // Only prevent default for wheel interactions
-        if (e.target.closest('.projects-wheel')) {
-          e.preventDefault();
-        }
+        document.body.style.cursor = 'grabbing';
+        e.preventDefault();
       }
       
       function drag(e) {
@@ -1625,16 +1412,13 @@
         lastMoveTime = now;
         updateWheel();
         
-        // Only prevent default if actively dragging the wheel
-        if (e.target.closest('.projects-wheel') || isDragging) {
-          e.preventDefault();
-        }
+        e.preventDefault();
       }
       
       function endDrag() {
         if (!isDragging) return;
         isDragging = false;
-        wheelContainer.style.cursor = 'grab';
+        document.body.style.cursor = 'auto';
         
         // Apply momentum/inertia with smooth transition to auto rotation
         if (Math.abs(velocity) > 0.1) {
@@ -1665,13 +1449,13 @@
         }
       }
       
-      // Mouse events - listen on document for full screen dragging
+      // Mouse events - listen on entire document for global drag
       document.addEventListener('mousedown', startDrag);
       document.addEventListener('mousemove', drag);
       document.addEventListener('mouseup', endDrag);
       
-      // Touch events for mobile - only on wheel container
-      wheelContainer.addEventListener('touchstart', startDrag, { passive: false });
+      // Touch events for mobile - listen on entire document
+      document.addEventListener('touchstart', startDrag, { passive: false });
       document.addEventListener('touchmove', drag, { passive: false });
       document.addEventListener('touchend', endDrag);
       
@@ -1726,80 +1510,7 @@
           }
         });
       });
-
-      // Vaporwave text fade effect
-      const muteContainer = document.querySelector('.mute-container');
-      const myStackText = document.querySelector('.my-stack-text');
-      const featuredProjectsWhite = document.querySelector('.title-featured-projects-white');
-      const stackText = document.querySelector('.stack-text');
-      const vaporwaveArrow = document.querySelector('.vaporwave-arrow');
       
-      
-      function updateMyStackOpacity() {
-        const scrollY = window.scrollY;
-        const windowHeight = window.innerHeight;
-        const documentHeight = document.documentElement.scrollHeight;
-        
-        // Fade in much sooner - start halfway through the page
-        const fadeInPoint = (documentHeight - windowHeight) * 0.5; // Start fading in at 50% scroll
-        
-        let opacity = 0;
-        if (scrollY >= fadeInPoint) {
-          opacity = Math.min(1, (scrollY - fadeInPoint) / 200);
-        }
-        
-        if (myStackText) {
-          myStackText.style.opacity = opacity;
-        }
-      }
-      
-      function updateStackTextAndArrowOpacity() {
-        const scrollY = window.scrollY;
-        
-        // Super fast fade - fade out completely within first 50px of scroll
-        const fadeStart = 0;
-        const fadeEnd = 50;
-        
-        let opacity = 1;
-        if (scrollY >= fadeStart && scrollY <= fadeEnd) {
-          opacity = 1 - (scrollY / fadeEnd);
-        } else if (scrollY > fadeEnd) {
-          opacity = 0;
-        }
-        
-        if (stackText) {
-          stackText.style.opacity = opacity;
-        }
-        if (vaporwaveArrow) {
-          vaporwaveArrow.style.opacity = opacity;
-        }
-      }
-      
-      function updateFeaturedProjectsWhiteOpacity() {
-        const scrollY = window.scrollY;
-        const windowHeight = window.innerHeight;
-        const documentHeight = document.documentElement.scrollHeight;
-        
-        // Only fade in when reaching the bottom
-        const fadeInPoint = documentHeight - windowHeight - 100; // Start fading in 100px before bottom
-        
-        let opacity = 0;
-        if (scrollY >= fadeInPoint) {
-          opacity = Math.min(1, (scrollY - fadeInPoint) / 100);
-        }
-        
-        if (featuredProjectsWhite) {
-          featuredProjectsWhite.style.opacity = opacity;
-        }
-      }
-      
-      // Initial call and scroll listeners
-      updateMyStackOpacity();
-      updateStackTextAndArrowOpacity();
-      updateFeaturedProjectsWhiteOpacity();
-      window.addEventListener('scroll', updateMyStackOpacity);
-      window.addEventListener('scroll', updateStackTextAndArrowOpacity);
-      window.addEventListener('scroll', updateFeaturedProjectsWhiteOpacity);
     });
 
     // Custom cursor animation
@@ -1846,66 +1557,7 @@
       window.addEventListener('mouseleave', handleMouseLeave);
     });
 
-    // Scroll progress indicator
-    document.addEventListener('DOMContentLoaded', () => {
-      const scrollProgressBar = document.querySelector('.scroll-progress-bar');
 
-      function updateScrollProgress() {
-        if (!scrollProgressBar) return;
-        
-        const { scrollHeight, clientHeight } = document.documentElement;
-        const scrollableHeight = scrollHeight - clientHeight;
-        const scrollY = window.scrollY;
-        const scrollProgress = (scrollY / scrollableHeight) * 100;
-        
-        scrollProgressBar.style.transform = `translateY(-${100 - scrollProgress}%)`;
-      }
-
-      // Initial call and scroll listener
-      updateScrollProgress();
-      window.addEventListener('scroll', updateScrollProgress);
-    });
-
-    // Synchronized hover effect for stack text and arrow
-    document.addEventListener('DOMContentLoaded', () => {
-      const stackText = document.querySelector('.stack-text');
-      const vaporwaveArrow = document.querySelector('.vaporwave-arrow');
-
-      if (stackText && vaporwaveArrow) {
-        // Mouse enter events
-        stackText.addEventListener('mouseenter', () => {
-          vaporwaveArrow.classList.add('hover-effect');
-        });
-
-        vaporwaveArrow.addEventListener('mouseenter', () => {
-          stackText.classList.add('hover-effect');
-        });
-
-        // Mouse leave events
-        stackText.addEventListener('mouseleave', () => {
-          vaporwaveArrow.classList.remove('hover-effect');
-        });
-
-        vaporwaveArrow.addEventListener('mouseleave', () => {
-          stackText.classList.remove('hover-effect');
-        });
-
-        // Click events to scroll to bottom
-        stackText.addEventListener('click', () => {
-          window.scrollTo({
-            top: document.documentElement.scrollHeight,
-            behavior: 'smooth'
-          });
-        });
-
-        vaporwaveArrow.addEventListener('click', () => {
-          window.scrollTo({
-            top: document.documentElement.scrollHeight,
-            behavior: 'smooth'
-          });
-        });
-      }
-    });
 
     // Simple navigation with ease-out
     document.addEventListener('DOMContentLoaded', () => {

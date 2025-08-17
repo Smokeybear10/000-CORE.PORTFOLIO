@@ -45,7 +45,7 @@
       width: 100%;
       min-height: 100vh;
       margin: 0;
-      padding: 2rem;
+      padding: 1rem;
       border: none;
       background: linear-gradient(135deg, #ff00ff 0%, #00ffff 25%, #ff0080 50%, #8000ff 75%, #00ff80 100%);
       background-size: 400% 400%;
@@ -103,13 +103,13 @@
     .contact-card {
       position: relative;
       z-index: 10;
-      max-width: 600px;
-      width: 90%;
+      max-width: 700px;
+      width: 85%;
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(20px);
       border: 3px solid rgba(255, 0, 255, 0.8);
       border-radius: 20px;
-      padding: 3rem;
+      padding: 2rem;
       box-shadow: 
         0 0 50px rgba(255, 0, 255, 0.8),
         0 0 100px rgba(0, 255, 255, 0.6),
@@ -252,32 +252,12 @@
       }
     }
 
-    /* Responsive design */
-    @media (orientation: portrait), (max-width: 768px) {
-      .contact-container {
-        padding: 1rem;
-      }
-
-      .contact-card {
-        padding: 2rem;
-        width: 95%;
-      }
-
-      .contact-item {
-        flex-direction: column;
-        text-align: center;
-        gap: 0.5rem;
-      }
-
-      .contact-text {
-        font-size: 1rem;
-      }
-    }
 
     /* Hide custom cursor for form elements */
     .contact-item, .contact-link {
       cursor: pointer !important;
     }
+
 
     /* Floating animation for the card */
     .contact-card {

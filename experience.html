@@ -256,7 +256,7 @@
     /* Top Container */
     .top-container {
       position: absolute;
-      top: 25vh;
+      top: calc(30vh);
       left: 50%;
       transform: translateX(-50%);
       width: min(100%, 1200px);
@@ -543,7 +543,7 @@
     }
 
     .journey-text {
-      font-size: min(8rem, 15vw);
+      font-size: min(8rem, 15vw, 13vh);
       font-weight: 900;
       font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
       background: linear-gradient(90deg, #ff00ff, #00ffff);
@@ -560,7 +560,7 @@
     }
 
     .journey-text div {
-      font-size: min(8rem, 15vw);
+      font-size: min(8rem, 15vw, 13vh);
       font-weight: 900;vw
       font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
       background: linear-gradient(90deg, #ff00ff, #00ffff);
@@ -637,7 +637,7 @@
       transform: translateY(-50%);
       width: 40px;
       height: 40px;
-      background-image: url('Hand.png');
+      background-image: url('Images/Hand.png');
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
@@ -646,7 +646,7 @@
     }
 
     .nav-link:nth-child(3)::before {
-      background-image: url('Dophin.png');
+      background-image: url('Images/Dophin.png');
     }
 
     .nav-link:hover {
@@ -697,7 +697,7 @@
       transform: translateY(-50%);
       width: 30px;
       height: 30px;
-      background-image: url('Hand.png');
+      background-image: url('Images/Hand.png');
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
@@ -852,17 +852,22 @@
 
     /* Profile Photo */
     .profile-photo {
-      width: 35vh;
-      height: 35vh;
-      margin: 0;
+      width: auto;
+      height: min(40vh, 480px);
+      aspect-ratio: 1;
+      margin: 0 !important;
+      padding: 0 !important;
       border-radius: 50%;
       overflow: hidden;
       border: 3px solid #ff00ff;
       box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
       transition: all 0.3s ease;
-      position: absolute;
-      left: 0;
-      top: 0;
+      position: absolute !important;
+      left: 0px !important;
+      top: 50% !important;
+      transform: translateY(-50%) !important;
+      object-fit: cover;
+      box-sizing: border-box !important;
     }
 
     .profile-photo:hover {
@@ -874,6 +879,10 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      margin: 0;
+      padding: 0;
+      border: none;
+      display: block;
     }
 
     /* Navigation Buttons */
@@ -1026,7 +1035,7 @@
         transform: translateX(-50%) !important;
         padding: 1rem !important;
         box-sizing: border-box !important;
-        top: 28vh !important;
+        top: min(40vh, 40vw) !important;
       }
       
       /* Make text and buttons fit inside the yellow container */
@@ -1148,6 +1157,14 @@
         padding: 0 0rem !important;
       }
       
+      /* Make text content container full width in vertical mode */
+      .text-content-container {
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        padding: 1rem !important;
+      }
+      
     }
 
     /* Show container outlines for debugging layout - DISABLED */
@@ -1252,7 +1269,7 @@
         <!-- 3D Lion Head (in front of all) -->
         <div class="lion-container-new" style="position: fixed; top: 5vh; right: 50%; width: min(50%, 600px); height: 80vh; margin-top: 0; z-index: 7; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; border: none;">
           <model-viewer
-            src="lion_head_4k.glb"
+            src="Models/lion_head_4k.glb"
             alt="3D Lion Head"
             auto-rotate
             rotation-per-second="30deg"
@@ -1271,7 +1288,7 @@
         <!-- 3D Bull Head (in front) -->
         <div class="bull-container-new" style="position: fixed; top: 5vh; right: 50%; width: min(50%, 600px); height: 80vh; margin-top: 0; z-index: 6; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; border: none;">
           <model-viewer
-            src="bull_head_4k.glb"
+            src="Models/bull_head_4k.glb"
             alt="3D Bull Head"
             auto-rotate
             rotation-per-second="30deg"
@@ -1290,7 +1307,7 @@
         <!-- 3D Horse Head -->
         <div class="horse-container" style="position: fixed; top: 0vh; right: 50%; width: min(50%, 600px); height: 90vh; margin-top: 0;">
           <model-viewer
-            src="horse_head_4k.glb"
+            src="Models/horse_head_4k.glb"
             alt="3D Horse Head"
             auto-rotate
             rotation-per-second="30deg"
@@ -1318,8 +1335,8 @@
 
       <!-- Top Container -->
       <div class="top-container">
-        <!-- Hello Thomas Section with relative content -->
-        <div style="position: relative; margin: 4rem 0 2rem 45vh;">
+        <!-- Text Content Container -->
+        <div class="text-content-container" style="position: absolute; left: calc(min(40vh, 480px) + 0rem); top: 0; right: 0; height: 100%; padding: 2rem; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center;">
           <!-- Hello Thomas Header -->
           <div class="hello-section" style="font-size: min(9vw, 3rem); font-weight: 900; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; color: #ffffff; margin: 0; text-align: left; line-height: 1.05; opacity: 0.3; transition: opacity 0.6s ease;">Hello. I am Thomas</div>
           
@@ -1343,7 +1360,7 @@
         
         <!-- Profile Photo -->
         <div class="profile-photo hello-visible">
-          <img src="SchoolPortrait.jpg" alt="Thomas Ou" />
+          <img src="Images/SchoolPortrait.jpg" alt="Thomas Ou" />
         </div>
       </div>
 
@@ -2068,25 +2085,35 @@
       border-radius: 0 !important;
     }
     
-    /* Show container borders for debugging */
+    /* Hide container borders for production */
     .top-container {
-      border: 0px solid red !important;
+      border: 0px solid transparent !important;
     }
     
     .left-section {
-      border: 0px solid blue !important;
+      border: 0px solid transparent !important;
     }
     
     .right-section {
-      border: 0px solid green !important;
+      border: 0px solid transparent !important;
     }
     
     .experience-container {
-      border: 0px solid orange !important;
+      border: 0px solid transparent !important;
     }
     
     .timeline-container {
-      border: 0px solid purple !important;
+      border: 0px solid transparent !important;
+    }
+    
+    /* Hide profile photo debug border */
+    .profile-photo {
+      border: 3px solid #ff00ff !important;
+    }
+    
+    /* Hide text content container debug border */
+    .text-content-container {
+      border: 0px solid transparent !important;
     }
   </style>
 

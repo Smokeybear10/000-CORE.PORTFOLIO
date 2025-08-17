@@ -258,7 +258,7 @@
       transform: translateY(-50%);
       width: 35px;
       height: 35px;
-      background-image: url('Hand.png');
+      background-image: url('Images/Hand.png');
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
@@ -267,7 +267,7 @@
     }
 
     .nav-link:nth-child(2)::before {
-      background-image: url('Dophin.png');
+      background-image: url('Images/Dophin.png');
     }
 
     .nav-link:hover {
@@ -318,7 +318,7 @@
       transform: translateY(-50%);
       width: 30px;
       height: 30px;
-      background-image: url('Hand.png');
+      background-image: url('Images/Hand.png');
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
@@ -341,10 +341,18 @@
       text-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
     }
 
-    /* Hide vaporwave in vertical/mobile mode */
-    @media (orientation: portrait), (max-width: 768px) {
-      .mute-container {
+    /* Hide intro text on smaller screens */
+    @media (max-width: 480px) {
+      .about-intro-container {
         display: none !important;
+      }
+      
+      .mute-text {
+        position: fixed !important;
+        bottom: 2rem !important;
+        left: 2rem !important;
+        right: auto !important;
+        top: auto !important;
       }
     }
 
@@ -875,9 +883,9 @@
         
         console.log('Starting to load Projects.glb model...');
         console.log('Current location:', window.location.href);
-        console.log('Attempting to load from:', new URL('Projects.glb', window.location.href).href);
+        console.log('Attempting to load from:', new URL('Models/Projects.glb', window.location.href).href);
         loader.load(
-           'Projects.glb',
+           'Models/Projects.glb',
            function (gltf) {
              console.log('Model loaded successfully:', gltf);
              model = gltf.scene;
@@ -1018,7 +1026,7 @@
           },
           function (error) {
             console.error('Error loading model:', error);
-            console.error('Model path attempted:', 'Projects.glb');
+            console.error('Model path attempted:', 'Models/Projects.glb');
             console.error('Current location:', window.location.href);
           }
         );
@@ -1098,10 +1106,10 @@
       
       // Model file mapping
       const modelFiles = {
-        'projects': 'Projects.glb',
-        'experience': 'Experience.glb',
-        'about': 'About.glb',
-        'contact': 'Contact.glb'
+        'projects': 'Models/Projects.glb',
+        'experience': 'Models/Experience.glb',
+        'about': 'Models/About.glb',
+        'contact': 'Models/Contact.glb'
       };
       
       let currentScene = null;
@@ -1397,7 +1405,7 @@
           
           // Touch events for mobile (especially horizontal mode)
           navLink.addEventListener('touchstart', (e) => {
-            e.preventDefault(); // Prevent double-firing with mouse events
+            // Don't prevent default to allow navigation clicks to work
             showModel();
           });
           
