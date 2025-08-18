@@ -50,7 +50,9 @@
       margin: 0;
       padding: 2rem;
       border: none;
-      background: #000000;
+      background: linear-gradient(135deg, #000000 0%, #220808 25%, #000000 50%, #140505 75%, #000000 100%);
+      background-size: 400% 400%;
+      animation: gradientShift 6s ease infinite;
       box-sizing: border-box;
       cursor: auto !important;
       position: relative;
@@ -69,21 +71,12 @@
         linear-gradient(90deg, rgba(255, 165, 0, 0.06) 1px, transparent 1px);
       background-size: 60px 60px;
       background-position: 0 0;
-      animation: gridMoveContained 8s linear infinite;
       pointer-events: none;
       z-index: 1;
       overflow: hidden;
       box-sizing: border-box;
     }
-    
-    @keyframes gridMoveContained {
-      0% {
-        background-position: 0px 0px;
-      }
-      100% {
-        background-position: 60px 60px;
-      }
-    }
+
 
     @keyframes gradientShift {
       0% {
@@ -132,13 +125,13 @@
     .title-subtitle {
       font-size: 1rem;
       font-weight: 600;
-      font-family: 'Fira Mono', 'Consolas', monospace;
+      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 900; text-transform: none; letter-spacing: 0.1em;
       color: #ffffff;
       text-align: left;
       letter-spacing: 0.1em;
       margin-top: 1rem;
       opacity: 1;
-      text-transform: uppercase;
+      text-transform: none;
     }
 
     .title-experience-white {
@@ -148,7 +141,7 @@
       color: #ffffff;
       text-align: left;
       letter-spacing: 0.05em;
-      text-transform: uppercase;
+      text-transform: none;
       margin: 0;
       position: absolute;
       top: 0;
@@ -168,7 +161,7 @@
       background-clip: text;
       text-align: left;
       letter-spacing: 0.05em;
-      text-transform: uppercase;
+      text-transform: none;
       margin: 0;
     }
 
@@ -182,7 +175,7 @@
       background-clip: text;
       text-align: left;
       letter-spacing: 0.05em;
-      text-transform: uppercase;
+      text-transform: none;
       margin: 0;
     }
 
@@ -281,13 +274,15 @@
 
     /* Section dim effect when not in focus */
     .timeline-container,
-    .cards-container {
+    .cards-container,
+    .hello-content-mobile {
       opacity: 0.3;
       transition: opacity 0.6s ease;
     }
 
     .timeline-container.in-view,
-    .cards-container.in-view {
+    .cards-container.in-view,
+    .hello-content-mobile.in-view {
       opacity: 1 !important;
     }
 
@@ -346,7 +341,7 @@
     .timeline-content h3 {
       margin: 0 0 0.5rem 0;
       color: #ffffff;
-      font-family: 'Fira Mono', 'Consolas', monospace;
+      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 900; text-transform: none; letter-spacing: 0.1em;
       font-size: 1.125rem;
     }
 
@@ -354,7 +349,7 @@
       font-weight: 600;
       color: #00ffff;
       margin-bottom: 1rem;
-      font-family: 'Fira Mono', 'Consolas', monospace;
+      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 900; text-transform: none; letter-spacing: 0.1em;
       text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
     }
 
@@ -370,7 +365,7 @@
       padding: 0.25rem 0.75rem;
       border-radius: 20px;
       font-size: 0.875rem;
-      font-family: 'Fira Mono', 'Consolas', monospace;
+      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 900; text-transform: none; letter-spacing: 0.1em;
       border: 1px solid #ffffff;
       box-shadow: none;
       text-shadow: none;
@@ -422,7 +417,7 @@
     .card-header h3 {
       margin: 0 0 0.5rem 0;
       color: #ffffff;
-      font-family: 'Fira Mono', 'Consolas', monospace;
+      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 900; text-transform: none; letter-spacing: 0.1em;
       font-size: 1.125rem;
       display: flex;
       align-items: center;
@@ -440,7 +435,7 @@
       font-weight: 600;
       color: #00ffff;
       margin-bottom: 0.25rem;
-      font-family: 'Fira Mono', 'Consolas', monospace;
+      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 900; text-transform: none; letter-spacing: 0.1em;
       text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
     }
 
@@ -448,14 +443,14 @@
       color: #f5f5f5;
       font-size: 0.875rem;
       margin-bottom: 1rem;
-      font-family: 'Fira Mono', 'Consolas', monospace;
+      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 900; text-transform: none; letter-spacing: 0.1em;
     }
 
     .card-preview p {
       margin: 0;
       color: #ffffff;
       line-height: 1.6;
-      font-family: 'Fira Mono', 'Consolas', monospace;
+      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 900; text-transform: none; letter-spacing: 0.1em;
       text-align: left;
     }
 
@@ -552,7 +547,7 @@
       background-clip: text;
       text-align: left;
       letter-spacing: 0.005em;
-      text-transform: uppercase;
+      text-transform: none;
       margin: 0;
       line-height: 0.9;
       display: flex;
@@ -569,7 +564,7 @@
       background-clip: text;
       text-align: left;
       letter-spacing: 0.05em;
-      text-transform: uppercase;
+      text-transform: none;
       margin: 0;
     }
 
@@ -616,11 +611,11 @@
 
     .nav-link {
       color: #ffffff;
-      font-family: 'Fira Mono', 'Consolas', monospace;
-      font-size: 1.1rem;
+      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 900; text-transform: none; letter-spacing: 0.1em;
+      font-size: 1.4rem;
       font-weight: 700;
       text-decoration: none;
-      text-transform: uppercase;
+      text-transform: none;
       letter-spacing: 0.08em;
       transition: all 0.3s ease;
       cursor: pointer;
@@ -660,8 +655,8 @@
     /* Mute icon and vaporwave text */
     .mute-container {
       position: fixed;
-      top: 2rem;
-      right: 2rem;
+      bottom: 1.5rem;
+      left: 1.5rem;
       z-index: 3;
       display: flex;
       align-items: center;
@@ -743,7 +738,7 @@
       font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
       font-size: 2rem;
       font-weight: 900;
-      text-transform: uppercase;
+      text-transform: none;
       letter-spacing: 0.15em;
       text-align: center;
       transition: color 0.3s ease;
@@ -781,10 +776,10 @@
 
     .toc-item {
       color: #ffffff;
-      font-family: 'Fira Mono', 'Consolas', monospace;
+      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 900; text-transform: none; letter-spacing: 0.1em;
       font-size: 1.25rem;
       font-weight: 600;
-      text-transform: uppercase;
+      text-transform: none;
       letter-spacing: 0.05em;
       cursor: pointer;
       transition: all 0.3s ease;
@@ -830,7 +825,7 @@
       font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
       font-size: 1.5rem;
       font-weight: 900;
-      text-transform: uppercase;
+      text-transform: none;
       letter-spacing: 0.1em;
       text-align: center;
       cursor: pointer;
@@ -859,8 +854,8 @@
       padding: 0 !important;
       border-radius: 50%;
       overflow: hidden;
-      border: 3px solid #ff00ff;
-      box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+      border: 3px solid #ffffff;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
       transition: all 0.3s ease;
       position: absolute !important;
       left: 0px !important;
@@ -871,8 +866,8 @@
     }
 
     .profile-photo:hover {
-      border-color: #00ffff;
-      box-shadow: 0 0 25px rgba(0, 255, 255, 0.6);
+      border-color: #ffffff;
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.8);
     }
 
     .profile-photo img {
@@ -901,7 +896,7 @@
       font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
       font-size: 1rem;
       font-weight: 700;
-      text-transform: uppercase;
+      text-transform: none;
       letter-spacing: 0.1em;
       padding: 0.75rem 1rem;
       border-radius: 8px;
@@ -1079,7 +1074,7 @@
         background-clip: text;
         text-align: center;
         letter-spacing: 0.05em;
-        text-transform: uppercase;
+        text-transform: none;
         margin: 0 0 1.5rem 0;
         line-height: 1;
       }
@@ -1096,7 +1091,7 @@
         background-clip: text;
         text-align: center;
         letter-spacing: 0.05em;
-        text-transform: uppercase;
+        text-transform: none;
         margin: 0 0 0 0;
         line-height: 1;
       }
@@ -1113,9 +1108,33 @@
         background-clip: text;
         text-align: center;
         letter-spacing: 0.05em;
-        text-transform: uppercase;
+        text-transform: none;
         margin: 0 0 0 0
         line-height: 1;
+      }
+      
+      /* Move hello content directly into main container in vertical mode */
+      .hello-content-mobile {
+        display: block !important;
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        width: 100% !important;
+        z-index: 50 !important;
+        background: rgba(0, 0, 0, 0.8) !important;
+        padding: 2rem !important;
+        border-radius: 15px !important;
+        box-sizing: border-box !important;
+        margin: 2rem 0 !important;
+      }
+      
+      /* Hide original hello sections in vertical mode */
+      .hello-section {
+        display: none !important;
+      }
+      
+      .text-content-container {
+        display: none !important;
       }
       
       /* Make red container (experience-container) extend to bottom of orange container */
@@ -1196,6 +1215,16 @@
     .cards-container {
       border: 2px solid cyan !important;
     }
+    
+    .text-content-container {
+      border: 3px solid pink !important;
+      background: rgba(255, 192, 203, 0.2) !important;
+    }
+    
+    .hello-section {
+      border: 2px solid lime !important;
+      background: rgba(0, 255, 0, 0.1) !important;
+    }
     */
     
     /* Show timeline container border for debugging - DISABLED */
@@ -1224,8 +1253,6 @@
   <!-- Experience Container -->
   <div class="experience-container">
     
-
-    
     <!-- Full Width Content -->
     <div class="content-section">
       
@@ -1235,8 +1262,39 @@
           <div>PROFESSIONAL</div>
           <div>EXPERIENCE</div>
         </div>
-        <div style="font-size: 1rem; font-weight: 600; font-family: 'Fira Mono', 'Consolas', monospace; color: #ffffff; text-align: left; letter-spacing: 0.1em; margin-top: 1rem; opacity: 1; text-transform: uppercase;">
+        <div style="font-size: 1rem; font-weight: 600; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 900; text-transform: none; letter-spacing: 0.1em; color: #ffffff; text-align: left; letter-spacing: 0.1em; margin-top: 1rem; opacity: 1; text-transform: none;">
           scroll down to learn more
+        </div>
+        
+        <!-- Mobile Hello Content (hidden by default, shown in vertical mode) -->
+        <div class="hello-content-mobile" style="display: none; border: none !important; background: rgba(0, 0, 0, 0.8) !important;">
+          <!-- Photo and Hello Header Container -->
+          <div style="display: flex; align-items: center; gap: 1rem; margin: 0 0 1rem 0;">
+            <!-- Profile Photo -->
+            <div class="profile-photo-mobile" style="width: auto; height: min(20vh, 160px); aspect-ratio: 1; flex-shrink: 0; border-radius: 50%; overflow: hidden; border: 3px solid #ffffff; box-shadow: 0 0 20px rgba(255, 255, 255, 0.5); transition: all 0.3s ease; display: flex; align-items: center; justify-content: center;">
+              <img src="Images/SchoolPortrait.jpg" alt="Thomas Ou" style="width: 100%; height: 100%; object-fit: cover; margin: 0; padding: 0; border: none; display: block;" />
+            </div>
+            
+            <!-- Hello Thomas Header -->
+            <div style="font-size: 3rem; font-weight: 900; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; color: #ffffff; margin: 0; text-align: left; line-height: 1.05; flex: 1;">Hello. I am Thomas</div>
+          </div>
+          
+          <!-- Bio Section -->
+          <div style="color: #ffffff; font-family: 'Inter', Arial, sans-serif; font-size: 1rem; line-height: 1.6; margin: 1rem 0; opacity: 1;">I'm a mathematician turned software engineer, with experience in data analysis, full-stack web development, and finance. I'm completing my undergraduate degree alongside an accelerated master's in Philadelphia, while also doing some side research with my professors.</div>
+          
+          <!-- Contact Section -->
+          <div style="color: #ffffff; font-family: 'Inter', Arial, sans-serif; font-size: 1rem; line-height: 1.6; margin: 1rem 0; opacity: 1;">In the past, I've always found great success in collaborating and connecting with new people. At the moment, I'm working on projects in artificial intelligence and blockchain/Web3. I'd love to connect, so don't hesitate to reach out at contact[at]thomasou[dot]com</div>
+          
+          <!-- Navigation Buttons -->
+          <div style="margin: 1rem 0 0 0; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.5rem; opacity: 1;">
+            <button class="hello-nav-btn" data-section="about" style="background: transparent; border: 2px solid #ffffff; color: #ffffff; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-size: 0.8rem; font-weight: 700; text-transform: none; letter-spacing: 0.1em; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">About</button>
+            <button class="hello-nav-btn" data-section="education" style="background: transparent; border: 2px solid #ffffff; color: #ffffff; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-size: 0.8rem; font-weight: 700; text-transform: none; letter-spacing: 0.1em; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">Education</button>
+            <button class="hello-nav-btn" data-section="experience" style="background: transparent; border: 2px solid #ffffff; color: #ffffff; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-size: 0.8rem; font-weight: 700; text-transform: none; letter-spacing: 0.1em; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">Experience</button>
+            <button class="hello-nav-btn" data-section="research" style="background: transparent; border: 2px solid #ffffff; color: #ffffff; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-size: 0.8rem; font-weight: 700; text-transform: none; letter-spacing: 0.1em; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">Research</button>
+          </div>
+          
+          <!-- Divider -->
+          <div style="width: 250px; height: 2px; background: linear-gradient(90deg, #ff00ff, #00ffff); margin: 2rem 0 0 0; border-radius: 1px; box-shadow: 0 0 8px rgba(255, 0, 255, 0.4); opacity: 1;"></div>
         </div>
       </div>
 
@@ -1246,21 +1304,21 @@
         
         <!-- RESEARCH Title (in front of all) -->
         <div class="research-title" style="position: fixed; top: 5vh; right: 50%; width: min(50%, 600px); z-index: 3; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;">
-          <div class="research-text" style="font-size: min(9vw, 8rem); font-weight: 900; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; background: linear-gradient(90deg, #ff00ff, #00ffff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-align: center; letter-spacing: 0.05em; text-transform: uppercase; margin: 0; line-height: 0.9; width: 100%;">
+          <div class="research-text" style="font-size: min(9vw, 8rem); font-weight: 900; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; background: linear-gradient(90deg, #ff00ff, #00ffff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-align: center; letter-spacing: 0.05em; text-transform: none; margin: 0; line-height: 0.9; width: 100%;">
             <div>RESEARCH</div>
           </div>
         </div>
         
         <!-- EXPERIENCE Title (in front) -->
         <div class="experience-title" style="position: fixed; top: 5vh; right: 50%; width: min(50%, 600px); z-index: 2; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;">
-          <div class="experience-text" style="font-size: min(9vw, 8rem); font-weight: 900; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; background: linear-gradient(90deg, #ff00ff, #00ffff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-align: center; letter-spacing: -0.02em; text-transform: uppercase; margin: 0; line-height: 0.9; width: 100%;">
+          <div class="experience-text" style="font-size: min(9vw, 8rem); font-weight: 900; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; background: linear-gradient(90deg, #ff00ff, #00ffff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-align: center; letter-spacing: -0.02em; text-transform: none; margin: 0; line-height: 0.9; width: 100%;">
             <div>EXPERIENCE</div>
           </div>
         </div>
         
         <!-- EDUCATION Title -->
         <div class="education-title" style="position: fixed; top: 5vh; right: 50%; width: min(50%, 600px); z-index: 1;">
-          <div class="education-text" style="font-size: min(9vw, 8rem); font-weight: 900; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; background: linear-gradient(90deg, #ff00ff, #00ffff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-align: center; letter-spacing: -0.02em; text-transform: uppercase; margin: 0; line-height: 0.9; width: 100%;">
+          <div class="education-text" style="font-size: min(9vw, 8rem); font-weight: 900; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; background: linear-gradient(90deg, #ff00ff, #00ffff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-align: center; letter-spacing: -0.02em; text-transform: none; margin: 0; line-height: 0.9; width: 100%;">
             <div>EDUCATION</div>
           </div>
         </div>
@@ -1348,10 +1406,10 @@
           
           <!-- Navigation Buttons - positioned relative to header -->
           <div class="hello-section" style="margin: 1rem 0 0 0; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.5rem; opacity: 0.3; transition: opacity 0.6s ease;">
-            <button class="hello-nav-btn" data-section="about" style="background: transparent; border: 2px solid #ffffff; color: #ffffff; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">About</button>
-            <button class="hello-nav-btn" data-section="education" style="background: transparent; border: 2px solid #ffffff; color: #ffffff; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">Education</button>
-            <button class="hello-nav-btn" data-section="experience" style="background: transparent; border: 2px solid #ffffff; color: #ffffff; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">Experience</button>
-            <button class="hello-nav-btn" data-section="research" style="background: transparent; border: 2px solid #ffffff; color: #ffffff; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">Research</button>
+            <button class="hello-nav-btn" data-section="about" style="background: transparent; border: 2px solid #ffffff; color: #ffffff; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-size: 0.8rem; font-weight: 700; text-transform: none; letter-spacing: 0.1em; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">About</button>
+            <button class="hello-nav-btn" data-section="education" style="background: transparent; border: 2px solid #ffffff; color: #ffffff; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-size: 0.8rem; font-weight: 700; text-transform: none; letter-spacing: 0.1em; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">Education</button>
+            <button class="hello-nav-btn" data-section="experience" style="background: transparent; border: 2px solid #ffffff; color: #ffffff; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-size: 0.8rem; font-weight: 700; text-transform: none; letter-spacing: 0.1em; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">Experience</button>
+            <button class="hello-nav-btn" data-section="research" style="background: transparent; border: 2px solid #ffffff; color: #ffffff; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-size: 0.8rem; font-weight: 700; text-transform: none; letter-spacing: 0.1em; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">Research</button>
           </div>
           
           <!-- Divider - positioned relative to header -->
@@ -1486,7 +1544,7 @@
 
         <!-- Resume Link beneath research -->
         <div style="text-align: center; margin: 4rem 0;">
-          <a href="#" class="resume-link" style="display: inline-block; background: linear-gradient(135deg, rgba(255, 0, 255, 0.2), rgba(0, 255, 255, 0.2)); border: 3px solid transparent; border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff00ff) 1; color: #ffffff; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-size: 1.3rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.15em; padding: 1.5rem 3rem; border-radius: 0; text-decoration: none; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 30px rgba(255, 0, 255, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.1); position: relative; overflow: hidden;">
+          <a href="#" class="resume-link" style="display: inline-block; background: linear-gradient(135deg, rgba(255, 0, 255, 0.2), rgba(0, 255, 255, 0.2)); border: 3px solid transparent; border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff00ff) 1; color: #ffffff; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-size: 1.3rem; font-weight: 900; text-transform: none; letter-spacing: 0.15em; padding: 1.5rem 3rem; border-radius: 0; text-decoration: none; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 30px rgba(255, 0, 255, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.1); position: relative; overflow: hidden;">
             <span style="position: relative; z-index: 2;">See My Resume</span>
             <div style="position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent); transition: left 0.6s ease;"></div>
           </a>
@@ -1691,12 +1749,14 @@
       const timelineContainer = document.querySelector('.timeline-container');
       const experienceContainer = document.querySelector('.experience-cards');
       const researchContainer = document.querySelector('.research-cards');
+      const helloContentMobile = document.querySelector('.hello-content-mobile');
       const helloSection = document.querySelector('.top-container .hello-section'); // Hello I am Thomas section
       
       const sections = [
         { element: timelineContainer, name: 'education' },
         { element: experienceContainer, name: 'experience' },
-        { element: researchContainer, name: 'research' }
+        { element: researchContainer, name: 'research' },
+        { element: helloContentMobile, name: 'hello-mobile' }
       ].filter(section => section.element);
       
       function updateSectionVisibility() {
@@ -2015,9 +2075,9 @@
              case 'projects':
                targetPage = 'Projects.html';
                break;
-             case 'contact':
-               targetPage = 'index.html';
-               break;
+                         case 'contact':
+              targetPage = 'contact.html';
+              break;
              default:
                return;
            }
@@ -2047,11 +2107,11 @@
 
   <!-- Bottom navigation -->
   <div class="bottom-nav" style="background: solid black !important; display: flex !important; flex-direction: column !important; width: 190px !important; height: auto !important; position: fixed !important; bottom: 0.5rem !important; right: 0.5rem !important; margin: 0 !important; padding: 0 !important; border-radius: 15px !important; gap: 0 !important; align-items: stretch !important; border: none !important;">
-    <a href="index.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-size: 1.6rem !important; color: white !important; text-decoration: none !important;">home</a>
-    <a href="index.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-size: 1.6rem !important; color: white !important; text-decoration: none !important;">about</a>
-    <a href="experience.html" class="nav-link active" style="background: none !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-size: 1.6rem !important; color: #00ffff !important; text-decoration: none !important; text-shadow: 0 0 10px rgba(0, 255, 255, 0.8) !important; user-select: none !important; -webkit-user-select: none !important; -moz-user-select: none !important; -ms-user-select: none !important; pointer-events: none !important;">experience</a>
-    <a href="Projects.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-size: 1.6rem !important; color: white !important; text-decoration: none !important;">projects</a>
-    <a href="index.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-size: 1.6rem !important; color: white !important; text-decoration: none !important;">contact</a>
+    <a href="index.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: white !important; text-decoration: none !important;">home</a>
+    <a href="index.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: white !important; text-decoration: none !important;">about</a>
+    <a href="experience.html" class="nav-link active" style="background: none !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: #00ffff !important; text-decoration: none !important; text-shadow: 0 0 10px rgba(0, 255, 255, 0.8) !important; user-select: none !important; -webkit-user-select: none !important; -moz-user-select: none !important; -ms-user-select: none !important; pointer-events: none !important;">experience</a>
+    <a href="Projects.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: white !important; text-decoration: none !important;">projects</a>
+    <a href="contact.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: white !important; text-decoration: none !important;">contact</a>
   </div>
 
   <style>
@@ -2108,7 +2168,7 @@
     
     /* Hide profile photo debug border */
     .profile-photo {
-      border: 3px solid #ff00ff !important;
+      border: 3px solid #ffffff !important;
     }
     
     /* Hide text content container debug border */
