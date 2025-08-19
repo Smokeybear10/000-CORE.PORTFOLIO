@@ -106,7 +106,7 @@
 
     .stack-category h3 {
       color: #ff00ff;
-      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 900; text-transform: none; letter-spacing: 0.1em;
+      font-family: 'Inter', Arial, sans-serif;
       font-size: 0.9rem;
       font-weight: 700;
       text-transform: none;
@@ -131,7 +131,7 @@
       border: 1px solid rgba(255, 0, 255, 0.3);
       border-radius: 15px;
       padding: 0.3rem 0.7rem;
-      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 900; text-transform: none; letter-spacing: 0.1em;
+      font-family: 'Inter', Arial, sans-serif;
       font-size: 0.65rem;
       font-weight: 500;
       text-transform: none;
@@ -210,7 +210,7 @@
 
     /* Section titles */
           .section-title {
-        position: relative;
+        position: fixed;
         top: 1rem;
         left: 1rem;
         z-index: 10;
@@ -228,7 +228,7 @@
     .title-subtitle {
       font-size: 1rem;
       font-weight: 600;
-      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 900; text-transform: none; letter-spacing: 0.1em;
+      font-family: 'Inter', Arial, sans-serif;
       color: #ffffff;
       text-align: left;
       letter-spacing: 0.1em;
@@ -273,7 +273,7 @@
 
     .tech-category h3 {
       color: #F97316;
-      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 900; text-transform: none; letter-spacing: 0.1em;
+      font-family: 'Montserrat', 'Inter', Arial, sans-serif;
       font-size: 1.125rem;
       margin-bottom: 1rem;
     }
@@ -291,22 +291,25 @@
       padding: 0.5rem 1rem;
       border-radius: 20px;
       font-size: 0.875rem;
-      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 900; text-transform: none; letter-spacing: 0.1em;
+      font-family: 'Inter', Arial, sans-serif;
       border: 1px solid rgba(249, 115, 22, 0.3);
     }
 
     /* 3D Project wheel styles */
     .projects-wheel {
-      position: relative;
-      width: 100%;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(500px, 70vw);
       height: min(500px, 50vh);
-      margin: 0 auto;
       perspective: 1000px;
       perspective-origin: center 80%;
       transform-style: preserve-3d;
       cursor: auto !important;
       border: none;
       background: transparent;
+      z-index: 10;
     }
 
     .wheel-container {
@@ -401,7 +404,7 @@
       background-repeat: no-repeat;
       border-radius: 8px 8px 0 0;
       border: none;
-      pointer-events: none;
+      pointer-events: auto;
     }
 
     .project-header {
@@ -412,19 +415,19 @@
       border: none;
       background: linear-gradient(90deg, #1a0d2e, #16213e);
       border-radius: 0 0 8px 8px;
-      pointer-events: none;
+      pointer-events: auto;
       border-top: 1px solid #ff00ff;
     }
 
     .project-header h3 {
       margin: 0;
       color: #ffffff;
-      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 900; text-transform: none; letter-spacing: 0.1em;
+      font-family: 'Montserrat', 'Inter', Arial, sans-serif;
       font-size: 0.8rem;
       line-height: 1.2;
       text-align: center;
       padding: 0 0.5rem;
-      pointer-events: none;
+      pointer-events: auto;
     }
 
     /* Modal styles */
@@ -481,13 +484,13 @@
 
     .modal h2 {
       color: #00ffff;
-      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 900; text-transform: none; letter-spacing: 0.1em;
+      font-family: 'Montserrat', 'Inter', Arial, sans-serif;
       margin-bottom: 1rem;
     }
 
     .modal p {
       color: #ffffff;
-      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 900; text-transform: none; letter-spacing: 0.1em;
+      font-family: 'Inter', Arial, sans-serif;
       line-height: 1.6;
       margin-bottom: 1rem;
       text-align: left;
@@ -506,7 +509,7 @@
       padding: 0.5rem 1rem;
       border-radius: 20px;
       font-size: 0.875rem;
-      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 900; text-transform: none; letter-spacing: 0.1em;
+      font-family: 'Inter', Arial, sans-serif;
       border: 1px solid rgba(255, 255, 255, 0.3);
       box-shadow: none;
     }
@@ -585,8 +588,7 @@
       flex-direction: column;
       gap: 1.5rem;
       align-items: flex-end;
-      backdrop-filter: blur(2px);
-      -webkit-backdrop-filter: blur(2px);
+      background: transparent;
       padding: 1rem 2rem;
       border-radius: 15px;
       border: none;
@@ -594,7 +596,7 @@
 
     .nav-link {
       color: #ffffff;
-      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 900; text-transform: none; letter-spacing: 0.1em;
+      font-family: 'Inter', Arial, sans-serif;
       font-size: 1.4rem;
       font-weight: 700;
       text-decoration: none;
@@ -604,6 +606,18 @@
       cursor: pointer;
       white-space: nowrap;
       position: relative;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      background: transparent;
+    }
+
+    .nav-link:hover {
+      background: rgba(0, 0, 0, 0.8) !important;
+      backdrop-filter: blur(10px) !important;
+      -webkit-backdrop-filter: blur(10px) !important;
+      transform: scale(1.05) !important;
+      color: #00ffff !important;
+      text-shadow: 0 0 10px rgba(0, 255, 255, 0.8) !important;
     }
 
 
@@ -636,155 +650,12 @@
     }
 
 
-    /* My Stack title styling */
-    .my-stack-title {
-      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
-      font-size: clamp(1.5rem, 5vw, 3rem);
-      font-weight: 900;
-      color: #ffffff;
-      text-align: right;
-      letter-spacing: 0.1em;
-      text-transform: none;
-      margin: 1rem 0 0rem 0;
-      padding: 0;
-      transform: perspective(500px) rotateX(15deg) skew(-5deg);
-    }
 
-    /* Dropdown styles */
-    .dropdown-container {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      width: auto;
-      height: auto;
-      padding: 0 1rem 0 1rem;
-      margin: 0;
-      border: none;
-      background: transparent;
-      flex: 1;
-    }
-
-    .dropdown-section {
-      background: transparent;
-      border: none;
-      border-radius: 0;
-      overflow: hidden;
-      transition: all 0.3s ease;
-      padding-right: 0;
-    }
-
-    .dropdown-section:hover {
-      background: transparent;
-      border: none;
-      box-shadow: none;
-    }
-
-    .dropdown-header {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0;
-      cursor: pointer;
-      background: transparent;
-      transition: all 0.3s ease;
-      position: relative;
-    }
-
-    .dropdown-header:hover {
-      background: transparent;
-    }
-
-    .dropdown-header:hover h3 {
-      color: #00ffff;
-    }
-
-    .dropdown-header h3 {
-      color: #ffffff;
-      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 900; text-transform: none; letter-spacing: 0.1em;
-      font-size: 2rem;
-      font-weight: 700;
-      text-transform: none;
-      letter-spacing: 0.05em;
-      margin: 0;
-      position: relative;
-    }
-
-
-    .dropdown-arrow {
-      color: #ff00ff;
-      font-size: 0.8rem;
-      transition: transform 0.3s ease;
-    }
-
-    .dropdown-section.active .dropdown-arrow {
-      transform: rotate(180deg);
-    }
-
-    .dropdown-content {
-      max-height: 0;
-      overflow: visible;
-      transition: max-height 0.3s ease;
-      background: transparent;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-      padding: 0;
-      justify-content: flex-end;
-    }
-
-    .dropdown-section.active .dropdown-content {
-      max-height: 200px;
-      padding: 0;
-    }
-
-    .icon-container {
-      position: relative;
-      display: inline-block;
-      cursor: pointer;
-    }
-
-    .dropdown-content img {
-      width: 40px;
-      height: 40px;
-      transition: all 0.3s ease;
-      filter: brightness(1) saturate(1);
-    }
-
-    .icon-container:hover img {
-      filter: brightness(0.7) saturate(0.8);
-      transform: scale(1.1);
-    }
-
-    .icon-tooltip {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(0, 0, 0, 0.8);
-      color: #ffffff;
-      padding: 0.3rem 0.6rem;
-      border-radius: 6px;
-      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 900; text-transform: none; letter-spacing: 0.1em;
-      font-size: 0.7rem;
-      font-weight: 600;
-      white-space: nowrap;
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.3s ease;
-      z-index: 10000;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
-    }
-
-    .icon-container:hover .icon-tooltip {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1.05);
-    }
 
     .tech-item {
       padding: 0.5rem 1rem;
       color: #ffffff;
-      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 900; text-transform: none; letter-spacing: 0.1em;
+      font-family: 'Fira Mono', 'Consolas', monospace;
       font-size: 0.8rem;
       background: rgba(255, 0, 255, 0.1);
       border: 1px solid rgba(255, 0, 255, 0.3);
@@ -868,132 +739,15 @@
 
 
 
+  <!-- Featured Projects Section -->
+  <div class="section-title">
+    <div class="title-featured">FEATURED</div>
+    <div class="title-projects">PROJECTS</div>
+    <div class="title-subtitle">Click on a project to view details</div>
+  </div>
+
   <!-- Projects Container -->
-      <div class="projects-container">
-  
-      <!-- Top section with featured projects and dropdown side by side -->
-      <div class="top-section">
-        <!-- Featured Projects Section -->
-        <div class="section-title">
-        <div class="title-featured">Featured</div>
-        <div class="title-projects">Projects</div>
-        <div class="title-subtitle">Click on a project to view details</div>
-      </div>
-      
-      <div class="dropdown-container">
-        <div class="my-stack-title">MY STACK</div>
-        <div class="dropdown-section">
-          <div class="dropdown-header">
-            <span class="dropdown-arrow">▼</span>
-            <h3>Languages</h3>
-          </div>
-          <div class="dropdown-content">
-            <div class="icon-container">
-              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python">
-              <span class="icon-tooltip">Python</span>
-            </div>
-            <div class="icon-container">
-              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++">
-              <span class="icon-tooltip">C++</span>
-            </div>
-            <div class="icon-container">
-              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/r/r-original.svg" alt="R">
-              <span class="icon-tooltip">R</span>
-            </div>
-            <div class="icon-container">
-              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ocaml/ocaml-original.svg" alt="OCaml">
-              <span class="icon-tooltip">OCaml</span>
-            </div>
-            <div class="icon-container">
-              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="Java">
-              <span class="icon-tooltip">Java</span>
-            </div>
-            <div class="icon-container">
-              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/matlab/matlab-original.svg" alt="MATLAB">
-              <span class="icon-tooltip">MATLAB</span>
-            </div>
-            <div class="icon-container">
-              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5">
-              <span class="icon-tooltip">HTML5</span>
-            </div>
-            <div class="icon-container">
-              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS">
-              <span class="icon-tooltip">CSS</span>
-            </div>
-            <div class="icon-container">
-              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript">
-              <span class="icon-tooltip">JavaScript</span>
-            </div>
-          </div>
-        </div>
-        
-        <div class="dropdown-section">
-          <div class="dropdown-header">
-            <span class="dropdown-arrow">▼</span>
-            <h3>Frameworks</h3>
-          </div>
-          <div class="dropdown-content">
-            <div class="icon-container">
-              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg" alt="NumPy">
-              <span class="icon-tooltip">NumPy</span>
-            </div>
-            <div class="icon-container">
-              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg" alt="Pandas">
-              <span class="icon-tooltip">Pandas</span>
-            </div>
-            <div class="icon-container">
-              <img src="Images/Icons/Sckit.png" alt="Scikit-learn">
-              <span class="icon-tooltip">Scikit-learn</span>
-            </div>
-            <div class="icon-container">
-              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg" alt="PyTorch">
-              <span class="icon-tooltip">PyTorch</span>
-            </div>
-            <div class="icon-container">
-              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React">
-              <span class="icon-tooltip">React</span>
-            </div>
-            <div class="icon-container">
-              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg" alt="TensorFlow">
-              <span class="icon-tooltip">TensorFlow</span>
-            </div>
-            <div class="icon-container">
-              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/matplotlib/matplotlib-original.svg" alt="Matplotlib">
-              <span class="icon-tooltip">Matplotlib</span>
-            </div>
-          </div>
-        </div>
-        
-        <div class="dropdown-section">
-          <div class="dropdown-header">
-            <span class="dropdown-arrow">▼</span>
-            <h3>Databases</h3>
-          </div>
-          <div class="dropdown-content">
-            <div class="icon-container">
-              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="MySQL">
-              <span class="icon-tooltip">MySQL</span>
-            </div>
-            <div class="icon-container">
-              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PostgreSQL">
-              <span class="icon-tooltip">PostgreSQL</span>
-            </div>
-            <div class="icon-container">
-              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" alt="MongoDB">
-              <span class="icon-tooltip">MongoDB</span>
-            </div>
-            <div class="icon-container">
-              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg" alt="TensorFlow">
-              <span class="icon-tooltip">TensorFlow</span>
-            </div>
-            <div class="icon-container">
-              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node.js">
-              <span class="icon-tooltip">Node.js</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      </div>
+  <div class="projects-container">
       
       <!-- Projects Wheel -->
       <div class="projects-wheel">
@@ -1054,12 +808,12 @@
   </div>
 
       <!-- Bottom navigation -->
-    <div class="bottom-nav" style="background: solid black !important; display: flex !important; flex-direction: column !important; width: 190px !important; height: auto !important; position: fixed !important; bottom: 0.5rem !important; right: 0.5rem !important; margin: 0 !important; padding: 0 !important; border-radius: 15px !important; gap: 0 !important; align-items: stretch !important; border: none !important;">
-      <a href="index.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 900; text-transform: none; letter-spacing: 0.1em !important; font-size: 1.4rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: white !important; text-decoration: none !important;">home</a>
-      <a href="index.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 900; text-transform: none; letter-spacing: 0.1em !important; font-size: 1.4rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: white !important; text-decoration: none !important;">about</a>
-      <a href="experience.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 900; text-transform: none; letter-spacing: 0.1em !important; font-size: 1.4rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: white !important; text-decoration: none !important;">experience</a>
-      <a href="Projects.html" class="nav-link active" style="background: none !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 900; text-transform: none; letter-spacing: 0.1em !important; font-size: 1.4rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: #00ffff !important; text-decoration: none !important; text-shadow: 0 0 10px rgba(0, 255, 255, 0.8) !important; user-select: none !important; -webkit-user-select: none !important; -moz-user-select: none !important; -ms-user-select: none !important; pointer-events: none !important;">projects</a>
-      <a href="contact.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 900; text-transform: none; letter-spacing: 0.1em !important; font-size: 1.4rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: white !important; text-decoration: none !important;">contact</a>
+    <div class="bottom-nav" style="background: solid black !important; display: flex !important; flex-direction: column !important; width: 140px !important; height: auto !important; position: fixed !important; bottom: 0.5rem !important; right: 0.5rem !important; margin: 0 !important; padding: 0 !important; border-radius: 15px !important; gap: 0 !important; align-items: stretch !important; border: none !important;">
+      <a href="index.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: white !important; text-decoration: none !important;">home</a>
+      <a href="about.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: white !important; text-decoration: none !important;">about</a>
+      <a href="experience.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: white !important; text-decoration: none !important;">experience</a>
+      <a href="Projects.html" class="nav-link active" style="background: none !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: #00ffff !important; text-decoration: none !important; text-shadow: 0 0 10px rgba(0, 255, 255, 0.8) !important; user-select: none !important; -webkit-user-select: none !important; -moz-user-select: none !important; -ms-user-select: none !important; pointer-events: none !important;">projects</a>
+      <a href="contact.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: white !important; text-decoration: none !important;">contact</a>
     </div>
 
     <style>
@@ -1109,6 +863,8 @@
           padding: 0 !important;
           margin: 0 !important;
           height: 100vh !important;
+          justify-content: center !important;
+          align-items: center !important;
         }
 
         /* Reduce project card height in vertical mode */
@@ -1116,67 +872,11 @@
           height: clamp(0px, 20vh, 200px) !important;
         }
 
-        /* Stack dropdown below featured projects in vertical mode */
-        .top-section {
-          flex-direction: column !important;
-        }
-
-        .dropdown-container {
-          position: relative !important;
-          left: auto !important;
-          top: auto !important;
-          width: 100% !important;
-          max-width: none !important;
-        }
-
-        /* Hide MY STACK title in vertical mode */
-        .my-stack-title {
-          display: none !important;
-        }
-
-        /* Add gap between dropdown and wheel in vertical mode */
-        .dropdown-container {
-          margin-bottom: 9vh !important;
-        }
-
-        /* Left align dropdown content in vertical mode */
-        .dropdown-header {
-          justify-content: flex-start !important;
-        }
-
-        .dropdown-content {
-          justify-content: flex-start !important;
-        }
-
-        /* Add spacing between subtitle and dropdown in vertical mode */
-        .dropdown-container {
-          margin-top: 2rem !important;
-        }
-
-        /* Scale down dropdown menu content in vertical mode */
-        .dropdown-header h3 {
-          font-size: clamp(1rem, 4vw, 1.5rem) !important;
-        }
-
-        .dropdown-content img {
-          width: clamp(20px, 5vw, 30px) !important;
-          height: clamp(20px, 5vw, 30px) !important;
-        }
-
-        .icon-tooltip {
-          font-size: clamp(0.5rem, 2vw, 0.7rem) !important;
-          padding: clamp(0.2rem, 1vw, 0.4rem) clamp(0.3rem, 1.5vw, 0.6rem) !important;
-        }
-
-        .dropdown-content {
-          gap: clamp(0.8rem, 3vw, 1.2rem) !important;
-        }
       }
       
       /* Ensure mobile interactions work properly */
       a, button, input, textarea, select, option, [role="button"], .clickable,
-      .bottom-nav, .nav-link, .dropdown, .dropdown-menu, .dropdown-item,
-      .modal, .close, .tech, .project-card {
+      .bottom-nav, .nav-link, .modal, .close, .tech, .project-card {
         pointer-events: auto !important;
         touch-action: manipulation !important;
         cursor: pointer !important;
@@ -1198,11 +898,7 @@
       
       /* Specifically target all possible hand image elements */
       .nav-link::before, .tech::before,
-      .mute-text::before,
-      .dropdown-item::before, .stack-category h3::before,
-      .stack-category .tech::before, .stack-category::before,
-      .dropdown-content .tech::before, .dropdown-content::before,
-      .stack-section *::before {
+      .mute-text::before {
         display: none !important;
         background-image: none !important;
         opacity: 0 !important;
@@ -1391,8 +1087,7 @@
         if (e.target.closest('.bottom-nav') || 
             e.target.closest('.modal') || 
             e.target.closest('.mute-container') ||
-            e.target.closest('.section-title') ||
-            e.target.closest('.dropdown-container')) {
+            e.target.closest('.section-title')) {
           return;
         }
         
@@ -1506,31 +1201,6 @@
       }
     });
 
-    // Dropdown functionality
-    document.addEventListener('DOMContentLoaded', () => {
-      const dropdownHeaders = document.querySelectorAll('.dropdown-header');
-      console.log('Found dropdown headers:', dropdownHeaders.length);
-      
-      dropdownHeaders.forEach((header, index) => {
-        header.addEventListener('click', () => {
-          console.log('Dropdown clicked:', index);
-          const section = header.parentElement;
-          const isActive = section.classList.contains('active');
-          
-          // Close all other dropdowns
-          document.querySelectorAll('.dropdown-section').forEach(s => {
-            s.classList.remove('active');
-          });
-          
-          // Toggle current dropdown
-          if (!isActive) {
-            section.classList.add('active');
-            console.log('Dropdown activated:', index);
-          }
-        });
-      });
-      
-    });
 
     // Custom cursor animation
     document.addEventListener('DOMContentLoaded', () => {
@@ -1595,7 +1265,7 @@
               targetPage = 'index.html';
               break;
             case 'about':
-              targetPage = 'index.html';
+              targetPage = 'about.html';
               break;
             case 'experience':
               targetPage = 'experience.html';
