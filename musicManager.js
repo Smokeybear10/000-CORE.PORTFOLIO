@@ -36,9 +36,11 @@ class MusicManager {
     // Set up navigation listeners to save state before page change
     this.setupNavigationListeners();
     
-    // Auto-start music if it was playing
+    // Auto-start music if it was playing (delay slightly to ensure page is ready)
     if (this.isPlaying) {
-      this.playMusic();
+      setTimeout(() => {
+        this.playMusic();
+      }, 100);
     }
     
     // Save state periodically
@@ -108,11 +110,18 @@ class MusicManager {
         this.isPlaying = true;
         this.updateMuteIcon(true);
         console.log('Music started successfully');
+        // Save the new state
+        this.saveMusicState();
       })
       .catch(error => {
-        console.log('Music play failed:', error);
-        this.isPlaying = false;
-        this.updateMuteIcon(false);
+        console.log('Music play failed (likely autoplay restriction):', error.message);
+        // Don't change isPlaying state if it was previously true - just means autoplay is blocked
+        if (this.isPlaying) {
+          console.log('Music was playing before, will resume on next user interaction');
+        } else {
+          this.isPlaying = false;
+          this.updateMuteIcon(false);
+        }
       });
   }
   
@@ -206,7 +215,14 @@ class MusicManager {
   
   // Method to start music on user interaction (for autoplay policy compliance)
   tryAutoStart() {
+    // Try to start music - this will only succeed if user has already interacted with the site
+    this.playMusic();
+  }
+  
+  // Method to immediately resume music if it was previously playing
+  resumeIfWasPlaying() {
     if (this.isPlaying && this.audioElement) {
+      console.log('Resuming music from previous session');
       this.playMusic();
     }
   }
@@ -336,9 +352,16 @@ document.addEventListener('DOMContentLoaded', () => {
     document.removeEventListener('touchstart', enableMusicOnInteraction);
   };
 
-  document.addEventListener('click', enableMusicOnInteraction);
-  document.addEventListener('keydown', enableMusicOnInteraction);
-  document.addEventListener('touchstart', enableMusicOnInteraction);
+  // If music was already playing from previous session, try to resume immediately
+  if (musicManager.isPlaying) {
+    console.log('Music was playing in previous session, attempting to resume...');
+    musicManager.tryAutoStart();
+  } else {
+    // Otherwise, wait for user interaction
+    document.addEventListener('click', enableMusicOnInteraction);
+    document.addEventListener('keydown', enableMusicOnInteraction);
+    document.addEventListener('touchstart', enableMusicOnInteraction);
+  }
   
   // Determine current page and set appropriate track
   const currentPage = window.location.pathname.split('/').pop().replace('.html', '') || 'index';
