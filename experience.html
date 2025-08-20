@@ -50,7 +50,7 @@
     /* Custom container for experience page */
     .experience-container {
       width: 100vw !important;
-      height: 320vh !important;
+      height: 330vh !important;
       margin: 0 !important;
       padding: 2rem;
       border: none;
@@ -59,7 +59,7 @@
         radial-gradient(circle at 20% 50%, rgba(255, 0, 255, 0.03) 0%, transparent 50%),
         radial-gradient(circle at 80% 20%, rgba(0, 255, 255, 0.03) 0%, transparent 50%),
         radial-gradient(circle at 40% 80%, rgba(255, 0, 255, 0.02) 0%, transparent 50%),
-        linear-gradient(135deg, #000000 0%, #220808 25%, #000000 50%, #140505 75%, #000000 100%);
+        linear-gradient(135deg, #000000 0%, #1a0329 25%, #050505 50%, #2a1237 75%, #000000 100%);
       background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
       box-sizing: border-box;
       cursor: auto !important;
@@ -90,7 +90,7 @@
     /* Full width content */
     .content-section {
       width: 100%;
-      height: calc(400vh - 100vw);
+      height: (500vh - 180vw);
       padding: 2rem 2rem 0 2rem;
       overflow: visible;
       display: flex;
@@ -124,23 +124,6 @@
       margin-top: 0.5rem;
       margin-left: .5rem;
       letter-spacing: 0.05em;
-    }
-
-    .title-experience-white {
-      font-size: 8rem;
-      font-weight: 400;
-      font-family: 'Anton', Arial, sans-serif;
-      color: #ffffff;
-      text-align: left;
-      letter-spacing: 0.05em;
-      text-transform: none;
-      margin: 0;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 10;
-      opacity: 0;
-      transition: opacity 0.3s ease;
     }
 
     .title-experience {
@@ -1104,7 +1087,7 @@
       
       /* Move education container down more in vertical mode - increases as vw gets smaller */
       .timeline-container {
-        margin-top: calc(0rem - 5vw) !important;
+        margin-top: calc(10vw - 10rem) !important;
       }
       
       .experience-cards::before {
@@ -1168,7 +1151,7 @@
       /* Make red container (experience-container) extend to bottom of orange container */
       .experience-container {
         min-height: 100vh !important;
-        height:  calc(400vh - 100vw)!important;
+        height:  calc(420vh - 100vw)!important;
       }
       
       /* Fix timeline alignment in vertical mode */
@@ -1212,6 +1195,192 @@
         padding: 1rem !important;
       }
       
+      /* Mobile menu button styles */
+      .mobile-menu-btn {
+        display: flex !important;
+        transition: all 0.3s ease;
+      }
+
+      .mobile-menu-btn:hover {
+        background: rgba(0, 0, 0, 0.5) !important;
+        border-color: rgba(255, 0, 255, 0.3) !important;
+      }
+
+      /* Hide hamburger when menu is open */
+      .mobile-menu-btn.active {
+        opacity: 0 !important;
+        pointer-events: none !important;
+      }
+
+      .mobile-menu-btn.active .hamburger span:nth-child(1) {
+        transform: rotate(-45deg) translate(-5px, 6px);
+        background: #ff00ff;
+      }
+
+      .mobile-menu-btn.active .hamburger span:nth-child(2) {
+        opacity: 0;
+      }
+
+      .mobile-menu-btn.active .hamburger span:nth-child(3) {
+        transform: rotate(45deg) translate(-5px, -6px);
+        background: #ff00ff;
+      }
+
+      /* Navigation mobile behavior */
+      .bottom-nav {
+        transform: translateX(200px) !important;
+        opacity: 0 !important;
+        transition: all 0.3s ease !important;
+        position: relative !important;
+      }
+
+      .bottom-nav.show {
+        transform: translateX(0) !important;
+        opacity: 1 !important;
+      }
+
+      /* Close button in navigation */
+      .nav-close-btn {
+        position: absolute;
+        top: 0.5rem;
+        left: 0.5rem;
+        width: 30px;
+        height: 30px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 10001;
+        transition: all 0.3s ease;
+      }
+
+      .bottom-nav.show .nav-close-btn {
+        display: flex !important;
+      }
+
+      .nav-close-btn:hover {
+        background: rgba(255, 255, 255, 0.2) !important;
+        border-color: rgba(255, 255, 255, 0.5) !important;
+      }
+
+      .nav-close-btn::before,
+      .nav-close-btn::after {
+        content: '';
+        position: absolute;
+        width: 12px;
+        height: 2px;
+        background: #ffffff;
+        border-radius: 1px;
+      }
+
+      .nav-close-btn::before {
+        transform: rotate(45deg);
+      }
+
+      .nav-close-btn::after {
+        transform: rotate(-45deg);
+      }
+      
+      /* Make cards clickable on mobile */
+      .card {
+        pointer-events: auto !important;
+        touch-action: manipulation !important;
+        cursor: pointer !important;
+        -webkit-tap-highlight-color: rgba(255, 0, 255, 0.3) !important;
+      }
+      
+    }
+
+    /* Ensure cards are clickable on all devices */
+    .card {
+      pointer-events: auto !important;
+      cursor: pointer !important;
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      cursor: auto !important;
+    }
+    .modal-content {
+      background: linear-gradient(145deg, #1a0d2e, #16213e);
+      margin: 0;
+      padding: 2rem;
+      border-radius: 12px;
+      width: 70vw;
+      max-width: 800px;
+      max-height: 85vh;
+      overflow-y: auto;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      border: 1px solid rgba(255, 0, 255, 0.2);
+      cursor: auto !important;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .modal.show .modal-content {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+    }
+    .close {
+      color: #ffffff;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    .close:hover {
+      color: #00ffff;
+    }
+    .modal h2 {
+      color: #ffffff;
+      font-family: 'Anton', Arial, sans-serif;
+      font-size: clamp(1.2rem, 4vw, 2rem);
+      font-weight: 400;
+      margin: 0 0 0.5rem 0;
+    }
+    .modal .modal-company {
+      color: #00ffff;
+      font-family: 'Montserrat', 'Inter', Arial, sans-serif;
+      font-weight: 600;
+      font-size: clamp(0.9rem, 2.5vw, 1.2rem);
+      margin-bottom: 0.25rem;
+    }
+    .modal .modal-location {
+      color: #f5f5f5;
+      font-family: 'Fira Mono', 'Consolas', monospace;
+      font-size: clamp(0.7rem, 2vw, 0.875rem);
+      margin-bottom: 1rem;
+    }
+    .modal p {
+      color: #ffffff;
+      font-family: 'Inter', Arial, sans-serif;
+      font-size: clamp(0.8rem, 2.2vw, 1rem);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      text-align: left;
+    }
+    
+    /* Touch devices specific improvements */
+    @media (hover: none) and (pointer: coarse) {
+      .card {
+        touch-action: manipulation !important;
+        -webkit-tap-highlight-color: rgba(255, 0, 255, 0.3) !important;
+        -webkit-touch-callout: none !important;
+      }
     }
 
     /* Show container outlines for debugging layout - DISABLED */
@@ -1267,6 +1436,16 @@
 </head>
 <body>
 
+  <!-- Modal for experience/research details -->
+  <div id="experienceModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <div id="modalContent">
+        <!-- Dynamic content will be inserted here -->
+      </div>
+    </div>
+  </div>
+
   <!-- Custom Cursor -->
   <svg id="custom-cursor" width="27" height="30" viewBox="0 0 27 30" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M20.0995 11.0797L3.72518 1.13204C2.28687 0.258253 0.478228 1.44326 0.704999 3.11083L3.28667 22.0953C3.58333 24.2768 7.33319 24.6415 8.3792 22.7043C9.5038 20.6215 10.8639 18.7382 12.43 17.7122C13.996 16.6861 16.2658 16.1911 18.6244 15.9918C20.8181 15.8063 21.9811 12.2227 20.0995 11.0797Z" fill="#ff00ff" stroke="rgba(255,0,255,0.5)" stroke-width="1"/>
@@ -1306,7 +1485,7 @@
           </div>
           
           <!-- Bio Section -->
-          <div style="color: #ffffff; font-family: 'Inter', Arial, sans-serif; font-size: 1.4rem; line-height: 1.6; margin: 1rem 0; opacity: 1;">I'm a mathematician turned software engineer, with experience in data analysis, full-stack web development, and finance. I'm completing my undergraduate degree alongside an accelerated master's in Philadelphia, while also doing some side research with my professors.</div>
+          <div style="color: #ffffff; font-family: 'Inter', Arial, sans-serif; font-size: clamp(0.9rem, 3vw, 1.4rem); line-height: 1.6; margin: 1rem 0; opacity: 1;">I am a student with experience across a wide range of fields, from fintech to law. At present, I am completing both my undergraduate and accelerated master's degree in Philadelphia, while also conducting research with faculty.</div>
           
           
           <!-- Navigation Buttons -->
@@ -1423,7 +1602,7 @@
           <div class="hello-section" style="font-size: min(7.5vw, 2.4rem); font-weight: 400; font-family: 'Anton', Arial, sans-serif; color: #ffffff; margin: 0; text-align: left; line-height: 1.05; opacity: 0.3; transition: opacity 0.6s ease; letter-spacing: 0.02em;">Hello. I am Thomas</div>
           
           <!-- Bio Section - positioned relative to header -->
-          <div class="hello-section" style="color: #ffffff; font-family: 'Inter', Arial, sans-serif; font-size: 1.4rem; line-height: 1.6; margin: 2rem 0 1rem 0; opacity: 0.3; transition: opacity 0.6s ease;">I'm a mathematician turned software engineer, with experience in data analysis, full-stack web development, and finance. I'm completing my undergraduate degree alongside an accelerated master's in Philadelphia, while also doing some side research with my professors.</div>
+          <div class="hello-section" style="color: #ffffff; font-family: 'Inter', Arial, sans-serif; font-size: 1.4rem; line-height: 1.6; margin: 2rem 0 1rem 0; opacity: 0.3; transition: opacity 0.6s ease;">I am a student with experience across a wide range of fields, from fintech to law. At present, I am completing both my undergraduate and accelerated master's degree in Philadelphia, while also conducting research with faculty.</div>
           
           
           <!-- Navigation Buttons - positioned relative to header -->
@@ -1507,18 +1686,18 @@
               <div class="card-location">Spring 2024</div>
             </div>
             <div class="card-preview">
-              <p>Built data systems to process large datasets and improved accuracy by 15%.</p>
+              <p>Designed automated ETL pipelines for processing large-scale tax data & developed predictive regression models to calculate quarterly tax obligations.</p>
             </div>
           </div>
 
           <div class="card">
             <div class="card-header">
-              <h3>Legal Research & NLP <span class="card-arrow">↗</span></h3>
+              <h3>Legal Research Intern <span class="card-arrow">↗</span></h3>
               <div class="card-company">Offices of Jonathan Spodnick</div>
               <div class="card-location">Fall 2023</div>
             </div>
             <div class="card-preview">
-              <p>Researched legal cases and prepared court documents for personal injury lawsuits.</p>
+              <p>Conducted legal research and case preparation for personal injury litigation and developed automated tools to streamline document processing and case analysis workflows.</p>
             </div>
           </div>
 
@@ -1529,7 +1708,7 @@
               <div class="card-location">Summer 2023</div>
             </div>
             <div class="card-preview">
-              <p>Analyzed company growth data for an $11B spaceflight company's public listing.</p>
+              <p> Supported major financial transactions and market analysis for billion-dollar deals while conducting regulatory impact assessments and client presentations.</p>
             </div>
           </div>
         </div>
@@ -1542,12 +1721,12 @@
           
           <div class="card">
             <div class="card-header">
-              <h3>Research Assistant <span class="card-arrow">↗</span></h3>
-              <div class="card-company">Department of Defense</div>
+              <h3>Military Tech Analyst<span class="card-arrow">↗</span></h3>
+              <div class="card-company">University Of Pennsylvania</div>
               <div class="card-location">Summer 2025</div>
             </div>
             <div class="card-preview">
-              <p>Research assistant working on technology projects for the Department of Defense.</p>
+              <p>Conducted digitization and analysis of historical U.S. Board of Ordnance and Fortification records for military innovation documentation.</p>
             </div>
           </div>
 
@@ -1558,7 +1737,7 @@
               <div class="card-location">Summer 2024</div>
             </div>
             <div class="card-preview">
-              <p>Studied how particles behave in fusion reactors using computer simulations.</p>
+              <p>Conducted advanced plasma confinement analysis and fusion reaction modeling to optimize tokamak reactor performance and energy output predictions.</p>
             </div>
           </div>
 
@@ -2122,6 +2301,150 @@
          });
        });
      });
+
+    // Mobile menu toggle
+    document.addEventListener('DOMContentLoaded', () => {
+      const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+      const bottomNav = document.querySelector('.bottom-nav');
+      const closeBtn = document.querySelector('.nav-close-btn');
+      
+      if (mobileMenuBtn && bottomNav) {
+        mobileMenuBtn.addEventListener('click', () => {
+          mobileMenuBtn.classList.toggle('active');
+          bottomNav.classList.toggle('show');
+        });
+        
+        // Close button functionality
+        if (closeBtn) {
+          closeBtn.addEventListener('click', () => {
+            mobileMenuBtn.classList.remove('active');
+            bottomNav.classList.remove('show');
+          });
+        }
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+          if (!mobileMenuBtn.contains(e.target) && !bottomNav.contains(e.target)) {
+            mobileMenuBtn.classList.remove('active');
+            bottomNav.classList.remove('show');
+          }
+        });
+      }
+    });
+
+    // Experience and Research data for modals
+    const experienceData = {
+      0: { // Data & Analytics at Flushing CPA
+        title: "Data & Analytics",
+        company: "Flushing CPA Tax Center",
+        location: "Spring 2024",
+        description: "• Designed and implemented automated data extraction, transformation, and loading processes to handle large-scale tax datasets from multiple sources, reducing manual processing time by 25% while improving financial projection accuracy by 15%.<br>&nbsp;<br>• Created VBA macros and automated workflows to systematically scan 300+ client tax records for compliance issues, implementing alert systems that reduced compliance review time by 30%.<br>&nbsp;<br>• Constructed predictive statistical models using historical financial data and industry benchmarks to forecast quarterly tax liabilities for 150+ small and medium business clients with 85% accuracy.<br>&nbsp;<br>• Established standardized data processing workflows and maintained centralized tax databases, achieving 98% data accuracy and supporting seamless operations during peak tax season periods."
+      },
+      1: { // Legal Research at Jonathan Spodnick
+        title: "Legal Research Intern",
+        company: "Offices of Jonathan Spodnick",
+        location: "Fall 2023",
+        description: "• Researched legal cases and prepared court documents including motions, briefs, and discovery materials for 25+ personal injury lawsuits.<br>&nbsp;<br>• Built a Python-based natural language processing tool to automatically categorize legal documents, reducing manual review time by 40%.<br>&nbsp;<br>• Applied statistical analysis to examine injury claim patterns and settlement data across 200+ cases, informing case valuation strategies.<br>&nbsp;<br>• Streamlined document processing workflows and maintained organized case databases, improving case preparation efficiency by 35%."
+      },
+      2: { // Fintech Analyst at CITIC
+        title: "Fintech Analyst",
+        company: "CITIC Securities",
+        location: "Summer 2023",
+        description: "• Assisted in preparing a listing proposal for an $11 billion spaceflight network company by developing data-driven presentations that showcased CITIC's core investment banking capabilities and sector expertise.<br>&nbsp;<br>• Analyzed socio-political impacts on China's financial markets during CITIC's RMB regulatory penalty, collaborating with a 9-person team to develop risk mitigation strategies that minimized adverse effects on stock price performance.<br>&nbsp;<br>• Supported the preparation and documentation of an $18 billion convertible bond prospectus for a regional banking client, ensuring regulatory compliance and investor disclosure requirements.<br>&nbsp;<br>• Contributed to deal structuring and financial modeling processes across multiple high-value transactions, supporting senior analysts in client relationship management and transaction execution."
+      },
+      3: { // DoD Research Assistant
+        title: "Military Tech Analyst",
+        company: "University Of Pennsylvania",
+        location: "Summer 2025",
+        description: "• Transcribed and analyzed military technology proposals from BOF Annual Reports (1897-1908), systematically cataloging over 200+ inventions including subject details, proposer information, and military adoption outcomes across 11 annual reporting periods.<br>&nbsp;<br>• Evaluated technological significance and historical impact of proposed military innovations, providing evidence-based recommendations for deeper research prioritization while assessing factors including adoption success, technological advancement, and lasting influence on modern defense systems.<br>&nbsp;<br>• Synthesized findings from diverse primary and secondary sources including patent databases, military testing records, newspaper archives, and academic collections to create comprehensive technology profiles supporting ongoing historical military innovation research initiatives."
+      },
+      4: { // PPPL Research Assistant
+        title: "Research Assistant", 
+        company: "Princeton Plasma Physics Lab (PPPL)",
+        location: "Summer 2024",
+        description: "• Analyzed plasma confinement mechanisms to study charged particle behavior within tokamak reactor configurations, examining magnetic field interactions and particle trajectory dynamics.<br>&nbsp;<br>• Simulated the effects of magnetic field strength variations and plasma density changes on reactor performance metrics, identifying optimal operating parameters for maximum energy output efficiency.<br>&nbsp;<br>• Developed statistical models to predict fusion reaction rates under different operating conditions, incorporating plasma temperature, density, and confinement variables to forecast reactor performance.<br>&nbsp;<br>• Collaborated with research team to validate simulation results against experimental data, contributing to ongoing fusion energy research and reactor optimization studies."
+      }
+    };
+
+    // Card click functionality with modal support
+    document.addEventListener('DOMContentLoaded', () => {
+      const cards = document.querySelectorAll('.card');
+      const modal = document.getElementById('experienceModal');
+      const modalContent = document.getElementById('modalContent');
+      const closeBtn = document.querySelector('.close');
+      
+      cards.forEach((card, index) => {
+        // Add click and touch handlers
+        const handleCardClick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          
+          // Add visual feedback
+          card.style.transform = 'scale(0.98)';
+          setTimeout(() => {
+            card.style.transform = '';
+          }, 150);
+          
+          // Get experience data
+          const experience = experienceData[index];
+          
+          if (experience) {
+            // Create modal content
+            modalContent.innerHTML = `
+              <h2>${experience.title}</h2>
+              <div class="modal-company">${experience.company}</div>
+              <div class="modal-location">${experience.location}</div>
+              <p>${experience.description}</p>
+            `;
+            
+            // Show modal with animation
+            modal.style.display = 'block';
+            setTimeout(() => {
+              modal.classList.add('show');
+            }, 10);
+          }
+        };
+        
+        // Add both click and touch events
+        card.addEventListener('click', handleCardClick);
+        card.addEventListener('touchend', handleCardClick);
+        
+        // Prevent touch conflicts with scrolling
+        card.addEventListener('touchstart', (e) => {
+          e.stopPropagation();
+        }, { passive: false });
+      });
+
+      // Close modal functionality
+      if (closeBtn && modal) {
+        closeBtn.addEventListener('click', () => {
+          modal.classList.remove('show');
+          setTimeout(() => {
+            modal.style.display = 'none';
+          }, 400);
+        });
+      }
+
+      // Close modal when clicking outside
+      window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.remove('show');
+          setTimeout(() => {
+            modal.style.display = 'none';
+          }, 400);
+        }
+      });
+
+      // Close modal with escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal && modal.style.display === 'block') {
+          modal.classList.remove('show');
+          setTimeout(() => {
+            modal.style.display = 'none';
+          }, 400);
+        }
+      });
+    });
   </script>
 
   <!-- Mute icon and vaporwave text -->
@@ -2132,8 +2455,18 @@
     <span class="mute-text">vaporwave</span>
   </div>
 
+  <!-- Mobile Menu Button (vertical mode only) -->
+  <div class="mobile-menu-btn" style="display: none; position: fixed; bottom: 1rem; right: 1rem; z-index: 10000; width: 50px; height: 50px; background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 50%; cursor: pointer; align-items: center; justify-content: center; border: 1px solid rgba(255, 255, 255, 0.1);">
+    <div class="hamburger">
+      <span style="display: block; width: 20px; height: 2px; background: #ffffff; margin: 3px 0; transition: 0.3s; border-radius: 1px;"></span>
+      <span style="display: block; width: 20px; height: 2px; background: #ffffff; margin: 3px 0; transition: 0.3s; border-radius: 1px;"></span>
+      <span style="display: block; width: 20px; height: 2px; background: #ffffff; margin: 3px 0; transition: 0.3s; border-radius: 1px;"></span>
+    </div>
+  </div>
+
   <!-- Bottom navigation -->
   <div class="bottom-nav" style="background: solid black !important; display: flex !important; flex-direction: column !important; width: 140px !important; height: auto !important; position: fixed !important; bottom: 0.5rem !important; right: 0.5rem !important; margin: 0 !important; padding: 0 !important; border-radius: 15px !important; gap: 0 !important; align-items: stretch !important; border: none !important;">
+    <div class="nav-close-btn"></div>
     <a href="index.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: white !important; text-decoration: none !important;">home</a>
     <a href="about.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: white !important; text-decoration: none !important;">about</a>
     <a href="experience.html" class="nav-link active" style="background: none !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: #00ffff !important; text-decoration: none !important; text-shadow: 0 0 10px rgba(0, 255, 255, 0.8) !important; user-select: none !important; -webkit-user-select: none !important; -moz-user-select: none !important; -ms-user-select: none !important; pointer-events: none !important;">experience</a>
@@ -2204,7 +2537,128 @@
     }
   </style>
 
+  <!-- Background music -->
+  <audio id="backgroundMusic" loop>
+    <source src="Assets/Resonance.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
 
+  <!-- Mute icon and vaporwave text -->
+  <div class="mute-container" id="muteContainer">
+    <svg class="mute-icon" id="muteIcon" viewBox="0 0 24 24">
+      <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+    </svg>
+    <span class="mute-text">vaporwave</span>
+  </div>
+
+  <style>
+    /* Mute icon and vaporwave text */
+    .mute-container {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 1.5rem;
+      z-index: 1001;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+    }
+
+    .mute-icon {
+      width: 24px;
+      height: 24px;
+      fill: #ffffff;
+      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+      transition: all 0.3s ease;
+    }
+
+    .mute-text {
+      color: #ffffff;
+      font-family: 'Inter', Arial, sans-serif;
+      font-size: 1rem;
+      font-weight: 400;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .mute-container:hover .mute-icon {
+      fill: #ff00ff;
+      filter: drop-shadow(0 0 15px rgba(255, 0, 255, 0.8));
+    }
+
+    .mute-container:hover .mute-text {
+      color: #ff00ff;
+      text-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+    }
+  </style>
+
+  <script>
+    // Background music functionality
+    document.addEventListener('DOMContentLoaded', () => {
+      const backgroundMusic = document.getElementById('backgroundMusic');
+      const muteContainer = document.getElementById('muteContainer');
+      const muteIcon = document.getElementById('muteIcon');
+      let isPlaying = false;
+
+      // Set initial volume and start time
+      backgroundMusic.volume = 0.5;
+      backgroundMusic.currentTime = 25; // Start at 25 seconds
+
+      // Icons for play/pause states
+      const mutedIcon = `<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>`;
+      const playingIcon = `<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>`;
+
+      // Toggle music play/pause
+      function toggleMusic() {
+        if (isPlaying) {
+          backgroundMusic.pause();
+          muteIcon.innerHTML = mutedIcon;
+          isPlaying = false;
+        } else {
+          backgroundMusic.play().catch(e => {
+            console.log('Audio play failed:', e);
+          });
+          muteIcon.innerHTML = playingIcon;
+          isPlaying = true;
+        }
+      }
+
+      // Click handler for mute container
+      muteContainer.addEventListener('click', toggleMusic);
+
+      // Auto-start music with fallback for browser restrictions
+      function startMusic() {
+        if (!isPlaying) {
+          backgroundMusic.play().then(() => {
+            muteIcon.innerHTML = playingIcon;
+            isPlaying = true;
+            console.log('Music started successfully');
+          }).catch(e => {
+            console.log('Auto-start blocked by browser, waiting for user interaction');
+          });
+        }
+      }
+
+      // Try immediate start
+      startMusic();
+
+      // Also try on any user interaction
+      function enableMusicOnInteraction() {
+        startMusic();
+        // Remove listeners after first successful start
+        document.removeEventListener('click', enableMusicOnInteraction);
+        document.removeEventListener('keydown', enableMusicOnInteraction);
+        document.removeEventListener('touchstart', enableMusicOnInteraction);
+      }
+
+      document.addEventListener('click', enableMusicOnInteraction);
+      document.addEventListener('keydown', enableMusicOnInteraction);
+      document.addEventListener('touchstart', enableMusicOnInteraction);
+    });
+  </script>
 
 </body>
-</html>`
+</html>

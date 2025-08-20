@@ -877,5 +877,128 @@
     });
   </script>
 
+  <!-- Background music -->
+  <audio id="backgroundMusic" loop>
+    <source src="Assets/Resonance.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <!-- Mute icon and vaporwave text -->
+  <div class="mute-container" id="muteContainer">
+    <svg class="mute-icon" id="muteIcon" viewBox="0 0 24 24">
+      <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+    </svg>
+    <span class="mute-text">vaporwave</span>
+  </div>
+
+  <style>
+    /* Mute icon and vaporwave text */
+    .mute-container {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 1.5rem;
+      z-index: 1001;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+    }
+
+    .mute-icon {
+      width: 24px;
+      height: 24px;
+      fill: #ffffff;
+      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+      transition: all 0.3s ease;
+    }
+
+    .mute-text {
+      color: #ffffff;
+      font-family: 'Inter', Arial, sans-serif;
+      font-size: 1rem;
+      font-weight: 400;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .mute-container:hover .mute-icon {
+      fill: #ff00ff;
+      filter: drop-shadow(0 0 15px rgba(255, 0, 255, 0.8));
+    }
+
+    .mute-container:hover .mute-text {
+      color: #ff00ff;
+      text-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+    }
+  </style>
+
+  <script>
+    // Background music functionality
+    document.addEventListener('DOMContentLoaded', () => {
+      const backgroundMusic = document.getElementById('backgroundMusic');
+      const muteContainer = document.getElementById('muteContainer');
+      const muteIcon = document.getElementById('muteIcon');
+      let isPlaying = false;
+
+      // Set initial volume and start time
+      backgroundMusic.volume = 0.5;
+      backgroundMusic.currentTime = 25; // Start at 25 seconds
+
+      // Icons for play/pause states
+      const mutedIcon = `<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>`;
+      const playingIcon = `<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>`;
+
+      // Toggle music play/pause
+      function toggleMusic() {
+        if (isPlaying) {
+          backgroundMusic.pause();
+          muteIcon.innerHTML = mutedIcon;
+          isPlaying = false;
+        } else {
+          backgroundMusic.play().catch(e => {
+            console.log('Audio play failed:', e);
+          });
+          muteIcon.innerHTML = playingIcon;
+          isPlaying = true;
+        }
+      }
+
+      // Click handler for mute container
+      muteContainer.addEventListener('click', toggleMusic);
+
+      // Auto-start music with fallback for browser restrictions
+      function startMusic() {
+        if (!isPlaying) {
+          backgroundMusic.play().then(() => {
+            muteIcon.innerHTML = playingIcon;
+            isPlaying = true;
+            console.log('Music started successfully');
+          }).catch(e => {
+            console.log('Auto-start blocked by browser, waiting for user interaction');
+          });
+        }
+      }
+
+      // Try immediate start
+      startMusic();
+
+      // Also try on any user interaction
+      function enableMusicOnInteraction() {
+        startMusic();
+        // Remove listeners after first successful start
+        document.removeEventListener('click', enableMusicOnInteraction);
+        document.removeEventListener('keydown', enableMusicOnInteraction);
+        document.removeEventListener('touchstart', enableMusicOnInteraction);
+      }
+
+      document.addEventListener('click', enableMusicOnInteraction);
+      document.addEventListener('keydown', enableMusicOnInteraction);
+      document.addEventListener('touchstart', enableMusicOnInteraction);
+    });
+  </script>
+
 </body>
 </html>
