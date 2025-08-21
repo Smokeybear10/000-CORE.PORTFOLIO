@@ -1,0 +1,546 @@
+/* Base styles to prevent bounce scrolling */
+html, body {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+body {
+  overscroll-behavior: none;
+  -webkit-overscroll-behavior: none;
+  opacity: 0;
+  animation: easeIn 0.8s ease-out forwards;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Initially hidden during startup */
+  background: linear-gradient(
+    135deg,
+    #000000 0%,
+    #0a0015 25%,
+    #000000 50%,
+    #150025 75%,
+    #000000 100%
+  );
+  background-size: 400% 400%;
+  animation: easeIn 0.8s ease-out forwards, gradientShift 6s ease infinite;
+  color: #ffffff;
+  font-family: 'Inter', Arial, sans-serif;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+@keyframes easeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* STARTUP PRELOADER */
+.startup-preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 9999;
+  display: flex;
+  background: #000000;
+  overflow: hidden;
+}
+
+.preloader-bar {
+  width: 10%;
+  height: 100%;
+  background: #000000;
+  transform: translateY(0);
+  will-change: transform;
+  position: relative;
+}
+
+.startup-name-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
+  font-size: clamp(8rem, 20vw, 12rem);
+  font-weight: 400;
+  color: #ffffff;
+  line-height: 1;
+  overflow: hidden;
+  letter-spacing: 0.1em;
+}
+
+.startup-name-text span {
+  display: inline-block;
+  transform: translateY(100%);
+}
+
+.startup-click-button {
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 1rem 2rem;
+  background: transparent;
+  border: 2px solid #ffffff;
+  color: #ffffff;
+  font-family: 'Inter', Arial, sans-serif;
+  font-size: 1.2rem;
+  font-weight: 400;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.3s ease;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.startup-click-button:hover {
+  background: #ffffff;
+  color: #000000;
+  transform: translateX(-50%) translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+}
+
+.startup-click-button.show {
+  opacity: 1;
+}
+
+@keyframes vaporwaveHue {
+  0% { filter: hue-rotate(0deg) saturate(1.2); }
+  25% { filter: hue-rotate(90deg) saturate(1.5); }
+  50% { filter: hue-rotate(180deg) saturate(1.8); }
+  75% { filter: hue-rotate(270deg) saturate(1.5); }
+  100% { filter: hue-rotate(360deg) saturate(1.2); }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* About container */
+.about-container {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  position: relative;
+}
+
+/* 3D Model Container */
+#model-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+  pointer-events: none;
+  display: none;
+  opacity: 0;
+  transition: none;
+}
+
+#model-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  filter: drop-shadow(0 0 200px rgba(255, 255, 255, 1.0));
+}
+
+/* 3D Cube Container */
+#cube-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+#cube-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  filter: drop-shadow(0 0 200px rgba(255, 255, 255, 1.0));
+}
+
+/* CUSTOM CURSOR */
+#custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  opacity: 1;
+  z-index: 999999;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: normal;
+  transition: opacity 0.3s ease;
+  display: block;
+}
+
+/* Hide default cursor globally */
+* {
+  cursor: none !important;
+}
+
+*:hover {
+  cursor: none !important;
+}
+
+html {
+  cursor: none !important;
+}
+
+body {
+  cursor: none !important;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+body * {
+  cursor: none !important;
+}
+
+/* Override all possible cursor styles */
+a, button, input, textarea, select, [role="button"], .clickable,
+.card, .nav-link, .tech, .mute-container, .vaporwave-arrow,
+.stack-text, .modal, .close, svg, path {
+  cursor: none !important;
+}
+
+a:hover, button:hover, input:hover, textarea:hover, select:hover,
+[role="button"]:hover, .clickable:hover, .card:hover,
+.nav-link:hover, .tech:hover, .mute-container:hover, .vaporwave-arrow:hover,
+.stack-text:hover, .modal:hover, .close:hover, svg:hover, path:hover {
+  cursor: none !important;
+}
+
+/* Navigation menu bottom right */
+.bottom-nav {
+  position: fixed;
+  bottom: 0rem;
+  right: 0rem;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: flex-end;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  padding: 1rem 2rem;
+  border-radius: 15px;
+  border: none;
+}
+
+.nav-link {
+  color: #ffffff;
+  font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 400; text-transform: uppercase; letter-spacing: 0.15em;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-decoration: none;
+  text-transform: none;
+  letter-spacing: 0.08em;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  white-space: nowrap;
+  position: relative;
+}
+
+.nav-link::before {
+  content: '';
+  position: absolute;
+  left: -2.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 35px;
+  height: 35px;
+  background-image: url('Images/Hand.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.nav-link:nth-child(2)::before {
+  background-image: url('Images/Dophin.png');
+}
+
+.nav-link:hover {
+  color: #00ffff;
+}
+
+.nav-link:hover::before {
+  opacity: 1;
+}
+
+/* Mute icon and vaporwave text */
+.mute-container {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.mute-icon {
+  width: 24px;
+  height: 24px;
+  fill: #ffffff;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+  transition: all 0.3s ease;
+}
+
+.mute-text {
+  color: #ffffff;
+  font-family: 'Inter', Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.mute-container:hover .mute-icon {
+  fill: #ff00ff;
+  filter: drop-shadow(0 0 15px rgba(255, 0, 255, 0.8));
+}
+
+.mute-container:hover .mute-text {
+  color: #ff00ff;
+  text-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+}
+
+/* Hide intro text on smaller screens */
+@media (max-width: 480px) {
+  .about-intro-container {
+    display: none !important;
+  }
+}
+
+/* About content */
+.about-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Thomas Ou heading */
+.name-heading {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1000;
+  font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
+  font-size: min(8rem, 22vw);
+  font-weight: 400;
+  color: #ffffff;
+  text-transform: none;
+  letter-spacing: 0.05em;
+  pointer-events: none;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+}
+
+/* About page typing card - no responsive changes */
+.about-typing-card {
+  position: fixed !important;
+  left: min(12rem, 29vw) !important;
+  top: min(10rem, 29vw) !important;
+  transform: rotate(-3deg) !important;
+  z-index: 500;
+  width: min(20rem, 58vw) !important;
+  height: clamp(5rem, 8vw, 10rem) !important;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 0, 255, 0.5);
+  border-radius: 0.8rem;
+  box-shadow: 
+    0 0 20px rgba(255, 0, 255, 0.4),
+    0 0 40px rgba(0, 255, 255, 0.2),
+    inset 0 1px 0 rgba(255, 0, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.about-typed-text {
+  width: 100%;
+  text-align: center;
+  font-family: 'Courier New', 'Monaco', 'Lucida Console', monospace;
+  font-weight: 400;
+  font-size: min(2rem, 5vw) !important;
+  background: linear-gradient(90deg, #ff00ff, #00ffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+  padding: 0;
+  letter-spacing: 0.1em;
+  text-transform: none;
+  text-shadow: 
+    0 0 10px rgba(255, 0, 255, 0.7),
+    0 0 20px rgba(0, 255, 255, 0.5);
+}
+
+/* About page intro container - bottom left - no responsive changes */
+.about-intro-container {
+  position: fixed !important;
+  left: .5rem !important;
+  bottom: .5rem !important;
+  z-index: 500;
+  width: min(50vw, 30rem) !important;
+  padding: 1rem;
+}
+
+.about-intro-text {
+  font-family: 'Courier New', 'Monaco', 'Lucida Console', monospace;
+  font-weight: 400;
+  font-size: min(2.8vw, 1.2rem) !important;
+  color: #ffffff;
+  margin: 0rem;
+  padding: 0;
+  letter-spacing: 0.05em;
+  line-height: 1.6;
+  text-align: left;
+  text-shadow: 
+    0 0 10px rgba(255, 0, 255, 0.8),
+    0 0 20px rgba(0, 255, 255, 0.6),
+    0 0 30px rgba(255, 0, 255, 0.4);
+}
+
+/* Vaporwave gradient overlay - in front of grid - hidden by default */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 0, 255, 0.15) 0%,
+    rgba(128, 0, 255, 0.12) 25%,
+    rgba(0, 255, 255, 0.15) 50%,
+    rgba(255, 0, 128, 0.12) 75%,
+    rgba(255, 0, 255, 0.15) 100%
+  );
+  background-size: 300% 300%;
+  animation: gradientShift 8s ease infinite;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Show gradient overlay when hovering over projects */
+body.projects-hover::after {
+  opacity: 1;
+}
+
+/* Override hand cursor hover effects for navigation buttons */
+.bottom-nav .nav-link::before {
+  display: none !important;
+}
+
+.bottom-nav .nav-link:hover::before {
+  display: none !important;
+}
+
+/* Add hover highlighting for nav text */
+.bottom-nav .nav-link:hover {
+  background: rgba(0, 0, 0, 0.3) !important;
+  color: #00ffff !important;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.8) !important;
+  border-radius: 8px !important;
+  transform: scale(1.05) !important;
+  transition: all 0.2s ease !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+
+/* Disable hover effects for active nav item */
+.bottom-nav .nav-link.active:hover {
+  background: none !important;
+  transform: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-radius: 0 !important;
+}
+
+/* Navigation specific styling for clean look */
+.bottom-nav {
+  background: transparent !important;
+  display: flex !important;
+  flex-direction: column !important;
+  width: 140px !important;
+  height: auto !important;
+  position: fixed !important;
+  bottom: 0.5rem !important;
+  right: 0.5rem !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 15px !important;
+  gap: 0 !important;
+  align-items: stretch !important;
+  border: none !important;
+}
+
+.bottom-nav .nav-link {
+  background: transparent !important;
+  border: none !important;
+  flex: none !important;
+  text-align: right !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  height: 45px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  padding: 0 10px 0 0 !important;
+  white-space: normal !important;
+  position: relative !important;
+  font-family: 'Fira Mono', 'Consolas', monospace !important;
+  font-size: 1.1rem !important;
+  font-weight: 400 !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  color: white !important;
+  text-decoration: none !important;
+}
+
+.bottom-nav .nav-link.active {
+  background: none !important;
+  color: #00ffff !important;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.8) !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  pointer-events: none !important;
+}

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thomas Ou • Portfolio</title>
+  <!-- Google Fonts for modern look -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:900,700,400|Inter:400,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton:wght@400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- GSAP -->
+  <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
+  <!-- Three.js -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.155.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.155.0/examples/jsm/"
+      }
+    }
+  </script>
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="styles/index.css" />
+  <script defer src="script.js"></script>
+  <!-- Music Manager -->
+  <script defer src="musicManager.js"></script>
+  <!-- Index page scripts -->
+  <script defer src="js/index.js"></script>
+  <script defer src="js/3d-cube.js"></script>
+  <script defer src="js/3d-models.js"></script>
+  <script defer src="js/dynamic-models.js"></script>
+  <script defer src="js/navigation.js"></script>
+</head>
+<body>
+
+  <!-- Startup Preloader -->
+  <div id="startup-preloader" class="startup-preloader">
+    <!-- Vertical bars -->
+    <div class="preloader-bar bar-1"></div>
+    <div class="preloader-bar bar-2"></div>
+    <div class="preloader-bar bar-3"></div>
+    <div class="preloader-bar bar-4"></div>
+    <div class="preloader-bar bar-5"></div>
+    <div class="preloader-bar bar-6"></div>
+    <div class="preloader-bar bar-7"></div>
+    <div class="preloader-bar bar-8"></div>
+    <div class="preloader-bar bar-9"></div>
+    <div class="preloader-bar bar-10"></div>
+    
+    <!-- Name animation -->
+    <div class="startup-name-text">
+      <span>T</span>
+      <span>H</span>
+      <span>O</span>
+      <span>M</span>
+      <span>A</span>
+      <span>S</span>
+    </div>
+
+    <!-- Click button -->
+    <button class="startup-click-button" id="startupClickButton">
+      Click Here
+    </button>
+  </div>
+
+  <!-- Custom Cursor -->
+  <svg id="custom-cursor" width="27" height="30" viewBox="0 0 27 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20.0995 11.0797L3.72518 1.13204C2.28687 0.258253 0.478228 1.44326 0.704999 3.11083L3.28667 22.0953C3.58333 24.2768 7.33319 24.6415 8.3792 22.7043C9.5038 20.6215 10.8639 18.7382 12.43 17.7122C13.996 16.6861 16.2658 16.1911 18.6244 15.9918C20.8181 15.8063 21.9811 12.2227 20.0995 11.0797Z" fill="#ff00ff" stroke="rgba(255,0,255,0.5)" stroke-width="1"/>
+  </svg>
+
+  <!-- Thomas Ou heading -->
+  <div class="name-heading">
+    <div>Thomas</div>
+    <div>Ou</div>
+  </div>
+
+  <!-- About page typing card -->
+  <div class="about-typing-card">
+    <h2 class="about-typed-text"></h2>
+  </div>
+
+  <!-- About Container -->
+  <div class="about-container">
+    <!-- 3D Model Container (reused for all models) -->
+    <div id="model-container">
+      <canvas id="model-canvas"></canvas>
+    </div>
+    
+    <!-- 3D Cube Container -->
+    <div id="cube-container">
+      <canvas id="cube-canvas"></canvas>
+    </div>
+    
+    <div class="about-content">
+    </div>
+  </div>
+
+  <!-- Background music -->
+  <audio id="backgroundMusic" loop>
+    <source src="Assets/Emotions.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  
+  <!-- Hover music -->
+  <audio id="hoverMusic" loop>
+    <source src="Assets/Resonance.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <!-- Mute icon and vaporwave text -->
+  <div class="mute-container" id="muteContainer">
+    <svg class="mute-icon" id="muteIcon" viewBox="0 0 24 24">
+      <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+    </svg>
+    <span class="mute-text">vaporwave</span>
+  </div>
+
+  <!-- Bottom navigation -->
+  <div class="bottom-nav">
+    <a href="home.html" class="nav-link active">home</a>
+    <a href="about.html" class="nav-link">about</a>
+    <a href="experience.html" class="nav-link">experience</a>
+    <a href="Projects.html" class="nav-link">projects</a>
+    <a href="contact.html" class="nav-link">contact</a>
+  </div>
+
+  <script>
+    // Background music functionality
+    document.addEventListener('DOMContentLoaded', () => {
+      const backgroundMusic = document.getElementById('backgroundMusic');
+      const hoverMusic = document.getElementById('hoverMusic');
+      const muteContainer = document.getElementById('muteContainer');
+      const muteIcon = document.getElementById('muteIcon');
+      const muteText = document.querySelector('.mute-text');
+      let isPlaying = false;
+      let isHovering = false;
+      let currentFadeInterval = null; // Track active fade interval
+
+      // Set initial volume and start time
+      backgroundMusic.volume = 0.2; // Quieter emotions
+      hoverMusic.volume = 0;
+      hoverMusic.currentTime = 25; // Start at 25 seconds
+
+      // Icons for play/pause states
+      const mutedIcon = `<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>`;
+      const playingIcon = `<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>`;
+
+      // Fade between tracks
+      function fadeToHover() {
+        if (!isPlaying || isHovering) return; // Don't fade if already hovering
+        
+        // Clear any existing fade interval
+        if (currentFadeInterval) {
+          clearInterval(currentFadeInterval);
+          currentFadeInterval = null;
+        }
+        
+        isHovering = true;
+        
+        // Start hover music if not already playing
+        if (hoverMusic.paused) {
+          hoverMusic.play().catch(e => console.log('Hover music play failed:', e));
+        }
+        
+        // Fade out emotions, fade in resonance
+        currentFadeInterval = setInterval(() => {
+          if (backgroundMusic.volume > 0) {
+            backgroundMusic.volume = Math.max(0, backgroundMusic.volume - 0.05);
+          }
+          if (hoverMusic.volume < 0.5) {
+            hoverMusic.volume = Math.min(0.5, hoverMusic.volume + 0.05);
+          }
+          
+          if (backgroundMusic.volume <= 0 && hoverMusic.volume >= 0.5) {
+            clearInterval(currentFadeInterval);
+            currentFadeInterval = null;
+          }
+        }, 50);
+      }
+      
+      function fadeToBackground() {
+        if (!isPlaying || !isHovering) return; // Don't fade if not hovering
+        
+        // Clear any existing fade interval
+        if (currentFadeInterval) {
+          clearInterval(currentFadeInterval);
+          currentFadeInterval = null;
+        }
+        
+        isHovering = false;
+        
+        // Fade out resonance, fade in emotions
+        currentFadeInterval = setInterval(() => {
+          if (hoverMusic.volume > 0) {
+            hoverMusic.volume = Math.max(0, hoverMusic.volume - 0.05);
+          }
+          if (backgroundMusic.volume < 0.2) {
+            backgroundMusic.volume = Math.min(0.2, backgroundMusic.volume + 0.05);
+          }
+          
+          if (hoverMusic.volume <= 0 && backgroundMusic.volume >= 0.2) {
+            clearInterval(currentFadeInterval);
+            currentFadeInterval = null;
+            hoverMusic.pause();
+          }
+        }, 50);
+      }
+
+      // Toggle music play/pause
+      function toggleMusic() {
+        if (isPlaying) {
+          backgroundMusic.pause();
+          muteIcon.innerHTML = mutedIcon;
+          isPlaying = false;
+        } else {
+          backgroundMusic.play().catch(e => {
+            console.log('Audio play failed:', e);
+            // Fallback for browsers that require user interaction
+          });
+          muteIcon.innerHTML = playingIcon;
+          isPlaying = true;
+        }
+      }
+
+      // Click handler for mute container
+      muteContainer.addEventListener('click', toggleMusic);
+
+      // Try multiple methods to auto-start music
+      function attemptAutoStart() {
+        if (!isPlaying) {
+          backgroundMusic.play().then(() => {
+            muteIcon.innerHTML = playingIcon;
+            isPlaying = true;
+            console.log('Music auto-started successfully');
+          }).catch(e => {
+            console.log('Auto-start failed, waiting for user interaction:', e);
+            // Try again after any user interaction
+            document.addEventListener('click', () => {
+              if (!isPlaying) {
+                toggleMusic();
+              }
+            }, { once: true });
+          });
+        }
+      }
+
+      // Multiple attempts to start music
+      setTimeout(attemptAutoStart, 500);
+      setTimeout(attemptAutoStart, 1000);
+      setTimeout(attemptAutoStart, 2000);
+
+      // Also try on window focus
+      window.addEventListener('focus', () => {
+        if (!isPlaying) {
+          setTimeout(attemptAutoStart, 100);
+        }
+      });
+
+      // Try on any user interaction
+      ['click', 'keydown', 'touchstart', 'mousemove'].forEach(event => {
+        document.addEventListener(event, () => {
+          if (!isPlaying) {
+            setTimeout(attemptAutoStart, 50);
+          }
+        }, { once: true });
+      });
+      
+      // Add hover listeners to navigation area
+      const navContainer = document.querySelector('.bottom-nav');
+      const navButtons = document.querySelectorAll('.bottom-nav .nav-link');
+      
+      // Use the container for enter/leave detection to avoid switching between buttons
+      if (navContainer) {
+        navContainer.addEventListener('mouseenter', () => {
+          fadeToHover();
+        });
+        
+        navContainer.addEventListener('mouseleave', () => {
+          fadeToBackground();
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>
