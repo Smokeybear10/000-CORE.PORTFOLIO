@@ -1,5 +1,5 @@
 // Global Music Manager for Portfolio Site
-// Handles persistent music playback across page navigation
+// Handles persistent music playback across page navigation and tesdt
 
 class MusicManager {
   constructor() {
