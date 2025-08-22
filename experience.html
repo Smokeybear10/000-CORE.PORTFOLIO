@@ -52,7 +52,7 @@
     /* Custom container for experience page */
     .experience-container {
       width: 100vw !important;
-      height: 330vh !important;
+      height: calc(2800px + 120vh - 20vw) !important;
       margin: 0 !important;
       padding: 2rem;
       border: none;
@@ -252,14 +252,16 @@
     /* Section dim effect when not in focus */
     .timeline-container,
     .cards-container,
-    .hello-content-mobile {
+    .hello-content-mobile,
+    .profile-photo {
       opacity: 0.3;
       transition: opacity 0.6s ease;
     }
 
     .timeline-container.in-view,
     .cards-container.in-view,
-    .hello-content-mobile.in-view {
+    .hello-content-mobile.in-view,
+    .profile-photo.in-view {
       opacity: 1 !important;
     }
 
@@ -1089,7 +1091,7 @@
       
       /* Move education container down more in vertical mode - increases as vw gets smaller */
       .timeline-container {
-        margin-top: calc(10vw - 10rem) !important;
+        margin-top: calc(30vw - 5rem - 20vh) !important;
       }
       
       .experience-cards::before {
@@ -1153,7 +1155,7 @@
       /* Make red container (experience-container) extend to bottom of orange container */
       .experience-container {
         min-height: 100vh !important;
-        height:  calc(420vh - 100vw)!important;
+        height: 450vh !important;
       }
       
       /* Fix timeline alignment in vertical mode */
@@ -1756,6 +1758,9 @@
         <!-- Spacer beneath research -->
         <div style="height: 2rem; margin: 1rem 0;"></div>
 
+        <!-- Extended bottom spacer to reach the very bottom -->
+        <div style="height: 15vh; margin: 3rem 0;"></div>
+
       </div>
     </div>
   </div>
@@ -1764,6 +1769,44 @@
     // Scroll to top on page load
     window.addEventListener('load', () => {
       window.scrollTo(0, 0);
+      
+      // Dynamically calculate and set container height based on actual content
+      function setContainerHeight() {
+        const container = document.querySelector('.experience-container');
+        
+        if (container) {
+          // Find all the actual content elements
+          const journeyTitle = document.querySelector('.journey-title');
+          const topContainer = document.querySelector('.top-container');
+          const timelineContainer = document.querySelector('.timeline-container');
+          const experienceCards = document.querySelector('.experience-cards');
+          const researchCards = document.querySelector('.research-cards');
+          const resumeLink = document.querySelector('a[href="Assets/Resume.pdf"]')?.parentElement;
+          
+          let totalHeight = 0;
+          
+          // Calculate based on actual content elements
+          if (journeyTitle) totalHeight += journeyTitle.offsetHeight;
+          if (topContainer) totalHeight += topContainer.offsetHeight;
+          if (timelineContainer) totalHeight += timelineContainer.offsetHeight;
+          if (experienceCards) totalHeight += experienceCards.offsetHeight;
+          if (researchCards) totalHeight += researchCards.offsetHeight;
+          if (resumeLink) totalHeight += resumeLink.offsetHeight;
+          
+          // Add substantial padding for spacing between sections
+          totalHeight += 800; // More generous padding
+          const minHeight = window.innerHeight;
+          const finalHeight = Math.max(totalHeight, minHeight);
+          
+          container.style.height = finalHeight + 'px';
+          console.log('Content heights calculated:', finalHeight);
+        }
+      }
+      
+      // Set height on load and resize
+      setTimeout(setContainerHeight, 500);
+      setTimeout(setContainerHeight, 1000);
+      window.addEventListener('resize', setContainerHeight);
     });
 
     // Custom cursor animation

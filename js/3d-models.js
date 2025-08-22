@@ -1,9 +1,16 @@
-// 3D Model Setup
-document.addEventListener('DOMContentLoaded', async () => {
+// 3D Model Setup - Global variables for SPA routing
+let modelScene, modelCamera, modelRenderer, model;
+let modelAnimationId;
+let isModelsInitialized = false;
+
+async function initializeModels() {
   const canvas = document.getElementById('model-canvas');
   const container = document.getElementById('model-container');
   
-  if (!canvas || !container) return;
+  if (!canvas || !container) {
+    console.log('Model elements not found');
+    return;
+  }
   
   try {
     // Import Three.js modules
@@ -11,41 +18,40 @@ document.addEventListener('DOMContentLoaded', async () => {
     const { GLTFLoader } = await import('three/addons/loaders/GLTFLoader.js');
     
     // Scene setup
-    const scene = new Scene();
-    const camera = new PerspectiveCamera(75, container.offsetWidth / container.offsetHeight, 0.1, 1000);
-    const renderer = new WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+    modelScene = new Scene();
+    modelCamera = new PerspectiveCamera(75, container.offsetWidth / container.offsetHeight, 0.1, 1000);
+    modelRenderer = new WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
     
-    renderer.setSize(container.offsetWidth, container.offsetHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setClearColor(0x000000, 0);
+    modelRenderer.setSize(container.offsetWidth, container.offsetHeight);
+    modelRenderer.setPixelRatio(window.devicePixelRatio);
+    modelRenderer.setClearColor(0x000000, 0);
     
     // Muted Vaporwave lighting setup
     const ambientLight = new AmbientLight(0x1a0d2e, 0.6);
-    scene.add(ambientLight);
+    modelScene.add(ambientLight);
     
     // Main muted magenta light
     const directionalLight = new DirectionalLight(0xcc66cc, 0.5);
     directionalLight.position.set(8, 8, 8);
-    scene.add(directionalLight);
+    modelScene.add(directionalLight);
     
     // Secondary muted cyan light
     const directionalLight2 = new DirectionalLight(0x66cccc, 0.3);
     directionalLight2.position.set(-8, -8, 8);
-    scene.add(directionalLight2);
+    modelScene.add(directionalLight2);
     
     // Accent muted pink light
     const directionalLight3 = new DirectionalLight(0xcc6699, 0.25);
     directionalLight3.position.set(0, 12, -8);
-    scene.add(directionalLight3);
+    modelScene.add(directionalLight3);
     
     // Fill light from below (muted white)
     const fillLight = new DirectionalLight(0xcccccc, 0.3);
     fillLight.position.set(0, -12, 0);
-    scene.add(fillLight);
+    modelScene.add(fillLight);
    
    // Load GLB model
    const loader = new GLTFLoader();
-   let model = null;
    
    console.log('Starting to load Projects.glb model...');
    console.log('Current location:', window.location.href);
@@ -181,7 +187,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           }
         });
        
-       scene.add(model);
+       modelScene.add(model);
        console.log('Model added to scene successfully. Position:', model.position, 'Scale:', model.scale);
      },
      function (progress) {
@@ -195,19 +201,19 @@ document.addEventListener('DOMContentLoaded', async () => {
    );
    
    // Camera position - angled view
-   camera.position.x = 12;
-   camera.position.y = 8;
-   camera.position.z = 15;
-   camera.lookAt(0, 0, 0);
-   console.log('Camera positioned at:', camera.position);
+   modelCamera.position.x = 12;
+   modelCamera.position.y = 8;
+   modelCamera.position.z = 15;
+   modelCamera.lookAt(0, 0, 0);
+   console.log('Camera positioned at:', modelCamera.position);
    
    // Classic vaporwave animation loop
    let time = 0;
-   let isShowingProjectsModel = false; // Track when projects model is visible
+   let isShowingProjectsModel = false;
    
    function animate() {
-     requestAnimationFrame(animate);
-     time += 0.01; // Slower, more elegant animation
+     modelAnimationId = requestAnimationFrame(animate);
+     time += 0.01;
      
      // Smooth rotation
      if (model) {
@@ -230,7 +236,9 @@ document.addEventListener('DOMContentLoaded', async () => {
      directionalLight3.intensity = 0.25;
      fillLight.intensity = 0.3;
      
-     renderer.render(scene, camera);
+     if (modelRenderer && modelScene && modelCamera) {
+       modelRenderer.render(modelScene, modelCamera);
+     }
    }
    
    // Make animation control accessible globally
@@ -241,13 +249,62 @@ document.addEventListener('DOMContentLoaded', async () => {
   animate();
   
   // Handle window resize
-  window.addEventListener('resize', () => {
-    camera.aspect = container.offsetWidth / container.offsetHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(container.offsetWidth, container.offsetHeight);
-  });
+  const handleResize = () => {
+    if (modelCamera && modelRenderer && container) {
+      modelCamera.aspect = container.offsetWidth / container.offsetHeight;
+      modelCamera.updateProjectionMatrix();
+      modelRenderer.setSize(container.offsetWidth, container.offsetHeight);
+    }
+  };
+  
+  window.addEventListener('resize', handleResize);
+  
+  isModelsInitialized = true;
+  console.log('3D Models initialized successfully');
   
 } catch (error) {
   console.error('Error initializing 3D scene:', error);
 }
+}
+
+// Global functions for SPA routing
+window.init3DModels = async function() {
+  if (!isModelsInitialized) {
+    await initializeModels();
+  }
+};
+
+window.cleanup3DModels = function() {
+  if (modelAnimationId) {
+    cancelAnimationFrame(modelAnimationId);
+    modelAnimationId = null;
+  }
+  
+  if (modelRenderer) {
+    modelRenderer.dispose();
+  }
+  
+  if (model && model.traverse) {
+    model.traverse((child) => {
+      if (child.isMesh && child.material) {
+        child.material.dispose();
+      }
+      if (child.geometry) {
+        child.geometry.dispose();
+      }
+    });
+  }
+  
+  modelScene = null;
+  modelCamera = null;
+  modelRenderer = null;
+  model = null;
+  isModelsInitialized = false;
+  
+  console.log('3D Models cleaned up');
+};
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', async () => {
+  await initializeModels();
 });

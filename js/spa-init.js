@@ -167,6 +167,33 @@ document.addEventListener('DOMContentLoaded', () => {
       
       // Initialize experience page animations if available
       setTimeout(() => {
+        // Ensure key elements are visible
+        const profilePhoto = document.querySelector('.profile-photo.hello-visible');
+        const allProfilePhotos = document.querySelectorAll('.profile-photo');
+        const leftSection = document.querySelector('.left-section');
+        const helloVisibleElements = document.querySelectorAll('.hello-visible');
+        
+        // Force all profile photos to be visible
+        allProfilePhotos.forEach(photo => {
+          photo.style.display = 'block';
+          photo.style.visibility = 'visible';
+          photo.style.opacity = '1';
+          photo.style.setProperty('display', 'block', 'important');
+        });
+        
+        if (leftSection) {
+          leftSection.style.display = 'block';
+          leftSection.style.visibility = 'visible';
+          leftSection.style.setProperty('display', 'block', 'important');
+        }
+        
+        // Show all hello-visible elements
+        helloVisibleElements.forEach(element => {
+          element.style.display = 'block';
+          element.style.visibility = 'visible';
+          element.classList.add('show');
+        });
+        
         if (window.initExperienceAnimations) {
           window.initExperienceAnimations();
         } else {

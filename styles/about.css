@@ -569,11 +569,9 @@ html, body {
     grid-template-columns: 1fr;
   }
 
-  .bottom-nav .nav-link {
-    background: rgba(0, 0, 0, 0.3) !important;
-    backdrop-filter: blur(10px) !important;
-    -webkit-backdrop-filter: blur(10px) !important;
-    border-radius: 8px !important;
+  /* Hide navigation bar completely in vertical mode */
+  .bottom-nav {
+    display: none !important;
   }
 }
 
@@ -621,29 +619,6 @@ html, body {
   shape-outside: circle(50%);
 }
 
-/* Navigation effects - always active on about page */
-.bottom-nav .nav-link {
-  background: none !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  border-radius: 0 !important;
-  transition: all 0.2s ease !important;
-}
-
-.bottom-nav .nav-link:hover {
-  color: #00ffff !important;
-  text-shadow: 0 0 10px rgba(0, 255, 255, 0.8) !important;
-  transform: scale(1.05) !important;
-}
-
-/* Disable hover effects for active nav item */
-.bottom-nav .nav-link.active:hover {
-  background: none !important;
-  transform: none !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  border-radius: 0 !important;
-}
 
 /* Mute container hover effects */
 .mute-container:hover .mute-icon {

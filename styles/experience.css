@@ -25,26 +25,8 @@ body {
 }
 
 
-/* Custom container for experience page */
-.experience-container {
-  width: 100vw !important;
-  height: 330vh !important;
-  margin: 0 !important;
-  padding: 2rem;
-  border: none;
-  background: 
-    radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px),
-    radial-gradient(circle at 20% 50%, rgba(255, 0, 255, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(0, 255, 255, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 40% 80%, rgba(255, 0, 255, 0.02) 0%, transparent 50%),
-    linear-gradient(135deg, #000000 0%, #1a0329 25%, #050505 50%, #2a1237 75%, #000000 100%);
-  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
-  box-sizing: border-box;
-  cursor: auto !important;
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-}
+
+
 
 
 
@@ -227,14 +209,26 @@ body {
 /* Section dim effect when not in focus */
 .timeline-container,
 .cards-container,
-.hello-content-mobile {
+.hello-content-mobile,
+.profile-photo {
   opacity: 0.3;
   transition: opacity 0.6s ease;
 }
 
 .timeline-container.in-view,
 .cards-container.in-view,
-.hello-content-mobile.in-view {
+.hello-content-mobile.in-view,
+.profile-photo.in-view {
+  opacity: 1 !important;
+}
+
+/* Profile photo specific dim/bright states - override hello-visible */
+.profile-photo.hello-visible {
+  opacity: 0.3 !important;
+  transition: opacity 0.6s ease;
+}
+
+.profile-photo.hello-visible.in-view {
   opacity: 1 !important;
 }
 
@@ -958,6 +952,16 @@ html, body {
   visibility: visible;
 }
 
+/* Hide mobile menu button in desktop mode and on home page */
+.mobile-menu-btn {
+  display: none !important;
+}
+
+/* Hide mobile menu button on home page even in mobile mode */
+body[data-current-route="home"] .mobile-menu-btn {
+  display: none !important;
+}
+
 /* Hide profile photo and remove margins in mobile/vertical mode */
 @media (orientation: portrait), (max-width: 768px) {
   .profile-photo {
@@ -969,9 +973,19 @@ html, body {
     display: none !important;
   }
   
-  /* Hide mute container in vertical mode */
-  .mute-container {
-    display: none !important;
+  /* Show mobile menu button in vertical mode - but not on home page */
+  body:not([data-current-route="home"]) .mobile-menu-btn {
+    display: flex !important;
+  }
+  
+  /* Always show regular nav on home page, even in mobile */
+  body[data-current-route="home"] .bottom-nav {
+    transform: translateX(0) !important;
+    opacity: 1 !important;
+    position: fixed !important;
+    background: solid black !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
   
   /* Make yellow container (top-container) 90vw and center it */
@@ -1032,7 +1046,7 @@ html, body {
   
   /* Move education container down more in vertical mode - increases as vw gets smaller */
   .timeline-container {
-    margin-top: calc(10vw - 10rem) !important;
+    margin-top: calc(30vw - 5rem - 20vh) !important;
   }
   
   .experience-cards::before {
@@ -1176,12 +1190,32 @@ html, body {
     transform: translateX(200px) !important;
     opacity: 0 !important;
     transition: all 0.3s ease !important;
-    position: relative !important;
+    position: fixed !important;
+    background: rgba(0, 0, 0, 0.8) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border-radius: 15px !important;
+    margin: 0.5rem !important;
+    width: calc(140px - 1rem) !important;
   }
 
   .bottom-nav.show {
     transform: translateX(0) !important;
     opacity: 1 !important;
+  }
+
+  /* Mobile nav backdrop overlay */
+  .bottom-nav.show::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, .8);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: -1;
   }
 
   /* Close button in navigation */
@@ -1191,8 +1225,8 @@ html, body {
     left: 0.5rem;
     width: 30px;
     height: 30px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: transparent;
+    border: 1px solid #ffffff;
     border-radius: 50%;
     display: none;
     align-items: center;
@@ -1207,8 +1241,15 @@ html, body {
   }
 
   .nav-close-btn:hover {
-    background: rgba(255, 255, 255, 0.2) !important;
-    border-color: rgba(255, 255, 255, 0.5) !important;
+    background: transparent !important;
+    border-color: #00ffff !important;
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+  }
+  
+  .nav-close-btn:hover::before,
+  .nav-close-btn:hover::after {
+    background: #00ffff !important;
   }
 
   .nav-close-btn::before,
@@ -1235,6 +1276,22 @@ html, body {
     touch-action: manipulation !important;
     cursor: pointer !important;
     -webkit-tap-highlight-color: rgba(255, 0, 255, 0.3) !important;
+  }
+  
+  
+  /* Add blur background to mute container in vertical mode */
+  .mute-container {
+    background: rgba(0, 0, 0, 0.3) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border-radius: 12px !important;
+    padding: 0.4rem !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  }
+  
+  /* Hide navigation bar completely in vertical mode */
+  .bottom-nav {
+    display: none !important;
   }
   
 }
@@ -1385,8 +1442,8 @@ html, body {
   display: none !important;
 }
 
-/* Add hover highlighting for nav text */
-.bottom-nav .nav-link:hover {
+/* Add hover highlighting for nav text - highest specificity */
+.bottom-nav .nav-link:hover:not(.active) {
   background: rgba(0, 0, 0, 0.3) !important;
   color: #00ffff !important;
   text-shadow: 0 0 10px rgba(0, 255, 255, 0.8) !important;

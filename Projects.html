@@ -462,6 +462,18 @@
       transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
+    .modal-content.fullscreen {
+      width: 95vw;
+      height: 95vh;
+      max-width: 95vw;
+      padding: 1rem;
+    }
+
+    .modal-content.fullscreen h2,
+    .modal-content.fullscreen p {
+      color: #ffffff;
+    }
+
     .modal.show .modal-content {
       transform: translate(-50%, -50%) scale(1);
       opacity: 1;
@@ -749,8 +761,6 @@
   </style>
   <!-- Your scripts -->
   <script defer src="script.js"></script>
-  <!-- Music Manager -->
-  <script defer src="musicManager.js"></script>
 </head>
 <body>
   
@@ -796,7 +806,7 @@
           </div>
           
           <div class="project-card" data-project="website">
-            <div class="project-image" style="background-color: rgba(249, 115, 22, 0.1);"></div>
+            <div class="project-image" style="background-image: url('Images/Portfolio.gif');"></div>
             <div class="project-header">
               <h3>Portfolio Website with Interactive Design</h3>
             </div>
@@ -1034,6 +1044,14 @@
                 ${project.tech.map(tech => `<span class="modal-tech-pill">${tech}</span>`).join('')}
               </div>
             `;
+            
+            // Apply fullscreen class for portfolio website project
+            const modalContentElement = document.querySelector('.modal-content');
+            if (projectId === 'website') {
+              modalContentElement.classList.add('fullscreen');
+            } else {
+              modalContentElement.classList.remove('fullscreen');
+            }
             
             // Show modal with expanding animation
             modal.style.display = 'block';
@@ -1409,7 +1427,7 @@
     }
   </style>
 
-  <!-- Music functionality is now handled by musicManager.js -->
+
 
 </body>
 </html>

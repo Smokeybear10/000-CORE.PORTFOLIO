@@ -174,8 +174,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  const customCursor = document.getElementById('custom-cursor');
-
   // Start typing animation for about page
   if (aboutTypedEl) {
     aboutTypedEl.classList.add('show');
@@ -185,43 +183,4 @@ document.addEventListener('DOMContentLoaded', () => {
     aboutIsTyping = false;
     typeAboutRole();
   }
-
-  // Show cursor on all devices
-  // Mouse move handler for custom cursor
-  function handleMouseMove(e) {
-    if (!customCursor) return;
-    
-    gsap.set(customCursor, {
-      x: e.clientX,
-      y: e.clientY,
-      opacity: 1,
-    });
-  }
-  
-  // Touch device detection - hide custom cursor on touch devices
-  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-  if (isTouchDevice && customCursor) {
-    customCursor.style.display = 'none';
-    return;
-  }
-  
-  // Hide cursor when mouse leaves window
-  function handleMouseLeave() {
-    if (!customCursor) return;
-    gsap.to(customCursor, {
-      opacity: 0,
-      duration: 0.2
-    });
-  }
-  
-  // Force show cursor initially
-  if (customCursor) {
-    customCursor.style.opacity = '1';
-    customCursor.style.display = 'block';
-    customCursor.style.visibility = 'visible';
-  }
-  
-  window.addEventListener('mousemove', handleMouseMove);
-  // Touch events removed - allow normal touch interaction
-  window.addEventListener('mouseleave', handleMouseLeave);
 });

@@ -600,7 +600,7 @@
   </div>
 
   <!-- Mobile Menu Button (vertical mode only) -->
-  <div class="mobile-menu-btn" style="display: none; position: fixed; bottom: 1rem; right: 1rem; z-index: 10000; width: 50px; height: 50px; background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 50%; cursor: pointer; align-items: center; justify-content: center; border: 1px solid rgba(255, 255, 255, 0.1);">
+  <div class="mobile-menu-btn" style="position: fixed; bottom: 1rem; right: 1rem; z-index: 10000; width: 50px; height: 50px; background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 50%; cursor: pointer; align-items: center; justify-content: center; border: 1px solid rgba(255, 255, 255, 0.1);">
     <div class="hamburger">
       <span style="display: block; width: 20px; height: 2px; background: #ffffff; margin: 3px 0; transition: 0.3s; border-radius: 1px;"></span>
       <span style="display: block; width: 20px; height: 2px; background: #ffffff; margin: 3px 0; transition: 0.3s; border-radius: 1px;"></span>
@@ -610,6 +610,7 @@
 
   <!-- Bottom navigation -->
   <div class="bottom-nav">
+    <div class="nav-close-btn"></div>
     <a href="#" data-spa-route="home" class="nav-link active">home</a>
     <a href="#" data-spa-route="about" class="nav-link">about</a>
     <a href="#" data-spa-route="experience" class="nav-link">experience</a>
@@ -618,8 +619,11 @@
   </div>
 
   <!-- Scripts -->
-  <script defer src="script.js"></script>
-  <script defer src="musicManager.js"></script>
+  <!-- Load SPA system first -->
+  <script defer src="js/spa-router.js"></script>
+  <script defer src="js/spa-init.js"></script>
+  
+  <!-- Load other scripts after SPA is initialized -->
   <script defer src="js/index.js"></script>
   <script defer src="js/3d-cube.js"></script>
   <script defer src="js/3d-models.js"></script>
@@ -627,8 +631,6 @@
   <script defer src="js/navigation.js"></script>
   <script defer src="js/about.js"></script>
   <script defer src="js/experience.js"></script>
-  <script defer src="js/spa-router.js"></script>
-  <script defer src="js/spa-init.js"></script>
 
 </body>
 </html>

@@ -48,9 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Scroll progress indicator
-let scrollProgressHandler = null;
-
-function initScrollProgress() {
+document.addEventListener('DOMContentLoaded', () => {
   const scrollProgressBar = document.querySelector('.scroll-progress-bar');
 
   function updateScrollProgress() {
@@ -64,30 +62,13 @@ function initScrollProgress() {
     scrollProgressBar.style.transform = `translateY(-${100 - scrollProgress}%)`;
   }
 
-  // Remove existing handler if any
-  if (scrollProgressHandler) {
-    window.removeEventListener('scroll', scrollProgressHandler);
-  }
-  
-  scrollProgressHandler = updateScrollProgress;
-  
   // Initial call and scroll listener
   updateScrollProgress();
-  window.addEventListener('scroll', scrollProgressHandler);
-}
-
-// Initialize on DOM ready for standalone experience page
-document.addEventListener('DOMContentLoaded', () => {
-  // Only init if we're on the experience page directly
-  if (window.location.pathname.includes('experience') && !window.location.pathname.includes('spa')) {
-    initScrollProgress();
-  }
+  window.addEventListener('scroll', updateScrollProgress);
 });
 
 // Experience text fade effect
-let experienceWhiteHandler = null;
-
-function initExperienceFadeEffects() {
+document.addEventListener('DOMContentLoaded', () => {
   const experienceWhite = document.querySelector('.title-experience-white');
   
   function updateExperienceWhiteOpacity() {
@@ -108,31 +89,13 @@ function initExperienceFadeEffects() {
     }
   }
   
-  // Remove existing handler if any
-  if (experienceWhiteHandler) {
-    window.removeEventListener('scroll', experienceWhiteHandler);
-  }
-  
-  experienceWhiteHandler = updateExperienceWhiteOpacity;
-  window.experienceScrollHandlers.push(experienceWhiteHandler);
-  
   // Initial call and scroll listeners
   updateExperienceWhiteOpacity();
-  window.addEventListener('scroll', experienceWhiteHandler);
-}
-
-// Initialize on DOM ready for standalone experience page
-document.addEventListener('DOMContentLoaded', () => {
-  // Only init if we're on the experience page directly
-  if (window.location.pathname.includes('experience') && !window.location.pathname.includes('spa')) {
-    initExperienceFadeEffects();
-  }
+  window.addEventListener('scroll', updateExperienceWhiteOpacity);
 });
 
 // Animal containers fade in/out based on section focus
-let animalVisibilityHandler = null;
-
-function initAnimalContainerVisibility() {
+document.addEventListener('DOMContentLoaded', () => {
   const horseContainer = document.querySelector('.horse-container');
   const bullContainer = document.querySelector('.bull-container-new');
   const lionContainer = document.querySelector('.lion-container-new');
@@ -331,8 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
     sections.forEach(section => {
       if (section === activeSection) {
         section.element.classList.add('in-view');
-        console.log('Setting as active:', section.name); // Debug
-      } else {
+              } else {
         section.element.classList.remove('in-view');
       }
     });
@@ -364,6 +326,20 @@ document.addEventListener('DOMContentLoaded', () => {
       // Store current section globally
       window.currentSection = currentSectionName;
       
+      // Handle hello-content-mobile in vertical mode
+      const isVerticalMode = window.innerHeight > window.innerWidth || window.innerWidth <= 768;
+      const helloContentMobile = document.querySelector('.hello-content-mobile');
+      
+      if (isVerticalMode && helloContentMobile) {
+        if (currentSectionName === 'about') {
+          // In about section - make hello-content-mobile bright
+          helloContentMobile.classList.add('in-view');
+        } else {
+          // In other sections - dim hello-content-mobile
+          helloContentMobile.classList.remove('in-view');
+        }
+      }
+      
       // Update button styling based on new active states
       if (window.updateButtonStyling) {
         window.updateButtonStyling();
@@ -389,13 +365,13 @@ document.addEventListener('DOMContentLoaded', () => {
    // Function to update button styling based on active state
    window.updateButtonStyling = function() {
      navButtons.forEach((button) => {
-       if (button.classList.contains('active')) {
-         button.style.borderColor = '#ff00ff';
-         button.style.boxShadow = '0 0 15px rgba(255, 0, 255, 0.6)';
-       } else {
-         button.style.borderColor = '#ffffff';
-         button.style.boxShadow = 'none';
-       }
+       // Remove any inline styling that might override CSS
+       button.style.borderColor = '';
+       button.style.boxShadow = '';
+       button.style.background = '';
+       button.style.color = '';
+       button.style.textShadow = '';
+       // Let CSS handle the styling based on .active class
      });
    }
    
@@ -403,30 +379,19 @@ document.addEventListener('DOMContentLoaded', () => {
    window.updateButtonStyling();
    
    navButtons.forEach((button, index) => {
-     // Mouse enter event
+     // Mouse enter event - let CSS handle hover styling
      button.addEventListener('mouseenter', () => {
-       if (button.classList.contains('active')) {
-         // Active button gets stronger glow on hover
-         button.style.boxShadow = '0 0 25px rgba(255, 0, 255, 0.8)';
-       } else {
-         // Other buttons get cyan glow on hover
-         button.style.borderColor = '#00ffff';
-         button.style.boxShadow = '0 0 20px rgba(0, 255, 255, 0.6)';
-       }
+       // Remove any conflicting inline styles and let CSS :hover handle it
+       button.style.borderColor = '';
+       button.style.boxShadow = '';
        button.style.transform = 'translateY(-2px) scale(1.05)';
      });
      
-     // Mouse leave event
+     // Mouse leave event - let CSS handle styling
      button.addEventListener('mouseleave', () => {
-       if (button.classList.contains('active')) {
-         // Active button returns to normal magenta glow
-         button.style.borderColor = '#ff00ff';
-         button.style.boxShadow = '0 0 15px rgba(255, 0, 255, 0.6)';
-       } else {
-         // Other buttons return to white
-         button.style.borderColor = '#ffffff';
-         button.style.boxShadow = 'none';
-       }
+       // Remove inline styles and let CSS handle normal state
+       button.style.borderColor = '';
+       button.style.boxShadow = '';
        button.style.transform = 'none';
      });
      
@@ -584,11 +549,36 @@ document.addEventListener('DOMContentLoaded', () => {
   const bottomNav = document.querySelector('.bottom-nav');
   const closeBtn = document.querySelector('.nav-close-btn');
   
+  console.log('Mobile menu elements found:', {
+    mobileMenuBtn: !!mobileMenuBtn,
+    bottomNav: !!bottomNav,
+    closeBtn: !!closeBtn
+  });
+  
   if (mobileMenuBtn && bottomNav) {
-    mobileMenuBtn.addEventListener('click', () => {
-      mobileMenuBtn.classList.toggle('active');
-      bottomNav.classList.toggle('show');
-    });
+    // Use capture phase to run before spa-router
+    mobileMenuBtn.addEventListener('click', (e) => {
+      console.log('Mobile menu clicked!');
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      
+      // Force the toggle with explicit if/else logic
+      if (mobileMenuBtn.classList.contains('active')) {
+        mobileMenuBtn.classList.remove('active');
+        bottomNav.classList.remove('show');
+      } else {
+        mobileMenuBtn.classList.add('active');
+        bottomNav.classList.add('show');
+      }
+      
+      console.log('After toggle - classes:', {
+        menuActive: mobileMenuBtn.classList.contains('active'),
+        navShow: bottomNav.classList.contains('show')
+      });
+      
+      return false;
+    }, true); // Use capture phase to run before spa-router
     
     // Close button functionality
     if (closeBtn) {
@@ -722,39 +712,165 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+// Helper functions for SPA initialization
+function initScrollProgress() {
+  const scrollProgressBar = document.querySelector('.scroll-progress-bar');
+  if (!scrollProgressBar) return;
+
+  function updateScrollProgress() {
+    const { scrollHeight, clientHeight } = document.documentElement;
+    const scrollableHeight = scrollHeight - clientHeight;
+    const scrollY = window.scrollY;
+    const scrollProgress = (scrollY / scrollableHeight) * 100;
+    scrollProgressBar.style.transform = `translateY(-${100 - scrollProgress}%)`;
+  }
+  
+  window.experienceScrollHandlers.push(updateScrollProgress);
+  window.addEventListener('scroll', updateScrollProgress);
+  updateScrollProgress();
+}
+
+function initModalFunctionality() {
+  const cards = document.querySelectorAll('.card');
+  const modal = document.getElementById('experienceModal');
+  const modalContent = document.getElementById('modalContent');
+  const closeBtn = document.querySelector('.close');
+  
+  if (!modal || !modalContent) return;
+  
+  cards.forEach((card, index) => {
+    const handleCardClick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const experience = experienceData[index];
+      if (experience) {
+        modalContent.innerHTML = `
+          <h2>${experience.title}</h2>
+          <div class="modal-company">${experience.company}</div>
+          <div class="modal-location">${experience.location}</div>
+          <p>${experience.description}</p>
+        `;
+        modal.style.display = 'block';
+        setTimeout(() => modal.classList.add('show'), 10);
+      }
+    };
+    
+    card.addEventListener('click', handleCardClick);
+    card.addEventListener('touchend', handleCardClick);
+  });
+  
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      modal.classList.remove('show');
+      setTimeout(() => modal.style.display = 'none', 400);
+    });
+  }
+}
+
 // SPA-specific initialization functions
 window.initExperienceAnimations = function() {
-  console.log('Initializing experience animations for SPA...');
+  console.log('🚀 Initializing experience animations for SPA...');
   
-  // Initialize scroll progress
-  initScrollProgress();
+  // Clean up existing handlers
+  if (window.experienceScrollHandlers) {
+    window.experienceScrollHandlers.forEach(handler => {
+      window.removeEventListener('scroll', handler);
+      window.removeEventListener('resize', handler);
+    });
+    window.experienceScrollHandlers = [];
+  }
   
-  // Initialize experience fade effects
-  initExperienceFadeEffects();
+  // Check if we're in vertical mode
+  const isVerticalMode = window.innerHeight > window.innerWidth || window.innerWidth <= 768;
+  console.log('📱 Vertical mode detected:', isVerticalMode);
   
-  // Initialize animal container visibility
-  initAnimalContainerVisibility();
+  // Set up initial state based on mode
+  setTimeout(() => {
+    if (isVerticalMode) {
+      // In vertical mode - hide left section 3D models and show about section first
+      console.log('🔧 Setting up vertical mode initial state...');
+      
+      // Hide left section elements
+      const leftSection = document.querySelector('.left-section');
+      const horseContainer = document.querySelector('.horse-container');
+      const bullContainer = document.querySelector('.bull-container-new');
+      const lionContainer = document.querySelector('.lion-container-new');
+      const educationTitle = document.querySelector('.education-title');
+      const experienceTitle = document.querySelector('.experience-title');
+      const researchTitle = document.querySelector('.research-title');
+      
+      if (leftSection) leftSection.style.display = 'none';
+      if (horseContainer) horseContainer.style.display = 'none';
+      if (bullContainer) bullContainer.style.display = 'none';
+      if (lionContainer) lionContainer.style.display = 'none';
+      if (educationTitle) educationTitle.style.display = 'none';
+      if (experienceTitle) experienceTitle.style.display = 'none';
+      if (researchTitle) researchTitle.style.display = 'none';
+      
+      // Show about section first (bright hello sections, dim other sections)
+      const helloSections = document.querySelectorAll('.hello-section');
+      const helloVisibleElements = document.querySelectorAll('.hello-visible');
+      const profilePhotos = document.querySelectorAll('.profile-photo');
+      
+      helloSections.forEach(section => {
+        section.style.opacity = '1';
+      });
+      helloVisibleElements.forEach(element => {
+        element.classList.add('show');
+      });
+      profilePhotos.forEach(photo => {
+        photo.style.display = 'block';
+        photo.style.visibility = 'visible';
+        photo.style.opacity = '1';
+        photo.classList.add('in-view');
+      });
+      
+      // Dim all content sections initially
+      const sections = document.querySelectorAll('.timeline-container, .experience-cards, .research-cards');
+      sections.forEach(section => {
+        section.classList.remove('in-view');
+      });
+      
+      // Set about button as active
+      const navButtons = document.querySelectorAll('.nav-buttons.permanent-buttons .nav-btn');
+      navButtons.forEach(btn => btn.classList.remove('active'));
+      if (navButtons[0]) navButtons[0].classList.add('active');
+      
+    } else {
+      // In horizontal mode - use normal initialization
+      console.log('🖥️ Setting up horizontal mode initial state...');
+      
+      // Show left section
+      const leftSection = document.querySelector('.left-section');
+      if (leftSection) leftSection.style.display = 'block';
+      
+      // Ensure profile photos are visible
+      const profilePhotos = document.querySelectorAll('.profile-photo');
+      profilePhotos.forEach(photo => {
+        photo.style.display = 'block';
+        photo.style.visibility = 'visible';
+        photo.style.opacity = '1';
+      });
+    }
+    
+    // Initialize core functionality
+    initScrollProgress();
+    initSectionFocusForSPA();
+    initNavigationButtonsForSPA();
+    initModalFunctionality();
+    
+    // Force update button styling
+    if (window.updateButtonStyling) {
+      window.updateButtonStyling();
+    }
+    
+  }, 150);
   
-  // Initialize section focus effects
-  initSectionFocusEffects();
-  
-  // Initialize hello navigation
-  initHelloNavigation();
-  
-  // Initialize hello buttons
-  initHelloButtons();
-  
-  console.log('Experience animations initialized');
+  console.log('✅ Experience animations initialized');
 };
 
 window.cleanupExperienceAnimations = function() {
-  console.log('Cleaning up experience animations...');
-  
-  // Remove scroll progress handler
-  if (scrollProgressHandler) {
-    window.removeEventListener('scroll', scrollProgressHandler);
-    scrollProgressHandler = null;
-  }
   
   // Remove other scroll handlers
   if (window.experienceScrollHandlers) {
@@ -769,3 +885,691 @@ window.cleanupExperienceAnimations = function() {
 
 // Store scroll handlers for cleanup
 window.experienceScrollHandlers = [];
+
+// SPA-compatible section focus initialization
+function initSectionFocusForSPA() {
+  console.log('🔍 Setting up section focus detection for SPA...');
+  const timelineContainer = document.querySelector('.timeline-container');
+  const experienceContainer = document.querySelector('.experience-cards');
+  const researchContainer = document.querySelector('.research-cards');
+  const helloContentMobile = document.querySelector('.hello-content-mobile');
+  const helloSection = document.querySelector('.top-container .hello-section');
+  
+  console.log('📋 Found elements:', {
+    timelineContainer: !!timelineContainer,
+    experienceContainer: !!experienceContainer, 
+    researchContainer: !!researchContainer,
+    helloContentMobile: !!helloContentMobile,
+    helloSection: !!helloSection
+  });
+  
+  const sections = [
+    { element: timelineContainer, name: 'education' },
+    { element: experienceContainer, name: 'experience' },
+    { element: researchContainer, name: 'research' },
+    { element: helloContentMobile, name: 'hello-mobile' }
+  ].filter(section => section.element);
+  
+  function updateSectionVisibility() {
+    const windowHeight = window.innerHeight;
+    let activeSection = null;
+    let maxVisibility = 0;
+    
+    // Handle Hello section visibility
+    const helloSections = document.querySelectorAll('.hello-section');
+    const helloVisibleElements = document.querySelectorAll('.hello-visible');
+    let helloInView = false;
+    
+    if (helloSection) {
+      const helloRect = helloSection.getBoundingClientRect();
+      const helloVisibleTop = Math.max(0, helloRect.top);
+      const helloVisibleBottom = Math.min(windowHeight, helloRect.bottom);
+      const helloVisibleHeight = Math.max(0, helloVisibleBottom - helloVisibleTop);
+      const helloVisibilityRatio = helloRect.height > 0 ? helloVisibleHeight / helloRect.height : 0;
+      
+      // If Hello section is significantly visible
+      if (helloVisibilityRatio > 0.3) {
+        helloInView = true;
+        // Brighten hello sections
+        helloSections.forEach(section => {
+          section.style.opacity = '1';
+        });
+        // Show photo and buttons
+        helloVisibleElements.forEach(element => {
+          element.classList.add('show');
+        });
+        // Dim all other sections
+        sections.forEach(section => {
+          section.element.classList.remove('in-view');
+        });
+        // Update hello button styling when hello section is in view
+        if (window.updateHelloButtonStyling) {
+          window.updateHelloButtonStyling('about', true);
+        }
+        // return; // TEMPORARILY DISABLED TO TEST SCROLL DETECTION
+      } else {
+        // Dim hello sections
+        helloSections.forEach(section => {
+          section.style.opacity = '0.3';
+        });
+        // Hide photo and buttons
+        helloVisibleElements.forEach(element => {
+          element.classList.remove('show');
+        });
+      }
+    }
+    
+    // DRASTICALLY SIMPLIFIED: Use scroll position to determine active section
+    const scrollY = window.scrollY;
+    const documentHeight = document.documentElement.scrollHeight;
+    const scrollableHeight = documentHeight - windowHeight;
+    let scrollPercent = 0;
+    
+    // Debug: Force scrollable detection if content seems reasonable
+    const hasMultipleSections = sections.length >= 3;
+    const contentHeight = document.body.scrollHeight;
+    
+    // Override non-scrollable detection if we have multiple sections OR we're in SPA mode
+    const isSPAMode = document.body.hasAttribute('data-current-route');
+    const forceScrollableDetection = (hasMultipleSections && contentHeight > windowHeight * 0.8) || 
+                                   (isSPAMode && hasMultipleSections);
+    
+
+    // Handle case where document isn't tall enough to scroll (unless we're forcing scrollable detection)
+    if (scrollableHeight <= 0 && !forceScrollableDetection) {
+      // For non-scrollable content, use viewport-based detection instead
+      
+      // Get the positions of each section relative to viewport
+      const educationSection = document.querySelector('.timeline-container');
+      const experienceSection = document.querySelector('.experience-cards');
+      const researchSection = document.querySelector('.research-cards');
+      
+      if (educationSection && experienceSection && researchSection) {
+        const educationRect = educationSection.getBoundingClientRect();
+        const experienceRect = experienceSection.getBoundingClientRect();
+        const researchRect = researchSection.getBoundingClientRect();
+        
+        
+        // Check if we're at the top (About section should be active)
+        const topThreshold = 50; // If education section is more than 50px from top, we're in About
+        if (educationRect.top > topThreshold) {
+          activeSection = null; // About section (no section active)
+        } else {
+          // Determine which section is most visible in viewport
+          const viewportCenter = windowHeight / 2;
+          
+          // Only consider sections that are actually visible (top < windowHeight)
+          const visibleSections = [];
+          if (educationRect.top < windowHeight && educationRect.bottom > 0) {
+            visibleSections.push({ name: 'education', rect: educationRect, section: sections.find(s => s.name === 'education') });
+          }
+          if (experienceRect.top < windowHeight && experienceRect.bottom > 0) {
+            visibleSections.push({ name: 'experience', rect: experienceRect, section: sections.find(s => s.name === 'experience') });
+          }
+          if (researchRect.top < windowHeight && researchRect.bottom > 0) {
+            visibleSections.push({ name: 'research', rect: researchRect, section: sections.find(s => s.name === 'research') });
+          }
+          
+          if (visibleSections.length === 0) {
+            activeSection = null; // No sections visible (About)
+            console.log('🎯 SPA: About section (no sections visible)');
+          } else {
+            // Find the section with the most area in viewport
+            let bestSection = null;
+            let maxVisibleArea = 0;
+            
+            visibleSections.forEach(({ name, rect, section }) => {
+              const visibleTop = Math.max(0, rect.top);
+              const visibleBottom = Math.min(windowHeight, rect.bottom);
+              const visibleArea = Math.max(0, visibleBottom - visibleTop);
+              
+              
+              if (visibleArea > maxVisibleArea) {
+                maxVisibleArea = visibleArea;
+                bestSection = section;
+              }
+            });
+            
+            activeSection = bestSection;
+          }
+        }
+      } else {
+        // Fallback: start with About section (no section active)
+        activeSection = null;
+      }
+    } else {
+      // Use the corrected scrollable height if we forced detection
+      const effectiveScrollableHeight = (forceScrollableDetection && scrollableHeight <= 0) ? 
+        (contentHeight - windowHeight) : scrollableHeight;
+      
+      scrollPercent = scrollY / effectiveScrollableHeight;
+      
+      // Simple scroll-based section detection - adjusted for better spacing
+      if (scrollPercent < 0.15) {
+        // Top 15% = About (no active section)
+        activeSection = null;
+      } else if (scrollPercent < 0.45) {
+        // 15-45% = Education
+        activeSection = sections.find(s => s.name === 'education');
+      } else if (scrollPercent < 0.75) {
+        // 45-75% = Experience  
+        activeSection = sections.find(s => s.name === 'experience');
+      } else {
+        // 75%+ = Research
+        activeSection = sections.find(s => s.name === 'research');
+      }
+    }
+    
+    
+    
+    // Apply focus to most visible section, dim others
+    sections.forEach(section => {
+      if (section === activeSection) {
+        section.element.classList.add('in-view');
+        console.log('SPA - Setting as active:', section.name);
+      } else {
+        section.element.classList.remove('in-view');
+      }
+    });
+
+    // Update navigation button highlighting
+    const navButtons = document.querySelectorAll('.nav-buttons.permanent-buttons .nav-btn');
+    if (navButtons.length >= 4) {
+      // Remove active class from all buttons
+      navButtons.forEach(btn => btn.classList.remove('active'));
+      
+      // Add active class based on current section
+      let currentSectionName = 'about'; // default (top section is About)
+      if (activeSection) {
+        if (activeSection.name === 'education') {
+          navButtons[1]?.classList.add('active'); // Education button
+          currentSectionName = 'education';
+        } else if (activeSection.name === 'experience') {
+          navButtons[2]?.classList.add('active'); // Experience button
+          currentSectionName = 'experience';
+        } else if (activeSection.name === 'research') {
+          navButtons[3]?.classList.add('active'); // Research button
+          currentSectionName = 'research';
+        }
+      } else {
+        // When no section is active, we're in the About section (top)
+        navButtons[0]?.classList.add('active'); // About button
+      }
+      
+      // Store current section globally
+      window.currentSection = currentSectionName;
+      
+      // Handle hello-content-mobile in vertical mode
+      const isVerticalMode = window.innerHeight > window.innerWidth || window.innerWidth <= 768;
+      const helloContentMobile = document.querySelector('.hello-content-mobile');
+      
+      if (isVerticalMode && helloContentMobile) {
+        if (currentSectionName === 'about') {
+          // In about section - make hello-content-mobile bright
+          helloContentMobile.classList.add('in-view');
+        } else {
+          // In other sections - dim hello-content-mobile
+          helloContentMobile.classList.remove('in-view');
+        }
+      }
+      
+      // Update button styling based on new active states
+      if (window.updateButtonStyling) {
+        window.updateButtonStyling();
+      }
+      
+      // Update hello button styling based on current section and hello visibility
+      if (window.updateHelloButtonStyling) {
+        window.updateHelloButtonStyling(currentSectionName, false); // Not in hello section when other sections are active
+      }
+    }
+    
+    // Also update animal visibility - INLINE VERSION
+    
+    const isEducationInFocus = activeSection && activeSection.name === 'education';
+    const isExperienceInFocus = activeSection && activeSection.name === 'experience';
+    const isResearchInFocus = activeSection && activeSection.name === 'research';
+    
+    
+    const horseContainer = document.querySelector('.horse-container');
+    const bullContainer = document.querySelector('.bull-container-new');
+    const lionContainer = document.querySelector('.lion-container-new');
+    const educationTitle = document.querySelector('.education-title');
+    const experienceTitle = document.querySelector('.experience-title');
+    const researchTitle = document.querySelector('.research-title');
+    
+    
+    // Horse shows for education
+    if (horseContainer) {
+      if (isEducationInFocus) {
+        horseContainer.classList.add('visible');
+      } else {
+        horseContainer.classList.remove('visible');
+      }
+    }
+    
+    // Bull shows for experience
+    if (bullContainer) {
+      if (isExperienceInFocus) {
+        bullContainer.style.opacity = '1';
+        bullContainer.style.visibility = 'visible';
+      } else {
+        bullContainer.style.opacity = '0';
+        bullContainer.style.visibility = 'hidden';
+      }
+    }
+    
+    // Lion shows for research
+    if (lionContainer) {
+      if (isResearchInFocus) {
+        lionContainer.style.opacity = '1';
+        lionContainer.style.visibility = 'visible';
+      } else {
+        lionContainer.style.opacity = '0';
+        lionContainer.style.visibility = 'hidden';
+      }
+    }
+    
+    // Education title shows when education is in focus
+    if (educationTitle) {
+      if (isEducationInFocus) {
+        educationTitle.classList.add('visible');
+      } else {
+        educationTitle.classList.remove('visible');
+      }
+    }
+    
+    // Experience title shows when experience is in focus
+    if (experienceTitle) {
+      if (isExperienceInFocus) {
+        experienceTitle.style.opacity = '1';
+        experienceTitle.style.visibility = 'visible';
+      } else {
+        experienceTitle.style.opacity = '0';
+        experienceTitle.style.visibility = 'hidden';
+      }
+    }
+    
+    // Research title shows when research is in focus
+    if (researchTitle) {
+      if (isResearchInFocus) {
+        researchTitle.style.opacity = '1';
+        researchTitle.style.visibility = 'visible';
+      } else {
+        researchTitle.style.opacity = '0';
+        researchTitle.style.visibility = 'hidden';
+      }
+    }
+  }
+  
+  // Store the handler for cleanup
+  window.experienceScrollHandlers.push(updateSectionVisibility);
+  
+  // Simple scroll detection for terminal
+  window.addEventListener('scroll', () => {
+    console.log(`Scroll: ${window.scrollY}px, DocHeight: ${document.documentElement.scrollHeight}, WindowHeight: ${window.innerHeight}`);
+  });
+  
+  // Initial call and scroll listener
+  updateSectionVisibility();
+  window.addEventListener('scroll', updateSectionVisibility);
+  window.addEventListener('resize', updateSectionVisibility);
+  
+  // For SPA mode, if no scroll is possible, add a timer-based section detection
+  const currentRoute = document.body.getAttribute('data-current-route');
+  if (currentRoute === 'experience') {
+    const documentHeight = document.documentElement.scrollHeight;
+    const windowHeight = window.innerHeight;
+    
+    if (documentHeight <= windowHeight + 10) {
+      // Content isn't scrollable, add viewport-based detection
+      setInterval(() => {
+        const educationSection = document.querySelector('.timeline-container');
+        const experienceSection = document.querySelector('.experience-cards');
+        const researchSection = document.querySelector('.research-cards');
+        
+        if (educationSection && experienceSection && researchSection) {
+          const educationRect = educationSection.getBoundingClientRect();
+          const experienceRect = experienceSection.getBoundingClientRect();
+          const researchRect = researchSection.getBoundingClientRect();
+          
+          const centerY = windowHeight / 2;
+          let activeSection = null;
+          
+          // Check which section is active based on viewport position
+          if (educationRect.top > centerY) {
+            // Above education section = About section
+            activeSection = null; // About (no section active)
+          } else if (educationRect.top <= centerY && educationRect.bottom >= centerY) {
+            activeSection = sections.find(s => s.name === 'education');
+          } else if (experienceRect.top <= centerY && experienceRect.bottom >= centerY) {
+            activeSection = sections.find(s => s.name === 'experience');
+          } else if (researchRect.top <= centerY && researchRect.bottom >= centerY) {
+            activeSection = sections.find(s => s.name === 'research');
+          } else if (researchRect.bottom < centerY) {
+            // Below research section = still Research
+            activeSection = sections.find(s => s.name === 'research');
+          }
+          
+          // Update sections
+          sections.forEach(section => {
+            if (section === activeSection) {
+              section.element.classList.add('in-view');
+            } else {
+              section.element.classList.remove('in-view');
+            }
+          });
+          
+          // Handle Hello/About content visibility
+          const helloSections = document.querySelectorAll('.hello-section');
+          const helloVisibleElements = document.querySelectorAll('.hello-visible');
+          const helloContentMobile = document.querySelector('.hello-content-mobile');
+          
+          // Check if we're in vertical/mobile mode
+          const isVerticalMode = window.innerHeight > window.innerWidth;
+          
+          // Handle left section visibility (3D models, titles, nav buttons)
+          const leftSection = document.querySelector('.left-section');
+          const horseContainer = document.querySelector('.horse-container');
+          const bullContainer = document.querySelector('.bull-container-new');
+          const lionContainer = document.querySelector('.lion-container-new');
+          const educationTitle = document.querySelector('.education-title');
+          const experienceTitle = document.querySelector('.experience-title');
+          const researchTitle = document.querySelector('.research-title');
+          const navButtonsContainer = document.querySelector('.nav-buttons.permanent-buttons');
+          
+          if (isVerticalMode) {
+            // Hide all left section content in vertical mode
+            if (leftSection) leftSection.style.display = 'none';
+            if (horseContainer) horseContainer.style.display = 'none';
+            if (bullContainer) bullContainer.style.display = 'none';
+            if (lionContainer) lionContainer.style.display = 'none';
+            if (educationTitle) educationTitle.style.display = 'none';
+            if (experienceTitle) experienceTitle.style.display = 'none';
+            if (researchTitle) researchTitle.style.display = 'none';
+            if (navButtonsContainer) navButtonsContainer.style.display = 'none';
+          } else {
+            // Show left section content in horizontal mode
+            if (leftSection) leftSection.style.display = 'block';
+            if (navButtonsContainer) {
+              navButtonsContainer.style.display = 'grid';
+              // Ensure it maintains the 2x2 grid layout
+              navButtonsContainer.style.gridTemplateColumns = '1fr 1fr';
+            }
+            // 3D models and titles will be shown/hidden based on active section below
+          }
+          
+          if (activeSection === null) {
+            // About section is active - show hello content
+            helloSections.forEach(section => {
+              section.style.opacity = '1';
+            });
+            helloVisibleElements.forEach(element => {
+              element.classList.add('show');
+            });
+            // Make profile photo bright when about is active
+            const profilePhoto = document.querySelector('.profile-photo');
+            if (profilePhoto) profilePhoto.classList.add('in-view');
+            if (helloContentMobile) {
+              if (isVerticalMode) {
+                // Show mobile content in vertical mode
+                helloContentMobile.style.display = 'block';
+                helloContentMobile.style.opacity = '1';
+                helloContentMobile.style.visibility = 'visible';
+              } else {
+                // Hide mobile content in horizontal mode
+                helloContentMobile.style.display = 'none';
+              }
+            }
+          } else {
+            // Other sections active - dim hello content
+            helloSections.forEach(section => {
+              section.style.opacity = '0.3';
+            });
+            helloVisibleElements.forEach(element => {
+              element.classList.remove('show');
+            });
+            // Dim profile photo when about is not active
+            const profilePhoto = document.querySelector('.profile-photo');
+            if (profilePhoto) profilePhoto.classList.remove('in-view');
+            if (helloContentMobile) {
+              if (isVerticalMode) {
+                helloContentMobile.style.opacity = '0.3';
+              } else {
+                // Always hidden in horizontal mode
+                helloContentMobile.style.display = 'none';
+              }
+            }
+          }
+          
+          // Update navigation buttons
+          const navButtons = document.querySelectorAll('.nav-buttons.permanent-buttons .nav-btn');
+          navButtons.forEach(btn => btn.classList.remove('active'));
+          
+          if (activeSection) {
+            if (activeSection.name === 'education' && navButtons[1]) {
+              navButtons[1].classList.add('active');
+            } else if (activeSection.name === 'experience' && navButtons[2]) {
+              navButtons[2].classList.add('active');
+            } else if (activeSection.name === 'research' && navButtons[3]) {
+              navButtons[3].classList.add('active');
+            }
+          } else if (navButtons[0]) {
+            navButtons[0].classList.add('active'); // About
+          }
+          
+          // Update button styling and animal visibility
+          if (window.updateButtonStyling) {
+            window.updateButtonStyling();
+          }
+          updateAnimalVisibility();
+        }
+      }, 100); // Check every 100ms
+    }
+  }
+  
+  
+  
+  
+  // Force initial state - For SPA experience route (mode-aware)
+  setTimeout(() => {
+    const currentRoute = document.body.getAttribute('data-current-route');
+    
+    if (currentRoute === 'experience') {
+      const isVerticalMode = window.innerHeight > window.innerWidth || window.innerWidth <= 768;
+      
+      if (!isVerticalMode) {
+        // Only activate education section in horizontal mode
+        sections.forEach(section => {
+          section.element.classList.remove('in-view');
+        });
+        
+        // Find and activate education section
+        const educationSection = sections.find(s => s.name === 'education');
+        if (educationSection) {
+          educationSection.element.classList.add('in-view');
+          
+          // Update navigation buttons
+          const navButtons = document.querySelectorAll('.nav-buttons.permanent-buttons .nav-btn');
+          navButtons.forEach(btn => btn.classList.remove('active'));
+          if (navButtons[1]) navButtons[1].classList.add('active'); // Education button
+          
+          // Update button styling
+          if (window.updateButtonStyling) {
+            window.updateButtonStyling();
+          }
+          
+          // Show education elements
+          const horseContainer = document.querySelector('.horse-container');
+          const educationTitle = document.querySelector('.education-title');
+          
+          if (horseContainer) horseContainer.classList.add('visible');
+          if (educationTitle) educationTitle.classList.add('visible');
+        }
+      }
+      // In vertical mode, don't override the About section setup from earlier
+      
+      // Add manual section switching for SPA since scroll detection doesn't work
+      const navButtons = document.querySelectorAll('.nav-buttons.permanent-buttons .nav-btn');
+      navButtons.forEach((button, index) => {
+        button.addEventListener('click', () => {
+          // Remove active from all sections
+          sections.forEach(section => {
+            section.element.classList.remove('in-view');
+          });
+          
+          // Remove active from all buttons
+          navButtons.forEach(btn => btn.classList.remove('active'));
+          
+          // Activate clicked button
+          button.classList.add('active');
+          
+          // Activate corresponding section
+          let targetSection = null;
+          switch(index) {
+            case 0: // About - no section active
+              break;
+            case 1: // Education
+              targetSection = sections.find(s => s.name === 'education');
+              break;
+            case 2: // Experience
+              targetSection = sections.find(s => s.name === 'experience');
+              break;
+            case 3: // Research
+              targetSection = sections.find(s => s.name === 'research');
+              break;
+          }
+          
+          if (targetSection) {
+            targetSection.element.classList.add('in-view');
+          }
+          
+          // Update button styling
+          if (window.updateButtonStyling) {
+            window.updateButtonStyling();
+          }
+          
+          // Manually trigger animal visibility update
+          updateAnimalVisibility();
+        });
+      });
+      
+    } else {
+      updateSectionVisibility();
+    }
+  }, 100);
+}
+
+// SPA-compatible navigation buttons initialization  
+function initNavigationButtonsForSPA() {
+  // The navigation button logic is already global, so it should work
+  // Just ensure the button styling function is available
+  if (!window.updateButtonStyling) {
+    const navButtons = document.querySelectorAll('.nav-buttons.permanent-buttons .nav-btn');
+    
+    window.updateButtonStyling = function() {
+      navButtons.forEach((button) => {
+        if (button.classList.contains('active')) {
+          button.style.borderColor = '#ff00ff';
+          button.style.boxShadow = '0 0 15px rgba(255, 0, 255, 0.6)';
+        } else {
+          button.style.borderColor = '#ffffff';
+          button.style.boxShadow = 'none';
+        }
+      });
+    }
+  }
+}
+
+// Animal visibility function that can be called from SPA
+function updateAnimalVisibility() {
+  // Check which section is in focus
+  const timelineContainer = document.querySelector('.timeline-container');
+  const experienceContainer = document.querySelector('.experience-cards');
+  const researchContainer = document.querySelector('.research-cards');
+  
+  const isEducationInFocus = timelineContainer && timelineContainer.classList.contains('in-view');
+  const isExperienceInFocus = experienceContainer && experienceContainer.classList.contains('in-view');
+  const isResearchInFocus = researchContainer && researchContainer.classList.contains('in-view');
+  
+  
+  const horseContainer = document.querySelector('.horse-container');
+  const bullContainer = document.querySelector('.bull-container-new');
+  const lionContainer = document.querySelector('.lion-container-new');
+  const educationTitle = document.querySelector('.education-title');
+  const navButtons = document.querySelector('.nav-buttons.permanent-buttons');
+  
+  
+  // Horse shows for education
+  if (horseContainer) {
+    if (isEducationInFocus) {
+      horseContainer.classList.add('visible');
+    } else {
+      horseContainer.classList.remove('visible');
+    }
+  }
+  
+  // Bull shows for experience
+  if (bullContainer) {
+    if (isExperienceInFocus) {
+      bullContainer.style.opacity = '1';
+      bullContainer.style.visibility = 'visible';
+    } else {
+      bullContainer.style.opacity = '0';
+      bullContainer.style.visibility = 'hidden';
+    }
+  }
+  
+  // Lion shows for research
+  if (lionContainer) {
+    if (isResearchInFocus) {
+      lionContainer.style.opacity = '1';
+      lionContainer.style.visibility = 'visible';
+    } else {
+      lionContainer.style.opacity = '0';
+      lionContainer.style.visibility = 'hidden';
+    }
+  }
+  
+  // Research title shows when research is in focus
+  const researchTitle = document.querySelector('.research-title');
+  if (researchTitle) {
+    if (isResearchInFocus) {
+      researchTitle.style.opacity = '1';
+      researchTitle.style.visibility = 'visible';
+    } else {
+      researchTitle.style.opacity = '0';
+      researchTitle.style.visibility = 'hidden';
+    }
+  }
+  
+  // Experience title shows when experience is in focus
+  const experienceTitle = document.querySelector('.experience-title');
+  if (experienceTitle) {
+    if (isExperienceInFocus) {
+      experienceTitle.style.opacity = '1';
+      experienceTitle.style.visibility = 'visible';
+    } else {
+      experienceTitle.style.opacity = '0';
+      experienceTitle.style.visibility = 'hidden';
+    }
+  }
+  
+  // Education title shows when education is in focus
+  if (isEducationInFocus) {
+    if (educationTitle) {
+      educationTitle.classList.add('visible');
+    }
+  } else {
+    if (educationTitle) {
+      educationTitle.classList.remove('visible');
+    }
+  }
+  
+  // Nav buttons show when education, experience, OR research is in focus (don't fade out until footer)
+  if (isEducationInFocus || isExperienceInFocus || isResearchInFocus) {
+    if (navButtons) navButtons.classList.add('visible');
+  } else {
+    if (navButtons) navButtons.classList.remove('visible');
+  }
+}

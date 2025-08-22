@@ -96,6 +96,9 @@ class SPARouter {
     // Fade out current content
     await this.fadeOut();
 
+    // Auto-close mobile nav when navigating to new page
+    this.closeMobileNav();
+
     // Hide/show elements
     this.updateElementVisibility(routeConfig);
 
@@ -204,6 +207,19 @@ class SPARouter {
         setTimeout(resolve, 400);
       }, 100);
     });
+  }
+
+  // Close mobile nav
+  closeMobileNav() {
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const bottomNav = document.querySelector('.bottom-nav');
+    
+    if (mobileMenuBtn && bottomNav) {
+      // Close the mobile nav
+      mobileMenuBtn.classList.remove('active');
+      bottomNav.classList.remove('show');
+      console.log('Mobile nav auto-closed on route change');
+    }
   }
 
   // Get current route
