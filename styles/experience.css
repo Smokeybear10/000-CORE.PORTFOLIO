@@ -452,21 +452,7 @@ body {
   display: block;
 }
 
-/* Hide default cursor globally - FORCE HIDE ALL CURSORS */
-* {
-  cursor: none !important;
-}
-
-*:hover {
-  cursor: none !important;
-}
-
-html {
-  cursor: none !important;
-}
-
 body {
-  cursor: none !important;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -492,24 +478,6 @@ html, body {
   display: none;
   width: 0;
   height: 0;
-}
-
-body * {
-  cursor: none !important;
-}
-
-/* Override all possible cursor styles */
-a, button, input, textarea, select, [role="button"], .clickable,
-.card, .nav-link, .tech, .mute-container, .vaporwave-arrow,
-.stack-text, .modal, .close, svg, path {
-  cursor: none !important;
-}
-
-a:hover, button:hover, input:hover, textarea:hover, select:hover,
-[role="button"]:hover, .clickable:hover, .card:hover,
-.nav-link:hover, .tech:hover, .mute-container:hover, .vaporwave-arrow:hover,
-.stack-text:hover, .modal:hover, .close:hover, svg:hover, path:hover {
-  cursor: none !important;
 }
 
 /* MY JOURNEY Title */

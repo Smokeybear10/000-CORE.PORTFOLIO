@@ -48,7 +48,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Scroll progress indicator
-document.addEventListener('DOMContentLoaded', () => {
+let scrollProgressHandler = null;
+
+function initScrollProgress() {
   const scrollProgressBar = document.querySelector('.scroll-progress-bar');
 
   function updateScrollProgress() {
@@ -62,13 +64,30 @@ document.addEventListener('DOMContentLoaded', () => {
     scrollProgressBar.style.transform = `translateY(-${100 - scrollProgress}%)`;
   }
 
+  // Remove existing handler if any
+  if (scrollProgressHandler) {
+    window.removeEventListener('scroll', scrollProgressHandler);
+  }
+  
+  scrollProgressHandler = updateScrollProgress;
+  
   // Initial call and scroll listener
   updateScrollProgress();
-  window.addEventListener('scroll', updateScrollProgress);
+  window.addEventListener('scroll', scrollProgressHandler);
+}
+
+// Initialize on DOM ready for standalone experience page
+document.addEventListener('DOMContentLoaded', () => {
+  // Only init if we're on the experience page directly
+  if (window.location.pathname.includes('experience') && !window.location.pathname.includes('spa')) {
+    initScrollProgress();
+  }
 });
 
 // Experience text fade effect
-document.addEventListener('DOMContentLoaded', () => {
+let experienceWhiteHandler = null;
+
+function initExperienceFadeEffects() {
   const experienceWhite = document.querySelector('.title-experience-white');
   
   function updateExperienceWhiteOpacity() {
@@ -89,13 +108,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   
+  // Remove existing handler if any
+  if (experienceWhiteHandler) {
+    window.removeEventListener('scroll', experienceWhiteHandler);
+  }
+  
+  experienceWhiteHandler = updateExperienceWhiteOpacity;
+  window.experienceScrollHandlers.push(experienceWhiteHandler);
+  
   // Initial call and scroll listeners
   updateExperienceWhiteOpacity();
-  window.addEventListener('scroll', updateExperienceWhiteOpacity);
+  window.addEventListener('scroll', experienceWhiteHandler);
+}
+
+// Initialize on DOM ready for standalone experience page
+document.addEventListener('DOMContentLoaded', () => {
+  // Only init if we're on the experience page directly
+  if (window.location.pathname.includes('experience') && !window.location.pathname.includes('spa')) {
+    initExperienceFadeEffects();
+  }
 });
 
 // Animal containers fade in/out based on section focus
-document.addEventListener('DOMContentLoaded', () => {
+let animalVisibilityHandler = null;
+
+function initAnimalContainerVisibility() {
   const horseContainer = document.querySelector('.horse-container');
   const bullContainer = document.querySelector('.bull-container-new');
   const lionContainer = document.querySelector('.lion-container-new');
@@ -684,3 +721,51 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+// SPA-specific initialization functions
+window.initExperienceAnimations = function() {
+  console.log('Initializing experience animations for SPA...');
+  
+  // Initialize scroll progress
+  initScrollProgress();
+  
+  // Initialize experience fade effects
+  initExperienceFadeEffects();
+  
+  // Initialize animal container visibility
+  initAnimalContainerVisibility();
+  
+  // Initialize section focus effects
+  initSectionFocusEffects();
+  
+  // Initialize hello navigation
+  initHelloNavigation();
+  
+  // Initialize hello buttons
+  initHelloButtons();
+  
+  console.log('Experience animations initialized');
+};
+
+window.cleanupExperienceAnimations = function() {
+  console.log('Cleaning up experience animations...');
+  
+  // Remove scroll progress handler
+  if (scrollProgressHandler) {
+    window.removeEventListener('scroll', scrollProgressHandler);
+    scrollProgressHandler = null;
+  }
+  
+  // Remove other scroll handlers
+  if (window.experienceScrollHandlers) {
+    window.experienceScrollHandlers.forEach(handler => {
+      window.removeEventListener('scroll', handler);
+    });
+    window.experienceScrollHandlers = [];
+  }
+  
+  console.log('Experience animations cleaned up');
+};
+
+// Store scroll handlers for cleanup
+window.experienceScrollHandlers = [];

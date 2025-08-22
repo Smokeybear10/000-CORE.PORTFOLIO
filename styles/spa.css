@@ -1,0 +1,299 @@
+/* SPA-specific styles */
+
+/* Route content containers */
+[data-route-content] {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Ensure smooth transitions */
+body {
+  transition: opacity 0.3s ease-out;
+}
+
+/* Route-specific element visibility */
+.route-home-only {
+  display: block;
+}
+
+.route-about-only {
+  display: none;
+}
+
+/* When on about route */
+body[data-current-route="about"] .route-home-only {
+  display: none;
+}
+
+body[data-current-route="about"] .route-about-only {
+  display: block;
+}
+
+/* Navigation improvements for SPA */
+.bottom-nav .nav-link {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.bottom-nav .nav-link:hover {
+  color: #00ffff !important;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.8) !important;
+  transform: scale(1.05) !important;
+}
+
+.bottom-nav .nav-link.active {
+  color: #00ffff !important;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.8) !important;
+  pointer-events: none !important;
+  user-select: none !important;
+}
+
+.bottom-nav .nav-link.active:hover {
+  transform: none !important;
+}
+
+/* Smooth scroll for route transitions */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Ensure content doesn't jump during transitions */
+.spa-content-wrapper {
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Hide elements during transitions */
+.spa-transitioning {
+  pointer-events: none;
+}
+
+/* Route content positioning */
+#home-content {
+  position: relative;
+  z-index: 1;
+}
+
+#about-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* Ensure proper layering */
+.about-container,
+.main-container {
+  position: relative;
+  z-index: 1;
+}
+
+/* 3D elements should stay behind content */
+#cube-container,
+#model-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Scroll progress indicator positioning */
+.scroll-progress {
+  position: fixed;
+  z-index: 100;
+}
+
+
+/* Music controls positioning */
+.mute-container {
+  position: fixed;
+  z-index: 1001;
+}
+
+/* Navigation positioning */
+.bottom-nav {
+  position: fixed;
+  bottom: 0rem;
+  right: 0rem;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: flex-end;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  padding: 1rem 2rem;
+  border-radius: 15px;
+  border: none;
+}
+
+.nav-link {
+  color: #ffffff;
+  font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; 
+  font-weight: 400; 
+  text-transform: uppercase; 
+  letter-spacing: 0.15em;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-decoration: none;
+  text-transform: none;
+  letter-spacing: 0.08em;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  white-space: nowrap;
+  position: relative;
+}
+
+.nav-link::before {
+  display: none !important;
+}
+
+.bottom-nav .nav-link::before {
+  display: none !important;
+}
+
+.bottom-nav .nav-link:hover::before {
+  display: none !important;
+}
+
+/* Add hover highlighting for nav text */
+.bottom-nav .nav-link:hover {
+  background: rgba(0, 0, 0, 0.3) !important;
+  color: #00ffff !important;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.8) !important;
+  border-radius: 8px !important;
+  transform: scale(1.05) !important;
+  transition: all 0.2s ease !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+
+/* Disable hover effects for active nav item */
+.bottom-nav .nav-link.active:hover {
+  background: none !important;
+  transform: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-radius: 0 !important;
+}
+
+/* Navigation specific styling for clean look */
+.bottom-nav {
+  background: transparent !important;
+  display: flex !important;
+  flex-direction: column !important;
+  width: 140px !important;
+  height: auto !important;
+  position: fixed !important;
+  bottom: 0.5rem !important;
+  right: 0.5rem !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 15px !important;
+  gap: 0 !important;
+  align-items: stretch !important;
+  border: none !important;
+}
+
+.bottom-nav .nav-link {
+  background: transparent !important;
+  border: none !important;
+  flex: none !important;
+  text-align: right !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  height: 45px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  padding: 0 10px 0 0 !important;
+  white-space: normal !important;
+  position: relative !important;
+  font-family: 'Fira Mono', 'Consolas', monospace !important;
+  font-size: 1.1rem !important;
+  font-weight: 400 !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  color: white !important;
+  text-decoration: none !important;
+}
+
+.bottom-nav .nav-link.active {
+  background: none !important;
+  color: #00ffff !important;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.8) !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  pointer-events: none !important;
+}
+
+.mobile-menu-btn {
+  position: fixed;
+  z-index: 10000;
+}
+
+/* Startup preloader */
+.startup-preloader {
+  position: fixed;
+  z-index: 10001;
+}
+
+/* Ensure proper display for route-specific elements */
+.home-only {
+  display: block;
+}
+
+.about-only {
+  display: none;
+}
+
+/* About route specific visibility */
+body[data-current-route="about"] .home-only {
+  display: none !important;
+}
+
+body[data-current-route="about"] .about-only {
+  display: block !important;
+}
+
+/* Home route specific visibility */
+body[data-current-route="home"] .home-only {
+  display: block !important;
+}
+
+body[data-current-route="home"] .about-only {
+  display: none !important;
+}
+
+/* Smooth transitions for content */
+.spa-content {
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.spa-content.hiding {
+  opacity: 0;
+}
+
+/* Prevent content jumping */
+.route-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Responsive adjustments for SPA */
+@media (orientation: portrait), (max-width: 768px) {
+  [data-route-content] {
+    padding-top: 0;
+  }
+  
+  .route-container {
+    min-height: 100vh;
+  }
+}

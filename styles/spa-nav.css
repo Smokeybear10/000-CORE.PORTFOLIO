@@ -1,0 +1,78 @@
+/* Clean SPA Navigation */
+.spa-nav {
+  position: fixed;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  align-items: stretch;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 140px;
+}
+
+.spa-nav-btn {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-family: 'Fira Mono', 'Consolas', monospace;
+  font-size: 1.1rem;
+  font-weight: 400;
+  text-align: right;
+  padding: 12px 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: none;
+  letter-spacing: normal;
+  outline: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.spa-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #00ffff;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+  transform: scale(1.02);
+}
+
+.spa-nav-btn.active {
+  color: #00ffff;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+  background: rgba(0, 255, 255, 0.1);
+  pointer-events: none;
+}
+
+.spa-nav-btn.active:hover {
+  transform: none;
+}
+
+/* Remove default button styling */
+.spa-nav-btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.spa-nav-btn:active {
+  transform: scale(0.98);
+}
+
+/* Mobile styles */
+@media (orientation: portrait), (max-width: 768px) {
+  .spa-nav {
+    width: 120px;
+    bottom: 1rem;
+    right: 1rem;
+  }
+  
+  .spa-nav-btn {
+    font-size: 1rem;
+    padding: 10px 12px;
+  }
+}

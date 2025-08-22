@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thomas Ou • About</title>
+  <!-- Google Fonts for modern look -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:900,700,400|Inter:400,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton:wght@400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- GSAP -->
+  <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
+  <!-- Three.js for 3D background -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="styles/about.css" />
+  <!-- Music Manager -->
+  <script defer src="musicManager.js"></script>
+  <!-- About JavaScript -->
+  <script defer src="js/about.js"></script>
+</head>
+<body>
+
+  <!-- Custom Cursor (hidden) -->
+  <svg id="custom-cursor" width="27" height="30" viewBox="0 0 27 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20.0995 11.0797L3.72518 1.13204C2.28687 0.258253 0.478228 1.44326 0.704999 3.11083L3.28667 22.0953C3.58333 24.2768 7.33319 24.6415 8.3792 22.7043C9.5038 20.6215 10.8639 18.7382 12.43 17.7122C13.996 16.6861 16.2658 16.1911 18.6244 15.9918C20.8181 15.8063 21.9811 12.2227 20.0995 11.0797Z" fill="#ff00ff" stroke="rgba(255,0,255,0.5)" stroke-width="1"/>
+  </svg>
+
+  <!-- Scroll Progress Indicator -->
+  <div class="scroll-progress">
+    <div class="scroll-progress-bar"></div>
+  </div>
+
+  <!-- About Container -->
+  <div class="about-container">
+    
+    <!-- About Title -->
+    <div class="about-title">
+      <div class="about-text">
+        <div>ABOUT</div>
+        <div>ME</div>
+      </div>
+      <div class="title-subtitle">Click on underlined words to learn more</div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="about-content">
+      
+      <!-- Profile Section -->
+      <div class="profile-section">
+        <div class="profile-text">
+                     <h2>👋 Hi there. I'm <span style="color: #ff00ff;"><strong>Thomas Ou</strong></span> and welcome to my personal portfolio! I'm pursuing a Bachelor's in <em>Mathematics</em> and <em>Statistics</em>, alongside an accelerated Master's in <em>Computer Science</em> at the <span style="background: #ffffff; color: #011f5b; padding: 0 0.5rem; border-radius: 8px; border: 1px solid #011f5b; display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600;"><img src="Images/Penn.png" alt="Penn" style="width: 1em; height: 1em; object-fit: contain;">University of Pennsylvania</span>. I specialize in building <a href="#" style="color: #ffffff; text-decoration: underline; text-decoration-color: #00ffff;">full-stack systems</a>, large language models, and the occasional <a href="#" style="color: #ffffff; text-decoration: underline; text-decoration-color: #00ffff;">passion project</a> that keeps me up at night.</h2>
+          
+          <div class="profile-image">
+            <img src="Images/ThomasPortrait.jpg" alt="Thomas Ou" />
+          </div>
+          
+                     <p>Tech has been part of my life for as long as I can remember. As a toddler, I was dismantling remotes and rewiring toys. By middle school, I was building computers and teaching myself to code. <span style="background: rgba(255, 0, 255, 0.3); color: #ffffff;">At 18, online poker led me to discover a vulnerability in a crypto casino's shuffling algorithm</span> that created predictable patterns every few hundred hands. I taught myself to code and developed a program to exploit it (<em style="color: #00ffff;">ethically, of course</em>), and was hired to help fix their system. Since then, I've been obsessed with finding ways to apply algorithmic reasoning—through machine learning, game theory, and probabilistic thinking—to real-world conflict and decision-making.</p>
+          
+                     <p>I'm excited by projects that are <strong style="color: #ff00ff;">ambitious</strong>, <em style="color: #00ffff;">creative</em>, and <mark style="background: rgba(0, 255, 255, 0.15); color: #00ffff; padding: 0.2rem 0.4rem; border-radius: 4px;">technically challenging</mark>. I enjoy turning complex ideas into intuitive and functional digital experiences, whether it's a rough concept or a fully formed vision. When I'm not studying or coding, you'll find me at the gym finishing training with my <a href="https://www.instagram.com/penn_mma/?hl=en" target="_blank" style="color: #ffffff; text-decoration: underline; text-decoration-color: #00ffff;">MMA team</a> or preparing for <a href="https://www.ocs.marines.mil" target="_blank" style="color: #ffffff; text-decoration: underline; text-decoration-color: #00ffff;">Marines Officer Candidates School</a> next summer. I also like to play poker (my main source of income), and eat hotpots (my main source of expenses).</p>
+        </div>
+      </div>
+
+
+      <!-- Current Focus -->
+      <div class="info-section">
+                 <h3 style="color: #ffffff; font-family: 'Anton', Arial, sans-serif; font-size: 2.2rem; font-weight: 400; letter-spacing: 0.05em;">Current Focus</h3>
+        <p>I'm currently working on projects in artificial intelligence and blockchain/Web3 technologies. My research interests include machine learning applications in tech, algorithmic trading strategies, and the mathematical foundations of cryptographic systems.</p>
+        <p>In the past, I've always found great success in collaborating and connecting with new people. I'd love to connect, so don't hesitate to reach out.</p>
+      </div>
+
+      <!-- My Stack Section -->
+      <div class="info-section">
+                 <h3 style="color: #ffffff; font-family: 'Anton', Arial, sans-serif; font-size: 2.2rem; font-weight: 400; letter-spacing: 0.05em;">My Stacks</h3>
+        <div class="stack-container">
+          
+          <div class="stack-section">
+            <div class="stack-header">
+              <h4>Languages</h4>
+              <span class="stack-arrow">▼</span>
+            </div>
+            <div class="stack-content">
+              <div class="icon-container">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python">
+                <span class="icon-tooltip">Python</span>
+              </div>
+              <div class="icon-container">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++">
+                <span class="icon-tooltip">C++</span>
+              </div>
+              <div class="icon-container">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/r/r-original.svg" alt="R">
+                <span class="icon-tooltip">R</span>
+              </div>
+              <div class="icon-container">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ocaml/ocaml-original.svg" alt="OCaml">
+                <span class="icon-tooltip">OCaml</span>
+              </div>
+              <div class="icon-container">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="Java">
+                <span class="icon-tooltip">Java</span>
+              </div>
+              <div class="icon-container">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/matlab/matlab-original.svg" alt="MATLAB">
+                <span class="icon-tooltip">MATLAB</span>
+              </div>
+              <div class="icon-container">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5">
+                <span class="icon-tooltip">HTML5</span>
+              </div>
+              <div class="icon-container">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS">
+                <span class="icon-tooltip">CSS</span>
+              </div>
+              <div class="icon-container">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript">
+                <span class="icon-tooltip">JavaScript</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="stack-section">
+            <div class="stack-header">
+              <h4>Frameworks</h4>
+              <span class="stack-arrow">▼</span>
+            </div>
+            <div class="stack-content">
+              <div class="icon-container">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg" alt="NumPy">
+                <span class="icon-tooltip">NumPy</span>
+              </div>
+              <div class="icon-container">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg" alt="Pandas">
+                <span class="icon-tooltip">Pandas</span>
+              </div>
+              <div class="icon-container">
+                <img src="Images/Icons/Sckit.png" alt="Scikit-learn">
+                <span class="icon-tooltip">Scikit-learn</span>
+              </div>
+              <div class="icon-container">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg" alt="PyTorch">
+                <span class="icon-tooltip">PyTorch</span>
+              </div>
+              <div class="icon-container">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React">
+                <span class="icon-tooltip">React</span>
+              </div>
+              <div class="icon-container">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg" alt="TensorFlow">
+                <span class="icon-tooltip">TensorFlow</span>
+              </div>
+              <div class="icon-container">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/matplotlib/matplotlib-original.svg" alt="Matplotlib">
+                <span class="icon-tooltip">Matplotlib</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="stack-section">
+            <div class="stack-header">
+              <h4>Databases & Tools</h4>
+              <span class="stack-arrow">▼</span>
+            </div>
+            <div class="stack-content">
+              <div class="icon-container">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="MySQL">
+                <span class="icon-tooltip">MySQL</span>
+              </div>
+              <div class="icon-container">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PostgreSQL">
+                <span class="icon-tooltip">PostgreSQL</span>
+              </div>
+              <div class="icon-container">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" alt="MongoDB">
+                <span class="icon-tooltip">MongoDB</span>
+              </div>
+              <div class="icon-container">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node.js">
+                <span class="icon-tooltip">Node.js</span>
+              </div>
+              <div class="icon-container">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git">
+                <span class="icon-tooltip">Git</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Mute icon and vaporwave text -->
+  <div class="mute-container" style="position: fixed; bottom: 1.5rem; left: 1.5rem; z-index: 10; display: flex; align-items: center; gap: 0.5rem; cursor: pointer; opacity: 1; transition: opacity 0.3s ease;">
+    <svg class="mute-icon" viewBox="0 0 24 24" style="width: 24px; height: 24px; fill: #ffffff; filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5)); transition: all 0.3s ease;">
+      <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+    </svg>
+    <span class="mute-text" style="color: #ffffff; font-family: 'Inter', Arial, sans-serif; font-size: 1rem; font-weight: 400; text-shadow: 0 0 10px rgba(255, 255, 255, 0.3); transition: all 0.3s ease;">vaporwave</span>
+  </div>
+
+  <!-- Mobile Menu Button (vertical mode only) -->
+  <div class="mobile-menu-btn" style="display: none; position: fixed; bottom: 1rem; right: 1rem; z-index: 10000; width: 50px; height: 50px; background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 50%; cursor: pointer; align-items: center; justify-content: center; border: 1px solid rgba(255, 255, 255, 0.1);">
+    <div class="hamburger">
+      <span style="display: block; width: 20px; height: 2px; background: #ffffff; margin: 3px 0; transition: 0.3s; border-radius: 1px;"></span>
+      <span style="display: block; width: 20px; height: 2px; background: #ffffff; margin: 3px 0; transition: 0.3s; border-radius: 1px;"></span>
+      <span style="display: block; width: 20px; height: 2px; background: #ffffff; margin: 3px 0; transition: 0.3s; border-radius: 1px;"></span>
+    </div>
+  </div>
+
+  <!-- Bottom navigation -->
+  <div class="bottom-nav" style="background: rgba(0, 0, 0, 0.3) !important; backdrop-filter: blur(10px) !important; -webkit-backdrop-filter: blur(10px) !important; display: flex !important; flex-direction: column !important; width: 140px !important; height: auto !important; position: fixed !important; bottom: 0.5rem !important; right: 0.5rem !important; margin: 0 !important; padding: 0 !important; border-radius: 15px !important; gap: 0 !important; align-items: stretch !important; border: none !important; z-index: 9999 !important;">
+    <div class="nav-close-btn"></div>
+    <a href="index.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: white !important; text-decoration: none !important;">home</a>
+    <a href="about.html" class="nav-link active" style="background: none !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: #00ffff !important; text-decoration: none !important; text-shadow: 0 0 10px rgba(0, 255, 255, 0.8) !important; user-select: none !important; -webkit-user-select: none !important; -moz-user-select: none !important; -ms-user-select: none !important; pointer-events: none !important;">about</a>
+    <a href="experience.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: white !important; text-decoration: none !important;">experience</a>
+    <a href="Projects.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: white !important; text-decoration: none !important;">projects</a>
+    <a href="contact.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: white !important; text-decoration: none !important;">contact</a>
+  </div>
+
+  <!-- Background music -->
+  <audio id="backgroundMusic" loop>
+    <source src="Assets/Resonance.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <!-- Mute icon and vaporwave text -->
+  <div class="mute-container" id="muteContainer">
+    <svg class="mute-icon" id="muteIcon" viewBox="0 0 24 24">
+      <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+    </svg>
+    <span class="mute-text">vaporwave</span>
+  </div>
+
+  <!-- Music functionality is now handled by musicManager.js -->
+
+</body>
+</html>
