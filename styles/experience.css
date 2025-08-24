@@ -476,7 +476,7 @@ html, body {
 
 /* MY JOURNEY Title */
 .journey-title {
-  position: absolute;
+  position: absolute !important;
   top: 1rem;
   left: 1rem;
   z-index: 10;
@@ -867,11 +867,18 @@ html, body {
 
 /* Hello navigation buttons base styles */
 .hello-nav-btn {
-  cursor: none !important;
+  cursor: pointer !important;
   pointer-events: auto !important;
   position: relative !important;
   z-index: 20 !important;
   transition: all 0.3s ease !important;
+}
+
+/* Make about button always glow */
+.hello-nav-btn[data-section="about"] {
+  border-color: #ff00ff !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 15px rgba(255, 0, 255, 0.5) !important;
 }
 
 /* Resume link hover effects */
@@ -1323,18 +1330,20 @@ body[data-current-route="home"] .mobile-menu-btn {
   max-width: 800px;
   max-height: 85vh;
   overflow-y: auto;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.8);
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) scale(0.8) !important;
   border: 1px solid rgba(255, 0, 255, 0.2);
   cursor: auto !important;
   opacity: 0;
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 10001 !important;
+  box-sizing: border-box !important;
 }
 .modal.show .modal-content {
-  transform: translate(-50%, -50%) scale(1);
-  opacity: 1;
+  transform: translate(-50%, -50%) scale(1) !important;
+  opacity: 1 !important;
 }
 .close {
   color: #ffffff;

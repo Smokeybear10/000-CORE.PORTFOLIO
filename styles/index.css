@@ -358,7 +358,7 @@ body {
 
 .about-typed-text {
   width: 100%;
-  text-align: center;
+  text-align: center !important;
   font-family: 'Courier New', 'Monaco', 'Lucida Console', monospace;
   font-weight: 400;
   font-size: min(2rem, 5vw) !important;
@@ -366,13 +366,33 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin: 0;
+  margin: 0 auto !important;
   padding: 0;
   letter-spacing: 0.1em;
   text-transform: none;
   text-shadow: 
     0 0 10px rgba(255, 0, 255, 0.7),
     0 0 20px rgba(0, 255, 255, 0.5);
+  line-height: 1.2 !important;
+  display: block !important;
+}
+
+.about-typed-text::after {
+  content: '|';
+  color: #ffffff;
+  animation: blink-cursor 1s infinite;
+  -webkit-text-fill-color: #ffffff;
+  text-shadow: none;
+  background: none;
+}
+
+@keyframes blink-cursor {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
 }
 
 /* About page intro container - bottom left - no responsive changes */

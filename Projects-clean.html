@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thomas Ou • Projects</title>
+  <!-- Google Fonts for modern look -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:900,700,400|Inter:400,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton:wght@400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- GSAP -->
+  <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
+  <!-- Three.js and Vanta.js for animated backgrounds -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://unpkg.com/vanta/dist/vanta.net.min.js"></script>
+  <script src="https://unpkg.com/vanta/dist/vanta.dots.min.js"></script>
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="styles/projects.css" />
+</head>
+<body>
+  
+  <!-- Custom Cursor -->
+  <svg id="custom-cursor" width="27" height="30" viewBox="0 0 27 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20.0995 11.0797L3.72518 1.13204C2.28687 0.258253 0.478228 1.44326 0.704999 3.11083L3.28667 22.0953C3.58333 24.2768 7.33319 24.6415 8.3792 22.7043C9.5038 20.6215 10.8639 18.7382 12.43 17.7122C13.996 16.6861 16.2658 16.1911 18.6244 15.9918C20.8181 15.8063 21.9811 12.2227 20.0995 11.0797Z" fill="#ff00ff" stroke="rgba(255,0,255,0.5)" stroke-width="1"/>
+  </svg>
+
+  <!-- Featured Projects Section -->
+  <div class="section-title">
+    <div class="title-featured">FEATURED</div>
+    <div class="title-projects">PROJECTS</div>
+    <div class="title-subtitle">Click on a project to view details</div>
+  </div>
+
+  <!-- Projects Container -->
+  <div class="projects-container">
+      
+      <!-- Projects Wheel -->
+      <div class="projects-wheel">
+        <div class="wheel-container">
+          <div class="project-card" data-project="verilog">
+            <div class="project-image" style="background-image: url('Images/ProjectPhotos/Verilog.png');"></div>
+            <div class="project-header">
+              <h3>Verilog-Based ALU for 16-bit RISC-V Processor</h3>
+            </div>
+          </div>
+          
+          <div class="project-card" data-project="flywheel">
+            <div class="project-image" style="background-image: url('Images/ProjectPhotos/MagneticallyLevitating.png');"></div>
+            <div class="project-header">
+              <h3>Magnetically Levitating Flywheel Generator</h3>
+            </div>
+          </div>
+          
+          <div class="project-card" data-project="foosball">
+            <div class="project-image" style="background-image: url('Images/ProjectPhotos/SmartTable.png');"></div>
+            <div class="project-header">
+              <h3>SmartTable System for Competitive Foosball</h3>
+            </div>
+          </div>
+          
+          <div class="project-card" data-project="website">
+            <div class="project-image" style="background-image: url('Images/Portfolio.gif');"></div>
+            <div class="project-header">
+              <h3>Portfolio Website with Interactive Design</h3>
+            </div>
+          </div>
+          
+          <div class="project-card" data-project="poker">
+            <div class="project-image" style="background-image: url('Images/ProjectPhotos/ThreeVariable.png');"></div>
+            <div class="project-header">
+              <h3>Bayesian Poker Analysis Engine</h3>
+            </div>
+          </div>
+          
+          <div class="project-card" data-project="spikeball">
+            <div class="project-image" style="background-image: url('Images/ProjectPhotos/IMG_8763 [MacMini] [2025-07-24] [11.57.19 AM].JPG');"></div>
+            <div class="project-header">
+              <h3>Spike Sure Rim Detection for Spikeball</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+
+  <!-- Mute icon and vaporwave text -->
+  <div class="mute-container" id="muteContainer">
+    <svg class="mute-icon" id="muteIcon" viewBox="0 0 24 24">
+      <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+    </svg>
+    <span class="mute-text">vaporwave</span>
+  </div>
+
+  <!-- Bottom navigation -->
+  <div class="bottom-nav">
+    <a href="index.html" class="nav-link">home</a>
+    <a href="about.html" class="nav-link">about</a>
+    <a href="experience.html" class="nav-link">experience</a>
+    <a href="Projects.html" class="nav-link active">projects</a>
+    <a href="contact.html" class="nav-link">contact</a>
+  </div>
+
+  <!-- Modal for project details -->
+  <div id="projectModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <div id="modalContent">
+        <!-- Dynamic content will be inserted here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Background music -->
+  <audio id="backgroundMusic" loop>
+    <source src="Assets/Resonance.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <!-- Scripts -->
+  <script src="js/projects.js"></script>
+
+</body>
+</html>

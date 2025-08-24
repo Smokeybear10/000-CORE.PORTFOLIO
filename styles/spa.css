@@ -45,8 +45,8 @@ body[data-current-route="about"] .route-about-only {
 .bottom-nav .nav-link.active {
   color: #ff00ff !important;
   text-shadow: 0 0 10px rgba(255, 0, 255, 0.8) !important;
-  background: rgba(255, 0, 255, 0.1) !important;
-  border-radius: 8px !important;
+  background: none !important;
+  border-radius: 0 !important;
   pointer-events: none !important;
   user-select: none !important;
 }
@@ -226,10 +226,10 @@ html {
 }
 
 .bottom-nav .nav-link.active {
-  background: rgba(255, 0, 255, 0.1) !important;
+  background: none !important;
   color: #ff00ff !important;
   text-shadow: 0 0 10px rgba(255, 0, 255, 0.8) !important;
-  border-radius: 8px !important;
+  border-radius: 0 !important;
   user-select: none !important;
   -webkit-user-select: none !important;
   -moz-user-select: none !important;
@@ -277,18 +277,6 @@ body[data-current-route="home"] .about-only {
 
 /* Highlight home nav link when on home page */
 body[data-current-route="home"] .bottom-nav .nav-link[data-spa-route="home"] {
-  color: #ff00ff !important;
-  text-shadow: 0 0 10px rgba(255, 0, 255, 0.8) !important;
-}
-
-/* Highlight about nav link when on about page */
-body[data-current-route="about"] .bottom-nav .nav-link[data-spa-route="about"] {
-  color: #ff00ff !important;
-  text-shadow: 0 0 10px rgba(255, 0, 255, 0.8) !important;
-}
-
-/* Highlight experience nav link when on experience page */
-body[data-current-route="experience"] .bottom-nav .nav-link[data-spa-route="experience"] {
   color: #ff00ff !important;
   text-shadow: 0 0 10px rgba(255, 0, 255, 0.8) !important;
 }

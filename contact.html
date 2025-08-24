@@ -322,14 +322,6 @@
     <span class="mute-text">vaporwave</span>
   </div>
 
-  <!-- Bottom navigation -->
-  <div class="bottom-nav" style="background: solid black !important; display: flex !important; flex-direction: column !important; width: 140px !important; height: auto !important; position: fixed !important; bottom: 0.5rem !important; right: 0.5rem !important; margin: 0 !important; padding: 0 !important; border-radius: 15px !important; gap: 0 !important; align-items: stretch !important; border: none !important;">
-    <a href="index.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: white !important; text-decoration: none !important;">home</a>
-    <a href="about.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: white !important; text-decoration: none !important;">about</a>
-    <a href="experience.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: white !important; text-decoration: none !important;">experience</a>
-    <a href="Projects.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: white !important; text-decoration: none !important;">projects</a>
-    <a href="contact.html" class="nav-link active" style="background: none !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: #00ffff !important; text-decoration: none !important; text-shadow: 0 0 10px rgba(0, 255, 255, 0.8) !important; user-select: none !important; -webkit-user-select: none !important; -moz-user-select: none !important; -ms-user-select: none !important; pointer-events: none !important;">contact</a>
-  </div>
 
   <style>
     /* Hide natural cursor and style custom cursor */
@@ -342,13 +334,13 @@
     }
     
     a, button, input, textarea, select, [role="button"], .clickable,
-    .contact-btn, .nav-link, .mute-container, svg, path {
+    .contact-btn, .mute-container, svg, path {
       cursor: none !important;
     }
     
     a:hover, button:hover, input:hover, textarea:hover, select:hover,
     [role="button"]:hover, .clickable:hover, .contact-btn:hover,
-    .nav-link:hover, .mute-container:hover, svg:hover, path:hover {
+    .mute-container:hover, svg:hover, path:hover {
       cursor: none !important;
     }
     
@@ -365,35 +357,6 @@
       display: block;
     }
     
-    /* Override hand cursor hover effects for navigation buttons */
-    .bottom-nav .nav-link::before {
-      display: none !important;
-    }
-    
-    .bottom-nav .nav-link:hover::before {
-      display: none !important;
-    }
-    
-    /* Add hover highlighting for nav text */
-    .bottom-nav .nav-link:hover {
-      background: rgba(0, 0, 0, 0.3) !important;
-      color: #00ffff !important;
-      text-shadow: 0 0 10px rgba(0, 255, 255, 0.8) !important;
-      border-radius: 8px !important;
-      transform: scale(1.05) !important;
-      transition: all 0.2s ease !important;
-      backdrop-filter: blur(10px) !important;
-      -webkit-backdrop-filter: blur(10px) !important;
-    }
-    
-    /* Disable hover effects for active nav item */
-    .bottom-nav .nav-link.active:hover {
-      background: none !important;
-      transform: none !important;
-      backdrop-filter: none !important;
-      -webkit-backdrop-filter: none !important;
-      border-radius: 0 !important;
-    }
 
     /* Mute icon and vaporwave text - positioned at bottom left */
     .mute-container {
@@ -615,29 +578,6 @@
       window.addEventListener('mouseleave', handleMouseLeave);
     });
 
-    // Navigation animation
-    document.addEventListener('DOMContentLoaded', () => {
-      const navLinks = document.querySelectorAll('.nav-link:not(.active)');
-      
-      navLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          
-          const targetPage = link.getAttribute('href');
-          
-          if (targetPage) {
-            // Slow ease-out transition
-            document.body.style.transition = 'opacity 0.8s ease-out';
-            document.body.style.opacity = '0';
-            
-            // Navigate after ease-out
-            setTimeout(() => {
-              window.location.href = targetPage;
-            }, 800);
-          }
-        });
-      });
-    });
 
     // Contact card entrance animation
     document.addEventListener('DOMContentLoaded', () => {

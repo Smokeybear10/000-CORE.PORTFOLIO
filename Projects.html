@@ -590,76 +590,6 @@
       text-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
     }
 
-    /* Navigation menu bottom right */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0rem;
-      right: 0rem;
-      z-index: 1000;
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-      align-items: flex-end;
-      background: transparent;
-      padding: 1rem 2rem;
-      border-radius: 15px;
-      border: none;
-    }
-
-    .nav-link {
-      color: #ffffff;
-      font-family: 'Inter', Arial, sans-serif;
-      font-size: 1.4rem;
-      font-weight: 700;
-      text-decoration: none;
-      text-transform: none;
-      letter-spacing: 0.08em;
-      transition: all 0.3s ease;
-      cursor: pointer;
-      white-space: nowrap;
-      position: relative;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      background: transparent;
-    }
-
-    .nav-link:hover {
-      background: rgba(0, 0, 0, 0.8) !important;
-      backdrop-filter: blur(10px) !important;
-      -webkit-backdrop-filter: blur(10px) !important;
-      transform: scale(1.05) !important;
-      color: #00ffff !important;
-      text-shadow: 0 0 10px rgba(0, 255, 255, 0.8) !important;
-    }
-
-
-    .nav-link::before {
-      content: '';
-      position: absolute;
-      left: -2.5rem;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 40px;
-      height: 40px;
-      background-image: url('hand.png');
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .nav-link:nth-child(4)::before {
-      background-image: url('Images/Dophin.png');
-    }
-
-    .nav-link:hover {
-      color: #00ffff;
-    }
-
-    .nav-link:hover::before {
-      opacity: 1;
-    }
 
 
 
@@ -724,14 +654,14 @@
     /* Override all possible cursor styles on desktop only */
     @media (hover: hover) and (pointer: fine) {
       a, button, input, textarea, select, [role="button"], .clickable,
-      .project-card, .nav-link, .tech, .mute-container,
+      .project-card, .tech, .mute-container,
       .modal, .close, svg, path {
         cursor: none !important;
       }
       
       a:hover, button:hover, input:hover, textarea:hover, select:hover,
       [role="button"]:hover, .clickable:hover, .project-card:hover,
-      .nav-link:hover, .tech:hover, .mute-container:hover,
+      .tech:hover, .mute-container:hover,
       .modal:hover, .close:hover, svg:hover, path:hover {
         cursor: none !important;
       }
@@ -839,45 +769,8 @@
     <span class="mute-text">vaporwave</span>
   </div>
 
-      <!-- Bottom navigation -->
-    <div class="bottom-nav" style="background: solid black !important; display: flex !important; flex-direction: column !important; width: 140px !important; height: auto !important; position: fixed !important; bottom: 0.5rem !important; right: 0.5rem !important; margin: 0 !important; padding: 0 !important; border-radius: 15px !important; gap: 0 !important; align-items: stretch !important; border: none !important;">
-      <a href="index.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: white !important; text-decoration: none !important;">home</a>
-      <a href="about.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: white !important; text-decoration: none !important;">about</a>
-      <a href="experience.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: white !important; text-decoration: none !important;">experience</a>
-      <a href="Projects.html" class="nav-link active" style="background: none !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: #00ffff !important; text-decoration: none !important; text-shadow: 0 0 10px rgba(0, 255, 255, 0.8) !important; user-select: none !important; -webkit-user-select: none !important; -moz-user-select: none !important; -ms-user-select: none !important; pointer-events: none !important;">projects</a>
-      <a href="contact.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: white !important; text-decoration: none !important;">contact</a>
-    </div>
 
     <style>
-      /* Override hand cursor hover effects for navigation buttons */
-      .bottom-nav .nav-link::before {
-        display: none !important;
-      }
-      
-      .bottom-nav .nav-link:hover::before {
-        display: none !important;
-      }
-      
-      /* Add hover highlighting for nav text */
-      .bottom-nav .nav-link:hover {
-        background: rgba(0, 0, 0, 0.3) !important;
-        color: #00ffff !important;
-        text-shadow: 0 0 10px rgba(0, 255, 255, 0.8) !important;
-        border-radius: 8px !important;
-        transform: scale(1.05) !important;
-        transition: all 0.2s ease !important;
-        backdrop-filter: blur(10px) !important;
-        -webkit-backdrop-filter: blur(10px) !important;
-      }
-      
-      /* Disable hover effects for active nav item */
-      .bottom-nav .nav-link.active:hover {
-        background: none !important;
-        transform: none !important;
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
-        border-radius: 0 !important;
-      }
       
       /* Hide mute container in vertical mode */
       @media (orientation: portrait), (max-width: 768px) {
@@ -908,7 +801,7 @@
       
       /* Ensure mobile interactions work properly */
       a, button, input, textarea, select, option, [role="button"], .clickable,
-      .bottom-nav, .nav-link, .modal, .close, .tech, .project-card {
+      .modal, .close, .tech, .project-card {
         pointer-events: auto !important;
         touch-action: manipulation !important;
         cursor: pointer !important;
@@ -936,20 +829,20 @@
 
       
       /* Remove all hand images from ::before pseudo-elements (excluding grid backgrounds) */
-      .nav-link::before, .mute-text::before, .tech::before,
+      .mute-text::before, .tech::before,
       .modal::before, .close::before {
         background-image: none !important;
         display: none !important;
       }
       
       /* Completely hide all hand images from specific elements */
-      .nav-link::before, .nav-link::after, .mute-text::before, .mute-text::after,
+      .mute-text::before, .mute-text::after,
       .tech::before, .tech::after {
         background-image: none !important;
       }
       
       /* Specifically target all possible hand image elements */
-      .nav-link::before, .tech::before,
+      .tech::before,
       .mute-text::before {
         display: none !important;
         background-image: none !important;
@@ -1158,9 +1051,8 @@
       }
       
       function startDrag(e) {
-        // Skip if clicking on navigation, modal, or interactive elements
-        if (e.target.closest('.bottom-nav') || 
-            e.target.closest('.modal') || 
+        // Skip if clicking on modal or interactive elements
+        if (e.target.closest('.modal') || 
             e.target.closest('.mute-container') ||
             e.target.closest('.section-title')) {
           return;
@@ -1323,48 +1215,6 @@
 
 
 
-    // Simple navigation with ease-out
-    document.addEventListener('DOMContentLoaded', () => {
-      const navLinks = document.querySelectorAll('.nav-link');
-      
-      navLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          
-          const linkText = link.textContent.toLowerCase().trim();
-          let targetPage = '';
-          
-          // Map navigation to target pages
-          switch(linkText) {
-            case 'home':
-              targetPage = 'index.html';
-              break;
-            case 'about':
-              targetPage = 'about.html';
-              break;
-            case 'experience':
-              targetPage = 'experience.html';
-              break;
-            case 'contact':
-              targetPage = 'contact.html';
-              break;
-            default:
-              return;
-          }
-          
-          if (targetPage) {
-            // Slow ease-out transition
-            document.body.style.transition = 'opacity 0.8s ease-out';
-            document.body.style.opacity = '0';
-            
-            // Navigate after ease-out
-            setTimeout(() => {
-              window.location.href = targetPage;
-            }, 800);
-          }
-        });
-      });
-    });
 
 
   </script>

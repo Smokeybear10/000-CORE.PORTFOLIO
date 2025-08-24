@@ -20,6 +20,10 @@
       }
     }
   </script>
+  <!-- Three.js and Vanta.js for projects page -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://unpkg.com/vanta/dist/vanta.net.min.js"></script>
+  <script src="https://unpkg.com/vanta/dist/vanta.dots.min.js"></script>
   <!-- Model Viewer for 3D GLB files -->
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   <!-- Styles -->
@@ -28,6 +32,8 @@
   <link rel="stylesheet" href="styles/about.css" />
   <link rel="stylesheet" href="styles/experience.css" />
   <link rel="stylesheet" href="styles/spa.css" />
+  <link rel="stylesheet" href="styles/projects-new.css" />
+  <link rel="stylesheet" href="styles/contact.css" />
 </head>
 <body data-current-route="home">
 
@@ -67,6 +73,7 @@
   <div class="scroll-progress about-only">
     <div class="scroll-progress-bar"></div>
   </div>
+
 
   <!-- SPA Content Wrapper -->
   <div class="spa-content-wrapper">
@@ -577,6 +584,115 @@
       </div>
     </div>
 
+    <!-- PROJECTS ROUTE CONTENT -->
+    <div id="projects-content" data-route-content style="display: none;">
+      <!-- Projects Container -->
+      <div class="projects-container projects-only">
+        
+        <!-- Featured Projects Section -->
+        <div class="section-title projects-only">
+          <div class="title-featured">FEATURED</div>
+          <div class="title-projects">PROJECTS</div>
+          <div class="title-subtitle">Click on a project to view details</div>
+        </div>
+        
+        <!-- Projects Wheel -->
+        <div class="projects-wheel projects-only">
+          <div class="wheel-container">
+            <div class="project-card" data-project="verilog">
+              <div class="project-image" style="background-image: url('Images/ProjectPhotos/Verilog.png');"></div>
+              <div class="project-header">
+                <h3>Verilog-Based ALU for 16-bit RISC-V Processor</h3>
+              </div>
+            </div>
+            
+            <div class="project-card" data-project="flywheel">
+              <div class="project-image" style="background-image: url('Images/ProjectPhotos/MagneticallyLevitating.png');"></div>
+              <div class="project-header">
+                <h3>Magnetically Levitating Flywheel Generator</h3>
+              </div>
+            </div>
+            
+            <div class="project-card" data-project="foosball">
+              <div class="project-image" style="background-image: url('Images/ProjectPhotos/SmartTable.png');"></div>
+              <div class="project-header">
+                <h3>SmartTable System for Competitive Foosball</h3>
+              </div>
+            </div>
+            
+            <div class="project-card" data-project="website">
+              <div class="project-image" style="background-image: url('Images/Portfolio.gif');"></div>
+              <div class="project-header">
+                <h3>Portfolio Website with Interactive Design</h3>
+              </div>
+            </div>
+            
+            <div class="project-card" data-project="poker">
+              <div class="project-image" style="background-image: url('Images/ProjectPhotos/ThreeVariable.png');"></div>
+              <div class="project-header">
+                <h3>Bayesian Poker Analysis Engine</h3>
+              </div>
+            </div>
+            
+            <div class="project-card" data-project="spikeball">
+              <div class="project-image" style="background-image: url('Images/ProjectPhotos/IMG_8763 [MacMini] [2025-07-24] [11.57.19 AM].JPG');"></div>
+              <div class="project-header">
+                <h3>Spike Sure Rim Detection for Spikeball</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Modal for project details -->
+        <div id="projectModal" class="modal projects-only">
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalContent">
+              <!-- Dynamic content will be inserted here -->
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+
+    <!-- CONTACT ROUTE CONTENT -->
+    <div id="contact-content" data-route-content style="display: none;">
+      <!-- Contact Container (background only) -->
+      <div class="contact-container contact-only">
+      </div>
+
+      <!-- CONTACT ME Title (outside container) -->
+      <div class="journey-title contact-only">
+        <div class="journey-text">
+          <div>CONTACT</div>
+          <div>ME</div>
+        </div>
+      </div>
+
+      <!-- Contact Buttons (outside container) -->
+      <div class="contact-buttons contact-only">
+        <button class="contact-btn" data-contact="email">
+          <svg viewBox="0 0 24 24">
+            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+          </svg>
+          Email Me
+        </button>
+        <button class="contact-btn" data-contact="linkedin">
+          <svg viewBox="0 0 24 24">
+            <path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/>
+          </svg>
+          Connect
+        </button>
+        <button class="contact-btn" data-contact="github">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.30.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+          </svg>
+          See My Code
+        </button>
+      </div>
+    </div>
+
   </div>
 
   <!-- Background music -->
@@ -614,13 +730,14 @@
     <a href="#" data-spa-route="home" class="nav-link active">home</a>
     <a href="#" data-spa-route="about" class="nav-link">about</a>
     <a href="#" data-spa-route="experience" class="nav-link">experience</a>
-    <a href="Projects.html" class="nav-link">projects</a>
-    <a href="contact.html" class="nav-link">contact</a>
+    <a href="#" data-spa-route="projects" class="nav-link">projects</a>
+    <a href="#" data-spa-route="contact" class="nav-link">contact</a>
   </div>
 
   <!-- Scripts -->
   <!-- Load SPA system first -->
   <script defer src="js/spa-router.js"></script>
+  <script defer src="js/spa-projects-new.js"></script>
   <script defer src="js/spa-init.js"></script>
   
   <!-- Load other scripts after SPA is initialized -->
@@ -631,6 +748,7 @@
   <script defer src="js/navigation.js"></script>
   <script defer src="js/about.js"></script>
   <script defer src="js/experience.js"></script>
+  <script defer src="js/contact.js"></script>
 
 </body>
 </html>

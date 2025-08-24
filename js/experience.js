@@ -470,12 +470,17 @@ document.addEventListener('DOMContentLoaded', () => {
      });
      
      // Click handler
-     button.addEventListener('click', () => {
+     button.addEventListener('click', (e) => {
+       console.log('Hello nav button clicked:', button.getAttribute('data-section'));
+       e.preventDefault();
+       e.stopPropagation();
+       
        const section = button.getAttribute('data-section');
        let targetElement = null;
        
        switch(section) {
          case 'about':
+           console.log('About button clicked - scrolling to top');
            window.scrollTo({ top: 0, behavior: 'smooth' });
            return;
          case 'education':
@@ -490,6 +495,7 @@ document.addEventListener('DOMContentLoaded', () => {
        }
        
        if (targetElement) {
+         console.log('Scrolling to:', section);
          targetElement.scrollIntoView({ 
            behavior: 'smooth',
            block: 'center'
