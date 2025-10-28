@@ -1,11 +1,10 @@
 // TYPING ANIMATION FOR ABOUT PAGE
 const aboutRoles = [
-  "Frontend Dev",
-  "Mathematician", 
-  "AI Engineer",
-  "Statistical Analyst",
-  "Quant Analyst",
-  "Poker Nerd"
+  "GTO Poker Nerd",
+  "CTF Fanatic",
+  "Full Stack Developer",
+  "DeFi Enthusiast",
+  "MonteCarlo Researcher"
 ];
 const aboutTypingDelay = 120, aboutErasingDelay = 80, aboutNewTextDelay = 2500;
 let aboutRoleIndex = 0, aboutCharIndex = 0;

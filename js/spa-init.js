@@ -52,43 +52,18 @@ document.addEventListener('DOMContentLoaded', () => {
         window.init3DModels();
       }
       
-      // Initialize navigation model hover functionality - this is what's missing on first load!
-      setTimeout(() => {
-        if (window.initializeNavigationModels) {
-          console.log('HOME: Initializing navigation model hover effects...');
-          window.initializeNavigationModels();
-        } else {
-          console.log('HOME: Navigation models function not found, retrying...');
-          setTimeout(() => {
-            if (window.initializeNavigationModels) window.initializeNavigationModels();
-          }, 500);
-        }
-      }, 200);
-      
       // Reset scroll position
       window.scrollTo(0, 0);
       
-      // Update music to home track - but only if music is currently playing
+      // Update music to home track
       const backgroundMusic = document.getElementById('backgroundMusic');
       const hoverMusic = document.getElementById('hoverMusic');
       if (backgroundMusic && hoverMusic) {
         backgroundMusic.src = 'Assets/Emotions.mp3';
         hoverMusic.src = 'Assets/Resonance.mp3';
+        backgroundMusic.volume = 0.2;
+        hoverMusic.volume = 0;
         hoverMusic.currentTime = 25;
-        
-        // Only restart music if it was already playing (respect mute state)
-        if (window.musicIsPlaying) {
-          backgroundMusic.volume = 0.2;
-          hoverMusic.volume = 0;
-          backgroundMusic.currentTime = 0;
-          backgroundMusic.play().catch(e => console.log('Home music play failed:', e));
-        } else {
-          // Music is muted, just set up sources but don't play
-          backgroundMusic.volume = 0;
-          hoverMusic.volume = 0;
-          backgroundMusic.pause();
-          hoverMusic.pause();
-        }
       }
       
     },
@@ -154,22 +129,11 @@ document.addEventListener('DOMContentLoaded', () => {
         window.updateScrollProgress();
       }
       
-      // Update music to about track - but only if music is currently playing
+      // Update music to about track
       const backgroundMusic = document.getElementById('backgroundMusic');
-      const hoverMusic = document.getElementById('hoverMusic');
-      if (backgroundMusic && hoverMusic) {
-        // Stop background music (Emotions) and play hover music (Resonance) only if not muted
-        backgroundMusic.pause();
-        backgroundMusic.volume = 0;
-        
-        if (window.musicIsPlaying) {
-          hoverMusic.volume = 0.3;
-          hoverMusic.play().catch(e => console.log('About music play failed:', e));
-        } else {
-          // Music is muted, don't play
-          hoverMusic.volume = 0;
-          hoverMusic.pause();
-        }
+      if (backgroundMusic) {
+        backgroundMusic.src = 'Assets/Resonance.mp3';
+        backgroundMusic.volume = 0.3;
       }
       
     },
@@ -273,22 +237,11 @@ document.addEventListener('DOMContentLoaded', () => {
       // Reset scroll position
       window.scrollTo(0, 0);
       
-      // Update music to experience track - but only if music is currently playing
+      // Update music to experience track
       const backgroundMusic = document.getElementById('backgroundMusic');
-      const hoverMusic = document.getElementById('hoverMusic');
-      if (backgroundMusic && hoverMusic) {
-        // Stop background music (Emotions) and play hover music (Resonance) only if not muted
-        backgroundMusic.pause();
-        backgroundMusic.volume = 0;
-        
-        if (window.musicIsPlaying) {
-          hoverMusic.volume = 0.3;
-          hoverMusic.play().catch(e => console.log('Experience music play failed:', e));
-        } else {
-          // Music is muted, don't play
-          hoverMusic.volume = 0;
-          hoverMusic.pause();
-        }
+      if (backgroundMusic) {
+        backgroundMusic.src = 'Assets/Resonance.mp3';
+        backgroundMusic.volume = 0.3;
       }
     },
     onExit: async () => {
@@ -365,22 +318,11 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('PROJECTS ROUTE: projectsRouteNew not found!');
       }
       
-      // Update music to projects track (using Resonance) - but only if music is currently playing
+      // Update music to projects track (using Resonance)
       const backgroundMusic = document.getElementById('backgroundMusic');
-      const hoverMusic = document.getElementById('hoverMusic');
-      if (backgroundMusic && hoverMusic) {
-        // Stop background music (Emotions) and play hover music (Resonance) only if not muted
-        backgroundMusic.pause();
-        backgroundMusic.volume = 0;
-        
-        if (window.musicIsPlaying) {
-          hoverMusic.volume = 0.3;
-          hoverMusic.play().catch(e => console.log('Projects music play failed:', e));
-        } else {
-          // Music is muted, don't play
-          hoverMusic.volume = 0;
-          hoverMusic.pause();
-        }
+      if (backgroundMusic) {
+        backgroundMusic.src = 'Assets/Resonance.mp3';
+        backgroundMusic.volume = 0.3;
       }
       
       window.scrollTo(0, 0);
@@ -454,22 +396,11 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('CONTACT ROUTE: contactRoute not found!');
       }
       
-      // Update music to contact track - but only if music is currently playing
+      // Update music to contact track
       const backgroundMusic = document.getElementById('backgroundMusic');
-      const hoverMusic = document.getElementById('hoverMusic');
-      if (backgroundMusic && hoverMusic) {
-        // Stop background music (Emotions) and play hover music (Resonance) only if not muted
-        backgroundMusic.pause();
-        backgroundMusic.volume = 0;
-        
-        if (window.musicIsPlaying) {
-          hoverMusic.volume = 0.3;
-          hoverMusic.play().catch(e => console.log('Contact music play failed:', e));
-        } else {
-          // Music is muted, don't play
-          hoverMusic.volume = 0;
-          hoverMusic.pause();
-        }
+      if (backgroundMusic) {
+        backgroundMusic.src = 'Assets/Resonance.mp3';
+        backgroundMusic.volume = 0.3;
       }
       
       window.scrollTo(0, 0);
@@ -490,12 +421,6 @@ document.addEventListener('DOMContentLoaded', () => {
   window.navigateToRoute = (route) => {
     router.navigateTo(route);
   };
-
-  // Ensure home route initialization happens on first load
-  setTimeout(() => {
-    console.log('Triggering initial home route setup...');
-    router.navigateTo('home');
-  }, 100);
 
   // Handle startup preloader for SPA
   const startupButton = document.getElementById('startupClickButton');
@@ -518,101 +443,83 @@ document.addEventListener('DOMContentLoaded', () => {
     const muteContainer = document.getElementById('muteContainer');
     const muteIcon = document.getElementById('muteIcon');
     
-    if (!backgroundMusic || !muteContainer) return;
+    if (!backgroundMusic || !hoverMusic || !muteContainer) return;
 
-    let isPlaying = false;
-    let isHovering = false;
-    let currentFadeInterval = null;
-    
-    // Initialize global music state
-    window.musicIsPlaying = false;
+    let isMuted = false;
+    let isHoveringNav = false;
+
+    // Set up audio sources
+    backgroundMusic.src = 'Assets/Emotions.mp3';
+    hoverMusic.src = 'Assets/Resonance.mp3';
+    backgroundMusic.loop = true;
+    hoverMusic.loop = true;
 
     const mutedIcon = `<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>`;
     const playingIcon = `<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>`;
 
-    function toggleMusic() {
-      if (isPlaying) {
-        // Mute all music (pause but don't reset position)
-        backgroundMusic.pause();
-        if (hoverMusic) hoverMusic.pause();
-        muteIcon.innerHTML = mutedIcon;
-        isPlaying = false;
-        window.musicIsPlaying = false; // Global state
+    function updateMusic() {
+      const currentRoute = document.body.getAttribute('data-current-route');
+      const muteText = document.querySelector('.mute-text');
+      
+      // Update text based on route and hover state
+      if (currentRoute === 'home' && !isHoveringNav) {
+        if (muteText) muteText.textContent = 'emotions';
+        if (!isMuted) {
+          hoverMusic.pause();
+          backgroundMusic.volume = 0.3;
+          backgroundMusic.play().catch(console.log);
+        }
       } else {
-        // Unmute - continue playing whichever track has volume > 0
-        if (backgroundMusic.volume > 0) {
-          backgroundMusic.play().catch(e => console.log('Background music resume failed:', e));
+        if (muteText) muteText.textContent = 'resonance';
+        if (!isMuted) {
+          backgroundMusic.pause();
+          hoverMusic.volume = 0.3;
+          hoverMusic.play().catch(console.log);
         }
-        if (hoverMusic && hoverMusic.volume > 0) {
-          hoverMusic.play().catch(e => console.log('Hover music resume failed:', e));
-        }
-        muteIcon.innerHTML = playingIcon;
-        isPlaying = true;
-        window.musicIsPlaying = true; // Global state
       }
     }
 
-    function fadeToHover() {
-      // Only fade on home page
-      if (router.getCurrentRoute() !== 'home') return;
-      if (!isPlaying || isHovering || !hoverMusic) return;
-      
-      console.log('Fading to hover music (Resonance)');
-      isHovering = true;
-      
-      // Start hover music (Resonance) and stop background music (Emotions)
-      backgroundMusic.volume = 0;
-      backgroundMusic.pause();
-      
-      hoverMusic.volume = 0.3;
-      hoverMusic.play().catch(e => console.log('Hover music play failed:', e));
-    }
-    
-    function fadeToBackground() {
-      // Only fade on home page
-      if (router.getCurrentRoute() !== 'home') return;
-      if (!isPlaying || !isHovering) return;
-      
-      console.log('Fading to background music (Emotions)');
-      isHovering = false;
-      
-      // Start background music (Emotions) and stop hover music (Resonance)
-      hoverMusic.volume = 0;
-      hoverMusic.pause();
-      
-      backgroundMusic.volume = 0.2;
-      backgroundMusic.play().catch(e => console.log('Background music play failed:', e));
+    function toggleMusic() {
+      if (isMuted) {
+        isMuted = false;
+        muteIcon.innerHTML = playingIcon;
+        updateMusic();
+      } else {
+        isMuted = true;
+        muteIcon.innerHTML = mutedIcon;
+        backgroundMusic.pause();
+        hoverMusic.pause();
+      }
     }
 
-    // Music controls
+    // Initialize with playing icon and correct text
+    muteIcon.innerHTML = playingIcon;
+    updateMusic();
+
+    // Mute button
     muteContainer.addEventListener('click', toggleMusic);
 
-    // Navigation hover effects
+    // Navigation hover
     const navContainer = document.querySelector('.bottom-nav');
-    if (navContainer && hoverMusic) {
-      navContainer.addEventListener('mouseenter', fadeToHover);
-      navContainer.addEventListener('mouseleave', fadeToBackground);
+    if (navContainer) {
+      navContainer.addEventListener('mouseenter', () => {
+        isHoveringNav = true;
+        updateMusic();
+      });
+      navContainer.addEventListener('mouseleave', () => {
+        isHoveringNav = false;
+        updateMusic();
+      });
     }
 
-    // Auto-start attempts
-    function attemptAutoStart() {
-      if (!isPlaying) {
-        backgroundMusic.play().then(() => {
-          muteIcon.innerHTML = playingIcon;
-          isPlaying = true;
-          window.musicIsPlaying = true; // Set global state
-        }).catch(e => {
-          console.log('Auto-start failed, waiting for user interaction:', e);
-        });
-      }
-    }
+    // Update music when route changes
+    window.addEventListener('spa-route-changed', updateMusic);
 
-    setTimeout(attemptAutoStart, 500);
-    setTimeout(attemptAutoStart, 1000);
-    setTimeout(attemptAutoStart, 2000);
-
-    ['click', 'keydown', 'touchstart', 'mousemove'].forEach(event => {
-      document.addEventListener(event, attemptAutoStart, { once: true });
+    // Auto-start music on user interaction
+    ['click', 'keydown', 'touchstart'].forEach(event => {
+      document.addEventListener(event, () => {
+        if (!isMuted) updateMusic();
+      }, { once: true });
     });
   };
 

@@ -1,41 +1,135 @@
 // COMPLETELY REWRITTEN SPA PROJECTS JAVASCRIPT
 
-// Project data
+// Project data with enhanced information
 const projectData = {
   verilog: {
     title: "Verilog-Based ALU for 16-bit RISC-V Processor",
     description: "Designed and implemented a comprehensive Arithmetic Logic Unit (ALU) in Verilog for a 16-bit RISC-V processor architecture. The project involved creating modular components for arithmetic operations, logical operations, and control logic while ensuring optimal timing and resource utilization.",
     tech: ["Verilog", "RISC-V", "Digital Design", "FPGA", "ModelSim", "Quartus"],
-    image: "Images/ProjectPhotos/Verilog.png"
+    image: "Images/ProjectPhotos/Verilog.png",
+    features: [
+      "16-bit arithmetic operations (ADD, SUB, MUL, DIV)",
+      "Logical operations (AND, OR, XOR, NOT, shifts)",
+      "Conditional branching and jump instructions",
+      "Register file with 32 x 16-bit registers",
+      "Pipeline hazard detection and resolution",
+      "FPGA synthesis and timing optimization"
+    ],
+    technical: "The ALU was designed using hierarchical Verilog modules with separate components for arithmetic, logic, and control operations. The design features a 5-stage pipeline with forwarding units to handle data hazards. Custom testbenches were developed to verify functionality across all instruction types, and the design was synthesized for Altera Cyclone IV FPGA with timing closure at 50MHz.",
+    challenges: "The primary challenge was achieving timing closure while maintaining full RISC-V compatibility. This required careful pipeline stage balancing and the implementation of bypassing logic. Memory alignment issues were resolved through custom address translation units.",
+    links: [
+      { text: "GitHub Repository", url: "#", type: "github", error: "Not publicly available" },
+      { text: "Technical Documentation", url: "#", type: "docs", error: "Not publicly available" }
+    ],
+    gallery: ["Images/ProjectPhotos/Verilog.png"]
   },
   flywheel: {
-    title: "Magnetically Levitating Flywheel Generator", 
+    title: "Magnetically Levitating Flywheel Generator",
     description: "Developed an innovative energy storage system using magnetic levitation technology to reduce friction losses in flywheel energy storage. The project integrated electromagnetic controls, power electronics, and real-time monitoring systems to achieve stable levitation and energy conversion.",
     tech: ["Electromagnetic Design", "Power Electronics", "Control Systems", "MATLAB/Simulink", "PCB Design", "Embedded Systems"],
-    image: "Images/ProjectPhotos/MagneticallyLevitating.png"
+    image: "Images/ProjectPhotos/MagneticallyLevitating.png",
+    features: [
+      "Magnetic bearing system with 5 degrees of freedom control",
+      "High-speed flywheel (up to 15,000 RPM)",
+      "Power electronics for motor/generator operation",
+      "Real-time control system with feedback loops",
+      "Energy storage capacity of 1kWh",
+      "Efficiency rating of 92% round-trip"
+    ],
+    technical: "The system uses active magnetic bearings controlled by PID loops running at 10kHz. The power electronics stage features a three-phase inverter with space vector PWM control. The flywheel is made from carbon fiber composite for optimal strength-to-weight ratio. MATLAB/Simulink was used for control system design and simulation.",
+    challenges: "Achieving stable levitation required extensive control system tuning and vibration analysis. The high-speed rotation introduced gyroscopic effects that needed compensation. Electromagnetic interference was minimized through careful PCB layout and shielding.",
+    links: [
+      { text: "Project Report", url: "#", type: "docs", error: "Not publicly available" },
+      { text: "CAD Models", url: "#", type: "design", error: "Not publicly available" }
+    ],
+    gallery: ["Images/ProjectPhotos/MagneticallyLevitating.png"]
   },
   foosball: {
     title: "SmartTable System for Competitive Foosball",
     description: "Created an intelligent foosball table system with real-time score tracking, game analytics, and competitive features. The system uses computer vision for ball tracking, embedded sensors for goal detection, and a web interface for tournament management and player statistics.",
     tech: ["Computer Vision", "OpenCV", "Raspberry Pi", "Node.js", "React", "WebSocket", "3D Printing"],
-    image: "Images/ProjectPhotos/SmartTable.png"
+    image: "Images/ProjectPhotos/SmartTable.png",
+    features: [
+      "Real-time ball tracking using computer vision",
+      "Automatic goal detection and scoring",
+      "Player statistics and performance analytics",
+      "Tournament bracket management",
+      "Live game streaming and recording",
+      "Mobile app for remote monitoring"
+    ],
+    technical: "The system uses multiple cameras positioned around the table for 360° ball tracking. OpenCV processes the video streams in real-time on a Raspberry Pi 4. The backend is built with Node.js and Socket.io for real-time communication. The frontend React app provides tournament management and statistics visualization.",
+    challenges: "Ball tracking in varying lighting conditions required adaptive thresholding algorithms. Occlusion handling was implemented using Kalman filters for trajectory prediction. Network latency was minimized through efficient WebSocket protocols.",
+    links: [
+      { text: "Live Demo", url: "#", type: "demo", error: "Not publicly available" },
+      { text: "GitHub Repository", url: "#", type: "github", error: "Not publicly available" },
+      { text: "Mobile App", url: "#", type: "app", error: "Not publicly available" }
+    ],
+    gallery: ["Images/ProjectPhotos/SmartTable.png"]
   },
   website: {
     title: "Portfolio Website with Interactive Design",
     description: "Designed and developed this interactive portfolio website featuring custom 3D animations, responsive design, and dynamic content. The site showcases modern web technologies while maintaining optimal performance and accessibility across all devices.",
-    tech: ["HTML5", "CSS3", "JavaScript", "GSAP", "Three.js", "Responsive Design", "Web Performance"]
+    tech: ["HTML5", "CSS3", "JavaScript", "GSAP", "Three.js", "Responsive Design", "Web Performance"],
+    image: "Assets/Portfolio.gif",
+    features: [
+      "Custom 3D animations and models",
+      "Single Page Application (SPA) architecture",
+      "Responsive design for all device sizes",
+      "Interactive project showcase wheel",
+      "Optimized loading and performance",
+      "Modern CSS Grid and Flexbox layouts"
+    ],
+    technical: "Built as a vanilla JavaScript SPA with custom routing and state management. Three.js handles 3D model rendering with optimized loading strategies. GSAP provides smooth animations and transitions. CSS Grid and Flexbox ensure responsive layouts across devices.",
+    challenges: "Balancing visual complexity with performance required careful asset optimization and lazy loading strategies. Cross-browser compatibility was ensured through progressive enhancement. Mobile performance was optimized through reduced polygon counts and texture compression.",
+    links: [
+      { text: "Live Website", url: "#", type: "live" },
+      { text: "Source Code", url: "#", type: "github" }
+    ],
+    gallery: ["Assets/Portfolio.gif"]
   },
   poker: {
-    title: "Bayesian Poker Analysis Engine",
-    description: "Implemented a sophisticated Bayesian inference system for analyzing poker gameplay and opponent behavior patterns. The engine uses probabilistic models to estimate bluffing tendencies, betting patterns, and optimal decision-making strategies across multi-street poker scenarios.",
-    tech: ["Python", "Bayesian Inference", "Statistical Modeling", "Game Theory", "Data Analysis", "Machine Learning"],
-    image: "Images/ProjectPhotos/ThreeVariable.png"
+    title: "MontePoker",
+    description: "Rust-based poker solver modeled after Pluribus, featuring hierarchical hand abstraction, Monte Carlo CFR training, and real-time strategy optimization. Uses memory- and compute-efficient abstractions to represent No Limit Texas Hold'em mechanics and generate blueprint strategies for advanced gameplay analysis.",
+    tech: ["Rust", "Monte Carlo CFR", "Game Theory", "Hand Abstraction", "Strategy Optimization", "Parallel Computing"],
+    image: "Images/ProjectPhotos/Montepoke1.gif",
+    features: [
+      "Hierarchical hand abstraction for efficient game representation",
+      "Monte Carlo Counterfactual Regret Minimization (CFR) training",
+      "Real-time strategy optimization and blueprint generation",
+      "Memory-efficient abstractions for No Limit Texas Hold'em",
+      "Parallel computing for accelerated training",
+      "Advanced gameplay analysis and strategy evaluation"
+    ],
+    technical: "Implemented in Rust for maximum performance, the solver uses hierarchical hand abstraction to reduce the game complexity while maintaining strategic accuracy. Monte Carlo CFR algorithms train on abstracted game trees, generating blueprint strategies that can be adapted for real-time play. The system employs efficient memory management and parallel processing to handle the computational demands of poker strategy generation.",
+    challenges: "The main challenge was balancing abstraction accuracy with computational efficiency. Implementing effective hand abstraction required careful consideration of strategic similarity while maintaining reasonable memory usage. Real-time strategy adaptation needed optimization to provide fast responses without sacrificing solution quality.",
+    links: [
+      { text: "GitHub Repository", url: "https://github.com/Smokeybear10/MontePokerG", type: "github" },
+      { text: "Strategy Analyzer", url: "#", type: "demo", error: "Website is currently down" },
+      { text: "Technical Documentation", url: "#", type: "docs", error: "Website is currently down" }
+    ],
+    gallery: ["Images/ProjectPhotos/Montepoke1.gif", "Images/ProjectPhotos/Montepoke2.gif"]
   },
-  spikeball: {
-    title: "Spike Sure Rim Detection for Spikeball",
-    description: "Developed an automated rim detection system for competitive Spikeball using computer vision and machine learning. The system provides real-time analysis of ball-rim interactions to assist with officiating and player training, improving game accuracy and fairness.",
-    tech: ["Computer Vision", "Machine Learning", "OpenCV", "Python", "Real-time Processing", "Sports Analytics"],
-    image: "Images/ProjectPhotos/IMG_8763 [MacMini] [2025-07-24] [11.57.19 AM].JPG"
+  smartcv: {
+    title: "SmartCV",
+    description: "An AI-powered resume optimization tool designed to streamline the job application process. Features include professional template building, ATS-friendly analysis, keyword and skills gap insights, and AI-driven content optimization. Enables creation of tailored, recruiter-ready resumes from scratch or imported documents.",
+    tech: ["Python", "Streamlit", "Google Gemini AI", "Natural Language Processing", "Machine Learning", "ATS Optimization"],
+    image: "Images/ProjectPhotos/SmartCV.png",
+    features: [
+      "AI-powered resume analysis using Google Gemini",
+      "ATS compatibility check and optimization",
+      "4 professional resume templates with real-time preview",
+      "Smart job matching with LinkedIn integration",
+      "Skills gap analysis and course recommendations",
+      "Comprehensive analytics dashboard with performance tracking"
+    ],
+    technical: "Built with Python and Streamlit for the web interface, integrating Google Gemini AI for intelligent content analysis. Features PDF/DOCX parsing with OCR capabilities, SQLite database for data persistence, and Chrome automation for job portal scraping. The system includes advanced NLP for keyword extraction and machine learning algorithms for ATS scoring.",
+    challenges: "Implementing accurate ATS scoring algorithms required extensive research into applicant tracking system preferences. Balancing AI-generated suggestions with maintaining authentic personal voice in resumes was crucial. Optimizing PDF parsing performance while maintaining accuracy across different document formats posed significant technical challenges.",
+    links: [
+      { text: "GitHub Repository", url: "#", type: "github" },
+      { text: "Live Demo", url: "#", type: "demo", error: "Website is currently down" },
+      { text: "Documentation", url: "#", type: "docs", error: "Website is currently down" }
+    ],
+    gallery: ["Images/ProjectPhotos/SmartCV.png"]
   }
 };
 
@@ -153,10 +247,10 @@ function setupWheelRotation() {
 function setupProjectModals() {
   const projectCards = document.querySelectorAll('.project-card');
   const modal = document.getElementById('projectModal');
-  const modalContent = document.getElementById('modalContent');
-  const closeBtn = modal?.querySelector('.close');
+  const backBtn = document.getElementById('backBtn');
+  const closeBtn = document.getElementById('closeBtn');
   
-  if (!modal || !modalContent) {
+  if (!modal) {
     console.error('Modal elements not found');
     return;
   }
@@ -180,19 +274,16 @@ function setupProjectModals() {
         return;
       }
       
-      // Create modal content
-      modalContent.innerHTML = `
-        <h2 style="color: #44ffff; font-family: 'Inter', sans-serif; margin-bottom: 1rem;">${project.title}</h2>
-        ${project.image ? `<img src="${project.image}" alt="${project.title}" style="width: 100%; height: 300px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">` : ''}
-        <p style="color: #ffffff; font-family: 'Inter', sans-serif; line-height: 1.6; margin-bottom: 1rem;">${project.description}</p>
-        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem;">
-          ${project.tech.map(tech => `<span style="background: rgba(255, 0, 255, 0.2); color: #ffffff; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.875rem; border: 1px solid rgba(255, 0, 255, 0.5);">${tech}</span>`).join('')}
-        </div>
-      `;
+      // Populate modal content
+      populateModalContent(project);
       
       // Show modal
       isModalOpen = true;
       modal.style.display = 'block';
+      
+      // Hide all navigation elements
+      hideAllNavigation();
+      
       setTimeout(() => {
         modal.classList.add('show');
       }, 10);
@@ -213,6 +304,10 @@ function setupProjectModals() {
   });
   
   // Close modal handlers
+  if (backBtn) {
+    backBtn.addEventListener('click', closeModal);
+  }
+  
   if (closeBtn) {
     closeBtn.addEventListener('click', closeModal);
   }
@@ -232,10 +327,103 @@ function setupProjectModals() {
   function closeModal() {
     isModalOpen = false;
     modal.classList.remove('show');
+    
+    // Show all navigation elements again
+    showAllNavigation();
+    
     setTimeout(() => {
       modal.style.display = 'none';
-    }, 400);
+    }, 500);
   }
+}
+
+// Populate modal with project content
+function populateModalContent(project) {
+  // Set hero image and title
+  const heroImage = document.getElementById('projectHeroImage');
+  const title = document.getElementById('projectTitle');
+  const techStack = document.getElementById('projectTechStack');
+  const description = document.getElementById('projectDescription');
+  const features = document.getElementById('projectFeatures');
+  const technical = document.getElementById('projectTechnical');
+  const challenges = document.getElementById('projectChallenges');
+  const links = document.getElementById('projectLinks');
+  const gallery = document.getElementById('projectGallery');
+  
+  // Hero section
+  if (heroImage && project.image) {
+    heroImage.src = project.image;
+    heroImage.alt = project.title;
+  }
+  
+  if (title) {
+    title.textContent = project.title;
+  }
+  
+  // Tech stack badges
+  if (techStack && project.tech) {
+    techStack.innerHTML = project.tech.map(tech => 
+      `<span class="tech-badge">${tech}</span>`
+    ).join('');
+  }
+  
+  // Description
+  if (description) {
+    description.textContent = project.description;
+  }
+  
+  // Features list
+  if (features && project.features) {
+    features.innerHTML = project.features.map(feature => 
+      `<li>${feature}</li>`
+    ).join('');
+  }
+  
+  // Technical details
+  if (technical && project.technical) {
+    technical.textContent = project.technical;
+  }
+  
+  // Challenges
+  if (challenges && project.challenges) {
+    challenges.textContent = project.challenges;
+  }
+  
+  // Links
+  if (links && project.links) {
+    links.innerHTML = project.links.map(link => {
+      const icon = getLinkIcon(link.type);
+      if (link.error) {
+        return `<span class="project-link disabled" title="${link.error}">${icon} ${link.text} <span class="error-indicator">⚠️</span></span>`;
+      } else {
+        return `<a href="${link.url}" class="project-link" target="_blank">${icon} ${link.text}</a>`;
+      }
+    }).join('');
+  }
+  
+  // Gallery
+  if (gallery && project.gallery) {
+    gallery.innerHTML = project.gallery.map(image => 
+      `<div class="gallery-image">
+        <img src="${image}" alt="Project gallery image" />
+      </div>`
+    ).join('');
+  }
+}
+
+// Get appropriate icon for link type
+function getLinkIcon(type) {
+  const icons = {
+    github: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.30.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>',
+    docs: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" /></svg>',
+    demo: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8,5.14V19.14L19,12.14L8,5.14Z" /></svg>',
+    live: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12,2A10,10 0 0,0 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12A10,10 0 0,0 12,2Z" /></svg>',
+    video: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17,10.5V7A1,1 0 0,0 16,6H4A1,1 0 0,0 3,7V17A1,1 0 0,0 4,18H16A1,1 0 0,0 17,17V13.5L21,17.5V6.5L17,10.5Z" /></svg>',
+    app: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17,19H7V5H17M17,1H7C5.89,1 5,1.89 5,3V21C5,22.1 5.9,23 7,23H17C18.1,23 19,22.1 19,21V3C19,1.89 18.1,1 17,1Z" /></svg>',
+    design: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12,2A2,2 0 0,1 14,4C14,4.74 13.6,5.39 13,5.73V7H14A7,7 0 0,1 21,14H22A1,1 0 0,1 23,15V18A1,1 0 0,1 22,19H21V20A2,2 0 0,1 19,22H5A2,2 0 0,1 3,20V19H2A1,1 0 0,1 1,18V15A1,1 0 0,1 2,14H3A7,7 0 0,1 10,7H11V5.73C10.4,5.39 10,4.74 10,4A2,2 0 0,1 12,2Z" /></svg>',
+    data: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12,3C7.58,3 4,4.79 4,7C4,9.21 7.58,11 12,11C16.42,11 20,9.21 20,7C20,4.79 16.42,3 12,3M4,9V12C4,14.21 7.58,16 12,16C16.42,16 20,14.21 20,12V9C20,11.21 16.42,13 12,13C7.58,13 4,11.21 4,9M4,14V17C4,19.21 7.58,21 12,21C16.42,21 20,19.21 20,17V14C20,16.21 16.42,18 12,18C7.58,18 4,16.21 4,14Z" /></svg>'
+  };
+  return icons[type] || icons.docs;
 }
 
 // Cleanup function
@@ -246,8 +434,59 @@ function cleanupProjects() {
   velocity = 0;
 }
 
+// Global navigation control functions
+function hideAllNavigation() {
+  console.log('Hiding all navigation elements');
+  const navigationSelectors = [
+    '.bottom-nav',
+    '.mobile-menu-btn', 
+    '.nav-buttons',
+    '.hello-nav-btn',
+    '.nav-btn',
+    '.nav-link',
+    '.spa-nav-btn',
+    '.nav-close-btn'
+  ];
+  
+  navigationSelectors.forEach(selector => {
+    const elements = document.querySelectorAll(selector);
+    elements.forEach(element => {
+      element.style.display = 'none';
+      element.style.visibility = 'hidden';
+      element.style.opacity = '0';
+    });
+  });
+}
+
+function showAllNavigation() {
+  console.log('Showing all navigation elements');
+  const navigationElements = [
+    { selector: '.bottom-nav', display: 'flex' },
+    { selector: '.mobile-menu-btn', display: 'flex' }, 
+    { selector: '.nav-buttons', display: 'block' },
+    { selector: '.hello-nav-btn', display: 'inline-block' },
+    { selector: '.nav-btn', display: 'block' },
+    { selector: '.nav-link', display: 'block' },
+    { selector: '.spa-nav-btn', display: 'block' },
+    { selector: '.nav-close-btn', display: 'block' }
+  ];
+  
+  navigationElements.forEach(nav => {
+    const elements = document.querySelectorAll(nav.selector);
+    elements.forEach(element => {
+      element.style.display = nav.display;
+      element.style.visibility = 'visible';
+      element.style.opacity = '1';
+    });
+  });
+}
+
 // Export for SPA system
 window.projectsRouteNew = {
   init: initProjects,
   cleanup: cleanupProjects
 };
+
+// Export navigation functions globally
+window.hideAllNavigation = hideAllNavigation;
+window.showAllNavigation = showAllNavigation;

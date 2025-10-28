@@ -111,9 +111,9 @@ class SPARouter {
     // Update navigation
     this.updateNavigation(route);
 
-    // Always keep URL as spa.html regardless of route
+    // Always keep URL as index.html regardless of route
     if (updateHistory) {
-      const url = window.location.pathname.includes('spa.html') ? window.location.pathname : '/spa.html';
+      const url = window.location.pathname.includes('index.html') ? window.location.pathname : '/index.html';
       window.history.replaceState({ route }, routeConfig.title, url);
     }
 

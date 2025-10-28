@@ -20,531 +20,26 @@
       }
     }
   </script>
+  <!-- Three.js and Vanta.js for projects page -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://unpkg.com/vanta/dist/vanta.net.min.js"></script>
+  <script src="https://unpkg.com/vanta/dist/vanta.dots.min.js"></script>
+  <!-- Model Viewer for 3D GLB files -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   <!-- Styles -->
   <link rel="stylesheet" href="style.css" />
-  <style>
-    /* Base styles to prevent bounce scrolling */
-    html, body {
-      -webkit-overflow-scrolling: touch;
-      scroll-behavior: smooth;
-    }
-    
-    body {
-      overscroll-behavior: none;
-      -webkit-overscroll-behavior: none;
-      opacity: 0;
-      animation: easeIn 0.8s ease-out forwards;
-      margin: 0;
-      padding: 0;
-      overflow: hidden; /* Initially hidden during startup */
-      background: linear-gradient(
-        135deg,
-        #000000 0%,
-        #0a0015 25%,
-        #000000 50%,
-        #150025 75%,
-        #000000 100%
-      );
-      background-size: 400% 400%;
-      animation: easeIn 0.8s ease-out forwards, gradientShift 6s ease infinite;
-      color: #ffffff;
-      font-family: 'Inter', Arial, sans-serif;
-      min-height: 100vh;
-      position: relative;
-      overflow-x: hidden;
-    }
-
-    @keyframes easeIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
-    }
-
-    /* STARTUP PRELOADER */
-    .startup-preloader {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
-      z-index: 9999;
-      display: flex;
-      background: #000000;
-      overflow: hidden;
-    }
-
-    .preloader-bar {
-      width: 10%;
-      height: 100%;
-      background: #000000;
-      transform: translateY(0);
-      will-change: transform;
-      position: relative;
-    }
-
-    .startup-name-text {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      display: flex;
-      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
-      font-size: clamp(8rem, 20vw, 12rem);
-      font-weight: 400;
-      color: #ffffff;
-      line-height: 1;
-      overflow: hidden;
-      letter-spacing: 0.1em;
-    }
-
-    .startup-name-text span {
-      display: inline-block;
-      transform: translateY(100%);
-    }
-
-    .startup-click-button {
-      position: absolute;
-      bottom: 20%;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 1rem 2rem;
-      background: transparent;
-      border: 2px solid #ffffff;
-      color: #ffffff;
-      font-family: 'Inter', Arial, sans-serif;
-      font-size: 1.2rem;
-      font-weight: 400;
-      cursor: pointer;
-      opacity: 0;
-      transition: all 0.3s ease;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-
-    .startup-click-button:hover {
-      background: #ffffff;
-      color: #000000;
-      transform: translateX(-50%) translateY(-2px);
-      box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
-    }
-
-    .startup-click-button.show {
-      opacity: 1;
-    }
-
-    @keyframes vaporwaveHue {
-      0% { filter: hue-rotate(0deg) saturate(1.2); }
-      25% { filter: hue-rotate(90deg) saturate(1.5); }
-      50% { filter: hue-rotate(180deg) saturate(1.8); }
-      75% { filter: hue-rotate(270deg) saturate(1.5); }
-      100% { filter: hue-rotate(360deg) saturate(1.2); }
-    }
-
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    /* STARTUP PRELOADER */
-    .startup-preloader {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
-      z-index: 9999;
-      display: flex;
-      background: #000000;
-      overflow: hidden;
-    }
-
-    .preloader-bar {
-      width: 10%;
-      height: 100%;
-      background: #000000;
-      transform: translateY(0);
-      will-change: transform;
-      position: relative;
-    }
-
-    .startup-name-text {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      display: flex;
-      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
-      font-size: clamp(8rem, 20vw, 12rem);
-      font-weight: 400;
-      color: #ffffff;
-      line-height: 1;
-      overflow: hidden;
-      letter-spacing: 0.1em;
-    }
-
-    .startup-name-text span {
-      display: inline-block;
-      transform: translateY(100%);
-    }
-
-    /* About container */
-    .about-container {
-      width: 100%;
-      min-height: 100vh;
-      margin: 0;
-      padding: 0;
-      background: transparent;
-      position: relative;
-    }
-
-    /* 3D Model Container */
-    #model-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 100;
-      pointer-events: none;
-      display: none;
-      opacity: 0;
-      transition: none;
-    }
-
-    #model-canvas {
-      width: 100%;
-      height: 100%;
-      display: block;
-      filter: drop-shadow(0 0 200px rgba(255, 255, 255, 1.0));
-    }
-
-    /* 3D Cube Container */
-    #cube-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 50;
-      pointer-events: none;
-      opacity: 1;
-      transition: opacity 0.3s ease;
-    }
-
-    #cube-canvas {
-      width: 100%;
-      height: 100%;
-      display: block;
-      filter: drop-shadow(0 0 200px rgba(255, 255, 255, 1.0));
-    }
-
-
-    /* CUSTOM CURSOR */
-    #custom-cursor {
-      position: fixed;
-      top: 0;
-      left: 0;
-      opacity: 1;
-      z-index: 999999;
-      pointer-events: none;
-      transform: translate(-50%, -50%);
-      mix-blend-mode: normal;
-      transition: opacity 0.3s ease;
-      display: block;
-    }
-
-    /* Hide default cursor globally */
-    * {
-      cursor: none !important;
-    }
-    
-    *:hover {
-      cursor: none !important;
-    }
-    
-    html {
-      cursor: none !important;
-    }
-    
-    body {
-      cursor: none !important;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-
-    body * {
-      cursor: none !important;
-    }
-    
-    /* Override all possible cursor styles */
-    a, button, input, textarea, select, [role="button"], .clickable,
-    .card, .nav-link, .tech, .mute-container, .vaporwave-arrow,
-    .stack-text, .modal, .close, svg, path {
-      cursor: none !important;
-    }
-    
-    a:hover, button:hover, input:hover, textarea:hover, select:hover,
-    [role="button"]:hover, .clickable:hover, .card:hover,
-    .nav-link:hover, .tech:hover, .mute-container:hover, .vaporwave-arrow:hover,
-    .stack-text:hover, .modal:hover, .close:hover, svg:hover, path:hover {
-      cursor: none !important;
-    }
-
-    /* Navigation menu bottom right */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0rem;
-      right: 0rem;
-      z-index: 1000;
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-      align-items: flex-end;
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
-      padding: 1rem 2rem;
-      border-radius: 15px;
-      border: none;
-    }
-
-    .nav-link {
-      color: #ffffff;
-      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 400; text-transform: uppercase; letter-spacing: 0.15em;
-      font-size: 1.1rem;
-      font-weight: 700;
-      text-decoration: none;
-      text-transform: none;
-      letter-spacing: 0.08em;
-      transition: all 0.3s ease;
-      cursor: pointer;
-      white-space: nowrap;
-      position: relative;
-    }
-
-
-    .nav-link::before {
-      content: '';
-      position: absolute;
-      left: -2.5rem;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 35px;
-      height: 35px;
-      background-image: url('Images/Hand.png');
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .nav-link:nth-child(2)::before {
-      background-image: url('Images/Dophin.png');
-    }
-
-    .nav-link:hover {
-      color: #00ffff;
-    }
-
-    .nav-link:hover::before {
-      opacity: 1;
-    }
-
-    /* Mute icon and vaporwave text */
-    .mute-container {
-      position: fixed;
-      bottom: 1.5rem;
-      left: 1.5rem;
-      z-index: 1001;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      cursor: pointer;
-      opacity: 1;
-      transition: opacity 0.3s ease;
-    }
-
-    .mute-icon {
-      width: 24px;
-      height: 24px;
-      fill: #ffffff;
-      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
-      transition: all 0.3s ease;
-    }
-
-    .mute-text {
-      color: #ffffff;
-      font-family: 'Inter', Arial, sans-serif;
-      font-size: 1rem;
-      font-weight: 400;
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-      transition: all 0.3s ease;
-      position: relative;
-    }
-
-
-    .mute-container:hover .mute-icon {
-      fill: #ff00ff;
-      filter: drop-shadow(0 0 15px rgba(255, 0, 255, 0.8));
-    }
-
-    .mute-container:hover .mute-text {
-      color: #ff00ff;
-      text-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
-    }
-
-    /* Hide intro text on smaller screens */
-    @media (max-width: 480px) {
-      .about-intro-container {
-        display: none !important;
-      }
-    }
-
-    /* About content */
-    .about-content {
-      position: relative;
-      z-index: 2;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 4rem 2rem;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    /* Thomas Ou heading */
-    .name-heading {
-      position: fixed;
-      top: 1rem;
-      left: 1rem;
-      z-index: 1000;
-      font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
-      font-size: min(8rem, 22vw);
-      font-weight: 400;
-      color: #ffffff;
-      text-transform: none;
-      letter-spacing: 0.05em;
-      pointer-events: none;
-      margin: 0;
-      padding: 0;
-      line-height: 1;
-    }
-
-    /* About page typing card - no responsive changes */
-    .about-typing-card {
-      position: fixed !important;
-      left: min(12rem, 29vw) !important;
-      top: min(10rem, 29vw) !important;
-      transform: rotate(-3deg) !important;
-      z-index: 500;
-      width: min(20rem, 58vw) !important;
-      height: clamp(5rem, 8vw, 10rem) !important;
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 0, 255, 0.5);
-      border-radius: 0.8rem;
-      box-shadow: 
-        0 0 20px rgba(255, 0, 255, 0.4),
-        0 0 40px rgba(0, 255, 255, 0.2),
-        inset 0 1px 0 rgba(255, 0, 255, 0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-    }
-
-    .about-typed-text {
-      width: 100%;
-      text-align: center;
-      font-family: 'Courier New', 'Monaco', 'Lucida Console', monospace;
-      font-weight: 400;
-      font-size: min(2rem, 5vw) !important;
-      background: linear-gradient(90deg, #ff00ff, #00ffff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin: 0;
-      padding: 0;
-      letter-spacing: 0.1em;
-      text-transform: none;
-      text-shadow: 
-        0 0 10px rgba(255, 0, 255, 0.7),
-        0 0 20px rgba(0, 255, 255, 0.5);
-    }
-    
-    /* About page intro container - bottom left - no responsive changes */
-    .about-intro-container {
-      position: fixed !important;
-      left: .5rem !important;
-      bottom: .5rem !important;
-      z-index: 500;
-      width: min(50vw, 30rem) !important;
-      padding: 1rem;
-    }
-
-    .about-intro-text {
-      font-family: 'Courier New', 'Monaco', 'Lucida Console', monospace;
-      font-weight: 400;
-      font-size: min(2.8vw, 1.2rem) !important;
-      color: #ffffff;
-      margin: 0rem;
-      padding: 0;
-      letter-spacing: 0.05em;
-      line-height: 1.6;
-      text-align: left;
-      text-shadow: 
-        0 0 10px rgba(255, 0, 255, 0.8),
-        0 0 20px rgba(0, 255, 255, 0.6),
-        0 0 30px rgba(255, 0, 255, 0.4);
-    }
-
-    /* Vaporwave gradient overlay - in front of grid - hidden by default */
-    body::after {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: linear-gradient(
-        135deg,
-        rgba(255, 0, 255, 0.15) 0%,
-        rgba(128, 0, 255, 0.12) 25%,
-        rgba(0, 255, 255, 0.15) 50%,
-        rgba(255, 0, 128, 0.12) 75%,
-        rgba(255, 0, 255, 0.15) 100%
-      );
-      background-size: 300% 300%;
-      animation: gradientShift 8s ease infinite;
-      z-index: 2;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    /* Show gradient overlay when hovering over projects */
-    body.projects-hover::after {
-      opacity: 1;
-    }
-
-    
-
-
-
-
-
-  </style>
-  <script defer src="script.js"></script>
+  <link rel="stylesheet" href="styles/index.css" />
+  <link rel="stylesheet" href="styles/about.css" />
+  <link rel="stylesheet" href="styles/experience.css" />
+  <link rel="stylesheet" href="styles/spa.css" />
+  <link rel="stylesheet" href="styles/projects-new.css" />
+  <link rel="stylesheet" href="styles/contact.css" />
 </head>
-<body>
+<body data-current-route="home">
 
-  <!-- Startup Preloader -->
-  <div id="startup-preloader" class="startup-preloader">
+
+  <!-- Startup Preloader (Home Only) -->
+  <div id="startup-preloader" class="startup-preloader home-only">
     <!-- Vertical bars -->
     <div class="preloader-bar bar-1"></div>
     <div class="preloader-bar bar-2"></div>
@@ -573,1045 +68,691 @@
     </button>
   </div>
 
-  <!-- Custom Cursor -->
-  <svg id="custom-cursor" width="27" height="30" viewBox="0 0 27 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M20.0995 11.0797L3.72518 1.13204C2.28687 0.258253 0.478228 1.44326 0.704999 3.11083L3.28667 22.0953C3.58333 24.2768 7.33319 24.6415 8.3792 22.7043C9.5038 20.6215 10.8639 18.7382 12.43 17.7122C13.996 16.6861 16.2658 16.1911 18.6244 15.9918C20.8181 15.8063 21.9811 12.2227 20.0995 11.0797Z" fill="#ff00ff" stroke="rgba(255,0,255,0.5)" stroke-width="1"/>
-  </svg>
 
-  
-  <!-- Thomas Ou heading -->
-  <div class="name-heading">
-    <div>Thomas</div>
-    <div>Ou</div>
-  </div>
-
-  <!-- About page typing card -->
-  <div class="about-typing-card">
-    <h2 class="about-typed-text">Software Developer & Mathematician</h2>
+  <!-- Scroll Progress Indicator (About Only) -->
+  <div class="scroll-progress about-only">
+    <div class="scroll-progress-bar"></div>
   </div>
 
 
-  <!-- About Container -->
-  <div class="about-container">
-    <!-- 3D Model Container (reused for all models) -->
-    <div id="model-container">
-      <canvas id="model-canvas"></canvas>
+  <!-- SPA Content Wrapper -->
+  <div class="spa-content-wrapper">
+    
+    <!-- HOME ROUTE CONTENT -->
+    <div id="home-content" data-route-content style="display: block;">
+      <!-- Thomas Ou heading -->
+      <div class="name-heading home-only">
+        <div>Thomas</div>
+        <div>Ou</div>
+      </div>
+
+      <!-- About page typing card -->
+      <div class="about-typing-card home-only">
+        <h2 class="about-typed-text"></h2>
+      </div>
+
+      <!-- About Container -->
+      <div class="about-container">
+        <!-- 3D Model Container (reused for all models) -->
+        <div id="model-container" class="home-only">
+          <canvas id="model-canvas"></canvas>
+        </div>
+        
+        <!-- 3D Cube Container -->
+        <div id="cube-container" class="home-only">
+          <canvas id="cube-canvas"></canvas>
+        </div>
+        
+        <div class="about-content">
+        </div>
+      </div>
+    </div>
+
+    <!-- ABOUT ROUTE CONTENT -->
+    <div id="about-content" data-route-content style="display: none;">
+      <!-- About Container -->
+      <div class="about-container">
+        
+        <!-- About Title -->
+        <div class="about-title">
+          <div class="about-text">
+            <div>ABOUT</div>
+            <div>ME</div>
+          </div>
+          <div class="title-subtitle">Click on underlined words to learn more</div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="about-content">
+          
+          <!-- Profile Section -->
+          <div class="profile-section">
+            <div class="profile-text">
+                         <h2>👋 Hi there. I'm <span style="color: #ff00ff;"><strong>Thomas Ou</strong></span> and welcome to my personal portfolio! I'm pursuing a Bachelor's in <em>Mathematics</em> and <em>Statistics</em>, alongside an accelerated Master's in <em>Computer Science</em> at the <span style="background: #ffffff; color: #011f5b; padding: 0 0.5rem; border-radius: 8px; border: 1px solid #011f5b; display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600;"><img src="Images/Penn.png" alt="Penn" style="width: 1em; height: 1em; object-fit: contain;">University of Pennsylvania</span>. I specialize in building <a href="#" style="color: #ffffff; text-decoration: underline; text-decoration-color: #00ffff;">full-stack systems</a>, large language models, and the occasional <a href="#" style="color: #ffffff; text-decoration: underline; text-decoration-color: #00ffff;">passion project</a> that keeps me up at night.</h2>
+              
+              <div class="profile-image">
+                <img src="Images/ThomasPortrait.jpg" alt="Thomas Ou" />
+              </div>
+              
+                         <p>Tech has been part of my life for as long as I can remember. As a toddler, I was dismantling remotes and rewiring toys. By middle school, I was building computers and teaching myself to code. <span style="background: rgba(255, 0, 255, 0.3); color: #ffffff;">At 18, online poker led me to discover a vulnerability in a crypto casino's shuffling algorithm</span> that created predictable patterns every few hundred hands. I taught myself to code and developed a program to exploit it (<em style="color: #00ffff;">ethically, of course</em>), and was hired to help fix their system. Since then, I've been obsessed with finding ways to apply algorithmic reasoning—through machine learning, game theory, and probabilistic thinking—to real-world conflict and decision-making.</p>
+              
+                         <p>I'm excited by projects that are <strong style="color: #ff00ff;">ambitious</strong>, <em style="color: #00ffff;">creative</em>, and <mark style="background: rgba(0, 255, 255, 0.15); color: #00ffff; padding: 0.2rem 0.4rem; border-radius: 4px;">technically challenging</mark>. I enjoy turning complex ideas into intuitive and functional digital experiences, whether it's a rough concept or a fully formed vision. When I'm not studying or coding, you'll find me at the gym finishing training with my <a href="https://www.instagram.com/penn_mma/?hl=en" target="_blank" style="color: #ffffff; text-decoration: underline; text-decoration-color: #00ffff;">MMA team</a> or preparing for <a href="https://www.ocs.marines.mil" target="_blank" style="color: #ffffff; text-decoration: underline; text-decoration-color: #00ffff;">Marines Officer Candidates School</a> next summer. I also like to play poker (my main source of income), and eat hotpots (my main source of expenses).</p>
+            </div>
+          </div>
+
+          <!-- Current Focus -->
+          <div class="info-section">
+                     <h3 style="color: #ffffff; font-family: 'Anton', Arial, sans-serif; font-size: 2.2rem; font-weight: 400; letter-spacing: 0.05em;">Current Focus</h3>
+            <p>I'm currently working on projects in artificial intelligence and blockchain/Web3 technologies. My research interests include machine learning applications in tech, algorithmic trading strategies, and the mathematical foundations of cryptographic systems.</p>
+            <p>In the past, I've always found great success in collaborating and connecting with new people. I'd love to connect, so don't hesitate to reach out.</p>
+          </div>
+
+          <!-- My Stack Section -->
+          <div class="info-section">
+                     <h3 style="color: #ffffff; font-family: 'Anton', Arial, sans-serif; font-size: 2.2rem; font-weight: 400; letter-spacing: 0.05em;">My Stacks</h3>
+            <div class="stack-container">
+              
+              <div class="stack-section">
+                <div class="stack-header">
+                  <h4>Languages</h4>
+                  <span class="stack-arrow">▼</span>
+                </div>
+                <div class="stack-content">
+                  <div class="icon-container">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python">
+                    <span class="icon-tooltip">Python</span>
+                  </div>
+                  <div class="icon-container">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++">
+                    <span class="icon-tooltip">C++</span>
+                  </div>
+                  <div class="icon-container">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/r/r-original.svg" alt="R">
+                    <span class="icon-tooltip">R</span>
+                  </div>
+                  <div class="icon-container">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ocaml/ocaml-original.svg" alt="OCaml">
+                    <span class="icon-tooltip">OCaml</span>
+                  </div>
+                  <div class="icon-container">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="Java">
+                    <span class="icon-tooltip">Java</span>
+                  </div>
+                  <div class="icon-container">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/matlab/matlab-original.svg" alt="MATLAB">
+                    <span class="icon-tooltip">MATLAB</span>
+                  </div>
+                  <div class="icon-container">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5">
+                    <span class="icon-tooltip">HTML5</span>
+                  </div>
+                  <div class="icon-container">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS">
+                    <span class="icon-tooltip">CSS</span>
+                  </div>
+                  <div class="icon-container">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript">
+                    <span class="icon-tooltip">JavaScript</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="stack-section">
+                <div class="stack-header">
+                  <h4>Frameworks</h4>
+                  <span class="stack-arrow">▼</span>
+                </div>
+                <div class="stack-content">
+                  <div class="icon-container">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg" alt="NumPy">
+                    <span class="icon-tooltip">NumPy</span>
+                  </div>
+                  <div class="icon-container">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg" alt="Pandas">
+                    <span class="icon-tooltip">Pandas</span>
+                  </div>
+                  <div class="icon-container">
+                    <img src="Images/Icons/Sckit.png" alt="Scikit-learn">
+                    <span class="icon-tooltip">Scikit-learn</span>
+                  </div>
+                  <div class="icon-container">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg" alt="PyTorch">
+                    <span class="icon-tooltip">PyTorch</span>
+                  </div>
+                  <div class="icon-container">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React">
+                    <span class="icon-tooltip">React</span>
+                  </div>
+                  <div class="icon-container">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg" alt="TensorFlow">
+                    <span class="icon-tooltip">TensorFlow</span>
+                  </div>
+                  <div class="icon-container">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/matplotlib/matplotlib-original.svg" alt="Matplotlib">
+                    <span class="icon-tooltip">Matplotlib</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="stack-section">
+                <div class="stack-header">
+                  <h4>Databases & Tools</h4>
+                  <span class="stack-arrow">▼</span>
+                </div>
+                <div class="stack-content">
+                  <div class="icon-container">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="MySQL">
+                    <span class="icon-tooltip">MySQL</span>
+                  </div>
+                  <div class="icon-container">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PostgreSQL">
+                    <span class="icon-tooltip">PostgreSQL</span>
+                  </div>
+                  <div class="icon-container">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" alt="MongoDB">
+                    <span class="icon-tooltip">MongoDB</span>
+                  </div>
+                  <div class="icon-container">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node.js">
+                    <span class="icon-tooltip">Node.js</span>
+                  </div>
+                  <div class="icon-container">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git">
+                    <span class="icon-tooltip">Git</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
     </div>
     
-    <!-- 3D Cube Container -->
-    <div id="cube-container">
-      <canvas id="cube-canvas"></canvas>
+    <!-- EXPERIENCE ROUTE CONTENT -->
+    <div id="experience-content" data-route-content style="display: none;">
+      <!-- Modal for experience/research details -->
+      <div id="experienceModal" class="modal experience-only">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <div id="modalContent">
+            <!-- Dynamic content will be inserted here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Experience Container -->
+      <div class="experience-container">
+        
+        <!-- Full Width Content -->
+        <div class="content-section">
+          
+          <!-- PROFESSIONAL EXPERIENCE Title -->
+          <div class="journey-title">
+            <div class="journey-text">
+              <div>PROFESSIONAL</div>
+              <div>EXPERIENCE</div>
+            </div>
+            <div class="title-subtitle">Scroll down to learn more</div>
+            
+            <!-- Mobile Hello Content (hidden by default, shown in vertical mode) -->
+            <div class="hello-content-mobile" style="display: none; border: none !important; background: transparent !important;">
+              <!-- Photo and Hello Header Container -->
+              <div style="display: flex; align-items: center; gap: 1rem; margin: 0 0 1rem 0;">
+                <!-- Profile Photo -->
+                <div class="profile-photo-mobile" style="width: auto; height: min(20vh, 160px); aspect-ratio: 1; flex-shrink: 0; border-radius: 50%; overflow: hidden; border: none; box-shadow: none; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center;">
+                  <img src="Images/SchoolPortrait.jpg" alt="Thomas Ou" style="width: 100%; height: 100%; object-fit: cover; margin: 0; padding: 0; border: none; display: block;" />
+                </div>
+                
+                <!-- Hello Thomas Header -->
+                <div style="font-size: 2.4rem; font-weight: 400; font-family: 'Anton', Arial, sans-serif; color: #ffffff; margin: 0; text-align: left; line-height: 1.05; flex: 1; letter-spacing: 0.02em;">Hello. I am Thomas</div>
+              </div>
+              
+              <!-- Bio Section -->
+              <div style="color: #ffffff; font-family: 'Inter', Arial, sans-serif; font-size: clamp(0.9rem, 3vw, 1.4rem); line-height: 1.6; margin: 1rem 0; opacity: 1;">I am a student with experience across a wide range of fields, from fintech to law. At present, I am completing both my undergraduate and accelerated master's degree in Philadelphia, while also conducting research with faculty.</div>
+              
+              
+              <!-- Navigation Buttons -->
+              <div style="margin: 1rem 0 0 0; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.5rem; opacity: 1;">
+                <button class="hello-nav-btn" data-section="about" style="background: transparent; border: 2px solid #ffffff; color: #ffffff; font-family: 'Anton', Arial, sans-serif; font-size: 0.8rem; font-weight: 400; text-transform: none; letter-spacing: 0.1em; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">About</button>
+                <button class="hello-nav-btn" data-section="education" style="background: transparent; border: 2px solid #ffffff; color: #ffffff; font-family: 'Anton', Arial, sans-serif; font-size: 0.8rem; font-weight: 400; text-transform: none; letter-spacing: 0.1em; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">Education</button>
+                <button class="hello-nav-btn" data-section="experience" style="background: transparent; border: 2px solid #ffffff; color: #ffffff; font-family: 'Anton', Arial, sans-serif; font-size: 0.8rem; font-weight: 400; text-transform: none; letter-spacing: 0.1em; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">Experience</button>
+                <button class="hello-nav-btn" data-section="research" style="background: transparent; border: 2px solid #ffffff; color: #ffffff; font-family: 'Anton', Arial, sans-serif; font-size: 0.8rem; font-weight: 400; text-transform: none; letter-spacing: 0.1em; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">Research</button>
+              </div>
+              
+              <!-- Divider -->
+              <div style="width: 250px; height: 2px; background: linear-gradient(90deg, #ff00ff, #00ffff); margin: 2rem 0 0 0; border-radius: 1px; box-shadow: 0 0 8px rgba(255, 0, 255, 0.4); opacity: 1;"></div>
+            </div>
+          </div>
+
+          
+          <!-- Left Half - Horse Model -->
+          <div class="left-section">
+            
+            <!-- RESEARCH Title (in front of all) -->
+            <div class="research-title" style="position: fixed; top: 5vh; right: 50%; width: min(50%, 600px); z-index: 3; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;">
+              <div class="research-text" style="font-size: min(9vw, 8rem); font-weight: 400; font-family: 'Anton', Arial, sans-serif; background: linear-gradient(90deg, #ff00ff, #00ffff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-align: center; letter-spacing: 0.05em; text-transform: none; margin: 0; line-height: 0.9; width: 100%;">
+                <div>RESEARCH</div>
+              </div>
+            </div>
+            
+            <!-- EXPERIENCE Title (in front) -->
+            <div class="experience-title" style="position: fixed; top: 5vh; right: 50%; width: min(50%, 600px); z-index: 2; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;">
+              <div class="experience-text" style="font-size: min(9vw, 8rem); font-weight: 400; font-family: 'Anton', Arial, sans-serif; background: linear-gradient(90deg, #ff00ff, #00ffff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-align: center; letter-spacing: -0.02em; text-transform: none; margin: 0; line-height: 0.9; width: 100%;">
+                <div>EXPERIENCE</div>
+              </div>
+            </div>
+            
+            <!-- EDUCATION Title -->
+            <div class="education-title" style="position: fixed; top: 5vh; right: 50%; width: min(50%, 600px); z-index: 1;">
+              <div class="education-text" style="font-size: min(9vw, 8rem); font-weight: 400; font-family: 'Anton', Arial, sans-serif; background: linear-gradient(90deg, #ff00ff, #00ffff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-align: center; letter-spacing: -0.02em; text-transform: none; margin: 0; line-height: 0.9; width: 100%;">
+                <div>EDUCATION</div>
+              </div>
+            </div>
+            
+            
+            <!-- 3D Lion Head (in front of all) -->
+            <div class="lion-container-new" style="position: fixed; top: 5vh; right: 50%; width: min(50%, 600px); height: 80vh; margin-top: 0; z-index: 7; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; border: none;">
+              <model-viewer
+                src="Models/lion_head_4k.glb"
+                alt="3D Lion Head"
+                auto-rotate
+                rotation-per-second="30deg"
+                camera-orbit="0deg 75deg 115%"
+                field-of-view="30deg"
+                shadow-intensity="0"
+                environment-image="neutral"
+                exposure="1"
+                shadow-softness="0"
+                loading="lazy"
+                reveal="auto"
+                style="width: 100%; height: 100%;">
+              </model-viewer>
+            </div>
+            
+            <!-- 3D Bull Head (in front) -->
+            <div class="bull-container-new" style="position: fixed; top: 5vh; right: 50%; width: min(50%, 600px); height: 80vh; margin-top: 0; z-index: 6; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; border: none;">
+              <model-viewer
+                src="Models/bull_head_4k.glb"
+                alt="3D Bull Head"
+                auto-rotate
+                rotation-per-second="30deg"
+                camera-orbit="0deg 75deg 115%"
+                field-of-view="30deg"
+                shadow-intensity="0"
+                environment-image="neutral"
+                exposure="1"
+                shadow-softness="0"
+                loading="lazy"
+                reveal="auto"
+                style="width: 100%; height: 100%;">
+              </model-viewer>
+            </div>
+            
+            <!-- 3D Horse Head -->
+            <div class="horse-container" style="position: fixed; top: 0vh; right: 50%; width: min(50%, 600px); height: 90vh; margin-top: 0;">
+              <model-viewer
+                src="Models/horse_head_4k.glb"
+                alt="3D Horse Head"
+                auto-rotate
+                rotation-per-second="30deg"
+                camera-orbit="0deg 75deg 85%"
+                field-of-view="30deg"
+                shadow-intensity="0"
+                environment-image="neutral"
+                exposure="1"
+                shadow-softness="0"
+                loading="eager"
+                reveal="auto"
+                style="width: 100%; height: 100%;">
+              </model-viewer>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="nav-buttons permanent-buttons" style="position: absolute; top: 70vh; left: 50%; transform: translateX(-50%); z-index: 15;">
+              <button class="nav-btn">About</button>
+              <button class="nav-btn">Education</button>
+              <button class="nav-btn">Experience</button>
+              <button class="nav-btn">Research</button>
+            </div>
+          </div>
+
+
+          <!-- Top Container -->
+          <div class="top-container">
+            <!-- Text Content Container -->
+            <div class="text-content-container" style="position: absolute; left: calc(min(40vh, 480px) + 0rem); top: 0; right: 0; height: 100%; padding: 2rem; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center;">
+              <!-- Hello Thomas Header -->
+              <div class="hello-section" style="font-size: min(7.5vw, 2.4rem); font-weight: 400; font-family: 'Anton', Arial, sans-serif; color: #ffffff; margin: 0; text-align: left; line-height: 1.05; opacity: 0.3; transition: opacity 0.6s ease; letter-spacing: 0.02em;">Hello. I am Thomas</div>
+              
+              <!-- Bio Section - positioned relative to header -->
+              <div class="hello-section" style="color: #ffffff; font-family: 'Inter', Arial, sans-serif; font-size: 1.4rem; line-height: 1.6; margin: 2rem 0 1rem 0; opacity: 0.3; transition: opacity 0.6s ease;">I am a student with experience across a wide range of fields, from fintech to law. At present, I am completing both my undergraduate and accelerated master's degree in Philadelphia, while also conducting research with faculty.</div>
+              
+              
+              <!-- Navigation Buttons - positioned relative to header -->
+              <div class="hello-section" style="margin: 1rem 0 0 0; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.5rem; opacity: 0.3; transition: opacity 0.6s ease;">
+                <button class="hello-nav-btn" data-section="about" style="background: transparent; border: 2px solid #ffffff; color: #ffffff; font-family: 'Anton', Arial, sans-serif; font-size: 0.8rem; font-weight: 400; text-transform: none; letter-spacing: 0.1em; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">About</button>
+                <button class="hello-nav-btn" data-section="education" style="background: transparent; border: 2px solid #ffffff; color: #ffffff; font-family: 'Anton', Arial, sans-serif; font-size: 0.8rem; font-weight: 400; text-transform: none; letter-spacing: 0.1em; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">Education</button>
+                <button class="hello-nav-btn" data-section="experience" style="background: transparent; border: 2px solid #ffffff; color: #ffffff; font-family: 'Anton', Arial, sans-serif; font-size: 0.8rem; font-weight: 400; text-transform: none; letter-spacing: 0.1em; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">Experience</button>
+                <button class="hello-nav-btn" data-section="research" style="background: transparent; border: 2px solid #ffffff; color: #ffffff; font-family: 'Anton', Arial, sans-serif; font-size: 0.8rem; font-weight: 400; text-transform: none; letter-spacing: 0.1em; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">Research</button>
+              </div>
+              
+              <!-- Divider - positioned relative to header -->
+              <div class="hello-section" style="width: 250px; height: 2px; background: linear-gradient(90deg, #ff00ff, #00ffff); margin: 2rem 0 0 0; border-radius: 1px; box-shadow: 0 0 8px rgba(255, 0, 255, 0.4); opacity: 0.3; transition: opacity 0.6s ease;"></div>
+            </div>
+            
+            <!-- Profile Photo -->
+            <div class="profile-photo hello-visible">
+              <img src="Images/SchoolPortrait.jpg" alt="Thomas Ou" />
+            </div>
+          </div>
+
+          <!-- Right Half - Content -->
+          <div class="right-section">
+            
+            <!-- Education Section -->
+            <div class="timeline-container">
+              <div class="timeline-track"></div>
+              
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                  <h3>Accelerated Masters in Computer Science</h3>
+                  <div class="timeline-school">University of Pennsylvania</div>
+                  <div class="timeline-details">
+                    <div class="course-grid">
+                      <span class="course-pill">Machine Learning</span>
+                      <span class="course-pill">Algorithms & Data Structures</span>
+                      <span class="course-pill">Computer Systems</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                  <h3>Bachelor of Science in Mathematics</h3>
+                  <div class="timeline-school">University of Pennsylvania</div>
+                  <div class="timeline-details">
+                    <div class="course-grid">
+                      <span class="course-pill">Real Analysis</span>
+                      <span class="course-pill">Abstract Algebra</span>
+                      <span class="course-pill">Probability Theory</span>
+                      <span class="course-pill">Statistical Inference</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                  <h3>High School Diploma</h3>
+                  <div class="timeline-school">University of Connecticut</div>
+                  <div class="timeline-details">
+                    <div class="course-grid">
+                      <span class="course-pill">Multivariable Calculus</span>
+                      <span class="course-pill">Linear Algebra</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Experience Section -->
+            <div class="cards-container experience-cards">
+              
+              <div class="card">
+                <div class="card-header">
+                  <h3>Data & Analytics <span class="card-arrow">↗</span></h3>
+                  <div class="card-company">Flushing CPA Tax Center</div>
+                  <div class="card-location">Spring 2024</div>
+                </div>
+                <div class="card-preview">
+                  <p>Designed automated ETL pipelines for processing large-scale tax data & developed predictive regression models to calculate quarterly tax obligations.</p>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <h3>Legal Research Intern <span class="card-arrow">↗</span></h3>
+                  <div class="card-company">Offices of Jonathan Spodnick</div>
+                  <div class="card-location">Fall 2023</div>
+                </div>
+                <div class="card-preview">
+                  <p>Conducted legal research and case preparation for personal injury litigation and developed automated tools to streamline document processing and case analysis workflows.</p>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <h3>Fintech Analyst <span class="card-arrow">↗</span></h3>
+                  <div class="card-company">CITIC Securities</div>
+                  <div class="card-location">Summer 2023</div>
+                </div>
+                <div class="card-preview">
+                  <p> Supported major financial transactions and market analysis for billion-dollar deals while conducting regulatory impact assessments and client presentations.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Spacer between sections -->
+            <div style="height: 2rem; margin: 1rem 0;"></div>
+
+            <!-- Research Section -->
+            <div class="cards-container research-cards">
+              
+              <div class="card">
+                <div class="card-header">
+                  <h3>Military Tech Analyst<span class="card-arrow">↗</span></h3>
+                  <div class="card-company">University Of Pennsylvania</div>
+                  <div class="card-location">Summer 2025</div>
+                </div>
+                <div class="card-preview">
+                  <p>Conducted digitization and analysis of historical U.S. Board of Ordnance and Fortification records for military innovation documentation.</p>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <h3>Research Assistant <span class="card-arrow">↗</span></h3>
+                  <div class="card-company">Princeton Plasma Physics Lab (PPPL)</div>
+                  <div class="card-location">Summer 2024</div>
+                </div>
+                <div class="card-preview">
+                  <p>Conducted advanced plasma confinement analysis and fusion reaction modeling to optimize tokamak reactor performance and energy output predictions.</p>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Resume Link beneath research -->
+            <div style="text-align: center; margin: 4rem 0;">
+              <a href="Assets/Resume.pdf" target="_blank" class="resume-link" style="display: inline-block; background: transparent; border: 2px solid #ffffff; color: #ffffff; font-family: 'Montserrat', 'Inter', Arial, sans-serif; font-size: 1.1rem; font-weight: 600; text-transform: none; letter-spacing: 0.05em; padding: 1rem 2rem; border-radius: 8px; text-decoration: none; transition: all 0.3s ease; position: relative; overflow: hidden;">
+                <span style="position: relative; z-index: 2;">See My Resume</span>
+                <div style="position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent); transition: left 0.6s ease;"></div>
+              </a>
+            </div>
+
+            <!-- Spacer beneath research -->
+            <div style="height: 2rem; margin: 1rem 0;"></div>
+
+          </div>
+        </div>
+      </div>
     </div>
-    
-    <div class="about-content">
+
+    <!-- PROJECTS ROUTE CONTENT -->
+    <div id="projects-content" data-route-content style="display: none;">
+      <!-- Projects Container -->
+      <div class="projects-container projects-only">
+        
+        <!-- Featured Projects Section -->
+        <div class="section-title projects-only">
+          <div class="title-featured">FEATURED</div>
+          <div class="title-projects">PROJECTS</div>
+          <div class="title-subtitle">Click on a project to view details</div>
+        </div>
+        
+        <!-- Projects Wheel -->
+        <div class="projects-wheel projects-only">
+          <div class="wheel-container">
+            <div class="project-card" data-project="verilog">
+              <div class="project-image" style="background-image: url('Images/ProjectPhotos/Verilog.png');"></div>
+              <div class="project-header">
+                <h3>Verilog-Based ALU for 16-bit RISC-V Processor</h3>
+              </div>
+            </div>
+            
+            <div class="project-card" data-project="flywheel">
+              <div class="project-image" style="background-image: url('Images/ProjectPhotos/MagneticallyLevitating.png');"></div>
+              <div class="project-header">
+                <h3>Magnetically Levitating Flywheel Generator</h3>
+              </div>
+            </div>
+            
+            <div class="project-card" data-project="foosball">
+              <div class="project-image" style="background-image: url('Images/ProjectPhotos/SmartTable.png');"></div>
+              <div class="project-header">
+                <h3>SmartTable System for Competitive Foosball</h3>
+              </div>
+            </div>
+            
+            <div class="project-card" data-project="website">
+              <div class="project-image" style="background-image: url('Assets/Portfolio.gif');"></div>
+              <div class="project-header">
+                <h3>Portfolio Website with Interactive Design</h3>
+              </div>
+            </div>
+            
+            <div class="project-card" data-project="poker">
+              <div class="project-image" style="background-image: url('Images/ProjectPhotos/Montepoke1.gif');"></div>
+              <div class="project-header">
+                <h3>MontePoker</h3>
+              </div>
+            </div>
+            
+            <div class="project-card" data-project="smartcv">
+              <div class="project-image" style="background-image: url('Images/ProjectPhotos/SmartCV.png');"></div>
+              <div class="project-header">
+                <h3>SmartCV</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Full-screen Modal for project details -->
+        <div id="projectModal" class="project-fullscreen-modal projects-only">
+          <div class="fullscreen-modal-header">
+            <button class="back-btn" id="backBtn">
+              <svg viewBox="0 0 24 24" width="24" height="24">
+                <path fill="currentColor" d="M19 7v4H5.83l3.58-3.59L8 6l-6 6 6 6 1.41-1.41L5.83 13H19V7z"/>
+              </svg>
+              Back
+            </button>
+            <span class="close-btn" id="closeBtn">&times;</span>
+          </div>
+          
+          <div class="fullscreen-modal-content">
+            <div class="project-hero-section">
+              <div class="project-hero-image">
+                <img id="projectHeroImage" src="" alt="" />
+              </div>
+              <div class="project-hero-info">
+                <h1 id="projectTitle" class="project-title"></h1>
+                <div id="projectTechStack" class="project-tech-stack">
+                  <!-- Tech stack badges will be inserted here -->
+                </div>
+              </div>
+            </div>
+            
+            <div class="project-details-grid">
+              <div class="project-overview-section">
+                <h2>Project Overview</h2>
+                <p id="projectDescription" class="project-description"></p>
+              </div>
+              
+              <div class="project-features-section">
+                <h2>Key Features</h2>
+                <ul id="projectFeatures" class="project-features-list">
+                  <!-- Features will be dynamically added -->
+                </ul>
+              </div>
+              
+              <div class="project-technical-section">
+                <h2>Technical Implementation</h2>
+                <div id="projectTechnical" class="project-technical-details">
+                  <!-- Technical details will be added -->
+                </div>
+              </div>
+              
+              <div class="project-challenges-section">
+                <h2>Challenges & Solutions</h2>
+                <div id="projectChallenges" class="project-challenges">
+                  <!-- Challenges will be added -->
+                </div>
+              </div>
+              
+              <div class="project-links-section">
+                <h2>Project Links</h2>
+                <div id="projectLinks" class="project-links">
+                  <!-- Links will be dynamically added -->
+                </div>
+              </div>
+              
+              <div class="project-gallery-section">
+                <h2>Gallery</h2>
+                <div id="projectGallery" class="project-gallery">
+                  <!-- Gallery images will be added -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
     </div>
+
+    <!-- CONTACT ROUTE CONTENT -->
+    <div id="contact-content" data-route-content style="display: none;">
+      <!-- Contact Container (background only) -->
+      <div class="contact-container contact-only">
+      </div>
+
+      <!-- CONTACT ME Title (outside container) -->
+      <div class="journey-title contact-only">
+        <div class="journey-text">
+          <div>CONTACT</div>
+          <div>ME</div>
+        </div>
+      </div>
+
+      <!-- Contact Buttons (outside container) -->
+      <div class="contact-buttons contact-only">
+        <button class="contact-btn" data-contact="email">
+          <svg viewBox="0 0 24 24">
+            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+          </svg>
+          Email Me
+        </button>
+        <button class="contact-btn" data-contact="linkedin">
+          <svg viewBox="0 0 24 24">
+            <path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/>
+          </svg>
+          Connect
+        </button>
+        <button class="contact-btn" data-contact="github">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.30.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+          </svg>
+          See My Code
+        </button>
+      </div>
+    </div>
+
   </div>
-
-  <script>
-    // TYPING ANIMATION FOR ABOUT PAGE
-    const aboutRoles = [
-      "Frontend Dev",
-      "Mathematician", 
-      "AI Engineer",
-      "Statistical Analyst",
-      "Quant Analyst",
-      "Poker Nerd"
-    ];
-    const aboutTypingDelay = 120, aboutErasingDelay = 80, aboutNewTextDelay = 2500;
-    let aboutRoleIndex = 0, aboutCharIndex = 0;
-    const aboutTypedEl = document.querySelector(".about-typed-text");
-    let aboutIsTyping = false;
-
-    function typeAboutRole() {
-      if (!aboutTypedEl) return;
-      
-      if (!aboutIsTyping) {
-        aboutIsTyping = true;
-        aboutTypedEl.classList.add('typing');
-      }
-      
-      if (aboutCharIndex < aboutRoles[aboutRoleIndex].length) {
-        aboutTypedEl.textContent += aboutRoles[aboutRoleIndex].charAt(aboutCharIndex++);
-        setTimeout(typeAboutRole, aboutTypingDelay + Math.random() * 40 - 20);
-      } else {
-        aboutIsTyping = false;
-        aboutTypedEl.classList.remove('typing');
-        setTimeout(eraseAboutRole, aboutNewTextDelay);
-      }
-    }
-
-    function eraseAboutRole() {
-      if (!aboutTypedEl) return;
-      
-      if (!aboutIsTyping) {
-        aboutIsTyping = true;
-        aboutTypedEl.classList.add('typing');
-      }
-      
-      if (aboutCharIndex > 0) {
-        aboutTypedEl.textContent = aboutRoles[aboutRoleIndex].substring(0, aboutCharIndex--);
-        setTimeout(eraseAboutRole, aboutErasingDelay);
-      } else {
-        aboutRoleIndex = (aboutRoleIndex + 1) % aboutRoles.length;
-        aboutTypedEl.textContent = "";
-        
-        aboutIsTyping = false;
-        aboutTypedEl.classList.remove('typing');
-        setTimeout(() => {
-          typeAboutRole();
-        }, 300);
-      }
-    }
-
-    // Custom cursor animation
-    // Check if this is a fresh visit or internal navigation
-    function isFirstVisit() {
-      // Check if we came from another page on the same site
-      const referrer = document.referrer;
-      const currentDomain = window.location.hostname;
-      
-      // If referrer is from the same domain, it's internal navigation - skip animation
-      if (referrer) {
-        try {
-          const referrerDomain = new URL(referrer).hostname;
-          if (referrerDomain === currentDomain) {
-            return false; // Internal navigation, skip animation
-          }
-        } catch (e) {
-          // If we can't parse referrer, continue with other checks
-        }
-      }
-      
-      // Always show animation for page reloads, direct visits, bookmarks, or external links
-      return true;
-    }
-
-
-    document.addEventListener('DOMContentLoaded', () => {
-      // Force scroll to top
-      if ('scrollRestoration' in history) {
-        history.scrollRestoration = 'manual';
-      }
-      window.scrollTo(0, 0);
-      
-      const preloader = document.getElementById('startup-preloader');
-      const clickButton = document.getElementById('startupClickButton');
-      
-      // Check if this is a first visit
-      console.log('Is first visit:', isFirstVisit());
-      
-      if (isFirstVisit()) {
-        // First visit - show startup animation
-        console.log('Running startup animation');
-        document.body.style.overflow = 'hidden';
-        
-        if (preloader) {
-          preloader.style.display = 'flex';
-          preloader.style.opacity = '1';
-        }
-        
-        if (clickButton) {
-          clickButton.style.opacity = '0';
-          clickButton.classList.remove('show');
-        }
-        
-        // Reset letter positions using GSAP to ensure proper state
-        gsap.set('.startup-name-text span', {
-          y: '100%'
-        });
-        
-        // Run startup animation
-        runStartupAnimation();
-      } else {
-        // Return visit - skip animation and go straight to content
-        console.log('Skipping startup animation');
-        if (preloader) {
-          preloader.style.display = 'none';
-        }
-        document.body.style.overflow = 'auto';
-      }
-
-      function runStartupAnimation() {
-        console.log('runStartupAnimation called');
-        const bars = document.querySelectorAll('.preloader-bar');
-        console.log('Preloader:', preloader, 'Bars:', bars.length, 'ClickButton:', clickButton);
-        
-        if (preloader && bars.length > 0) {
-          console.log('Starting GSAP timeline');
-          const tl = gsap.timeline({
-            defaults: {
-              ease: 'power1.inOut',
-            }
-          });
-          
-          // First animate the name letters up (slower)
-          tl.to('.startup-name-text span', {
-            y: 0,
-            stagger: 0.08,
-            duration: 0.3,
-          });
-          
-          // Then show the click button after a delay
-          tl.to(clickButton, {
-            delay: 1,
-            opacity: 1,
-            duration: 0.5,
-            ease: 'power2.out',
-            onComplete: () => {
-              clickButton.classList.add('show');
-            }
-          });
-
-          // Handle click button
-          clickButton.addEventListener('click', () => {
-            gsap.to(preloader, {
-              autoAlpha: 0,
-              duration: 0.8,
-              ease: 'power2.inOut',
-              onComplete: () => {
-                preloader.style.display = 'none';
-                // Re-enable scrolling after animation completes
-                document.body.style.overflow = 'auto';
-              }
-            });
-          });
-        } else {
-          console.log('Animation conditions not met, showing content');
-          // Fallback - ensure content is accessible
-          if (preloader) {
-            preloader.style.display = 'none';
-          }
-          document.body.style.overflow = 'auto';
-        }
-      }
-
-      const customCursor = document.getElementById('custom-cursor');
-
-      // Start typing animation for about page
-      if (aboutTypedEl) {
-        aboutTypedEl.classList.add('show');
-        aboutTypedEl.textContent = '';
-        aboutRoleIndex = 0;
-        aboutCharIndex = 0;
-        aboutIsTyping = false;
-        typeAboutRole();
-      }
-
-      // Show cursor on all devices
-      // Mouse move handler for custom cursor
-      function handleMouseMove(e) {
-        if (!customCursor) return;
-        
-        gsap.set(customCursor, {
-          x: e.clientX,
-          y: e.clientY,
-          opacity: 1,
-        });
-      }
-      
-      // Touch device detection - hide custom cursor on touch devices
-      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-      if (isTouchDevice && customCursor) {
-        customCursor.style.display = 'none';
-        return;
-      }
-      
-      // Hide cursor when mouse leaves window
-      function handleMouseLeave() {
-        if (!customCursor) return;
-        gsap.to(customCursor, {
-          opacity: 0,
-          duration: 0.2
-        });
-      }
-      
-      // Force show cursor initially
-      if (customCursor) {
-        customCursor.style.opacity = '1';
-        customCursor.style.display = 'block';
-        customCursor.style.visibility = 'visible';
-      }
-      
-      window.addEventListener('mousemove', handleMouseMove);
-      // Touch events removed - allow normal touch interaction
-      window.addEventListener('mouseleave', handleMouseLeave);
-    });
-
-
-    // 3D Cube Setup
-    document.addEventListener('DOMContentLoaded', async () => {
-      const cubeCanvas = document.getElementById('cube-canvas');
-      const cubeContainer = document.getElementById('cube-container');
-      
-      if (cubeCanvas && cubeContainer) {
-        try {
-          // Import Three.js modules for cube
-          const { Scene, PerspectiveCamera, WebGLRenderer, BoxGeometry, Mesh, ShaderMaterial, Color } = await import('three');
-          
-          // Cube scene setup
-          const cubeScene = new Scene();
-          const cubeCamera = new PerspectiveCamera(75, cubeContainer.offsetWidth / cubeContainer.offsetHeight, 0.1, 1000);
-          const cubeRenderer = new WebGLRenderer({ canvas: cubeCanvas, alpha: true, antialias: true });
-          
-          cubeRenderer.setSize(cubeContainer.offsetWidth, cubeContainer.offsetHeight);
-          cubeRenderer.setPixelRatio(window.devicePixelRatio);
-          cubeRenderer.setClearColor(0x000000, 0);
-          
-          // Create vaporwave cube material
-          const cubeMaterial = new ShaderMaterial({
-            uniforms: {
-              time: { value: 0.0 }
-            },
-            vertexShader: `
-              varying vec3 vPosition;
-              varying vec3 vNormal;
-              
-              void main() {
-                vPosition = position;
-                vNormal = normal;
-                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-              }
-            `,
-            fragmentShader: `
-              uniform float time;
-              varying vec3 vPosition;
-              varying vec3 vNormal;
-              
-              void main() {
-                // Distinct muted vaporwave colors
-                vec3 magenta = vec3(0.7, 0.0, 0.7);
-                vec3 cyan = vec3(0.0, 0.7, 0.8);
-                vec3 pink = vec3(0.8, 0.0, 0.4);
-                vec3 purple = vec3(0.4, 0.0, 0.8);
-                
-                // Face-based coloring with gradient alternation
-                vec3 faceColor = magenta;
-                vec3 altColor = cyan;
-                
-                if (abs(vNormal.x) > 0.9) {
-                  faceColor = cyan;
-                  altColor = pink;
-                } else if (abs(vNormal.y) > 0.9) {
-                  faceColor = pink;
-                  altColor = purple;
-                } else if (abs(vNormal.z) > 0.9) {
-                  faceColor = purple;
-                  altColor = magenta;
-                }
-                
-                // Create slower gradient alternation
-                float gradientShift = sin(time * 0.8) * 0.5 + 0.5;
-                faceColor = mix(faceColor, altColor, gradientShift);
-                
-                // Edge glow effect
-                float edge = 1.0 - max(max(abs(vNormal.x), abs(vNormal.y)), abs(vNormal.z));
-                edge = pow(edge, 2.0);
-                
-                // Final color
-                vec3 finalColor = faceColor + edge * vec3(1.0) * 0.8;
-                
-                gl_FragColor = vec4(finalColor, 0.9);
-              }
-            `,
-            transparent: true
-          });
-          
-          // Create cube geometry and mesh
-          const cubeGeometry = new BoxGeometry(3, 3, 3);
-          const cube = new Mesh(cubeGeometry, cubeMaterial);
-          cubeScene.add(cube);
-          
-          // Position camera - centered view
-          cubeCamera.position.z = 8;
-          cubeCamera.position.y = 0;
-          
-          // Animation loop for cube
-          let cubeTime = 0;
-          let isCubeVisible = true; // Track cube visibility
-          
-          function animateCube() {
-            requestAnimationFrame(animateCube);
-            
-            // Only animate when cube is visible
-            if (isCubeVisible) {
-              cubeTime += 0.02;
-              
-              // Rotate cube
-              cube.rotation.x = cubeTime * 0.5;
-              cube.rotation.y = cubeTime * 0.8;
-              cube.rotation.z = cubeTime * 0.3;
-              
-              // Floating motion
-              cube.position.y = Math.sin(cubeTime * 0.6) * 0.5;
-              cube.position.x = Math.cos(cubeTime * 0.4) * 0.3;
-              
-              // Update material with pulsing effect
-              cubeMaterial.uniforms.time.value = cubeTime;
-            }
-            
-            cubeRenderer.render(cubeScene, cubeCamera);
-          }
-          
-          // Make cube animation control accessible globally
-          window.setCubeVisible = function(visible) {
-            isCubeVisible = visible;
-          };
-          
-          animateCube();
-          
-          // Handle resize for cube
-          window.addEventListener('resize', () => {
-            cubeCamera.aspect = cubeContainer.offsetWidth / cubeContainer.offsetHeight;
-            cubeCamera.updateProjectionMatrix();
-            cubeRenderer.setSize(cubeContainer.offsetWidth, cubeContainer.offsetHeight);
-          });
-          
-        } catch (error) {
-          console.error('Error initializing cube scene:', error);
-        }
-      }
-    });
-
-    // 3D Model Setup
-    document.addEventListener('DOMContentLoaded', async () => {
-      const canvas = document.getElementById('model-canvas');
-      const container = document.getElementById('model-container');
-      
-      if (!canvas || !container) return;
-      
-      try {
-        // Import Three.js modules
-        const { Scene, PerspectiveCamera, WebGLRenderer, AmbientLight, DirectionalLight, MeshPhongMaterial, Box3, Vector3, ShaderMaterial, Color, BoxGeometry, Mesh } = await import('three');
-        const { GLTFLoader } = await import('three/addons/loaders/GLTFLoader.js');
-        
-        // Scene setup
-        const scene = new Scene();
-        const camera = new PerspectiveCamera(75, container.offsetWidth / container.offsetHeight, 0.1, 1000);
-        const renderer = new WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
-        
-        renderer.setSize(container.offsetWidth, container.offsetHeight);
-        renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.setClearColor(0x000000, 0);
-        
-                 // Muted Vaporwave lighting setup
-         const ambientLight = new AmbientLight(0x1a0d2e, 0.6);
-         scene.add(ambientLight);
-         
-         // Main muted magenta light
-         const directionalLight = new DirectionalLight(0xcc66cc, 0.5);
-         directionalLight.position.set(8, 8, 8);
-         scene.add(directionalLight);
-         
-         // Secondary muted cyan light
-         const directionalLight2 = new DirectionalLight(0x66cccc, 0.3);
-         directionalLight2.position.set(-8, -8, 8);
-         scene.add(directionalLight2);
-         
-         // Accent muted pink light
-         const directionalLight3 = new DirectionalLight(0xcc6699, 0.25);
-         directionalLight3.position.set(0, 12, -8);
-         scene.add(directionalLight3);
-         
-         // Fill light from below (muted white)
-         const fillLight = new DirectionalLight(0xcccccc, 0.3);
-         fillLight.position.set(0, -12, 0);
-         scene.add(fillLight);
-        
-        // Load GLB model
-        const loader = new GLTFLoader();
-        let model = null;
-        
-        console.log('Starting to load Projects.glb model...');
-        console.log('Current location:', window.location.href);
-        console.log('Attempting to load from:', new URL('Models/Projects.glb', window.location.href).href);
-        loader.load(
-           'Models/Projects.glb',
-           function (gltf) {
-             console.log('Model loaded successfully:', gltf);
-             model = gltf.scene;
-             window.projectsModel = model; // Make it globally accessible for debugging
-             
-             // Get bounding box to center and scale properly
-             const box = new Box3().setFromObject(model);
-             const center = box.getCenter(new Vector3());
-             const size = box.getSize(new Vector3());
-             
-             console.log('Model bounds:', { center, size });
-             
-             // Center the model and move it down
-             model.position.sub(center);
-             model.position.y -= 33; // Move projects model down significantly
-             
-             // Scale to be bigger
-             const maxDim = Math.max(size.x, size.y, size.z);
-             const scale = 25 / maxDim;
-             model.scale.setScalar(scale);
-             
-             console.log('Model scaled to:', scale);
-             
-                          // Apply unlit vaporwave material - no lighting dependencies
-             const vaporwaveMaterial = new ShaderMaterial({
-               uniforms: {
-                 time: { value: 0.0 }
-               },
-               vertexShader: `
-                 varying vec3 vPosition;
-                 varying vec3 vNormal;
-                 
-                 void main() {
-                   vPosition = position;
-                   vNormal = normal;
-                   gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-                 }
-               `,
-               fragmentShader: `
-                 uniform float time;
-                 varying vec3 vPosition;
-                 varying vec3 vNormal;
-                 
-                 void main() {
-                   // Classic Vaporwave color palette
-                   vec3 magenta = vec3(1.0, 0.0, 1.0);      // #ff00ff
-                   vec3 cyan = vec3(0.0, 1.0, 1.0);         // #00ffff
-                   vec3 pink = vec3(1.0, 0.0, 0.5);         // #ff0080
-                   vec3 purple = vec3(0.5, 0.0, 1.0);       // #8000ff
-                   vec3 neonBlue = vec3(0.0, 0.5, 1.0);     // #0080ff
-                   vec3 neonGreen = vec3(0.0, 1.0, 0.5);    // #00ff80
-                   
-                   // Slower, more subtle patterns
-                   float pattern1 = sin(vPosition.x * 0.1 + time * 0.2) * 
-                                   sin(vPosition.y * 0.08 + time * 0.15) * 
-                                   sin(vPosition.z * 0.12 + time * 0.3);
-                   
-                   float pattern2 = cos(vPosition.x * 0.06 + time * 0.3) * 
-                                   cos(vPosition.y * 0.09 + time * 0.2) * 
-                                   cos(vPosition.z * 0.05 + time * 0.5);
-                   
-                   float pattern3 = sin(vPosition.x * 0.04 + time * 0.4) * 
-                                   cos(vPosition.y * 0.11 + time * 0.35) * 
-                                   sin(vPosition.z * 0.08 + time * 0.25);
-                   
-                   // Combine patterns for complex color mixing
-                   float combinedPattern = (pattern1 + pattern2 + pattern3) / 3.0;
-                   
-                   // Create multiple color layers that are always visible
-                   vec3 color1 = mix(magenta, cyan, (pattern1 + 1.0) * 0.5);
-                   vec3 color2 = mix(pink, purple, (pattern2 + 1.0) * 0.5);
-                   vec3 color3 = mix(neonBlue, neonGreen, (pattern3 + 1.0) * 0.5);
-                   
-                   // Always mix all colors - never just one
-                   vec3 baseColor = mix(color1, color2, sin(time * 0.8) * 0.5 + 0.5);
-                   baseColor = mix(baseColor, color3, cos(time * 1.2) * 0.5 + 0.5);
-                   
-                   // Add position-based color variation
-                   vec3 positionColor = mix(purple, pink, (vPosition.x + vPosition.y + vPosition.z) * 0.1);
-                   baseColor = mix(baseColor, positionColor, 0.4);
-                   
-                   // Add edge glow based on normal - like the cube image
-                   float edge = 1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0)));
-                   edge = pow(edge, 1.5);
-                   
-                   // Add subtle edge glow where faces meet
-                   float edgeGlow = 1.0 - abs(dot(vNormal, vec3(1.0, 0.0, 0.0)));
-                   edgeGlow = max(edgeGlow, 1.0 - abs(dot(vNormal, vec3(0.0, 1.0, 0.0))));
-                   edgeGlow = pow(edgeGlow, 2.0) * 0.6;
-                   
-                   // Add back-facing glow effect
-                   float backGlow = max(dot(vNormal, vec3(0.0, 0.0, -1.0)), 0.0);
-                   backGlow = pow(backGlow, 3.0) * 0.8; // Faint glow intensity
-                   
-                   // Add color cycling overlay
-                   float colorCycle1 = sin(time * 0.5) * 0.5 + 0.5;
-                   float colorCycle2 = cos(time * 0.7) * 0.5 + 0.5;
-                   vec3 cycleColor1 = mix(magenta, cyan, colorCycle1);
-                   vec3 cycleColor2 = mix(pink, purple, colorCycle2);
-                   
-                   // Final color with reduced intensity
-                   vec3 finalColor = baseColor * (1.0 + edge * 0.3) + 
-                                   cycleColor1 * 0.15 + 
-                                   cycleColor2 * 0.1;
-                   
-                   // Add subtle edge glow like the cube image
-                   vec3 edgeGlowColor = mix(cyan, magenta, sin(time * 0.4) * 0.5 + 0.5);
-                   finalColor += edgeGlowColor * edgeGlow * 0.2;
-                   
-                   // Add back glow effect
-                   vec3 backGlowColor = mix(magenta, cyan, sin(time * 0.3) * 0.5 + 0.5);
-                   finalColor += backGlowColor * backGlow * 0.5;
-                   
-                   // Ensure minimum brightness
-                   finalColor = max(finalColor, vec3(0.3));
-                   
-                   gl_FragColor = vec4(finalColor, 1.0);
-                 }
-               `,
-               transparent: true,
-               opacity: 1.0
-             });
-            
-                         model.traverse((child) => {
-               if (child.isMesh) {
-                 child.material = vaporwaveMaterial.clone();
-               }
-             });
-            
-            scene.add(model);
-            console.log('Model added to scene successfully. Position:', model.position, 'Scale:', model.scale);
-          },
-          function (progress) {
-            console.log('Loading progress:', (progress.loaded / progress.total * 100) + '%');
-          },
-          function (error) {
-            console.error('Error loading model:', error);
-            console.error('Model path attempted:', 'Models/Projects.glb');
-            console.error('Current location:', window.location.href);
-          }
-        );
-        
-        // Camera position - angled view
-        camera.position.x = 12;
-        camera.position.y = 8;
-        camera.position.z = 15;
-        camera.lookAt(0, 0, 0);
-        console.log('Camera positioned at:', camera.position);
-        
-                 // Classic vaporwave animation loop
-         let time = 0;
-         let isShowingProjectsModel = false; // Track when projects model is visible
-         
-         function animate() {
-           requestAnimationFrame(animate);
-           time += 0.01; // Slower, more elegant animation
-           
-           // Smooth rotation
-           if (model) {
-             model.rotation.y = time;
-             
-             // Gentle bobbing motion
-             model.position.y = Math.sin(time * 0.4) * 0.2;
-             
-             // Update vaporwave animation
-             model.traverse((child) => {
-               if (child.isMesh && child.material.uniforms) {
-                 child.material.uniforms.time.value = time;
-               }
-             });
-           }
-           
-           // Keep lights static
-           directionalLight.intensity = 0.5;
-           directionalLight2.intensity = 0.3;
-           directionalLight3.intensity = 0.25;
-           fillLight.intensity = 0.3;
-           
-           renderer.render(scene, camera);
-         }
-         
-         // Make animation control accessible globally
-         window.setProjectsModelVisible = function(visible) {
-           isShowingProjectsModel = visible;
-         };
-        
-        animate();
-        
-        // Handle window resize
-        window.addEventListener('resize', () => {
-          camera.aspect = container.offsetWidth / container.offsetHeight;
-          camera.updateProjectionMatrix();
-          renderer.setSize(container.offsetWidth, container.offsetHeight);
-        });
-        
-      } catch (error) {
-        console.error('Error initializing 3D scene:', error);
-      }
-    });
-
-    // Dynamic 3D Model System
-    document.addEventListener('DOMContentLoaded', async () => {
-      const canvas = document.getElementById('model-canvas');
-      const container = document.getElementById('model-container');
-      
-      if (!canvas || !container) return;
-      
-      // Model file mapping
-      const modelFiles = {
-        'projects': 'Models/Projects.glb',
-        'experience': 'Models/Experience.glb',
-        'about': 'Models/About.glb',
-        'contact': 'Models/Contact.glb'
-      };
-      
-      let currentScene = null;
-      let currentRenderer = null;
-      let currentCamera = null;
-      let currentModel = null;
-      let animationId = null;
-      
-      // Function to load and display a model
-      window.loadAndShowModel = async function(modelType) {
-        console.log(`Loading model: ${modelType}`);
-        
-        // Clear existing scene
-        if (animationId) {
-          cancelAnimationFrame(animationId);
-        }
-        if (currentScene) {
-          // Clear the scene
-          while(currentScene.children.length > 0) {
-            currentScene.remove(currentScene.children[0]);
-          }
-        }
-        
-        try {
-          // Import Three.js modules
-          const { Scene, PerspectiveCamera, WebGLRenderer, AmbientLight, DirectionalLight, MeshPhongMaterial, Box3, Vector3, ShaderMaterial, Color, BoxGeometry, Mesh } = await import('three');
-          const { GLTFLoader } = await import('three/addons/loaders/GLTFLoader.js');
-          
-          // Create new scene if needed
-          if (!currentScene) {
-            currentScene = new Scene();
-            currentCamera = new PerspectiveCamera(75, container.offsetWidth / container.offsetHeight, 0.1, 1000);
-            currentRenderer = new WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
-            
-            currentRenderer.setSize(container.offsetWidth, container.offsetHeight);
-            currentRenderer.setPixelRatio(window.devicePixelRatio);
-            currentRenderer.setClearColor(0x000000, 0);
-            
-            // Camera position - angled view
-            currentCamera.position.x = 12;
-            currentCamera.position.y = 8;
-            currentCamera.position.z = 15;
-          }
-          
-          // Add lighting for glow effect
-          const ambientLight = new AmbientLight(0x1a0d2e, 0.6);
-          currentScene.add(ambientLight);
-           
-          const directionalLight = new DirectionalLight(0xcc66cc, 0.5);
-          directionalLight.position.set(8, 8, 8);
-          currentScene.add(directionalLight);
-           
-          const directionalLight2 = new DirectionalLight(0x66cccc, 0.3);
-          directionalLight2.position.set(-8, -8, 8);
-          currentScene.add(directionalLight2);
-           
-          const directionalLight3 = new DirectionalLight(0xcc6699, 0.25);
-          directionalLight3.position.set(0, 12, -8);
-          currentScene.add(directionalLight3);
-           
-          const fillLight = new DirectionalLight(0xcccccc, 0.3);
-          fillLight.position.set(0, -12, 0);
-          currentScene.add(fillLight);
-          
-          // Load model
-          const loader = new GLTFLoader();
-          const modelFile = modelFiles[modelType] || modelFiles['projects'];
-          
-          console.log(`Attempting to load: ${modelFile}`);
-          console.log(`Full URL: ${new URL(modelFile, window.location.href).href}`);
-          
-          loader.load(
-            modelFile,
-            function (gltf) {
-              console.log(`${modelType} model loaded successfully`);
-              currentModel = gltf.scene;
-              
-              // Center and scale model
-              const box = new Box3().setFromObject(currentModel);
-              const center = box.getCenter(new Vector3());
-              const size = box.getSize(new Vector3());
-              
-              // Position model with projects-specific adjustment
-              currentModel.position.sub(center);
-              
-              // Set position based on model type
-              if (modelType === 'projects') {
-                currentModel.position.y = -15; // Set projects model to specific low position
-              } else {
-                currentModel.position.y -= 3; // General downward movement for other models
-              }
-              
-              const maxDim = Math.max(size.x, size.y, size.z);
-              let scale = 20 / maxDim;
-              
-              // Adjust scale based on model type
-              if (modelType === 'experience') {
-                scale = 25 / maxDim; // Make experience bigger
-              } else if (modelType === 'about') {
-                scale = 15 / maxDim; // Make about smaller
-              }
-              
-              currentModel.scale.setScalar(scale);
-              
-              // Set camera lookAt based on model type
-              if (modelType === 'projects') {
-                currentCamera.lookAt(0, 3, 0); // Look down more for projects
-              } else {
-                currentCamera.lookAt(0, 3, 0); // Normal lookAt for other models
-              }
-              
-              // Apply face-based glow material for letter distinction
-              const faceGlowMaterial = new ShaderMaterial({
-                uniforms: {
-                  time: { value: 0.0 }
-                },
-                vertexShader: `
-                  varying vec3 vPosition;
-                  varying vec3 vNormal;
-                  
-                  void main() {
-                    vPosition = position;
-                    vNormal = normal;
-                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-                  }
-                `,
-                fragmentShader: `
-                  uniform float time;
-                  varying vec3 vPosition;
-                  varying vec3 vNormal;
-                  
-                  void main() {
-                    // Distinct muted vaporwave colors
-                    vec3 magenta = vec3(0.7, 0.0, 0.7);
-                    vec3 cyan = vec3(0.0, 0.7, 0.8);
-                    vec3 pink = vec3(0.8, 0.0, 0.4);
-                    vec3 purple = vec3(0.4, 0.0, 0.8);
-                    
-                    // Face-based coloring with gradient alternation
-                    vec3 faceColor = magenta;
-                    vec3 altColor = cyan;
-                    
-                    if (abs(vNormal.x) > 0.9) {
-                      faceColor = cyan;
-                      altColor = pink;
-                    } else if (abs(vNormal.y) > 0.9) {
-                      faceColor = pink;
-                      altColor = purple;
-                    } else if (abs(vNormal.z) > 0.9) {
-                      faceColor = purple;
-                      altColor = magenta;
-                    }
-                    
-                    // Create gradient alternation
-                    float gradientShift = sin(time * 2.0) * 0.5 + 0.5;
-                    faceColor = mix(faceColor, altColor, gradientShift);
-                    
-                    // Edge glow effect matching cube
-                    float edge = 1.0 - max(max(abs(vNormal.x), abs(vNormal.y)), abs(vNormal.z));
-                    edge = pow(edge, 2.0);
-                    
-                    // Final color matching cube
-                    vec3 finalColor = faceColor + edge * vec3(1.0) * 0.8;
-                    
-                    gl_FragColor = vec4(finalColor, 1.0);
-                  }
-                `,
-                transparent: false
-              });
-              
-              currentModel.traverse((child) => {
-                if (child.isMesh) {
-                  child.material = faceGlowMaterial.clone();
-                }
-              });
-              
-              currentScene.add(currentModel);
-              
-              // Start animation
-              let time = 0;
-              function animate() {
-                animationId = requestAnimationFrame(animate);
-                time += 0.01;
-                
-                if (currentModel) {
-                  currentModel.rotation.y = time;
-                  currentModel.position.y = Math.sin(time * 0.4) * 0.2;
-                  
-                  currentModel.traverse((child) => {
-                    if (child.isMesh && child.material.uniforms) {
-                      child.material.uniforms.time.value = time;
-                    }
-                  });
-                }
-                
-                currentRenderer.render(currentScene, currentCamera);
-              }
-              animate();
-            },
-            function (progress) {
-              console.log(`Loading ${modelType}:`, (progress.loaded / progress.total * 100) + '%');
-            },
-            function (error) {
-              console.error(`Error loading ${modelType} model:`, error);
-              console.error(`Failed URL: ${new URL(modelFile, window.location.href).href}`);
-              console.error(`Model file: ${modelFile}`);
-              console.error(`Model type: ${modelType}`);
-              
-              // Try to provide more specific error information
-              if (error.target) {
-                console.error(`HTTP Status: ${error.target.status}`);
-                console.error(`HTTP Status Text: ${error.target.statusText}`);
-              }
-            }
-          );
-        } catch (error) {
-          console.error('Error in loadAndShowModel:', error);
-        }
-      };
-      
-    });
-
-    // Simple navigation with dynamic model loading
-    document.addEventListener('DOMContentLoaded', () => {
-      const navLinks = document.querySelectorAll('.nav-link');
-      const projectsLinks = document.querySelectorAll('.nav-link');
-      console.log('Found nav links:', projectsLinks.length);
-      projectsLinks.forEach((link, index) => {
-        console.log(`Nav link ${index + 1}:`, link.textContent.trim());
-      });
-      const cubeContainer = document.getElementById('cube-container');
-      const modelContainer = document.getElementById('model-container');
-      
-      // Set up dynamic model hover for multiple navigation links
-      const modelNavLinks = ['projects', 'experience', 'about', 'contact'];
-      
-      modelNavLinks.forEach(linkName => {
-        const navLink = Array.from(projectsLinks).find(link => 
-          link.textContent.toLowerCase().trim() === linkName
-        );
-        
-        if (navLink && cubeContainer && modelContainer) {
-          console.log(`Setting up ${linkName} hover functionality`);
-          
-          // Function to show the model (works for both hover and touch)
-          function showModel() {
-            console.log(`Showing ${linkName} model - loading 3D model`);
-            
-            // Clear any pending hide timeout immediately
-            if (window.hideModelTimeout) {
-              clearTimeout(window.hideModelTimeout);
-              window.hideModelTimeout = null;
-              console.log(`Cleared pending hide timeout`);
-            }
-            
-            // Set current hovered model immediately
-            window.currentHoveredModel = linkName;
-            console.log(`Set currentHoveredModel to: ${linkName}`);
-            
-            // Load and show the appropriate model
-            if (window.loadAndShowModel) {
-              window.loadAndShowModel(linkName);
-            }
-            
-            // Fade out cube, fade in 3D model
-            cubeContainer.style.opacity = '0';
-            modelContainer.style.display = 'block';
-            modelContainer.style.opacity = '1';
-            
-            // Disable cube animations
-            if (window.setCubeVisible) window.setCubeVisible(false);
-            
-            // Gradient overlay removed
-            
-            // Force model to stay visible after a small delay (in case of race conditions)
-            setTimeout(() => {
-              if (window.currentHoveredModel === linkName) {
-                modelContainer.style.display = 'block';
-                modelContainer.style.opacity = '1';
-                console.log(`Force-ensured ${linkName} model is visible`);
-              }
-            }, 200);
-            
-            console.log(`After ${linkName} show - Model visible`);
-          }
-
-          // Desktop hover events
-          navLink.addEventListener('mouseenter', showModel);
-          
-          // Touch events for mobile (especially horizontal mode)
-          navLink.addEventListener('touchstart', (e) => {
-            // Don't prevent default to allow navigation clicks to work
-            showModel();
-          });
-          
-          navLink.addEventListener('mouseleave', () => {
-            console.log(`Left ${linkName} hover - scheduling hide check`);
-            
-            // Clear current hovered model if it's this one
-            if (window.currentHoveredModel === linkName) {
-              window.currentHoveredModel = null;
-            }
-            
-            // Schedule hiding with a delay to allow switching between buttons
-            window.hideModelTimeout = setTimeout(() => {
-              if (!window.currentHoveredModel) {
-                console.log(`Hiding model - no button hovered`);
-                // Fade out 3D model, fade in cube
-                cubeContainer.style.opacity = '1';
-                modelContainer.style.opacity = '0';
-                
-                // Re-enable cube animations
-                if (window.setCubeVisible) window.setCubeVisible(true);
-                
-                setTimeout(() => {
-                  modelContainer.style.display = 'none';
-                }, 300);
-              }
-            }, 150); // Delay to allow switching between buttons
-            
-            // Gradient overlay removed
-          });
-        } else {
-          console.log(`Missing elements for ${linkName}:`, { 
-            navLink: !!navLink, 
-            cubeContainer: !!cubeContainer, 
-            modelContainer: !!modelContainer 
-          });
-        }
-      });
-      
-      navLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          
-          const linkText = link.textContent.toLowerCase().trim();
-          let targetPage = '';
-          
-          // Map navigation to target pages
-          switch(linkText) {
-            case 'home':
-              targetPage = 'home.html';
-              break;
-            case 'about':
-              targetPage = 'about.html';
-              break;
-            case 'experience':
-              targetPage = 'experience.html';
-              break;
-            case 'projects':
-              targetPage = 'Projects.html';
-              break;
-            case 'contact':
-              targetPage = 'contact.html';
-              break;
-            default:
-              return;
-          }
-          
-          if (targetPage) {
-            // Slow ease-out transition
-            document.body.style.transition = 'opacity 0.8s ease-out';
-            document.body.style.opacity = '0';
-            
-            // Navigate after ease-out
-            setTimeout(() => {
-              window.location.href = targetPage;
-            }, 800);
-          }
-        });
-      });
-    });
-  </script>
 
   <!-- Background music -->
   <audio id="backgroundMusic" loop>
@@ -1633,204 +774,40 @@
     <span class="mute-text">vaporwave</span>
   </div>
 
-  <!-- Bottom navigation -->
-  <div class="bottom-nav" style="background: solid black !important; display: flex !important; flex-direction: column !important; width: 140px !important; height: auto !important; position: fixed !important; bottom: 0.5rem !important; right: 0.5rem !important; margin: 0 !important; padding: 0 !important; border-radius: 15px !important; gap: 0 !important; align-items: stretch !important; border: none !important;">
-    <a href="home.html" class="nav-link active" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: #00ffff !important; text-decoration: none !important; text-shadow: 0 0 10px rgba(0, 255, 255, 0.8) !important; user-select: none !important; -webkit-user-select: none !important; -moz-user-select: none !important; -ms-user-select: none !important; pointer-events: none !important;">home</a>
-    <a href="about.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: white !important; text-decoration: none !important;">about</a>
-    <a href="experience.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: white !important; text-decoration: none !important;">experience</a>
-    <a href="Projects.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: white !important; text-decoration: none !important;">projects</a>
-    <a href="contact.html" class="nav-link" style="background: solid black !important; border: none !important; flex: none !important; text-align: right !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; height: 45px !important; width: 100% !important; box-sizing: border-box !important; margin: 0 !important; padding: 0 10px 0 0 !important; white-space: normal !important; position: relative !important; font-family: 'Fira Mono', 'Consolas', monospace !important; font-size: 1.1rem !important; font-weight: 400 !important; text-transform: none !important; letter-spacing: normal !important; color: white !important; text-decoration: none !important;">contact</a>
+  <!-- Mobile Menu Button (vertical mode only) -->
+  <div class="mobile-menu-btn" style="position: fixed; bottom: 1rem; right: 1rem; z-index: 10000; width: 50px; height: 50px; background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 50%; cursor: pointer; align-items: center; justify-content: center; border: 1px solid rgba(255, 255, 255, 0.1);">
+    <div class="hamburger">
+      <span style="display: block; width: 20px; height: 2px; background: #ffffff; margin: 3px 0; transition: 0.3s; border-radius: 1px;"></span>
+      <span style="display: block; width: 20px; height: 2px; background: #ffffff; margin: 3px 0; transition: 0.3s; border-radius: 1px;"></span>
+      <span style="display: block; width: 20px; height: 2px; background: #ffffff; margin: 3px 0; transition: 0.3s; border-radius: 1px;"></span>
+    </div>
   </div>
 
-  <style>
-    /* Override hand cursor hover effects for navigation buttons */
-    .bottom-nav .nav-link::before {
-      display: none !important;
-    }
-    
-    .bottom-nav .nav-link:hover::before {
-      display: none !important;
-    }
-    
-    /* Add hover highlighting for nav text */
-    .bottom-nav .nav-link:hover {
-      background: rgba(0, 0, 0, 0.3) !important;
-      color: #00ffff !important;
-      text-shadow: 0 0 10px rgba(0, 255, 255, 0.8) !important;
-      border-radius: 8px !important;
-      transform: scale(1.05) !important;
-      transition: all 0.2s ease !important;
-      backdrop-filter: blur(10px) !important;
-      -webkit-backdrop-filter: blur(10px) !important;
-    }
-    
-    /* Disable hover effects for active nav item */
-    .bottom-nav .nav-link.active:hover {
-      background: none !important;
-      transform: none !important;
-      backdrop-filter: none !important;
-      -webkit-backdrop-filter: none !important;
-      border-radius: 0 !important;
-    }
-  </style>
+  <!-- Bottom navigation -->
+  <div class="bottom-nav">
+    <div class="nav-close-btn"></div>
+    <a href="#" data-spa-route="home" class="nav-link active">home</a>
+    <a href="#" data-spa-route="about" class="nav-link">about</a>
+    <a href="#" data-spa-route="experience" class="nav-link">experience</a>
+    <a href="#" data-spa-route="projects" class="nav-link">projects</a>
+    <a href="#" data-spa-route="contact" class="nav-link">contact</a>
+  </div>
 
-  <script>
-    // Background music functionality
-    document.addEventListener('DOMContentLoaded', () => {
-      const backgroundMusic = document.getElementById('backgroundMusic');
-      const hoverMusic = document.getElementById('hoverMusic');
-      const muteContainer = document.getElementById('muteContainer');
-      const muteIcon = document.getElementById('muteIcon');
-      const muteText = document.querySelector('.mute-text');
-      let isPlaying = false;
-      let isHovering = false;
-      let currentFadeInterval = null; // Track active fade interval
-
-      // Set initial volume and start time
-      backgroundMusic.volume = 0.2; // Quieter emotions
-      hoverMusic.volume = 0;
-      hoverMusic.currentTime = 25; // Start at 25 seconds
-
-      // Icons for play/pause states
-      const mutedIcon = `<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>`;
-      const playingIcon = `<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>`;
-
-      // Fade between tracks
-      function fadeToHover() {
-        if (!isPlaying || isHovering) return; // Don't fade if already hovering
-        
-        // Clear any existing fade interval
-        if (currentFadeInterval) {
-          clearInterval(currentFadeInterval);
-          currentFadeInterval = null;
-        }
-        
-        isHovering = true;
-        
-        // Start hover music if not already playing
-        if (hoverMusic.paused) {
-          hoverMusic.play().catch(e => console.log('Hover music play failed:', e));
-        }
-        
-        // Fade out emotions, fade in resonance
-        currentFadeInterval = setInterval(() => {
-          if (backgroundMusic.volume > 0) {
-            backgroundMusic.volume = Math.max(0, backgroundMusic.volume - 0.05);
-          }
-          if (hoverMusic.volume < 0.5) {
-            hoverMusic.volume = Math.min(0.5, hoverMusic.volume + 0.05);
-          }
-          
-          if (backgroundMusic.volume <= 0 && hoverMusic.volume >= 0.5) {
-            clearInterval(currentFadeInterval);
-            currentFadeInterval = null;
-          }
-        }, 50);
-      }
-      
-      function fadeToBackground() {
-        if (!isPlaying || !isHovering) return; // Don't fade if not hovering
-        
-        // Clear any existing fade interval
-        if (currentFadeInterval) {
-          clearInterval(currentFadeInterval);
-          currentFadeInterval = null;
-        }
-        
-        isHovering = false;
-        
-        // Fade out resonance, fade in emotions
-        currentFadeInterval = setInterval(() => {
-          if (hoverMusic.volume > 0) {
-            hoverMusic.volume = Math.max(0, hoverMusic.volume - 0.05);
-          }
-          if (backgroundMusic.volume < 0.2) {
-            backgroundMusic.volume = Math.min(0.2, backgroundMusic.volume + 0.05);
-          }
-          
-          if (hoverMusic.volume <= 0 && backgroundMusic.volume >= 0.2) {
-            clearInterval(currentFadeInterval);
-            currentFadeInterval = null;
-            hoverMusic.pause();
-          }
-        }, 50);
-      }
-
-      // Toggle music play/pause
-      function toggleMusic() {
-        if (isPlaying) {
-          backgroundMusic.pause();
-          muteIcon.innerHTML = mutedIcon;
-          isPlaying = false;
-        } else {
-          backgroundMusic.play().catch(e => {
-            console.log('Audio play failed:', e);
-            // Fallback for browsers that require user interaction
-          });
-          muteIcon.innerHTML = playingIcon;
-          isPlaying = true;
-        }
-      }
-
-      // Click handler for mute container
-      muteContainer.addEventListener('click', toggleMusic);
-
-      // Try multiple methods to auto-start music
-      function attemptAutoStart() {
-        if (!isPlaying) {
-          backgroundMusic.play().then(() => {
-            muteIcon.innerHTML = playingIcon;
-            isPlaying = true;
-            console.log('Music auto-started successfully');
-          }).catch(e => {
-            console.log('Auto-start failed, waiting for user interaction:', e);
-            // Try again after any user interaction
-            document.addEventListener('click', () => {
-              if (!isPlaying) {
-                toggleMusic();
-              }
-            }, { once: true });
-          });
-        }
-      }
-
-      // Multiple attempts to start music
-      setTimeout(attemptAutoStart, 500);
-      setTimeout(attemptAutoStart, 1000);
-      setTimeout(attemptAutoStart, 2000);
-
-      // Also try on window focus
-      window.addEventListener('focus', () => {
-        if (!isPlaying) {
-          setTimeout(attemptAutoStart, 100);
-        }
-      });
-
-      // Try on any user interaction
-      ['click', 'keydown', 'touchstart', 'mousemove'].forEach(event => {
-        document.addEventListener(event, () => {
-          if (!isPlaying) {
-            setTimeout(attemptAutoStart, 50);
-          }
-        }, { once: true });
-      });
-      
-      // Add hover listeners to navigation area
-      const navContainer = document.querySelector('.bottom-nav');
-      const navButtons = document.querySelectorAll('.bottom-nav .nav-link');
-      
-      // Use the container for enter/leave detection to avoid switching between buttons
-      if (navContainer) {
-        navContainer.addEventListener('mouseenter', () => {
-          fadeToHover();
-        });
-        
-        navContainer.addEventListener('mouseleave', () => {
-          fadeToBackground();
-        });
-      }
-    });
-  </script>
+  <!-- Scripts -->
+  <!-- Load SPA system first -->
+  <script defer src="js/spa-router.js"></script>
+  <script defer src="js/spa-projects-new.js"></script>
+  <script defer src="js/spa-init.js"></script>
+  
+  <!-- Load other scripts after SPA is initialized -->
+  <script defer src="js/index.js"></script>
+  <script defer src="js/3d-cube.js"></script>
+  <script defer src="js/3d-models.js"></script>
+  <script defer src="js/dynamic-models.js"></script>
+  <script defer src="js/navigation.js"></script>
+  <script defer src="js/about.js"></script>
+  <script defer src="js/experience.js"></script>
+  <script defer src="js/contact.js"></script>
 
 </body>
 </html>

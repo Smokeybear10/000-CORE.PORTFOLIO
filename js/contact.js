@@ -70,7 +70,7 @@ function setupContactButtons() {
           window.open('mailto:thomasou@seas.upenn.edu', '_blank');
           break;
         case 'linkedin':
-          window.open('https://www.linkedin.com/in/thomasou6/', '_blank');
+          window.open('https://www.linkedin.com/in/thomasou2006', '_blank');
           break;
         case 'github':
           window.open('https://github.com/thomasou6', '_blank');

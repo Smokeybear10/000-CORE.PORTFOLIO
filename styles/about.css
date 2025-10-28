@@ -6,8 +6,8 @@ html, body {
 }
 
 body {
-  overscroll-behavior: none;
-  -webkit-overscroll-behavior: none;
+  overscroll-behavior: auto;
+  -webkit-overscroll-behavior: auto;
   opacity: 0;
   animation: easeIn 0.8s ease-out forwards;
 }
