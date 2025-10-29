@@ -609,14 +609,14 @@ const experienceData = {
   0: { // Data & Analytics at Flushing CPA
     title: "Data & Analytics",
     company: "Flushing CPA Tax Center",
-    location: "Spring 2024",
-    description: "• Designed and implemented automated data extraction, transformation, and loading processes to handle large-scale tax datasets from multiple sources, reducing manual processing time by 25% while improving financial projection accuracy by 15%.<br>&nbsp;<br>• Created VBA macros and automated workflows to systematically scan 300+ client tax records for compliance issues, implementing alert systems that reduced compliance review time by 30%.<br>&nbsp;<br>• Constructed predictive statistical models using historical financial data and industry benchmarks to forecast quarterly tax liabilities for 150+ small and medium business clients with 85% accuracy.<br>&nbsp;<br>• Established standardized data processing workflows and maintained centralized tax databases, achieving 98% data accuracy and supporting seamless operations during peak tax season periods."
+    location: "Feb 2024 - May 2024",
+    description: "• Designed and implemented ETL pipelines in Python to automate the ingestion and processing of over 50,000 financial records, improving tax projection accuracy by 15% through enhanced data quality controls and validation procedures.<br>&nbsp;<br>• Built Excel VBA macros for automated compliance anomaly detection in client tax returns, reducing manual review time by 40% and flagging high-risk discrepancies for further investigation.<br>&nbsp;<br>• Developed regression models using Python and scikit-learn to forecast quarterly tax liabilities for small business clients, achieving 92% prediction accuracy."
   },
-  1: { // Legal Research at Jonathan Spodnick
-    title: "Legal Research Intern",
-    company: "Offices of Jonathan Spodnick",
-    location: "Fall 2023",
-    description: "• Researched legal cases and prepared court documents including motions, briefs, and discovery materials for 25+ personal injury lawsuits.<br>&nbsp;<br>• Built a Python-based natural language processing tool to automatically categorize legal documents, reducing manual review time by 40%.<br>&nbsp;<br>• Applied statistical analysis to examine injury claim patterns and settlement data across 200+ cases, informing case valuation strategies.<br>&nbsp;<br>• Streamlined document processing workflows and maintained organized case databases, improving case preparation efficiency by 35%."
+  1: { // Legal Intern at Jonathan Spodnick
+    title: "Legal Intern",
+    company: "Jonathan E Spodnick Law Office",
+    location: "Sep 2023 - Dec 2023",
+    description: "• Engineered a Python-based NLP text classification system using spaCy and NLTK to automatically categorize over 1,000 legal documents by case type and relevance, reducing manual review time by 50%. The system streamlined discovery processes and improved case preparation efficiency.<br>&nbsp;<br>• Conducted statistical analysis on personal injury settlement data using regression and clustering techniques to identify trends in claim values and case outcomes, providing data-driven insights for case strategy.<br>&nbsp;<br>• Automated discovery documentation workflows through Python scripts for document parsing, metadata extraction, and evidence organization."
   },
   2: { // Fintech Analyst at CITIC
     title: "Fintech Analyst",
@@ -624,17 +624,17 @@ const experienceData = {
     location: "Summer 2023",
     description: "• Assisted in preparing a listing proposal for an $11 billion spaceflight network company by developing data-driven presentations that showcased CITIC's core investment banking capabilities and sector expertise.<br>&nbsp;<br>• Analyzed socio-political impacts on China's financial markets during CITIC's RMB regulatory penalty, collaborating with a 9-person team to develop risk mitigation strategies that minimized adverse effects on stock price performance.<br>&nbsp;<br>• Supported the preparation and documentation of an $18 billion convertible bond prospectus for a regional banking client, ensuring regulatory compliance and investor disclosure requirements.<br>&nbsp;<br>• Contributed to deal structuring and financial modeling processes across multiple high-value transactions, supporting senior analysts in client relationship management and transaction execution."
   },
-  3: { // DoD Research Assistant
-    title: "Military Tech Analyst",
-    company: "University Of Pennsylvania",
-    location: "Summer 2025",
-    description: "• Transcribed and analyzed military technology proposals from BOF Annual Reports (1897-1908), systematically cataloging over 200+ inventions including subject details, proposer information, and military adoption outcomes across 11 annual reporting periods.<br>&nbsp;<br>• Evaluated technological significance and historical impact of proposed military innovations, providing evidence-based recommendations for deeper research prioritization while assessing factors including adoption success, technological advancement, and lasting influence on modern defense systems.<br>&nbsp;<br>• Synthesized findings from diverse primary and secondary sources including patent databases, military testing records, newspaper archives, and academic collections to create comprehensive technology profiles supporting ongoing historical military innovation research initiatives."
+  3: { // Research Assistant - CURF
+    title: "Research Assistant",
+    company: "University of Pennsylvania",
+    location: "Jul 2025 - Present",
+    description: "• Working under Professor Michael C. Horowitz to digitize and analyze over 50 years of historical U.S. military appropriations data. Developing a Python-based OCR and data extraction pipeline to convert archival documents into structured data for statistical analysis.<br>&nbsp;<br>• Designing SQL database schemas and implementing data normalization procedures to enable analysis of bureaucratic resource allocation patterns and defense innovation trends. Applying natural language processing techniques for automated document classification and named entity extraction from unstructured historical text.<br>&nbsp;<br>• This research explores how bureaucratic structure and resource allocation influence defense innovation and military capability development."
   },
   4: { // PPPL Research Assistant
-    title: "Research Assistant", 
-    company: "Princeton Plasma Physics Lab (PPPL)",
-    location: "Summer 2024",
-    description: "• Analyzed plasma confinement mechanisms to study charged particle behavior within tokamak reactor configurations, examining magnetic field interactions and particle trajectory dynamics.<br>&nbsp;<br>• Simulated the effects of magnetic field strength variations and plasma density changes on reactor performance metrics, identifying optimal operating parameters for maximum energy output efficiency.<br>&nbsp;<br>• Developed statistical models to predict fusion reaction rates under different operating conditions, incorporating plasma temperature, density, and confinement variables to forecast reactor performance.<br>&nbsp;<br>• Collaborated with research team to validate simulation results against experimental data, contributing to ongoing fusion energy research and reactor optimization studies."
+    title: "Research Assistant",
+    company: "Princeton Plasma Physics Laboratory (PPPL)",
+    location: "Jul 2024 - Aug 2024",
+    description: "• Implemented Monte Carlo simulations in Python to model charged particle trajectories in tokamak fusion reactors under varying magnetic field configurations and plasma conditions.<br>&nbsp;<br>• Developed predictive statistical models using scikit-learn to forecast fusion reaction rates based on plasma confinement parameters, achieving R² > 0.90 on validation data.<br>&nbsp;<br>• Automated data processing pipeline capable of handling 100GB+ of simulation output using Pandas and NumPy, reducing analysis time by 75% and enabling faster iteration on reactor design parameters."
   }
 };
 

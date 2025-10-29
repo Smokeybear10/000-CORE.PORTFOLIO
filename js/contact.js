@@ -67,13 +67,13 @@ function setupContactButtons() {
       // Handle different contact types
       switch(contactType) {
         case 'email':
-          window.open('mailto:thomasou@seas.upenn.edu', '_blank');
+          window.open('mailto:thomasou@sas.upenn.edu', '_blank');
           break;
         case 'linkedin':
           window.open('https://www.linkedin.com/in/thomasou2006', '_blank');
           break;
         case 'github':
-          window.open('https://github.com/thomasou6', '_blank');
+          window.open('https://github.com/Smokeybear10', '_blank');
           break;
         default:
           console.log('Unknown contact type:', contactType);

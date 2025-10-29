@@ -82,8 +82,8 @@ const projectData = {
     technical: "Built as a vanilla JavaScript SPA with custom routing and state management. Three.js handles 3D model rendering with optimized loading strategies. GSAP provides smooth animations and transitions. CSS Grid and Flexbox ensure responsive layouts across devices.",
     challenges: "Balancing visual complexity with performance required careful asset optimization and lazy loading strategies. Cross-browser compatibility was ensured through progressive enhancement. Mobile performance was optimized through reduced polygon counts and texture compression.",
     links: [
-      { text: "Live Website", url: "#", type: "live" },
-      { text: "Source Code", url: "#", type: "github" }
+      { text: "Live Website", url: "https://thomasou.com", type: "live" },
+      { text: "Source Code", url: "https://github.com/Smokeybear10/PortfolioWebsite-Ver2.0", type: "github" }
     ],
     gallery: ["Assets/Portfolio.gif"]
   },
@@ -125,7 +125,7 @@ const projectData = {
     technical: "Built with Python and Streamlit for the web interface, integrating Google Gemini AI for intelligent content analysis. Features PDF/DOCX parsing with OCR capabilities, SQLite database for data persistence, and Chrome automation for job portal scraping. The system includes advanced NLP for keyword extraction and machine learning algorithms for ATS scoring.",
     challenges: "Implementing accurate ATS scoring algorithms required extensive research into applicant tracking system preferences. Balancing AI-generated suggestions with maintaining authentic personal voice in resumes was crucial. Optimizing PDF parsing performance while maintaining accuracy across different document formats posed significant technical challenges.",
     links: [
-      { text: "GitHub Repository", url: "#", type: "github" },
+      { text: "GitHub Repository", url: "https://github.com/Smokeybear10/SmartCV", type: "github" },
       { text: "Live Demo", url: "#", type: "demo", error: "Website is currently down" },
       { text: "Documentation", url: "#", type: "docs", error: "Website is currently down" }
     ],
