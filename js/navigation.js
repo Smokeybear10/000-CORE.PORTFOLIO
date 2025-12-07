@@ -1,20 +1,26 @@
-// Simple navigation with dynamic model loading - EXPERIENCE PAGE ONLY
+// Simple navigation with dynamic model loading - HOME AND EXPERIENCE PAGES
 document.addEventListener('DOMContentLoaded', () => {
   // Wait for SPA to initialize, then check route
   setTimeout(() => {
     const currentRoute = document.body.getAttribute('data-current-route');
-    if (currentRoute !== 'experience') {
-      console.log('Navigation.js: Skipping model setup - not on experience page, current route:', currentRoute);
+    if (currentRoute !== 'experience' && currentRoute !== 'home') {
+      console.log('Navigation.js: Skipping model setup - not on home or experience page, current route:', currentRoute);
       return;
     }
-    
+
     initializeNavigationModels();
   }, 500);
 });
 
 // Function to initialize navigation models for experience page
 function initializeNavigationModels() {
-  
+  // Prevent duplicate initialization
+  if (window.navModelsInitialized) {
+    console.log('Navigation models already initialized, skipping...');
+    return;
+  }
+  window.navModelsInitialized = true;
+
   const navLinks = document.querySelectorAll('.nav-link');
   const projectsLinks = document.querySelectorAll('.nav-link');
   console.log('Found nav links:', projectsLinks.length);
@@ -23,7 +29,7 @@ function initializeNavigationModels() {
   });
   const cubeContainer = document.getElementById('cube-container');
   const modelContainer = document.getElementById('model-container');
-  
+
   // Set up dynamic model hover for multiple navigation links
   const modelNavLinks = ['projects', 'experience', 'about', 'contact'];
   

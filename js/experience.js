@@ -606,35 +606,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Experience and Research data for modals
 const experienceData = {
-  0: { // Data & Analytics at Flushing CPA
-    title: "Data & Analytics",
+  0: { // Investment Strategy Associate at WITG
+    title: "Investment Strategy Associate",
+    company: "Wharton Investment and Trading Group",
+    location: "Oct 2024 - Present",
+    description: "• Coordinated a team of 15 analysts in developing equity research reports and financial models (DCF, Comps) across Technology and Industrials sectors.<br>&nbsp;<br>• Prepared and presented weekly investment pitches to the group's executive board for potential capital allocation decisions."
+  },
+  1: { // Quant Intern at Astera Holdings
+    title: "Quant Intern",
+    company: "Astera Holdings",
+    location: "Jan 2025 - May 2025",
+    description: "• Developed a low-latency arbitrage trading engine for prediction markets (Kalshi, Polymarket), utilizing Python AsyncIO and concurrent WebSocket connections to ingest real-time order books.<br>&nbsp;<br>• Engineered an event-driven execution system that identified cross-exchange price discrepancies and executed trades with sub-second latency, integrating robust error handling for API rate limits.<br>&nbsp;<br>• Built a scalable data ingestion pipeline to normalize fragmentation across disparate betting APIs, enabling the backtesting of arbitrage strategies against 1M+ historical market events."
+  },
+  2: { // Data Engineering Intern at Flushing CPA
+    title: "Data Engineering Intern",
     company: "Flushing CPA Tax Center",
-    location: "Feb 2024 - May 2024",
-    description: "• Designed and implemented ETL pipelines in Python to automate the ingestion and processing of over 50,000 financial records, improving tax projection accuracy by 15% through enhanced data quality controls and validation procedures.<br>&nbsp;<br>• Built Excel VBA macros for automated compliance anomaly detection in client tax returns, reducing manual review time by 40% and flagging high-risk discrepancies for further investigation.<br>&nbsp;<br>• Developed regression models using Python and scikit-learn to forecast quarterly tax liabilities for small business clients, achieving 92% prediction accuracy."
+    location: "Jun 2024 - Aug 2024",
+    description: "• Deployed robust ETL pipelines using Python and SQL to ingest 50K+ financial records, implementing automated schema validation to guarantee 99.9% data integrity.<br>&nbsp;<br>• Engineered a predictive time-series forecasting service achieving 92% accuracy on revenue projections, reducing dependency on manual heuristics and enabling data-driven planning.<br>&nbsp;<br>• Implemented a real-time anomaly detection system to identify potential fraud risks, automating compliance checks and reducing manual review workload by 40% across 200+ accounts."
   },
-  1: { // Legal Intern at Jonathan Spodnick
-    title: "Legal Intern",
-    company: "Jonathan E Spodnick Law Office",
-    location: "Sep 2023 - Dec 2023",
-    description: "• Engineered a Python-based NLP text classification system using spaCy and NLTK to automatically categorize over 1,000 legal documents by case type and relevance, reducing manual review time by 50%. The system streamlined discovery processes and improved case preparation efficiency.<br>&nbsp;<br>• Conducted statistical analysis on personal injury settlement data using regression and clustering techniques to identify trends in claim values and case outcomes, providing data-driven insights for case strategy.<br>&nbsp;<br>• Automated discovery documentation workflows through Python scripts for document parsing, metadata extraction, and evidence organization."
+  3: { // Technology and Research Analyst at Penn Blockchain
+    title: "Technology and Research Analyst",
+    company: "Penn Blockchain",
+    location: "Oct 2024 - Mar 2025",
+    description: "• Authored in-depth research reports on decentralized finance (DeFi) primitives, tokenomics, and the integration of blockchain technology into traditional finance infrastructure.<br>&nbsp;<br>• Developed foundational understanding of core smart contract development principles and technical audit processes to assess protocol risk."
   },
-  2: { // Fintech Analyst at CITIC
-    title: "Fintech Analyst",
-    company: "CITIC Securities",
-    location: "Summer 2023",
-    description: "• Assisted in preparing a listing proposal for an $11 billion spaceflight network company by developing data-driven presentations that showcased CITIC's core investment banking capabilities and sector expertise.<br>&nbsp;<br>• Analyzed socio-political impacts on China's financial markets during CITIC's RMB regulatory penalty, collaborating with a 9-person team to develop risk mitigation strategies that minimized adverse effects on stock price performance.<br>&nbsp;<br>• Supported the preparation and documentation of an $18 billion convertible bond prospectus for a regional banking client, ensuring regulatory compliance and investor disclosure requirements.<br>&nbsp;<br>• Contributed to deal structuring and financial modeling processes across multiple high-value transactions, supporting senior analysts in client relationship management and transaction execution."
-  },
-  3: { // Research Assistant - CURF
-    title: "Research Assistant",
+  4: { // Data Analyst - CURF
+    title: "Data Analyst",
     company: "University of Pennsylvania",
     location: "Jul 2025 - Present",
-    description: "• Working under Professor Michael C. Horowitz to digitize and analyze over 50 years of historical U.S. military appropriations data. Developing a Python-based OCR and data extraction pipeline to convert archival documents into structured data for statistical analysis.<br>&nbsp;<br>• Designing SQL database schemas and implementing data normalization procedures to enable analysis of bureaucratic resource allocation patterns and defense innovation trends. Applying natural language processing techniques for automated document classification and named entity extraction from unstructured historical text.<br>&nbsp;<br>• This research explores how bureaucratic structure and resource allocation influence defense innovation and military capability development."
+    description: "• Developing end-to-end Python OCR pipeline using Tesseract and custom preprocessing to digitize 50+ years of historical U.S. military appropriations records from archival documents for Prof. Michael C. Horowitz's defense innovation research.<br>&nbsp;<br>• Designing PostgreSQL database schema with normalized tables and indexing strategies; implementing NLP system for automated document classification, named entity extraction, and metadata tagging across unstructured historical text.<br>&nbsp;<br>• Building data validation and quality assurance workflows to ensure accuracy of digitized records; creating Python scripts for batch processing and error handling across 10TB+ document corpus."
   },
-  4: { // PPPL Research Assistant
-    title: "Research Assistant",
+  5: { // Software Engineering Intern - PPPL
+    title: "Software Engineering Intern (Computational Physics)",
     company: "Princeton Plasma Physics Laboratory (PPPL)",
-    location: "Jul 2024 - Aug 2024",
-    description: "• Implemented Monte Carlo simulations in Python to model charged particle trajectories in tokamak fusion reactors under varying magnetic field configurations and plasma conditions.<br>&nbsp;<br>• Developed predictive statistical models using scikit-learn to forecast fusion reaction rates based on plasma confinement parameters, achieving R² > 0.90 on validation data.<br>&nbsp;<br>• Automated data processing pipeline capable of handling 100GB+ of simulation output using Pandas and NumPy, reducing analysis time by 75% and enabling faster iteration on reactor design parameters."
+    location: "Feb 2024 - Apr 2024",
+    description: "• Developed a high-performance Monte Carlo simulation engine for particle modeling, achieving a 75% runtime reduction by implementing SIMD vectorization and multi-threaded parallel computing in C++.<br>&nbsp;<br>• Automated a CI/CD pipeline for validating 100GB+ simulation datasets, ensuring reproducibility and reducing regression testing turnaround time from days to under four hours.<br>&nbsp;<br>• Built interactive visualization dashboards using Python to profile simulation performance, enabling the rapid identification of bottlenecks and accelerating model calibration cycles."
   }
 };
 

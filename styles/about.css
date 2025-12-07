@@ -70,10 +70,7 @@ body {
   font-size: min(8rem, 15vw, 13vh);
   font-weight: 400;
   font-family: 'Anton', Arial, sans-serif;
-  background: linear-gradient(90deg, #ff00ff, #00ffff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #ffffff;
   text-align: left;
   letter-spacing: 0.05em;
   text-transform: none;
@@ -111,10 +108,7 @@ body {
   font-size: min(8rem, 15vw, 13vh);
   font-weight: 400;
   font-family: 'Anton', Arial, sans-serif;
-  background: linear-gradient(90deg, #ff00ff, #00ffff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #ffffff;
   text-align: left;
   letter-spacing: 0.05em;
   text-transform: none;

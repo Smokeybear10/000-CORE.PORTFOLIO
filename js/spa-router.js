@@ -127,6 +127,9 @@ class SPARouter {
 
     this.currentRoute = route;
     this.isTransitioning = false;
+
+    // Dispatch route changed event for music system
+    window.dispatchEvent(new CustomEvent('spa-route-changed', { detail: { route } }));
   }
 
   // Update element visibility

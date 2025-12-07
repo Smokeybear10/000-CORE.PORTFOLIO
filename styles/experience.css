@@ -576,10 +576,7 @@ html, body {
   font-size: min(8rem, 15vw, 13vh);
   font-weight: 400;
   font-family: 'Anton', Arial, sans-serif;
-  background: linear-gradient(90deg, #ff00ff, #00ffff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #ffffff;
   text-align: left;
   letter-spacing: 0.005em;
   text-transform: none;
@@ -593,10 +590,7 @@ html, body {
   font-size: min(8rem, 15vw, 13vh);
   font-weight: 400;
   font-family: 'Anton', Arial, sans-serif;
-  background: linear-gradient(90deg, #ff00ff, #00ffff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #ffffff;
   text-align: left;
   letter-spacing: 0.05em;
   text-transform: none;
@@ -1150,7 +1144,7 @@ body[data-current-route="home"] .mobile-menu-btn {
   /* Make orange container (right-section) 90vw and position under top-container */
   .right-section {
     position: absolute !important;
-    top: 78vh !important;
+    top: calc(min(40vh, 40vw) + 60vh) !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
     width: 90vw !important;
@@ -1158,7 +1152,7 @@ body[data-current-route="home"] .mobile-menu-btn {
     padding: 1rem !important;
     box-sizing: border-box !important;
   }
-  
+
   /* Add section titles above each section */
   .timeline-container::before {
     content: 'EDUCATION';
@@ -1176,10 +1170,10 @@ body[data-current-route="home"] .mobile-menu-btn {
     margin: 0 0 1.5rem 0;
     line-height: 1;
   }
-  
-  /* Move education container down more in vertical mode - increases as vw gets smaller */
+
+  /* Education container should be at top of right-section */
   .timeline-container {
-    margin-top: calc(30vw - 5rem - 20vh) !important;
+    margin-top: 2rem !important;
   }
   
   .experience-cards::before {
@@ -1240,10 +1234,11 @@ body[data-current-route="home"] .mobile-menu-btn {
     display: none !important;
   }
   
-  /* Make red container (experience-container) extend to bottom of orange container */
+  /* Make red container (experience-container) extend to fit content */
   .experience-container {
     min-height: 100vh !important;
-    height:  calc(420vh - 100vw)!important;
+    height: auto !important;
+    overflow-y: visible !important;
   }
   
   /* Fix timeline alignment in vertical mode */
@@ -1327,7 +1322,7 @@ body[data-current-route="home"] .mobile-menu-btn {
     background: rgba(0, 0, 0, 0.8) !important;
     backdrop-filter: blur(10px) !important;
     -webkit-backdrop-filter: blur(10px) !important;
-    border-radius: 15px !important;
+    border-radius: 15px 0 0 15px !important;
     margin: 0.5rem !important;
     width: calc(140px - 1rem) !important;
   }

@@ -2,26 +2,26 @@
 
 // Project data with enhanced information
 const projectData = {
-  verilog: {
-    title: "Verilog-Based ALU for 16-bit RISC-V Processor",
-    description: "Designed and implemented a comprehensive Arithmetic Logic Unit (ALU) in Verilog for a 16-bit RISC-V processor architecture. The project involved creating modular components for arithmetic operations, logical operations, and control logic while ensuring optimal timing and resource utilization.",
-    tech: ["Verilog", "RISC-V", "Digital Design", "FPGA", "ModelSim", "Quartus"],
-    image: "Images/ProjectPhotos/Verilog.png",
+  fightvision: {
+    title: "Computer Vision Strike Detection System for MMA",
+    description: "Developed an automated strike detection and classification system for Mixed Martial Arts footage using computer vision and deep learning. The system integrates Meta's Segment Anything Model 2 (SAM2) with Label Studio to create a semi-automated annotation pipeline, generating 200+ annotated training frames across 40 fight sequences. Designed a Temporal Segment Network (TSN) architecture using MMAction2 framework for spatio-temporal feature extraction and real-time action recognition.",
+    tech: ["Python", "Computer Vision", "Deep Learning", "SAM2", "Label Studio", "MMAction2", "Temporal Segment Networks", "3D CNN"],
+    image: "Images/ProjectPhotos/Strikezone1.gif",
     features: [
-      "16-bit arithmetic operations (ADD, SUB, MUL, DIV)",
-      "Logical operations (AND, OR, XOR, NOT, shifts)",
-      "Conditional branching and jump instructions",
-      "Register file with 32 x 16-bit registers",
-      "Pipeline hazard detection and resolution",
-      "FPGA synthesis and timing optimization"
+      { title: "Meta SAM2 Integration for Automated Segmentation", detail: "Leverages Meta's Segment Anything Model 2 as a backend for Label Studio, enabling semi-automated mask generation for fighter segmentation with significantly reduced manual annotation time" },
+      { title: "Semi-Automated Annotation Pipeline", detail: "Integrated workflow combining SAM2's promptable visual segmentation with Label Studio's browser-based interface, achieving 60% reduction in manual annotation time through automated mask generation and refinement" },
+      { title: "Temporal Segment Network (TSN) Architecture", detail: "Implemented pre-trained TSN model via MMAction2 framework for spatio-temporal feature extraction, enabling real-time action recognition across temporal sequences of fight footage" },
+      { title: "Multi-Class Event Detection", detail: "Successfully detects and classifies multiple event types including fighter segmentation, strike events, significant strikes, and missed strike attempts with frame-level precision" },
+      { title: "Custom Training Data Generation", detail: "Generated 200+ high-quality annotated frames representing 40 distinct fight sequences, each comprising 5-frame temporal windows to capture strike dynamics and motion patterns" },
+      { title: "Proof-of-Concept for Sports Analytics", detail: "Demonstrates feasibility of automated quantitative analysis in combat sports, providing foundation for advanced fight statistics, performance metrics, and tactical insights" }
     ],
-    technical: "The ALU was designed using hierarchical Verilog modules with separate components for arithmetic, logic, and control operations. The design features a 5-stage pipeline with forwarding units to handle data hazards. Custom testbenches were developed to verify functionality across all instruction types, and the design was synthesized for Altera Cyclone IV FPGA with timing closure at 50MHz.",
-    challenges: "The primary challenge was achieving timing closure while maintaining full RISC-V compatibility. This required careful pipeline stage balancing and the implementation of bypassing logic. Memory alignment issues were resolved through custom address translation units.",
+    technical: "The system architecture combines Meta's SAM2 for mask-based object segmentation with Label Studio's annotation interface, creating a semi-automated labeling workflow for generating training data. The detection pipeline utilizes a Temporal Segment Network (TSN) pre-trained model accessed through the MMAction2 computer vision framework, which processes spatio-temporal features across sequential frames. Initially explored 3D CNN architectures for direct spatio-temporal inference, but pivoted to TSN due to computational constraints. The model processes 5-frame temporal windows representing discrete fight moments, with each frame annotated for fighter masks, strike events, and miss classifications. Training was conducted on 200 labeled frames across 40 sequences using transfer learning from pre-trained TSN weights.",
+    challenges: "Primary bottleneck was dataset size limitations - only 200 frames across 40 sequences were manually annotated due to Label Studio Premium subscription access issues, which would have enabled automated learning of labeling patterns after 3-4 examples. Initial 3D CNN architecture was abandoned due to excessive RAM requirements that exceeded Google Colab runtime capacity, even with batching optimizations. Manual mask refinement remained time-consuming despite SAM2 automation. Model accuracy remains below production standards due to limited training data, though results were impressive given the constraint of only 40 data points for transfer learning.",
     links: [
-      { text: "GitHub Repository", url: "#", type: "github", error: "Not publicly available" },
-      { text: "Technical Documentation", url: "#", type: "docs", error: "Not publicly available" }
+      { text: "GitHub Repository", url: "https://github.com/Smokeybear10/Strike_Detection_ML", type: "github" },
+      { text: "Project Documentation", url: "#", type: "docs", error: "Not publicly available" }
     ],
-    gallery: ["Images/ProjectPhotos/Verilog.png"]
+    gallery: ["Images/ProjectPhotos/Strikezone1.gif", "Images/ProjectPhotos/Strikezone4.gif", "Images/ProjectPhotos/Strikezone2.png", "Images/ProjectPhotos/Strikezone3.png"]
   },
   flywheel: {
     title: "Magnetically Levitating Flywheel Generator",
@@ -196,7 +196,7 @@ function setupWheelRotation() {
         velocity = targetSpeed;
       }
       currentRotation += velocity;
-      wheelContainer.style.transform = `rotateX(-22deg) rotateY(${currentRotation}deg)`;
+      wheelContainer.style.transform = `rotateX(-13deg) rotateY(${currentRotation}deg)`;
     }
     requestAnimationFrame(autoRotate);
   }
@@ -224,10 +224,10 @@ function setupWheelRotation() {
     
     const currentX = e.type === 'mousemove' ? e.clientX : e.touches[0].clientX;
     const deltaX = currentX - startX;
-    
+
     currentRotation += deltaX * 0.5;
-    wheelContainer.style.transform = `rotateX(-22deg) rotateY(${currentRotation}deg)`;
-    
+    wheelContainer.style.transform = `rotateX(-13deg) rotateY(${currentRotation}deg)`;
+
     startX = currentX;
     e.preventDefault();
   }

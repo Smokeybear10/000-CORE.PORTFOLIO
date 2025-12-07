@@ -22,15 +22,35 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Function to load and display a model
   window.loadAndShowModel = async function(modelType) {
     console.log(`Loading model: ${modelType}`);
-    
-    // Clear existing scene
+
+    // Clear existing scene and animation
     if (animationId) {
       cancelAnimationFrame(animationId);
+      animationId = null;
     }
+
+    // Properly dispose of current model
+    if (currentModel) {
+      currentModel.traverse((child) => {
+        if (child.isMesh) {
+          if (child.geometry) child.geometry.dispose();
+          if (child.material) {
+            if (Array.isArray(child.material)) {
+              child.material.forEach(mat => mat.dispose());
+            } else {
+              child.material.dispose();
+            }
+          }
+        }
+      });
+      currentModel = null;
+    }
+
+    // Clear the scene completely
     if (currentScene) {
-      // Clear the scene
       while(currentScene.children.length > 0) {
-        currentScene.remove(currentScene.children[0]);
+        const child = currentScene.children[0];
+        currentScene.remove(child);
       }
     }
     

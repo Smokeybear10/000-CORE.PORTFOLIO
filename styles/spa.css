@@ -37,20 +37,13 @@ body[data-current-route="about"] .route-about-only {
   position: relative;
 }
 
-/* Animated underline effect */
+/* Animated underline effect - DISABLED */
 .bottom-nav .nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: 8px;
-  right: 10px;
-  width: 0;
-  height: 2px;
-  background: linear-gradient(90deg, #00ffff, #ff00ff);
-  transition: width 0.3s ease;
+  display: none;
 }
 
 .bottom-nav .nav-link:hover::after {
-  width: calc(100% - 20px);
+  display: none;
 }
 
 .bottom-nav .nav-link:hover {
