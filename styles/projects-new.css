@@ -415,7 +415,7 @@
 
 .project-details-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
   padding: 3rem 2rem;
   max-width: 1400px;
@@ -428,6 +428,11 @@
   border-radius: 12px;
   border: 1px solid rgba(255, 0, 255, 0.2);
   backdrop-filter: blur(10px);
+}
+
+/* Make gallery span two columns */
+.project-gallery-section {
+  grid-column: 1 / -1;
 }
 
 .project-details-grid h2 {
@@ -466,6 +471,65 @@
   left: 0;
   color: #ff00ff;
   font-size: 0.8rem;
+}
+
+/* Collapsible features */
+.collapsible-feature {
+  padding: 0 !important;
+}
+
+.collapsible-feature::before {
+  display: none !important;
+}
+
+.feature-title {
+  cursor: pointer;
+  padding: 0.75rem 0 0.75rem 1.5rem;
+  font-weight: 600;
+  color: #ffffff !important;
+  transition: all 0.3s ease;
+  position: relative;
+  user-select: none;
+}
+
+.feature-title:hover {
+  padding-left: 2rem;
+  color: #00ffff !important;
+}
+
+.feature-title:hover::before {
+  color: #ff00ff !important;
+}
+
+.feature-title::before {
+  content: '▼';
+  position: absolute;
+  left: 0;
+  color: #ffffff;
+  font-size: 0.8rem;
+  transition: transform 0.3s ease;
+}
+
+.feature-title.collapsed::before {
+  transform: rotate(-90deg);
+}
+
+.expand-icon {
+  display: none;
+}
+
+.feature-detail {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  padding: 0 0 0 1.5rem;
+  color: #ffffff !important;
+  font-size: 0.95rem;
+}
+
+.feature-detail.expanded {
+  max-height: 500px;
+  padding: 0.5rem 0 0.75rem 1.5rem;
 }
 
 .project-links {
@@ -526,6 +590,7 @@
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
 }
 
 .gallery-image img {
@@ -537,6 +602,79 @@
 
 .gallery-image:hover img {
   transform: scale(1.05);
+}
+
+/* Image Lightbox */
+.image-lightbox {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 100000;
+  justify-content: center;
+  align-items: center;
+  cursor: zoom-out;
+  animation: fadeIn 0.3s ease;
+}
+
+.image-lightbox.active {
+  display: flex;
+}
+
+.image-lightbox img {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  animation: zoomIn 0.3s ease;
+}
+
+.lightbox-close {
+  display: none;
+}
+
+.image-lightbox.closing {
+  animation: fadeOut 0.3s ease forwards;
+}
+
+.image-lightbox.closing img {
+  animation: zoomOut 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes zoomOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.8);
+  }
 }
 
 /* Mobile responsiveness for full-screen modal */
