@@ -90,7 +90,7 @@ body {
   font-size: 8rem;
   font-weight: 400;
   font-family: 'Anton', Arial, sans-serif;
-  background: linear-gradient(90deg, #ff00ff, #00ffff);
+  background: linear-gradient(90deg, #ffffff, #00ffff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -1638,23 +1638,20 @@ body[data-current-route="home"] .mobile-menu-btn {
 
 /* Add hover highlighting for nav text - highest specificity */
 .bottom-nav .nav-link:hover:not(.active) {
-  background: rgba(0, 0, 0, 0.3) !important;
-  color: #00ffff !important;
-  text-shadow: 0 0 10px rgba(0, 255, 255, 0.8) !important;
-  border-radius: 8px !important;
-  transform: scale(1.05) !important;
-  transition: all 0.2s ease !important;
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+  text-shadow: none !important;
+  border-radius: 10px !important;
+  transform: translateY(-1px) !important;
+  transition: all 0.15s ease !important;
 }
 
 /* Disable hover effects for active nav item */
 .bottom-nav .nav-link.active:hover {
-  background: none !important;
+  background: #ffffff !important;
+  color: #000000 !important;
   transform: none !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  border-radius: 0 !important;
+  border-radius: 10px !important;
 }
 
 /* Hide container borders for production */

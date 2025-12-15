@@ -23,7 +23,7 @@ body {
 
 /* Main container - Pure black background */
 body[data-current-route="about"] .about-container {
-  width: 100vw;
+  width: 100%;
   min-height: 100vh;
   background: transparent;
   position: relative;
@@ -174,13 +174,12 @@ body[data-current-route="about"] .about-container {
   border-radius: 15px;
   padding: 2rem;
   margin-bottom: 2rem;
-  transition: all 0.3s ease;
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .info-section:hover {
   background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 0, 255, 0.3);
-  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .info-section h3 {

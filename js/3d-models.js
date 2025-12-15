@@ -106,7 +106,7 @@ async function initializeModels() {
             
             void main() {
               // Classic Vaporwave color palette
-              vec3 magenta = vec3(1.0, 0.0, 1.0);      // #ff00ff
+              vec3 magenta = vec3(1.0, 1.0, 1.0);      // white
               vec3 cyan = vec3(0.0, 1.0, 1.0);         // #00ffff
               vec3 pink = vec3(1.0, 0.0, 0.5);         // #ff0080
               vec3 purple = vec3(0.5, 0.0, 1.0);       // #8000ff

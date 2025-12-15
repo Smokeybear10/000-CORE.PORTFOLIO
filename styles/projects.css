@@ -89,7 +89,7 @@ body {
 }
 
 .stack-category h3 {
-  color: #ff00ff;
+  color: #ffffff;
   font-family: 'Inter', Arial, sans-serif;
   font-size: 0.9rem;
   font-weight: 700;
@@ -145,8 +145,8 @@ body {
 
 .tech:hover {
   background: rgba(255, 0, 255, 0.2);
-  border-color: #ff00ff;
-  color: #ff00ff;
+  border-color: #ffffff;
+  color: #ffffff;
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(255, 0, 255, 0.3);
 }
@@ -221,7 +221,7 @@ body {
   font-size: min(8rem, 15vw, 13vh);
   font-weight: 900;
   font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
-  background: linear-gradient(90deg, #ff00ff, #00ffff);
+  background: linear-gradient(90deg, #ffffff, #00ffff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -235,7 +235,7 @@ body {
   font-size: min(8rem, 15vw, 13vh);
   font-weight: 900;
   font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
-  background: linear-gradient(90deg, #ff00ff, #00ffff);
+  background: linear-gradient(90deg, #ffffff, #00ffff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -398,7 +398,7 @@ body {
   backdrop-filter: blur(10px);
   border-radius: 0 0 8px 8px;
   pointer-events: auto;
-  border-top: 2px solid #ff00ff;
+  border-top: 2px solid #ffffff;
 }
 
 .project-header h3 {
@@ -460,7 +460,7 @@ body {
 }
 
 .close {
-  color: #ff00ff;
+  color: #ffffff;
   float: right;
   font-size: 28px;
   font-weight: bold;
@@ -537,12 +537,12 @@ body {
 }
 
 .mute-container:hover .mute-icon {
-  fill: #ff00ff;
+  fill: #ffffff;
   filter: drop-shadow(0 0 15px rgba(255, 0, 255, 0.8));
 }
 
 .mute-container:hover .mute-text {
-  color: #ff00ff;
+  color: #ffffff;
   text-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
 }
 
@@ -591,9 +591,9 @@ body {
 }
 
 .nav-link.active {
-  background: none !important;
-  color: #00ffff !important;
-  text-shadow: 0 0 10px rgba(0, 255, 255, 0.8) !important;
+  background: #ffffff !important;
+  color: #000000 !important;
+  text-shadow: none !important;
   user-select: none !important;
   -webkit-user-select: none !important;
   -moz-user-select: none !important;
@@ -603,23 +603,22 @@ body {
 
 /* Add hover highlighting for nav text */
 .nav-link:hover {
-  background: rgba(0, 0, 0, 0.3) !important;
-  color: #00ffff !important;
-  text-shadow: 0 0 10px rgba(0, 255, 255, 0.8) !important;
-  border-radius: 8px !important;
-  transform: scale(1.05) !important;
-  transition: all 0.2s ease !important;
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+  text-shadow: none !important;
+  border-radius: 10px !important;
+  transform: translateY(-1px) !important;
+  transition: all 0.15s ease !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
 /* Disable hover effects for active nav item */
 .nav-link.active:hover {
-  background: none !important;
+  background: #ffffff !important;
+  color: #000000 !important;
   transform: none !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  border-radius: 0 !important;
+  border-radius: 10px !important;
 }
 
 .tech-item {
@@ -636,8 +635,8 @@ body {
 
 .tech-item:hover {
   background: rgba(255, 0, 255, 0.2);
-  color: #ff00ff;
-  border-color: #ff00ff;
+  color: #ffffff;
+  border-color: #ffffff;
   transform: translateY(-1px);
 }
 

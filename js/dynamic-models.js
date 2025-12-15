@@ -166,11 +166,11 @@ document.addEventListener('DOMContentLoaded', async () => {
               varying vec3 vNormal;
               
               void main() {
-                // Distinct muted vaporwave colors
-                vec3 magenta = vec3(0.7, 0.0, 0.7);
-                vec3 cyan = vec3(0.0, 0.7, 0.8);
-                vec3 pink = vec3(0.8, 0.0, 0.4);
-                vec3 purple = vec3(0.4, 0.0, 0.8);
+                // White / cyan / purple palette (soft)
+                vec3 magenta = vec3(0.90, 0.90, 0.90);  // white-ish
+                vec3 cyan    = vec3(0.1, 0.8, 0.9);
+                vec3 pink    = vec3(0.8, 0.35, 0.95);   // soft purple-pink
+                vec3 purple  = vec3(0.45, 0.25, 0.8);
                 
                 // Face-based coloring with gradient alternation
                 vec3 faceColor = magenta;

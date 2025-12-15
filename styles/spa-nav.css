@@ -36,17 +36,18 @@
 }
 
 .spa-nav-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #00ffff;
-  text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
-  transform: scale(1.02);
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  text-shadow: none;
+  transform: translateY(-1px);
 }
 
 .spa-nav-btn.active {
-  color: #00ffff;
-  text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
-  background: rgba(0, 255, 255, 0.1);
+  color: #000000;
+  background: #ffffff;
+  box-shadow: 0 8px 18px rgba(255, 255, 255, 0.15);
   pointer-events: none;
+  text-shadow: none;
 }
 
 .spa-nav-btn.active:hover {
