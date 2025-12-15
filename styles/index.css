@@ -277,12 +277,12 @@ body {
 }
 
 .mute-container:hover .mute-icon {
-  fill: #ff00ff;
+  fill: #ffffff;
   filter: drop-shadow(0 0 15px rgba(255, 0, 255, 0.8));
 }
 
 .mute-container:hover .mute-text {
-  color: #ff00ff;
+  color: #ffffff;
   text-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
 }
 
@@ -356,7 +356,7 @@ body {
   font-family: 'Courier New', 'Monaco', 'Lucida Console', monospace;
   font-weight: 400;
   font-size: min(2rem, 5vw) !important;
-  background: linear-gradient(90deg, #ff00ff, #00ffff);
+  background: linear-gradient(90deg, #ffffff, #00ffff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -457,75 +457,5 @@ body.projects-hover::after {
 }
 
 /* Add hover highlighting for nav text */
-.bottom-nav .nav-link:hover {
-  background: rgba(0, 0, 0, 0.3) !important;
-  color: #00ffff !important;
-  text-shadow: 0 0 10px rgba(0, 255, 255, 0.8) !important;
-  border-radius: 8px !important;
-  transform: scale(1.05) !important;
-  transition: all 0.2s ease !important;
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
-}
-
-/* Disable hover effects for active nav item */
-.bottom-nav .nav-link.active:hover {
-  background: none !important;
-  transform: none !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  border-radius: 0 !important;
-}
 
 /* Navigation specific styling for clean look */
-.bottom-nav {
-  background: transparent !important;
-  display: flex !important;
-  flex-direction: column !important;
-  width: 140px !important;
-  height: auto !important;
-  position: fixed !important;
-  bottom: 0.5rem !important;
-  right: 0.5rem !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  border-radius: 15px !important;
-  gap: 0 !important;
-  align-items: stretch !important;
-  border: none !important;
-}
-
-.bottom-nav .nav-link {
-  background: transparent !important;
-  border: none !important;
-  flex: none !important;
-  text-align: right !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: flex-end !important;
-  height: 45px !important;
-  width: 100% !important;
-  box-sizing: border-box !important;
-  margin: 0 !important;
-  padding: 0 10px 0 0 !important;
-  white-space: normal !important;
-  position: relative !important;
-  font-family: 'Fira Mono', 'Consolas', monospace !important;
-  font-size: 1.1rem !important;
-  font-weight: 400 !important;
-  text-transform: none !important;
-  letter-spacing: normal !important;
-  color: white !important;
-  text-decoration: none !important;
-}
-
-.bottom-nav .nav-link.active {
-  background: none !important;
-  color: #00ffff !important;
-  text-shadow: 0 0 10px rgba(0, 255, 255, 0.8) !important;
-  user-select: none !important;
-  -webkit-user-select: none !important;
-  -moz-user-select: none !important;
-  -ms-user-select: none !important;
-  pointer-events: none !important;
-}
