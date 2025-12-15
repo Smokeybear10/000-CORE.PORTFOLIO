@@ -1,4 +1,5 @@
-// TYPING ANIMATION FOR ABOUT PAGE
+// TYPING ANIMATION FOR ABOUT PAGE - DISABLED
+/*
 const aboutRoles = [
   "GTO Poker Nerd",
   "CTF Fanatic",
@@ -13,12 +14,12 @@ let aboutIsTyping = false;
 
 function typeAboutRole() {
   if (!aboutTypedEl) return;
-  
+
   if (!aboutIsTyping) {
     aboutIsTyping = true;
     aboutTypedEl.classList.add('typing');
   }
-  
+
   if (aboutCharIndex < aboutRoles[aboutRoleIndex].length) {
     aboutTypedEl.textContent += aboutRoles[aboutRoleIndex].charAt(aboutCharIndex++);
     setTimeout(typeAboutRole, aboutTypingDelay + Math.random() * 40 - 20);
@@ -31,19 +32,19 @@ function typeAboutRole() {
 
 function eraseAboutRole() {
   if (!aboutTypedEl) return;
-  
+
   if (!aboutIsTyping) {
     aboutIsTyping = true;
     aboutTypedEl.classList.add('typing');
   }
-  
+
   if (aboutCharIndex > 0) {
     aboutTypedEl.textContent = aboutRoles[aboutRoleIndex].substring(0, aboutCharIndex--);
     setTimeout(eraseAboutRole, aboutErasingDelay);
   } else {
     aboutRoleIndex = (aboutRoleIndex + 1) % aboutRoles.length;
     aboutTypedEl.textContent = "";
-    
+
     aboutIsTyping = false;
     aboutTypedEl.classList.remove('typing');
     setTimeout(() => {
@@ -51,14 +52,17 @@ function eraseAboutRole() {
     }, 300);
   }
 }
+*/
 
+// STARTUP ANIMATION - DISABLED
+/*
 // Custom cursor animation
 // Check if this is a fresh visit or internal navigation
 function isFirstVisit() {
   // Check if we came from another page on the same site
   const referrer = document.referrer;
   const currentDomain = window.location.hostname;
-  
+
   // If referrer is from the same domain, it's internal navigation - skip animation
   if (referrer) {
     try {
@@ -70,7 +74,7 @@ function isFirstVisit() {
       // If we can't parse referrer, continue with other checks
     }
   }
-  
+
   // Always show animation for page reloads, direct visits, bookmarks, or external links
   return true;
 }
@@ -81,33 +85,33 @@ document.addEventListener('DOMContentLoaded', () => {
     history.scrollRestoration = 'manual';
   }
   window.scrollTo(0, 0);
-  
+
   const preloader = document.getElementById('startup-preloader');
   const clickButton = document.getElementById('startupClickButton');
-  
+
   // Check if this is a first visit
   console.log('Is first visit:', isFirstVisit());
-  
+
   if (isFirstVisit()) {
     // First visit - show startup animation
     console.log('Running startup animation');
     document.body.style.overflow = 'hidden';
-    
+
     if (preloader) {
       preloader.style.display = 'flex';
       preloader.style.opacity = '1';
     }
-    
+
     if (clickButton) {
       clickButton.style.opacity = '0';
       clickButton.classList.remove('show');
     }
-    
+
     // Reset letter positions using GSAP to ensure proper state
     gsap.set('.startup-name-text span', {
       y: '100%'
     });
-    
+
     // Run startup animation
     runStartupAnimation();
   } else {
@@ -123,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('runStartupAnimation called');
     const bars = document.querySelectorAll('.preloader-bar');
     console.log('Preloader:', preloader, 'Bars:', bars.length, 'ClickButton:', clickButton);
-    
+
     if (preloader && bars.length > 0) {
       console.log('Starting GSAP timeline');
       const tl = gsap.timeline({
@@ -131,14 +135,14 @@ document.addEventListener('DOMContentLoaded', () => {
           ease: 'power1.inOut',
         }
       });
-      
+
       // First animate the name letters up (slower)
       tl.to('.startup-name-text span', {
         y: 0,
         stagger: 0.08,
         duration: 0.3,
       });
-      
+
       // Then show the click button after a delay
       tl.to(clickButton, {
         delay: 1,
@@ -182,4 +186,43 @@ document.addEventListener('DOMContentLoaded', () => {
     aboutIsTyping = false;
     typeAboutRole();
   }
+});
+*/
+
+// Typing animation - DISABLED
+/*
+document.addEventListener('DOMContentLoaded', () => {
+  // Start typing animation for about page
+  const aboutTypedEl = document.querySelector(".about-typed-text");
+  if (aboutTypedEl) {
+    aboutTypedEl.classList.add('show');
+    aboutTypedEl.textContent = '';
+    aboutRoleIndex = 0;
+    aboutCharIndex = 0;
+    aboutIsTyping = false;
+    typeAboutRole();
+  }
+});
+*/
+
+// Starfield cursor parallax
+document.addEventListener('DOMContentLoaded', () => {
+  const body = document.body;
+  if (!body) return;
+  let rafId = null;
+
+  const onMove = (e) => {
+    const { innerWidth, innerHeight } = window;
+    const x = (e.clientX / innerWidth - 0.5) * 36; // more dramatic parallax
+    const y = (e.clientY / innerHeight - 0.5) * 36;
+
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(() => {
+      body.style.setProperty('--star-shift-x', `${x}px`);
+      body.style.setProperty('--star-shift-y', `${y}px`);
+      body.dataset.starShift = 'true';
+    });
+  };
+
+  window.addEventListener('pointermove', onMove, { passive: true });
 });

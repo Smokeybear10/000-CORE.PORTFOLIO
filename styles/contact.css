@@ -7,9 +7,7 @@
   margin: 0;
   padding: 1rem;
   border: none;
-  background: linear-gradient(135deg, #150a0f 0%, #000000 25%, #301020 50%, #000000 75%, #1a0f15 100%);
-  background-size: 400% 400%;
-  animation: gradientShift 12s ease infinite;
+  background: transparent;
   box-sizing: border-box;
   cursor: auto !important;
   position: fixed;
@@ -21,17 +19,7 @@
   justify-content: center;
 }
 
-@keyframes gradientShift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
+@keyframes gradientShift {}
 
 /* CONTACT ME Title */
 .journey-title {

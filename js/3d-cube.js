@@ -25,7 +25,7 @@ async function initializeCube() {
     cubeRenderer.setPixelRatio(window.devicePixelRatio);
     cubeRenderer.setClearColor(0x000000, 0);
     
-    // Create vaporwave cube material
+    // Create vaporwave cube material (muted/toned colors)
     cubeMaterial = new ShaderMaterial({
       uniforms: {
         time: { value: 0.0 }
@@ -46,11 +46,11 @@ async function initializeCube() {
         varying vec3 vNormal;
         
         void main() {
-          // Distinct muted vaporwave colors
-          vec3 magenta = vec3(0.7, 0.0, 0.7);
-          vec3 cyan = vec3(0.0, 0.7, 0.8);
-          vec3 pink = vec3(0.8, 0.0, 0.4);
-          vec3 purple = vec3(0.4, 0.0, 0.8);
+          // Muted vaporwave colors
+          vec3 magenta = vec3(0.55, 0.05, 0.55);
+          vec3 cyan    = vec3(0.05, 0.55, 0.60);
+          vec3 pink    = vec3(0.65, 0.10, 0.42);
+          vec3 purple  = vec3(0.35, 0.10, 0.55);
           
           // Face-based coloring with gradient alternation
           vec3 faceColor = magenta;
@@ -71,26 +71,26 @@ async function initializeCube() {
           float gradientShift = sin(time * 0.8) * 0.5 + 0.5;
           faceColor = mix(faceColor, altColor, gradientShift);
           
-          // Edge glow effect
+          // Edge glow effect (softened)
           float edge = 1.0 - max(max(abs(vNormal.x), abs(vNormal.y)), abs(vNormal.z));
           edge = pow(edge, 2.0);
           
-          // Final color
-          vec3 finalColor = faceColor + edge * vec3(1.0) * 0.8;
+          // Final color with minimal glow
+          vec3 finalColor = faceColor + edge * vec3(1.0) * 0.02;
           
-          gl_FragColor = vec4(finalColor, 0.9);
+          gl_FragColor = vec4(finalColor, 0.45);
         }
       `,
       transparent: true
     });
     
     // Create cube geometry and mesh
-    const cubeGeometry = new BoxGeometry(3, 3, 3);
+    const cubeGeometry = new BoxGeometry(2.2, 2.2, 2.2);
     cube = new Mesh(cubeGeometry, cubeMaterial);
     cubeScene.add(cube);
     
     // Position camera - centered view
-    cubeCamera.position.z = 8;
+    cubeCamera.position.z = 6.5;
     cubeCamera.position.y = 0;
     
     // Animation loop for cube
@@ -109,9 +109,9 @@ async function initializeCube() {
         cube.rotation.y = cubeTime * 0.8;
         cube.rotation.z = cubeTime * 0.3;
         
-        // Floating motion
-        cube.position.y = Math.sin(cubeTime * 0.6) * 0.5;
-        cube.position.x = Math.cos(cubeTime * 0.4) * 0.3;
+        // Subtle floating motion (reduced)
+        cube.position.y = Math.sin(cubeTime * 0.6) * 0.18;
+        cube.position.x = Math.cos(cubeTime * 0.4) * 0.12;
         
         // Update material with pulsing effect
         cubeMaterial.uniforms.time.value = cubeTime;

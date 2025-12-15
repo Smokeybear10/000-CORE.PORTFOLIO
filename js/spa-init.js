@@ -10,8 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
     contentSelector: '#home-content',
     showElements: [
       '.startup-preloader',
-      '.name-heading', 
-      '.about-typing-card',
+      '.name-heading',
+      // '.about-typing-card', // DISABLED
       '#cube-container',
       '#model-container'
     ],
@@ -21,32 +21,32 @@ document.addEventListener('DOMContentLoaded', () => {
     onEnter: async () => {
       // Set body route attribute
       document.body.setAttribute('data-current-route', 'home');
-      
+
       // Update navigation active state
       document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
       const homeNavLink = document.querySelector('.nav-link[data-spa-route="home"]');
       if (homeNavLink) homeNavLink.classList.add('active');
-      
+
       // Show home elements
       document.querySelector('.name-heading').style.display = 'block';
-      document.querySelector('.about-typing-card').style.display = 'flex';
+      // document.querySelector('.about-typing-card').style.display = 'flex'; // DISABLED
       document.querySelector('#cube-container').style.display = 'block';
       document.querySelector('#model-container').style.display = 'block';
-      
+
       // Hide scroll progress
       const scrollProgress = document.querySelector('.scroll-progress');
       if (scrollProgress) scrollProgress.style.display = 'none';
-      
+
       // Restart home page animations
       if (window.initHomeAnimations) {
         window.initHomeAnimations();
       }
-      
+
       // Restart 3D cube
       if (window.init3DCube) {
         window.init3DCube();
       }
-      
+
       // Restart 3D models
       if (window.init3DModels) {
         window.init3DModels();
@@ -63,10 +63,10 @@ document.addEventListener('DOMContentLoaded', () => {
     onExit: async () => {
       // Hide home elements
       document.querySelector('.name-heading').style.display = 'none';
-      document.querySelector('.about-typing-card').style.display = 'none';
+      // document.querySelector('.about-typing-card').style.display = 'none'; // DISABLED
       document.querySelector('#cube-container').style.display = 'none';
       document.querySelector('#model-container').style.display = 'none';
-      
+
       // Clean up home page specific elements
       if (window.cleanup3DCube) {
         window.cleanup3DCube();
@@ -74,6 +74,14 @@ document.addEventListener('DOMContentLoaded', () => {
       if (window.cleanup3DModels) {
         window.cleanup3DModels();
       }
+
+      // Clean up dynamic models from navigation hover
+      if (window.cleanupDynamicModels) {
+        window.cleanupDynamicModels();
+      }
+
+      // Reset navigation models initialization flag so it can be re-initialized
+      window.navModelsInitialized = false;
     }
   });
 
@@ -86,37 +94,37 @@ document.addEventListener('DOMContentLoaded', () => {
     hideElements: [
       '.startup-preloader',
       '.name-heading',
-      '.about-typing-card', 
+      // '.about-typing-card', // DISABLED
       '#cube-container',
       '#model-container'
     ],
     onEnter: async () => {
       // Set body route attribute
       document.body.setAttribute('data-current-route', 'about');
-      
+
       // Update navigation active state
       document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
       const aboutNavLink = document.querySelector('.nav-link[data-spa-route="about"]');
       if (aboutNavLink) aboutNavLink.classList.add('active');
-      
+
       // Hide home elements
       document.querySelector('.name-heading').style.display = 'none';
-      document.querySelector('.about-typing-card').style.display = 'none';
+      // document.querySelector('.about-typing-card').style.display = 'none'; // DISABLED
       document.querySelector('#cube-container').style.display = 'none';
       document.querySelector('#model-container').style.display = 'none';
-      
+
       // Show about elements
       const scrollProgress = document.querySelector('.scroll-progress');
       if (scrollProgress) scrollProgress.style.display = 'block';
-      
+
       // Restart about page animations
       if (window.initAboutAnimations) {
         window.initAboutAnimations();
       }
-      
+
       // Reset scroll position
       window.scrollTo(0, 0);
-      
+
       // Update scroll progress
       if (window.updateScrollProgress) {
         window.updateScrollProgress();
@@ -126,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Hide about elements
       const scrollProgress = document.querySelector('.scroll-progress');
       if (scrollProgress) scrollProgress.style.display = 'none';
-      
+
       // Clean up about page specific animations
       if (window.cleanupAboutAnimations) {
         window.cleanupAboutAnimations();
@@ -143,21 +151,21 @@ document.addEventListener('DOMContentLoaded', () => {
     hideElements: [
       '.startup-preloader',
       '.name-heading',
-      '.about-typing-card', 
+      // '.about-typing-card', // DISABLED
       '#cube-container',
       '#model-container'
     ],
     onEnter: async () => {
       document.body.setAttribute('data-current-route', 'experience');
-      
+
       // Update navigation active state
       document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
       const experienceNavLink = document.querySelector('.nav-link[data-spa-route="experience"]');
       if (experienceNavLink) experienceNavLink.classList.add('active');
-      
+
       // Hide home elements
       document.querySelector('.name-heading').style.display = 'none';
-      document.querySelector('.about-typing-card').style.display = 'none';
+      // document.querySelector('.about-typing-card').style.display = 'none'; // DISABLED
       document.querySelector('#cube-container').style.display = 'none';
       document.querySelector('#model-container').style.display = 'none';
       
@@ -226,11 +234,19 @@ document.addEventListener('DOMContentLoaded', () => {
       // Hide experience elements
       const scrollProgress = document.querySelector('.scroll-progress');
       if (scrollProgress) scrollProgress.style.display = 'none';
-      
+
       // Clean up experience animations if available
       if (window.cleanupExperienceAnimations) {
         window.cleanupExperienceAnimations();
       }
+
+      // Clean up dynamic models from navigation hover
+      if (window.cleanupDynamicModels) {
+        window.cleanupDynamicModels();
+      }
+
+      // Reset navigation models initialization flag so it can be re-initialized
+      window.navModelsInitialized = false;
     }
   });
 
@@ -241,7 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
     hideElements: [
       '.startup-preloader',
       '.name-heading',
-      '.about-typing-card', 
+      // '.about-typing-card', // DISABLED
       '#cube-container',
       '#model-container',
       '.scroll-progress'
@@ -257,12 +273,12 @@ document.addEventListener('DOMContentLoaded', () => {
       
       // Hide home elements
       const nameHeading = document.querySelector('.name-heading');
-      const typingCard = document.querySelector('.about-typing-card');
+      // const typingCard = document.querySelector('.about-typing-card'); // DISABLED
       const cubeContainer = document.querySelector('#cube-container');
       const modelContainer = document.querySelector('#model-container');
-      
+
       if (nameHeading) nameHeading.style.display = 'none';
-      if (typingCard) typingCard.style.display = 'none';
+      // if (typingCard) typingCard.style.display = 'none'; // DISABLED
       if (cubeContainer) cubeContainer.style.display = 'none';
       if (modelContainer) modelContainer.style.display = 'none';
       
@@ -314,7 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
     hideElements: [
       '.startup-preloader',
       '.name-heading',
-      '.about-typing-card', 
+      // '.about-typing-card', // DISABLED
       '#cube-container',
       '#model-container',
       '.scroll-progress'
@@ -322,21 +338,21 @@ document.addEventListener('DOMContentLoaded', () => {
     onEnter: async () => {
       console.log('CONTACT ROUTE: Entering contact route...');
       document.body.setAttribute('data-current-route', 'contact');
-      
+
       // Update navigation active state
       document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
       const contactNavLink = document.querySelector('.nav-link[data-spa-route="contact"]');
       if (contactNavLink) contactNavLink.classList.add('active');
-      
+
       // Hide home elements
       const nameHeading = document.querySelector('.name-heading');
-      const typingCard = document.querySelector('.about-typing-card');
+      // const typingCard = document.querySelector('.about-typing-card'); // DISABLED
       const cubeContainer = document.querySelector('#cube-container');
       const modelContainer = document.querySelector('#model-container');
       const scrollProgress = document.querySelector('.scroll-progress');
-      
+
       if (nameHeading) nameHeading.style.display = 'none';
-      if (typingCard) typingCard.style.display = 'none';
+      // if (typingCard) typingCard.style.display = 'none'; // DISABLED
       if (cubeContainer) cubeContainer.style.display = 'none';
       if (modelContainer) modelContainer.style.display = 'none';
       if (scrollProgress) scrollProgress.style.display = 'none';
@@ -400,7 +416,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Ensure music works across routes
+  // MUSIC SETUP - DISABLED
+  /*
   const setupGlobalMusic = () => {
     const backgroundMusic = document.getElementById('backgroundMusic');
     const hoverMusic = document.getElementById('hoverMusic');
@@ -476,6 +493,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize music after router is set up
   setTimeout(setupGlobalMusic, 100);
+  */
 
 
   // Additional click capture for navigation safety
@@ -500,18 +518,20 @@ document.addEventListener('DOMContentLoaded', () => {
 // Global animation initialization functions
 window.initHomeAnimations = () => {
   // Reinitialize home page specific animations
-  if (window.typeAboutRole) {
-    window.typeAboutRole();
-  }
-  
+  // DISABLED - Typing animation removed
+  // if (window.typeAboutRole) {
+  //   window.typeAboutRole();
+  // }
+
   // Restart startup animations if needed
-  const preloader = document.getElementById('startup-preloader');
-  if (preloader && preloader.style.display !== 'none') {
-    // Preloader is visible, restart its animations
-    if (window.initStartupAnimations) {
-      window.initStartupAnimations();
-    }
-  }
+  // DISABLED - Startup animation removed
+  // const preloader = document.getElementById('startup-preloader');
+  // if (preloader && preloader.style.display !== 'none') {
+  //   // Preloader is visible, restart its animations
+  //   if (window.initStartupAnimations) {
+  //     window.initStartupAnimations();
+  //   }
+  // }
 };
 
 window.initAboutAnimations = () => {

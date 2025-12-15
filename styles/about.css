@@ -21,31 +21,27 @@ body {
   }
 }
 
-/* Main container */
-.about-container {
+/* Main container - Pure black background */
+body[data-current-route="about"] .about-container {
   width: 100vw;
   min-height: 100vh;
-  background: linear-gradient(135deg, #000000 0%, #0f0820 25%, #0d1425 50%, #081a35 75%, #1f1a40 100%);
-  background-size: 400% 400%;
-  animation: gradientShift 8s ease infinite;
+  background: transparent;
   position: relative;
   padding: 2rem;
   box-sizing: border-box;
 }
 
-/* Add dot pattern overlay similar to reference image */
-.about-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 50%;
-  height: 100%;
-  background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
-  background-size: 20px 20px;
-  opacity: 0.3;
-  pointer-events: none;
+/* Default container (for home page) */
+.about-container {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  position: relative;
 }
+
+/* Dot pattern overlay removed for clean black background */
 
 @keyframes gradientShift {
   0% {

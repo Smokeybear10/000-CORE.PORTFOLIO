@@ -25,30 +25,33 @@ async function initializeModels() {
     modelRenderer.setSize(container.offsetWidth, container.offsetHeight);
     modelRenderer.setPixelRatio(window.devicePixelRatio);
     modelRenderer.setClearColor(0x000000, 0);
-    
+
+    // LIGHTS REMOVED - Model uses self-illuminating shader material
+    /*
     // Muted Vaporwave lighting setup
     const ambientLight = new AmbientLight(0x1a0d2e, 0.6);
     modelScene.add(ambientLight);
-    
+
     // Main muted magenta light
     const directionalLight = new DirectionalLight(0xcc66cc, 0.5);
     directionalLight.position.set(8, 8, 8);
     modelScene.add(directionalLight);
-    
+
     // Secondary muted cyan light
     const directionalLight2 = new DirectionalLight(0x66cccc, 0.3);
     directionalLight2.position.set(-8, -8, 8);
     modelScene.add(directionalLight2);
-    
+
     // Accent muted pink light
     const directionalLight3 = new DirectionalLight(0xcc6699, 0.25);
     directionalLight3.position.set(0, 12, -8);
     modelScene.add(directionalLight3);
-    
+
     // Fill light from below (muted white)
     const fillLight = new DirectionalLight(0xcccccc, 0.3);
     fillLight.position.set(0, -12, 0);
     modelScene.add(fillLight);
+    */
    
    // Load GLB model
    const loader = new GLTFLoader();
@@ -163,13 +166,13 @@ async function initializeModels() {
                               cycleColor1 * 0.15 + 
                               cycleColor2 * 0.1;
               
-              // Add subtle edge glow like the cube image
+              // Add subtle edge glow like the cube image (further reduced)
               vec3 edgeGlowColor = mix(cyan, magenta, sin(time * 0.4) * 0.5 + 0.5);
-              finalColor += edgeGlowColor * edgeGlow * 0.2;
+              finalColor += edgeGlowColor * edgeGlow * 0.06;
               
-              // Add back glow effect
+              // Add back glow effect (further reduced)
               vec3 backGlowColor = mix(magenta, cyan, sin(time * 0.3) * 0.5 + 0.5);
-              finalColor += backGlowColor * backGlow * 0.5;
+              finalColor += backGlowColor * backGlow * 0.15;
               
               // Ensure minimum brightness
               finalColor = max(finalColor, vec3(0.3));
@@ -218,10 +221,10 @@ async function initializeModels() {
      // Smooth rotation
      if (model) {
        model.rotation.y = time;
-       
+
        // Gentle bobbing motion
        model.position.y = Math.sin(time * 0.4) * 0.2;
-       
+
        // Update vaporwave animation
        model.traverse((child) => {
          if (child.isMesh && child.material.uniforms) {
@@ -229,12 +232,15 @@ async function initializeModels() {
          }
        });
      }
-     
+
+     // LIGHTS REMOVED
+     /*
      // Keep lights static
      directionalLight.intensity = 0.5;
      directionalLight2.intensity = 0.3;
      directionalLight3.intensity = 0.25;
      fillLight.intensity = 0.3;
+     */
      
      if (modelRenderer && modelScene && modelCamera) {
        modelRenderer.render(modelScene, modelCamera);

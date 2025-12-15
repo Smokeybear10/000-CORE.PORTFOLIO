@@ -206,6 +206,19 @@ body {
   z-index: 2;
 }
 
+/* Experience container height to allow full-page scroll */
+.experience-container {
+  position: relative;
+  min-height: 360vh;
+  padding-bottom: 260vh;
+}
+
+.experience-container::after {
+  content: '';
+  display: block;
+  height: 40vh;
+}
+
 /* Section dim effect when not in focus */
 .timeline-container,
 .cards-container,
@@ -496,6 +509,37 @@ body {
   font-family: 'Inter', Arial, sans-serif;
   font-size: 1rem;
   text-align: left;
+}
+
+/* Scroll-in animations for experience and research cards (education untouched) */
+.experience-cards .card,
+.research-cards .card {
+  opacity: 0;
+  transform: translateY(40px) scale(0.98);
+  animation: cardRise 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.experience-cards .card:nth-child(1) { animation-delay: 0.05s; }
+.experience-cards .card:nth-child(2) { animation-delay: 0.15s; }
+.experience-cards .card:nth-child(3) { animation-delay: 0.25s; }
+.experience-cards .card:nth-child(4) { animation-delay: 0.35s; }
+.experience-cards .card:nth-child(5) { animation-delay: 0.45s; }
+.experience-cards .card:nth-child(6) { animation-delay: 0.55s; }
+
+.research-cards .card:nth-child(1) { animation-delay: 0.05s; }
+.research-cards .card:nth-child(2) { animation-delay: 0.15s; }
+.research-cards .card:nth-child(3) { animation-delay: 0.25s; }
+.research-cards .card:nth-child(4) { animation-delay: 0.35s; }
+
+@keyframes cardRise {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 /* Override Thomas text to be white */
@@ -892,10 +936,6 @@ html, body {
   transform: translateY(-50%) !important;
   object-fit: cover;
   box-sizing: border-box !important;
-}
-
-.profile-photo:hover {
-  /* No hover effects */
 }
 
 .profile-photo img {

@@ -3,6 +3,70 @@ window.addEventListener('load', () => {
   window.scrollTo(0, 0);
 });
 
+// Render education, experience, and research sections from centralized data
+document.addEventListener('DOMContentLoaded', () => {
+  const data = window.profileData || {};
+  const { education = [], experience = [], research = [] } = data;
+
+  // Education timeline
+  const timelineContainer = document.querySelector('.timeline-container');
+  if (timelineContainer && education.length) {
+    const itemsHtml = education.map((edu) => `
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h3>${edu.title}</h3>
+          <div class="timeline-school">${edu.school}</div>
+          <div class="timeline-details">
+            <div class="course-grid">
+              ${(edu.courses || []).map(course => `<span class="course-pill">${course}</span>`).join('')}
+            </div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+    timelineContainer.innerHTML = `<div class="timeline-track"></div>${itemsHtml}`;
+  }
+
+  // Experience cards
+  const experienceContainer = document.querySelector('.experience-cards');
+  if (experienceContainer && experience.length) {
+    experienceContainer.innerHTML = experience.map((exp) => `
+      <div class="card panel panel--outline panel--flat">
+        <div class="panel__content">
+          <div class="card-header">
+            <h3 class="panel__title">${exp.title} <span class="card-arrow">↗</span></h3>
+            <div class="card-company panel__meta">${exp.company}</div>
+            <div class="card-location panel__meta">${exp.dates}</div>
+          </div>
+          <div class="card-preview">
+            <p>${exp.blurb}</p>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Research cards
+  const researchContainer = document.querySelector('.research-cards');
+  if (researchContainer && research.length) {
+    researchContainer.innerHTML = research.map((role) => `
+      <div class="card panel panel--outline panel--flat">
+        <div class="panel__content">
+          <div class="card-header">
+            <h3 class="panel__title">${role.title}<span class="card-arrow">↗</span></h3>
+            <div class="card-company panel__meta">${role.company}</div>
+            <div class="card-location panel__meta">${role.dates}</div>
+          </div>
+          <div class="card-preview">
+            <p>${role.blurb}</p>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+});
+
 // Custom cursor animation
 document.addEventListener('DOMContentLoaded', () => {
   const customCursor = document.getElementById('custom-cursor');

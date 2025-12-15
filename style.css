@@ -4,3 +4,127 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+/* Global spacey background with tiny stars (Aiden-style) */
+body {
+  position: relative;
+  background: #000000;
+  color: #ffffff;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  inset: -20%;
+  pointer-events: none;
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  opacity: 0.45;
+  z-index: -2;
+  transform: translate3d(-220px, -220px, 0);
+  animation: none;
+}
+
+/* Fine star layer */
+body::before {
+  background-image:
+    radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.8), transparent 60%),
+    radial-gradient(1px 1px at 80% 20%, rgba(255,255,255,0.6), transparent 60%),
+    radial-gradient(1px 1px at 50% 70%, rgba(255,255,255,0.9), transparent 60%),
+    radial-gradient(1px 1px at 10% 80%, rgba(255,255,255,0.4), transparent 60%),
+    radial-gradient(1px 1px at 70% 50%, rgba(255,255,255,0.7), transparent 60%),
+    radial-gradient(2px 2px at 30% 15%, rgba(255,255,255,0.5), transparent 60%),
+    radial-gradient(2px 2px at 15% 60%, rgba(255,255,255,0.65), transparent 60%),
+    radial-gradient(1.5px 1.5px at 60% 75%, rgba(255,255,255,0.55), transparent 60%),
+    radial-gradient(2px 2px at 90% 55%, rgba(255,255,255,0.35), transparent 60%),
+    radial-gradient(1.2px 1.2px at 40% 45%, rgba(255,255,255,0.85), transparent 60%);
+}
+
+/* Larger soft glows */
+body::after {
+  background-image:
+    radial-gradient(2px 2px at 30% 40%, rgba(255,255,255,0.18), transparent 55%),
+    radial-gradient(2px 2px at 60% 25%, rgba(255,255,255,0.14), transparent 55%),
+    radial-gradient(2px 2px at 75% 65%, rgba(255,255,255,0.22), transparent 55%),
+    radial-gradient(3px 3px at 40% 80%, rgba(255,255,255,0.12), transparent 60%),
+    radial-gradient(3px 3px at 15% 55%, rgba(255,255,255,0.1), transparent 60%),
+    radial-gradient(4px 4px at 85% 30%, rgba(255,255,255,0.08), transparent 60%),
+    radial-gradient(3px 3px at 25% 85%, rgba(255,255,255,0.15), transparent 60%),
+    radial-gradient(2.5px 2.5px at 55% 15%, rgba(255,255,255,0.2), transparent 60%);
+  opacity: 0.25;
+  animation-duration: 160s;
+}
+
+@keyframes starDrift {
+  from { transform: translate3d(0,0,0); }
+  to { transform: translate3d(-200px, -200px, 0); }
+}
+
+/* Cursor-reactive parallax for stars */
+body::before,
+body::after {
+  transition: transform 120ms ease-out;
+}
+
+body[data-star-shift="true"]::before {
+  transform: translate3d(calc(-220px + var(--star-shift-x, 0px)), calc(-220px + var(--star-shift-y, 0px)), 0);
+}
+
+body[data-star-shift="true"]::after {
+  transform: translate3d(calc(-220px + var(--star-shift-x, 0px) * 0.75), calc(-220px + var(--star-shift-y, 0px) * 0.75), 0);
+}
+
+/* Panel wrapper inspired by SkewedPanel for consistent shape/border */
+.panel {
+  position: relative;
+  border: 2px solid #ffffff;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 1.25rem;
+  transform: skew(-8deg);
+  overflow: hidden;
+  transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease, background 200ms ease;
+}
+
+/* Flat variant (no skew) */
+.panel--flat {
+  transform: none;
+}
+
+.panel--flat .panel__content {
+  transform: none;
+}
+
+.panel--light {
+  background: rgba(255, 255, 255, 0.9);
+  color: #000;
+  border-color: #000;
+}
+
+.panel--outline {
+  background: transparent;
+  border-color: #ffffff;
+}
+
+.panel:hover {
+  transform: skew(-8deg) translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.panel__content {
+  transform: skew(8deg);
+}
+
+.panel__title {
+  font-family: 'Anton', Arial, sans-serif;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.35rem;
+}
+
+.panel__meta {
+  font-family: 'Fira Mono', monospace;
+  font-size: 0.95rem;
+  opacity: 0.85;
+}

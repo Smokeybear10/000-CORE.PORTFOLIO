@@ -12,16 +12,7 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden; /* Initially hidden during startup */
-  background: linear-gradient(
-    135deg,
-    #000000 0%,
-    #0a0015 25%,
-    #000000 50%,
-    #150025 75%,
-    #000000 100%
-  );
-  background-size: 400% 400%;
-  animation: easeIn 0.8s ease-out forwards, gradientShift 6s ease infinite;
+  background: #000000; /* Solid black background */
   color: #ffffff;
   font-family: 'Inter', Arial, sans-serif;
   min-height: 100vh;
@@ -426,7 +417,8 @@ body {
     0 0 30px rgba(255, 0, 255, 0.4);
 }
 
-/* Vaporwave gradient overlay - in front of grid - hidden by default */
+/* Vaporwave gradient overlay - DISABLED for pure black background */
+/*
 body::after {
   content: '';
   position: fixed;
@@ -450,10 +442,10 @@ body::after {
   transition: opacity 0.3s ease;
 }
 
-/* Show gradient overlay when hovering over projects */
 body.projects-hover::after {
   opacity: 1;
 }
+*/
 
 /* Override hand cursor hover effects for navigation buttons */
 .bottom-nav .nav-link::before {

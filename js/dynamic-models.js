@@ -74,26 +74,29 @@ document.addEventListener('DOMContentLoaded', async () => {
         currentCamera.position.y = 8;
         currentCamera.position.z = 15;
       }
-      
+
+      // LIGHTS REMOVED - Model uses self-illuminating shader material
+      /*
       // Add lighting for glow effect
       const ambientLight = new AmbientLight(0x1a0d2e, 0.6);
       currentScene.add(ambientLight);
-       
+
       const directionalLight = new DirectionalLight(0xcc66cc, 0.5);
       directionalLight.position.set(8, 8, 8);
       currentScene.add(directionalLight);
-       
+
       const directionalLight2 = new DirectionalLight(0x66cccc, 0.3);
       directionalLight2.position.set(-8, -8, 8);
       currentScene.add(directionalLight2);
-       
+
       const directionalLight3 = new DirectionalLight(0xcc6699, 0.25);
       directionalLight3.position.set(0, 12, -8);
       currentScene.add(directionalLight3);
-       
+
       const fillLight = new DirectionalLight(0xcccccc, 0.3);
       fillLight.position.set(0, -12, 0);
       currentScene.add(fillLight);
+      */
       
       // Load model
       const loader = new GLTFLoader();
@@ -250,5 +253,50 @@ document.addEventListener('DOMContentLoaded', async () => {
       console.error('Error in loadAndShowModel:', error);
     }
   };
-  
+
+  // Cleanup function for dynamic models
+  window.cleanupDynamicModels = function() {
+    console.log('Cleaning up dynamic models...');
+
+    // Cancel animation
+    if (animationId) {
+      cancelAnimationFrame(animationId);
+      animationId = null;
+    }
+
+    // Dispose of current model
+    if (currentModel) {
+      currentModel.traverse((child) => {
+        if (child.isMesh) {
+          if (child.geometry) child.geometry.dispose();
+          if (child.material) {
+            if (Array.isArray(child.material)) {
+              child.material.forEach(mat => mat.dispose());
+            } else {
+              child.material.dispose();
+            }
+          }
+        }
+      });
+      currentModel = null;
+    }
+
+    // Clear scene
+    if (currentScene) {
+      while(currentScene.children.length > 0) {
+        const child = currentScene.children[0];
+        currentScene.remove(child);
+      }
+      currentScene = null;
+    }
+
+    // Dispose renderer
+    if (currentRenderer) {
+      currentRenderer.dispose();
+      currentRenderer = null;
+    }
+
+    currentCamera = null;
+  };
+
 });
