@@ -8,37 +8,29 @@ html, body {
 body {
   overscroll-behavior: auto;
   -webkit-overscroll-behavior: auto;
-  opacity: 0;
-  animation: easeIn 0.8s ease-out forwards;
+  opacity: 1;
+  animation: none;
 }
 
-@keyframes easeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-/* Main container - Pure black background */
-body[data-current-route="about"] .about-container {
-  width: 100%;
-  min-height: 100vh;
-  background: transparent;
-  position: relative;
-  padding: 2rem;
-  box-sizing: border-box;
-}
-
-/* Default container (for home page) */
 .about-container {
   width: 100%;
   min-height: 100vh;
   margin: 0;
-  padding: 0;
+  padding: 2rem;
   background: transparent;
   position: relative;
+  box-sizing: border-box;
+}
+
+/* Debug outlines for about layout */
+.about-container,
+.about-content,
+.profile-section,
+.info-section,
+.about-title,
+.about-text,
+.title-subtitle {
+  outline: 1px dashed rgba(0, 255, 0, 0.35);
 }
 
 /* Dot pattern overlay removed for clean black background */
@@ -58,7 +50,7 @@ body[data-current-route="about"] .about-container {
 /* Title */
 .about-title {
   position: relative;
-  margin: -1rem 0 2rem -1rem;
+  margin: 0 0 0.5rem 0;
   z-index: 100;
 }
 
@@ -74,15 +66,11 @@ body[data-current-route="about"] .about-container {
   line-height: 0.9;
   display: flex;
   flex-direction: column;
-  opacity: 0;
-  animation: fadeInTitle 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s forwards;
+  opacity: 1;
+  animation: none;
 }
 
-@keyframes fadeInTitle {
-  to {
-    opacity: 1;
-  }
-}
+@keyframes fadeInTitle {}
 
 .title-subtitle {
   font-size: 1rem;
@@ -90,8 +78,10 @@ body[data-current-route="about"] .about-container {
   font-family: 'Inter', Arial, sans-serif;
   color: #ffffff;
   text-align: left;
-  margin-top: 0.5rem;
+  margin: 0;
+  padding: 0;
   letter-spacing: 0.05em;
+  display: none;
 }
 
 /* Hover effect for underlined links */
@@ -241,8 +231,8 @@ body[data-current-route="about"] .about-container {
 }
 
 .skill-tag:hover {
-  border-color: #ff00ff;
-  color: #ff00ff;
+  border-color: #ffffff;
+  color: #ffffff;
   transform: scale(1.05);
 }
 
@@ -263,7 +253,7 @@ body[data-current-route="about"] .about-container {
 }
 
 .stack-section:hover {
-  border-color: rgba(255, 0, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.3);
   background: rgba(0, 0, 0, 0.4);
 }
 
@@ -406,11 +396,11 @@ body[data-current-route="about"] .about-container {
 .scroll-progress-bar {
   width: 100%;
   height: 100%;
-  background: linear-gradient(180deg, #ff00ff 0%, #00ffff 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #00ffff 100%);
   border-radius: 3px;
   transform: translateY(-100%);
   transition: transform 0.1s ease-out;
-  box-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 /* Hide scrollbar like experience page */
@@ -449,12 +439,12 @@ html, body {
 
 .mobile-menu-btn:hover {
   background: rgba(0, 0, 0, 0.5) !important;
-  border-color: rgba(255, 0, 255, 0.3) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
 }
 
 .mobile-menu-btn.active .hamburger span:nth-child(1) {
   transform: rotate(-45deg) translate(-5px, 6px);
-  background: #ff00ff;
+  background: #ffffff;
 }
 
 .mobile-menu-btn.active .hamburger span:nth-child(2) {
@@ -463,7 +453,7 @@ html, body {
 
 .mobile-menu-btn.active .hamburger span:nth-child(3) {
   transform: rotate(45deg) translate(-5px, -6px);
-  background: #ff00ff;
+  background: #ffffff;
 }
 
 /* Responsive design */
@@ -540,7 +530,7 @@ html, body {
     top: 0;
     left: 0;
     text-align: center;
-    margin-bottom: 2rem;
+    margin: 0 0 0.5rem 0;
   }
 
   .about-content {
@@ -619,13 +609,13 @@ html, body {
 
 /* Mute container hover effects */
 .mute-container:hover .mute-icon {
-  fill: #ff00ff !important;
-  filter: drop-shadow(0 0 15px rgba(255, 0, 255, 0.8)) !important;
+  fill: #ffffff !important;
+  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8)) !important;
 }
 
 .mute-container:hover .mute-text {
-  color: #ff00ff !important;
-  text-shadow: 0 0 15px rgba(255, 0, 255, 0.5) !important;
+  color: #ffffff !important;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.5) !important;
 }
 
 /* Mute icon and vaporwave text */
@@ -661,11 +651,11 @@ html, body {
 }
 
 .mute-container:hover .mute-icon {
-  fill: #ff00ff;
-  filter: drop-shadow(0 0 15px rgba(255, 0, 255, 0.8));
+  fill: #ffffff;
+  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
 }
 
 .mute-container:hover .mute-text {
-  color: #ff00ff;
-  text-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+  color: #ffffff;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
 }

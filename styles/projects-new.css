@@ -53,6 +53,7 @@
   color: #ffffff;
   font-family: 'Inter', sans-serif;
   margin-top: 1rem;
+  animation: none;
 }
 
 /* Projects wheel - responsive sizing like Projects.html */
@@ -301,7 +302,7 @@
 }
 
 .close-btn {
-  color: #ff00ff;
+  color: #ffffff;
   font-size: 2rem;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -446,7 +447,7 @@
   content: '▶';
   position: absolute;
   left: 0;
-  color: #ff00ff;
+  color: #ffffff;
   font-size: 0.8rem;
 }
 
@@ -475,7 +476,7 @@
 }
 
 .feature-title:hover::before {
-  color: #ff00ff !important;
+  color: #ffffff !important;
 }
 
 .feature-title::before {

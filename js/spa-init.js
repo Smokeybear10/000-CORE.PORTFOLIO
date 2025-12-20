@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
         allProfilePhotos.forEach(photo => {
           photo.style.display = 'block';
           photo.style.visibility = 'visible';
-          photo.style.opacity = '1';
+          // Don't set inline opacity - let CSS classes handle it
           photo.style.setProperty('display', 'block', 'important');
         });
         
