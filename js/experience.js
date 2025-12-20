@@ -486,15 +486,15 @@ document.addEventListener('DOMContentLoaded', () => {
    // Hello navigation button click handlers
    const helloNavButtons = document.querySelectorAll('.hello-nav-btn');
    
-   // Function to update hello button styling - only About button is magenta when hello section is in view
+  // Function to update hello button styling - About button glows cyan when hello section is in view
    window.updateHelloButtonStyling = function(currentSection, isHelloInView) {
      helloNavButtons.forEach((button) => {
        const section = button.getAttribute('data-section');
        
-       // About button is magenta only when the hello section is actually in view
+      // About button is cyan only when the hello section is actually in view
        if (isHelloInView && section === 'about') {
-         button.style.borderColor = '#ff00ff';
-         button.style.boxShadow = '0 0 15px rgba(255, 0, 255, 0.6)';
+        button.style.borderColor = '#00ffff';
+        button.style.boxShadow = '0 0 15px rgba(0, 255, 255, 0.6)';
        } else {
          button.style.borderColor = '#ffffff';
          button.style.boxShadow = 'none';
@@ -983,8 +983,8 @@ function initNavigationButtonsForSPA() {
     window.updateButtonStyling = function() {
       navButtons.forEach((button) => {
         if (button.classList.contains('active')) {
-          button.style.borderColor = '#ff00ff';
-          button.style.boxShadow = '0 0 15px rgba(255, 0, 255, 0.6)';
+          button.style.borderColor = '#00ffff';
+          button.style.boxShadow = '0 0 15px rgba(0, 255, 255, 0.6)';
         } else {
           button.style.borderColor = '#ffffff';
           button.style.boxShadow = 'none';

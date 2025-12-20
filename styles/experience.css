@@ -6,25 +6,6 @@ html, body {
   padding: 0 !important;
 }
 
-/* Debug outlines for experience layout */
-.experience-container,
-.content-section,
-.left-section,
-.right-section,
-.timeline-container,
-.experience-cards,
-.research-cards,
-.journey-title,
-.journey-text,
-.education-title,
-.experience-title,
-.research-title,
-.horse-container,
-.bull-container-new,
-.lion-container-new {
-  outline: 1px dashed rgba(0, 255, 0, 0.35);
-}
-
 body {
   overscroll-behavior: auto;
   -webkit-overscroll-behavior: auto;
@@ -42,9 +23,6 @@ body {
     opacity: 1;
   }
 }
-
-
-
 
 
 
@@ -109,10 +87,7 @@ body {
   font-size: 8rem;
   font-weight: 400;
   font-family: 'Anton', Arial, sans-serif;
-  background: linear-gradient(90deg, #ffffff, #00ffff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #ffffff;
   text-align: left;
   letter-spacing: 0.05em;
   text-transform: none;
@@ -123,10 +98,7 @@ body {
   font-size: 30rem;
   font-weight: 400;
   font-family: 'Anton', Arial, sans-serif;
-  background: linear-gradient(90deg, #ffffff, #00ffff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #ffffff;
   text-align: left;
   letter-spacing: 0.05em;
   text-transform: none;
@@ -413,7 +385,7 @@ body {
   left: 0;
   width: 0;
   height: 3px;
-  background: linear-gradient(90deg, #ffffff, #00ffff);
+  background: #ffffff;
   box-shadow: none;
   animation: expandUnderline 1s ease 0.8s forwards;
 }
@@ -1248,10 +1220,7 @@ body[data-current-route="home"] .mobile-menu-btn {
     font-size: 3rem;
     font-weight: 400;
     font-family: 'Anton', Arial, sans-serif;
-    background: linear-gradient(90deg, #ffffff, #00ffff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #ffffff;
     text-align: center;
     letter-spacing: 0.05em;
     text-transform: none;
@@ -1270,10 +1239,7 @@ body[data-current-route="home"] .mobile-menu-btn {
     font-size: 3rem;
     font-weight: 400;
     font-family: 'Anton', Arial, sans-serif;
-    background: linear-gradient(90deg, #ffffff, #00ffff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #ffffff;
     text-align: center;
     letter-spacing: 0.05em;
     text-transform: none;
@@ -1287,10 +1253,7 @@ body[data-current-route="home"] .mobile-menu-btn {
     font-size: 3rem;
     font-weight: 400;
     font-family: 'Anton', Arial, sans-serif;
-    background: linear-gradient(90deg, #ffffff, #00ffff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #ffffff;
     text-align: center;
     letter-spacing: 0.05em;
     text-transform: none;
@@ -1531,7 +1494,9 @@ body[data-current-route="home"] .mobile-menu-btn {
   cursor: auto !important;
 }
 .modal-content {
-  background: linear-gradient(145deg, #1a0d2e, #16213e);
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   margin: 0 auto;
   padding: 2rem;
   border-radius: 12px;
@@ -1543,8 +1508,8 @@ body[data-current-route="home"] .mobile-menu-btn {
   top: 47% !important;
   left: 50% !important;
   transform: translate(-50%, -50%) scale(0.9) !important;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5), 0 0 60px rgba(255, 255, 255, 0.1);
   cursor: auto !important;
   opacity: 0;
   transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
@@ -1629,50 +1594,6 @@ body[data-current-route="home"] .mobile-menu-btn {
 
 /* Show container outlines for debugging layout - DISABLED */
 /*
-.experience-container {
-  border: 2px solid red !important;
-}
-
-.content-section {
-  border: 2px solid blue !important;
-}
-
-.left-section {
-  border: 2px solid green !important;
-}
-
-.top-container {
-  border: 2px solid yellow !important;
-}
-
-.right-section {
-  border: 2px solid orange !important;
-}
-
-.timeline-container {
-  border: 2px solid purple !important;
-}
-
-.cards-container {
-  border: 2px solid cyan !important;
-}
-
-.text-content-container {
-  border: 3px solid pink !important;
-  background: rgba(255, 192, 203, 0.2) !important;
-}
-
-.hello-section {
-  border: 2px solid lime !important;
-  background: rgba(0, 255, 0, 0.1) !important;
-}
-*/
-
-/* Show timeline container border for debugging - DISABLED */
-/*
-.timeline-container {
-  border: 2px solid purple !important;
-}
 */
 
 /* Override hand cursor hover effects for navigation buttons */

@@ -22,17 +22,6 @@ body {
   box-sizing: border-box;
 }
 
-/* Debug outlines for about layout */
-.about-container,
-.about-content,
-.profile-section,
-.info-section,
-.about-title,
-.about-text,
-.title-subtitle {
-  outline: 1px dashed rgba(0, 255, 0, 0.35);
-}
-
 /* Dot pattern overlay removed for clean black background */
 
 @keyframes gradientShift {
