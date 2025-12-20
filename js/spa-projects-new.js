@@ -137,6 +137,8 @@ let velocity = 0.3;
 let isModalOpen = false;
 let isHovering = false; // Track if hovering over a card
 let autoRotationSpeed = 0.3;
+let sectionCycleInterval = null;
+let currentSectionIndex = 0;
 
 // Initialize projects functionality
 function initProjects() {
@@ -243,8 +245,7 @@ function setupWheelRotation() {
 function setupProjectModals() {
   const projectCards = document.querySelectorAll('.project-card');
   const modal = document.getElementById('projectModal');
-  const backBtn = document.getElementById('backBtn');
-  const closeBtn = document.getElementById('closeBtn');
+  const backBtn = document.getElementById('backToProjects');
   
   if (!modal) {
     console.error('Modal elements not found');
@@ -304,10 +305,6 @@ function setupProjectModals() {
     backBtn.addEventListener('click', closeModal);
   }
   
-  if (closeBtn) {
-    closeBtn.addEventListener('click', closeModal);
-  }
-  
   modal.addEventListener('click', (e) => {
     if (e.target === modal) {
       closeModal();
@@ -321,6 +318,10 @@ function setupProjectModals() {
   });
   
   function closeModal() {
+    if (sectionCycleInterval) {
+      clearInterval(sectionCycleInterval);
+      sectionCycleInterval = null;
+    }
     isModalOpen = false;
     modal.classList.remove('show');
     
@@ -340,10 +341,12 @@ function populateModalContent(project) {
   const title = document.getElementById('projectTitle');
   const techStack = document.getElementById('projectTechStack');
   const description = document.getElementById('projectDescription');
-  const features = document.getElementById('projectFeatures');
-  const technical = document.getElementById('projectTechnical');
   const links = document.getElementById('projectLinks');
-  const gallery = document.getElementById('projectGallery');
+  const sectionStack = document.querySelector('.project-section-stack');
+  const sections = Array.from(document.querySelectorAll('.project-details-grid .project-section'));
+  const dotsContainer = document.getElementById('sectionDots');
+  const prevBtn = document.getElementById('sectionPrev');
+  const nextBtn = document.getElementById('sectionNext');
   
   // Hero section
   if (heroImage && project.image) {
@@ -367,61 +370,93 @@ function populateModalContent(project) {
     description.textContent = project.description;
   }
   
-  // Features list - handle both string and object formats
-  if (features && project.features) {
-    features.innerHTML = project.features.map((feature, index) => {
-      if (typeof feature === 'object' && feature.title && feature.detail) {
-        return `<li class="collapsible-feature">
-          <div class="feature-title collapsed" data-index="${index}">${feature.title}</div>
-          <div class="feature-detail">${feature.detail}</div>
-        </li>`;
-      } else {
-        return `<li>${feature}</li>`;
-      }
-    }).join('');
-
-    // Add click handlers for collapsible features
-    document.querySelectorAll('.feature-title').forEach(title => {
-      title.addEventListener('click', function() {
-        const detail = this.nextElementSibling;
-        this.classList.toggle('collapsed');
-        detail.classList.toggle('expanded');
-      });
-    });
+  // Links (inline under tech stack)
+  if (links) {
+    if (project.links) {
+      links.innerHTML = project.links.map(link => {
+        const icon = getLinkIcon(link.type);
+        if (link.error) {
+          return `<span class="project-link disabled" title="${link.error}">${icon} ${link.text} <span class="error-indicator">⚠️</span></span>`;
+        } else {
+          return `<a href="${link.url}" class="project-link" target="_blank">${icon} ${link.text}</a>`;
+        }
+      }).join('');
+    } else {
+      links.innerHTML = '';
+    }
   }
   
-  // Technical details
-  if (technical && project.technical) {
-    technical.textContent = project.technical;
+  // Clear any existing dynamic image sections
+  if (sectionStack) {
+    sectionStack.querySelectorAll('.project-section.image-section').forEach(el => el.remove());
   }
 
-  // Links
-  if (links && project.links) {
-    links.innerHTML = project.links.map(link => {
-      const icon = getLinkIcon(link.type);
-      if (link.error) {
-        return `<span class="project-link disabled" title="${link.error}">${icon} ${link.text} <span class="error-indicator">⚠️</span></span>`;
-      } else {
-        return `<a href="${link.url}" class="project-link" target="_blank">${icon} ${link.text}</a>`;
-      }
-    }).join('');
-  }
-  
-  // Gallery
-  if (gallery && project.gallery) {
-    gallery.innerHTML = project.gallery.map(image =>
-      `<div class="gallery-image">
-        <img src="${image}" alt="Project gallery image" />
-      </div>`
-    ).join('');
-
-    // Add click handlers for lightbox
-    document.querySelectorAll('.gallery-image').forEach(galleryItem => {
-      galleryItem.addEventListener('click', function() {
-        const img = this.querySelector('img');
-        openLightbox(img.src);
-      });
+  // Add gallery images as cycle cards
+  if (sectionStack && project.gallery && project.gallery.length) {
+    project.gallery.forEach((src, idx) => {
+      const imgSection = document.createElement('div');
+      imgSection.className = 'project-section image-section';
+      imgSection.innerHTML = `<img src="${src}" alt="Project image ${idx + 1}">`;
+      sectionStack.appendChild(imgSection);
     });
+  }
+
+  // Section navigation (manual + auto)
+  if (sections.length) {
+    if (sectionCycleInterval) {
+      clearInterval(sectionCycleInterval);
+    }
+
+    const allSections = sectionStack ? Array.from(sectionStack.querySelectorAll('.project-section')) : sections;
+
+    // Build dots
+    if (dotsContainer) {
+      dotsContainer.innerHTML = allSections.map((_, i) => `<div class="section-dot" data-idx="${i}"></div>`).join('');
+    }
+    const dots = dotsContainer ? Array.from(dotsContainer.querySelectorAll('.section-dot')) : [];
+
+    const setSection = (idx, direction = 1) => {
+      const len = allSections.length;
+      currentSectionIndex = ((idx % len) + len) % len;
+      allSections.forEach((section, i) => {
+        section.classList.remove('active', 'prev', 'next');
+        if (i === currentSectionIndex) {
+          section.classList.add('active');
+        } else if (i === (currentSectionIndex - 1 + len) % len) {
+          section.classList.add('prev');
+        } else if (i === (currentSectionIndex + 1) % len) {
+          section.classList.add('next');
+        }
+      });
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentSectionIndex);
+      });
+    };
+
+    const nextSection = () => setSection(currentSectionIndex + 1, 1);
+    const prevSection = () => setSection(currentSectionIndex - 1, -1);
+
+    // Initial
+    setSection(0);
+
+    // Auto cycle
+    sectionCycleInterval = setInterval(nextSection, 5000);
+
+    // Manual controls
+    if (nextBtn) nextBtn.onclick = () => { nextSection(); resetCycle(); };
+    if (prevBtn) prevBtn.onclick = () => { prevSection(); resetCycle(); };
+    dots.forEach(dot => {
+      dot.onclick = () => {
+        const idx = Number(dot.getAttribute('data-idx'));
+        setSection(idx, 1);
+        resetCycle();
+      };
+    });
+
+    function resetCycle() {
+      if (sectionCycleInterval) clearInterval(sectionCycleInterval);
+      sectionCycleInterval = setInterval(nextSection, 5000);
+    }
   }
 }
 

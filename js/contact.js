@@ -105,8 +105,8 @@ function startFallingShapes() {
   
   // Vaporwave color palette
   const vaporwaveColors = [
-    '#ff00ff', '#00ffff', '#ff0080', '#8000ff', '#ffcc00', 
-    '#00ff80', '#ff0040', '#4000ff', '#00ccff', '#ff3300'
+    '#00ffff', '#00e5ff', '#00ccff', '#00b7ff', '#ffcc00', 
+    '#00ff80', '#00aaff', '#00ccff', '#00ccff', '#ff3300'
   ];
 
   function createComplexFallingShape() {
@@ -141,12 +141,12 @@ function startFallingShapes() {
     const ambientLight = new THREE.AmbientLight(0x202020, 0.1);
     scene.add(ambientLight);
     
-    // X-axis lights - Magenta
-    const xLightPos = new THREE.DirectionalLight(0xff00ff, 0.8);
+  // X-axis lights - Cyan
+  const xLightPos = new THREE.DirectionalLight(0x00ffff, 0.8);
     xLightPos.position.set(1, 0, 0);
     scene.add(xLightPos);
     
-    const xLightNeg = new THREE.DirectionalLight(0xff00ff, 0.8);
+  const xLightNeg = new THREE.DirectionalLight(0x00ffff, 0.8);
     xLightNeg.position.set(-1, 0, 0);
     scene.add(xLightNeg);
     
