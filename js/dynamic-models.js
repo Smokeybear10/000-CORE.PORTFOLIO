@@ -127,15 +127,20 @@ document.addEventListener('DOMContentLoaded', async () => {
           }
           
           const maxDim = Math.max(size.x, size.y, size.z);
-          let scale = 20 / maxDim;
-          
-          // Adjust scale based on model type
-          if (modelType === 'experience') {
-            scale = 25 / maxDim; // Make experience bigger
+          // Viewport-based factor (centered around 1440px)
+          // Mild viewport scaling to avoid drastic size swings
+          const vwFactor = Math.min(1.1, Math.max(0.9, (window.innerWidth || 1440) / 1440));
+
+          // Keep "experience" largest; scale others individually, multiplied by viewport factor
+          let scale = (28 / maxDim) * vwFactor; // experience
+          if (modelType === 'projects') {
+            scale = (21 / maxDim) * vwFactor;
+          } else if (modelType === 'contact') {
+            scale = (19 / maxDim) * vwFactor;
           } else if (modelType === 'about') {
-            scale = 15 / maxDim; // Make about smaller
+            scale = (13 / maxDim) * vwFactor;
           }
-          
+
           currentModel.scale.setScalar(scale);
           
           // Set camera lookAt based on model type

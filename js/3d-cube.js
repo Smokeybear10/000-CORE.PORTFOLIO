@@ -76,21 +76,21 @@ async function initializeCube() {
           edge = pow(edge, 2.0);
           
           // Final color with minimal glow
-          vec3 finalColor = faceColor + edge * vec3(1.0) * 0.02;
-          
-          gl_FragColor = vec4(finalColor, 0.45);
+          vec3 finalColor = faceColor + edge * vec3(1.0) * 0.03;
+
+          gl_FragColor = vec4(finalColor, 1.0);
         }
       `,
-      transparent: true
+      transparent: false
     });
     
     // Create cube geometry and mesh
-    const cubeGeometry = new BoxGeometry(2.2, 2.2, 2.2);
+    const cubeGeometry = new BoxGeometry(3.6, 3.6, 3.6);
     cube = new Mesh(cubeGeometry, cubeMaterial);
     cubeScene.add(cube);
     
     // Position camera - centered view
-    cubeCamera.position.z = 6.5;
+    cubeCamera.position.z = 8.5;
     cubeCamera.position.y = 0;
     
     // Animation loop for cube
