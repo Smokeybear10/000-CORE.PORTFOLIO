@@ -204,25 +204,3 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 */
-
-// Starfield cursor parallax
-document.addEventListener('DOMContentLoaded', () => {
-  const body = document.body;
-  if (!body) return;
-  let rafId = null;
-
-  const onMove = (e) => {
-    const { innerWidth, innerHeight } = window;
-    const x = (e.clientX / innerWidth - 0.5) * 36; // more dramatic parallax
-    const y = (e.clientY / innerHeight - 0.5) * 36;
-
-    if (rafId) cancelAnimationFrame(rafId);
-    rafId = requestAnimationFrame(() => {
-      body.style.setProperty('--star-shift-x', `${x}px`);
-      body.style.setProperty('--star-shift-y', `${y}px`);
-      body.dataset.starShift = 'true';
-    });
-  };
-
-  window.addEventListener('pointermove', onMove, { passive: true });
-});
