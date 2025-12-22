@@ -703,85 +703,7 @@ const experienceData = {
   }
 };
 
-// Card click functionality with modal support
-document.addEventListener('DOMContentLoaded', () => {
-  const cards = document.querySelectorAll('.card');
-  const modal = document.getElementById('experienceModal');
-  const modalContent = document.getElementById('modalContent');
-  const closeBtn = document.querySelector('.close');
-  
-  cards.forEach((card, index) => {
-    // Add click and touch handlers
-    const handleCardClick = (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      
-      // Add visual feedback
-      card.style.transform = 'scale(0.98)';
-      setTimeout(() => {
-        card.style.transform = '';
-      }, 150);
-      
-      // Get experience data
-      const experience = experienceData[index];
-      
-      if (experience) {
-        // Create modal content
-        modalContent.innerHTML = `
-          <h2>${experience.title}</h2>
-          <div class="modal-company">${experience.company}</div>
-          <div class="modal-location">${experience.location}</div>
-          <p>${experience.description}</p>
-        `;
-        
-        // Show modal with animation
-        modal.style.display = 'block';
-        setTimeout(() => {
-          modal.classList.add('show');
-        }, 10);
-      }
-    };
-    
-    // Add both click and touch events
-    card.addEventListener('click', handleCardClick);
-    card.addEventListener('touchend', handleCardClick);
-    
-    // Prevent touch conflicts with scrolling
-    card.addEventListener('touchstart', (e) => {
-      e.stopPropagation();
-    }, { passive: false });
-  });
-
-  // Close modal functionality
-  if (closeBtn && modal) {
-    closeBtn.addEventListener('click', () => {
-      modal.classList.remove('show');
-      setTimeout(() => {
-        modal.style.display = 'none';
-      }, 400);
-    });
-  }
-
-  // Close modal when clicking outside
-  window.addEventListener('click', (e) => {
-    if (e.target === modal) {
-      modal.classList.remove('show');
-      setTimeout(() => {
-        modal.style.display = 'none';
-      }, 400);
-    }
-  });
-
-  // Close modal with escape key
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal && modal.style.display === 'block') {
-      modal.classList.remove('show');
-      setTimeout(() => {
-        modal.style.display = 'none';
-      }, 400);
-    }
-  });
-});
+// Card click functionality with modal support (disabled)
 
 // Helper functions for SPA initialization
 function initScrollProgress() {
@@ -806,7 +728,16 @@ function initModalFunctionality() {
   const modal = document.getElementById('experienceModal');
   const modalContent = document.getElementById('modalContent');
   const closeBtn = document.querySelector('.close');
-  
+
+  // Resume link click handler
+  const resumeLink = document.querySelector('.resume-link');
+  if (resumeLink) {
+    resumeLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      alert('Please contact thomasou@sas.upenn.edu for my resume.');
+    });
+  }
+
   if (!modal || !modalContent) return;
   
   cards.forEach((card, index) => {
@@ -837,6 +768,22 @@ function initModalFunctionality() {
       setTimeout(() => modal.style.display = 'none', 400);
     });
   }
+
+  // Close modal when clicking outside the content
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.classList.remove('show');
+      setTimeout(() => modal.style.display = 'none', 400);
+    }
+  });
+
+  // Close modal on ESC key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.style.display === 'block') {
+      modal.classList.remove('show');
+      setTimeout(() => modal.style.display = 'none', 400);
+    }
+  });
 }
 
 // SPA-specific initialization functions

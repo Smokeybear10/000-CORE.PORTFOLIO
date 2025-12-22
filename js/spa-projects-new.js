@@ -559,8 +559,8 @@ function showAllNavigation() {
   console.log('Showing all navigation elements');
   const navigationElements = [
     { selector: '.bottom-nav', display: 'flex' },
-    { selector: '.mobile-menu-btn', display: 'flex' }, 
-    { selector: '.nav-buttons', display: 'block' },
+    { selector: '.mobile-menu-btn', display: 'flex' },
+    { selector: '.nav-buttons', display: 'grid' },
     { selector: '.hello-nav-btn', display: 'inline-block' },
     { selector: '.nav-btn', display: 'block' },
     { selector: '.nav-link', display: 'block' },
