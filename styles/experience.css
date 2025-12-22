@@ -339,7 +339,7 @@ body {
   font-weight: 600;
   color: #00ffff;
   margin-bottom: 1rem;
-  font-family: 'Montserrat', 'Inter', Arial, sans-serif;
+  font-family: 'Inter', Arial, sans-serif;
 }
 
 .course-grid {
@@ -354,7 +354,7 @@ body {
   padding: 0.25rem 0.75rem;
   border-radius: 20px;
   font-size: 0.875rem;
-  font-family: 'Fira Mono', 'Consolas', monospace;
+  font-family: 'Fira Mono', 'Courier New', monospace;
   border: 1px solid #ffffff;
   box-shadow: none;
   text-shadow: none;
@@ -364,7 +364,7 @@ body {
 .section-title {
   font-size: 2.2rem;
   font-weight: 400;
-  font-family: 'Anton', sans-serif;
+  font-family: 'Anton', Arial, sans-serif;
   color: #ffffff;
   margin: 4rem 0 1rem 0;
   text-align: left;
@@ -505,14 +505,14 @@ body {
   font-weight: 600;
   color: #00ffff;
   margin-bottom: 0.25rem;
-  font-family: 'Montserrat', 'Inter', Arial, sans-serif;
+  font-family: 'Inter', Arial, sans-serif;
 }
 
 .card-location {
   color: #f5f5f5;
   font-size: 0.875rem;
   margin-bottom: 1rem;
-  font-family: 'Fira Mono', 'Consolas', monospace;
+  font-family: 'Fira Mono', 'Courier New', monospace;
 }
 
 .card-preview p {
@@ -1550,14 +1550,14 @@ body[data-current-route="home"] .mobile-menu-btn {
 }
 .modal .modal-company {
   color: #00ffff;
-  font-family: 'Montserrat', 'Inter', Arial, sans-serif;
+  font-family: 'Inter', Arial, sans-serif;
   font-weight: 600;
   font-size: clamp(0.9rem, 2.5vw, 1.2rem);
   margin-bottom: 0.25rem;
 }
 .modal .modal-location {
   color: #f5f5f5;
-  font-family: 'Fira Mono', 'Consolas', monospace;
+  font-family: 'Fira Mono', 'Courier New', monospace;
   font-size: clamp(0.7rem, 2vw, 0.875rem);
   margin-bottom: 1rem;
 }

@@ -57,7 +57,7 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
-  font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
+  font-family: 'Anton', Arial, sans-serif;
   font-size: clamp(8rem, 20vw, 12rem);
   font-weight: 400;
   color: #ffffff;
@@ -204,7 +204,7 @@ body {
 
 .nav-link {
   color: #ffffff;
-  font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; font-weight: 400; text-transform: uppercase; letter-spacing: 0.15em;
+  font-family: 'Anton', Arial, sans-serif; font-weight: 400; text-transform: uppercase; letter-spacing: 0.15em;
   font-size: 1.1rem;
   font-weight: 700;
   text-decoration: none;
@@ -312,7 +312,7 @@ body {
   top: 1rem;
   left: 1rem;
   z-index: 1000;
-  font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
+  font-family: 'Anton', Arial, sans-serif;
   font-size: min(8rem, 22vw);
   font-weight: 400;
   color: #ffffff;
@@ -380,7 +380,7 @@ body {
   width: auto;
   max-width: min(18rem, 55vw);
   text-align: center !important;
-  font-family: 'Courier New', 'Monaco', 'Lucida Console', monospace;
+  font-family: 'Fira Mono', 'Courier New', monospace;
   font-weight: 400;
   font-size: min(2rem, 5vw) !important;
   background: linear-gradient(90deg, #ffffff, #00ffff);
@@ -429,7 +429,7 @@ body {
 }
 
 .about-intro-text {
-  font-family: 'Courier New', 'Monaco', 'Lucida Console', monospace;
+  font-family: 'Fira Mono', 'Courier New', monospace;
   font-weight: 400;
   font-size: min(2.8vw, 1.2rem) !important;
   color: #ffffff;

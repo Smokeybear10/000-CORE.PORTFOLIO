@@ -135,7 +135,7 @@ html {
 .nav-link {
   background: transparent;
   color: #ffffff;
-  font-family: 'Inter', 'Montserrat', 'Arial', sans-serif;
+  font-family: 'Inter', Arial, sans-serif;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -210,7 +210,7 @@ html {
   padding: 0 10px 0 0 !important;
   white-space: normal !important;
   position: relative !important;
-  font-family: 'Fira Mono', 'Consolas', monospace !important;
+  font-family: 'Fira Mono', 'Courier New', monospace !important;
   font-size: 1.1rem !important;
   font-weight: 400 !important;
   text-transform: none !important;
