@@ -33,7 +33,7 @@
 .journey-text {
   font-size: min(8rem, 22vw);
   font-weight: 400;
-  font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
+  font-family: 'Anton', Arial, sans-serif;
   color: #ffffff;
   text-align: left;
   letter-spacing: 0.05em;
@@ -47,7 +47,7 @@
 .journey-text div {
   font-size: min(8rem, 22vw);
   font-weight: 400;
-  font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif;
+  font-family: 'Anton', Arial, sans-serif;
   color: #ffffff;
   text-align: left;
   letter-spacing: 0.05em;

@@ -51,7 +51,7 @@
 .title-subtitle {
   font-size: 1.2rem;
   color: #ffffff;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', Arial, sans-serif;
   margin-top: 1rem;
   animation: none;
 }
@@ -154,7 +154,7 @@
 .project-header h3 {
   margin: 0;
   color: #ffffff;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', Arial, sans-serif;
   font-size: 1.35rem;
   text-align: center;
   padding: 0 0.5rem;
@@ -291,7 +291,7 @@
   margin: 0;
   text-align: left;
   color: #ffffff;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', Arial, sans-serif;
   font-size: 1rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -391,7 +391,7 @@
   padding: 0.5rem 1rem;
   border-radius: 20px;
   font-size: 0.875rem;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', Arial, sans-serif;
   font-weight: 500;
 }
 
@@ -478,7 +478,7 @@
   padding: 0.6rem 1rem;
   min-width: 64px;
   min-height: 64px;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', Arial, sans-serif;
   font-size: 1.6rem;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -533,7 +533,7 @@
 
 .project-description, .project-technical-details, .project-challenges {
   color: #ffffff !important;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', Arial, sans-serif;
   line-height: 1.6;
   font-size: 1rem;
 }
@@ -546,7 +546,7 @@
 
 .project-features-list li {
   color: #ffffff !important;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', Arial, sans-serif;
   padding: 0.5rem 0;
   position: relative;
   padding-left: 1.5rem;
@@ -629,7 +629,7 @@
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
   text-decoration: none;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', Arial, sans-serif;
   font-weight: 600;
   transition: all 0.2s ease;
 }
