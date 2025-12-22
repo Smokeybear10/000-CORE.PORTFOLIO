@@ -56,45 +56,40 @@
   line-height: 1;
 }
 
-/* Contact Buttons */
+/* Contact Buttons - Base */
 .contact-buttons {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
-  flex-direction: row !important;
-  gap: 2rem;
   z-index: 100;
 }
 
 .contact-btn {
-  width: 160px;
-  height: 160px;
-  font-family: 'Anton', 'Montserrat', 'Inter', Arial, sans-serif; 
-  font-weight: 400; 
-  text-transform: uppercase; 
-  letter-spacing: 0.15em;
-  font-size: 1rem;
-  font-weight: 600;
+  width: 200px;
+  height: 200px;
+  font-family: 'Anton', Arial, sans-serif;
+  font-weight: 400;
+  font-size: 1.2rem;
+  text-transform: none;
+  letter-spacing: 0.1em;
   background: transparent;
   border: none;
   border-radius: 0;
   color: #ffffff;
   cursor: pointer;
   transition: all 0.3s ease;
-  text-transform: none;
-  letter-spacing: 0.1em;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
 }
 
 .contact-btn svg {
-  width: 100px;
-  height: 100px;
+  width: 130px;
+  height: 130px;
   fill: currentColor;
 }
 
@@ -125,19 +120,31 @@
   transform: translateY(-2px) scale(1.02);
 }
 
-/* Layout for horizontal/desktop mode */
-@media (min-width: 769px) and (orientation: landscape) {
+/* Mobile/Vertical mode - stack vertically */
+@media (max-width: 768px) {
   .contact-buttons {
-    flex-direction: row !important;
-    gap: 2rem;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .contact-btn {
+    width: 160px;
+    height: 160px;
+    font-size: 1rem;
+  }
+
+  .contact-btn svg {
+    width: 100px;
+    height: 100px;
   }
 }
 
-/* Layout for vertical mode */
-@media (orientation: portrait), (max-width: 768px) {
+/* Desktop/Horizontal mode - buttons in a row (must come AFTER mobile to override) */
+@media (min-width: 769px) {
   .contact-buttons {
-    flex-direction: column !important;
-    gap: 1.5rem;
+    flex-direction: row !important;
+    flex-wrap: nowrap;
+    gap: 2rem;
   }
 }
 
@@ -180,6 +187,11 @@
 /* Contact route visibility control */
 body[data-current-route="contact"] .contact-only {
   display: block !important;
+}
+
+/* Exception for contact-buttons - needs flex not block */
+body[data-current-route="contact"] .contact-buttons.contact-only {
+  display: flex !important;
 }
 
 body:not([data-current-route="contact"]) .contact-only {

@@ -503,7 +503,7 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       e.stopImmediatePropagation();
       console.log('Intercepted nav link click, preventing navigation');
-      
+
       // Get the route from data attribute
       const route = target.getAttribute('data-spa-route');
       if (route && window.spaRouter) {
@@ -512,26 +512,69 @@ document.addEventListener('DOMContentLoaded', () => {
       return false;
     }
   }, true); // Use capture phase
+
+  // Initialize home page typing animation on initial load
+  if (window.initHomeAnimations) {
+    window.initHomeAnimations();
+  }
 });
 
 
 // Global animation initialization functions
 window.initHomeAnimations = () => {
-  // Reinitialize home page specific animations
-  // DISABLED - Typing animation removed
-  // if (window.typeAboutRole) {
-  //   window.typeAboutRole();
-  // }
+  // Initialize typing animation for name
+  if (window.initNameTyping) {
+    window.initNameTyping();
+  }
+};
 
-  // Restart startup animations if needed
-  // DISABLED - Startup animation removed
-  // const preloader = document.getElementById('startup-preloader');
-  // if (preloader && preloader.style.display !== 'none') {
-  //   // Preloader is visible, restart its animations
-  //   if (window.initStartupAnimations) {
-  //     window.initStartupAnimations();
-  //   }
-  // }
+// Typing animation for name
+window.initNameTyping = () => {
+  const typedText1 = document.querySelector('.typed-text-1');
+  const typedText2 = document.querySelector('.typed-text-2');
+  const cursor1 = document.querySelector('.cursor-1');
+  const cursor2 = document.querySelector('.cursor-2');
+
+  if (!typedText1 || !typedText2) return;
+
+  const text1 = 'THOMAS';
+  const text2 = 'OU';
+  const typingDelay = 250;
+  let charIndex1 = 0;
+  let charIndex2 = 0;
+
+  function typeLine1() {
+    if (charIndex1 < text1.length) {
+      typedText1.textContent += text1.charAt(charIndex1);
+      charIndex1++;
+      setTimeout(typeLine1, typingDelay);
+    } else {
+      // Hide cursor 1 and start typing line 2
+      if (cursor1) cursor1.style.display = 'none';
+      if (cursor2) cursor2.style.display = 'inline-block';
+      setTimeout(typeLine2, typingDelay);
+    }
+  }
+
+  function typeLine2() {
+    if (charIndex2 < text2.length) {
+      typedText2.textContent += text2.charAt(charIndex2);
+      charIndex2++;
+      setTimeout(typeLine2, typingDelay);
+    } else {
+      // Keep cursor 2 visible and blinking
+      if (cursor2) cursor2.style.display = 'inline-block';
+    }
+  }
+
+  // Clear any existing text and start typing
+  typedText1.textContent = '';
+  typedText2.textContent = '';
+  if (cursor1) cursor1.style.display = 'inline-block';
+  if (cursor2) cursor2.style.display = 'none';
+
+  // Start typing after a short delay
+  setTimeout(typeLine1, 500);
 };
 
 window.initAboutAnimations = () => {

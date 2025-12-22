@@ -321,7 +321,34 @@ body {
   pointer-events: none;
   margin: 0;
   padding: 0;
-  line-height: 1;
+  line-height: 1.2;
+}
+
+.typing-line-1,
+.typing-line-2 {
+  display: block;
+  white-space: nowrap;
+}
+
+.typed-text-1,
+.typed-text-2 {
+  display: inline;
+}
+
+.cursor {
+  display: inline;
+  animation: blink 1.5s infinite;
+  color: #ffffff;
+  font-weight: 300;
+}
+
+@keyframes blink {
+  0%, 49% {
+    opacity: 1;
+  }
+  50%, 100% {
+    opacity: 0;
+  }
 }
 
 /* About page typing card - no responsive changes */
