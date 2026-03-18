@@ -22,13 +22,19 @@
   pointer-events: auto !important;
 }
 
-/* Section titles */
-.section-title {
+/* Section titles - scoped to projects route */
+#projects-content .section-title {
   position: absolute;
   top: 1rem;
   left: 1rem;
   z-index: 1010;
   opacity: 1;
+  font-size: unset;
+  font-weight: unset;
+  margin: 0;
+  animation: none;
+  transform: none;
+  overflow: visible;
 }
 
 .title-featured, .title-projects {
@@ -156,8 +162,8 @@
   pointer-events: none;
 }
 
-/* Modal - completely rewritten */
-.modal {
+/* Project modal - scoped to avoid overriding experience modal */
+#projects-content .modal {
   display: none;
   position: fixed;
   z-index: 2000 !important;
@@ -169,7 +175,7 @@
   pointer-events: auto !important;
 }
 
-.modal-content {
+#projects-content .modal-content {
   background: #000000;
   margin: 2% auto;
   padding: 1.5rem;
@@ -183,12 +189,12 @@
   pointer-events: auto !important;
 }
 
-.modal.show .modal-content {
+#projects-content .modal.show .modal-content {
   transform: scale(1);
   opacity: 1;
 }
 
-.close {
+#projects-content .close {
   color: #ffffff;
   position: absolute;
   right: 1rem;
@@ -199,7 +205,7 @@
   pointer-events: auto !important;
 }
 
-.close:hover {
+#projects-content .close:hover {
   color: #44ffff;
 }
 
@@ -709,10 +715,6 @@
   animation: zoomIn 0.3s ease;
 }
 
-.lightbox-close {
-  display: none;
-}
-
 .image-lightbox.closing {
   animation: fadeOut 0.3s ease forwards;
 }
@@ -769,15 +771,6 @@
   
   .project-details-grid > div {
     padding: 1.5rem;
-  }
-  
-  .fullscreen-modal-header {
-    padding: 0 1rem;
-  }
-  
-  .back-btn {
-    font-size: 0.8rem;
-    padding: 0.4rem 0.8rem;
   }
   
   .project-title {

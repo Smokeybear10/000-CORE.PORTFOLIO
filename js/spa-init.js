@@ -235,19 +235,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (window.initExperienceAnimations) {
           window.initExperienceAnimations();
-        } else {
-          const scrollProgressBar = document.querySelector('.scroll-progress-bar');
-          if (scrollProgressBar) {
-            function updateScrollProgress() {
-              const { scrollHeight, clientHeight } = document.documentElement;
-              const scrollableHeight = scrollHeight - clientHeight;
-              const scrollY = window.scrollY;
-              const scrollProgress = (scrollY / scrollableHeight) * 100;
-              scrollProgressBar.style.transform = `translateY(-${100 - scrollProgress}%)`;
-            }
-            window.addEventListener('scroll', updateScrollProgress);
-            updateScrollProgress();
-          }
+        } else if (window.updateScrollProgress) {
+          window.updateScrollProgress();
         }
       }, 100);
 
@@ -359,22 +348,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
-window.initAboutAnimations = () => {
-  if (window.ScrollTrigger) {
-    window.ScrollTrigger.refresh();
-  }
-};
+// initAboutAnimations is now defined in about.js with full GSAP re-initialization
 
-window.updateScrollProgress = () => {
-  const scrollProgressBar = document.querySelector('.scroll-progress-bar');
-  function updateProgress() {
-    if (!scrollProgressBar) return;
-    const { scrollHeight, clientHeight } = document.documentElement;
-    const scrollableHeight = scrollHeight - clientHeight;
-    const scrollY = window.scrollY;
-    const scrollProgress = (scrollY / scrollableHeight) * 100;
-    scrollProgressBar.style.transform = `translateY(-${100 - scrollProgress}%)`;
-  }
-  window.addEventListener('scroll', updateProgress);
-  updateProgress();
-};
+window.updateScrollProgress = (() => {
+  let activeHandler = null;
+  return () => {
+    const scrollProgressBar = document.querySelector('.scroll-progress-bar');
+    if (activeHandler) {
+      window.removeEventListener('scroll', activeHandler);
+      activeHandler = null;
+    }
+    function updateProgress() {
+      if (!scrollProgressBar) return;
+      const { scrollHeight, clientHeight } = document.documentElement;
+      const scrollableHeight = scrollHeight - clientHeight;
+      const scrollY = window.scrollY;
+      const scrollProgress = (scrollY / scrollableHeight) * 100;
+      scrollProgressBar.style.transform = `translateY(-${100 - scrollProgress}%)`;
+    }
+    activeHandler = updateProgress;
+    window.addEventListener('scroll', updateProgress);
+    updateProgress();
+  };
+})();

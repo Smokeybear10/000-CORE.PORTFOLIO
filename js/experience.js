@@ -13,25 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Scroll progress indicator
-document.addEventListener('DOMContentLoaded', () => {
-  const scrollProgressBar = document.querySelector('.scroll-progress-bar');
-
-  function updateScrollProgress() {
-    if (!scrollProgressBar) return;
-    
-    const { scrollHeight, clientHeight } = document.documentElement;
-    const scrollableHeight = scrollHeight - clientHeight;
-    const scrollY = window.scrollY;
-    const scrollProgress = (scrollY / scrollableHeight) * 100;
-    
-    scrollProgressBar.style.transform = `translateY(-${100 - scrollProgress}%)`;
-  }
-
-  // Initial call and scroll listener
-  updateScrollProgress();
-  window.addEventListener('scroll', updateScrollProgress);
-});
+// Scroll progress is now managed by spa-init.js window.updateScrollProgress
+// to avoid duplicate listeners accumulating on route changes.
 
 
 // Reveal left 3D column and education title after initial scroll
@@ -420,8 +403,6 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
   const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
   const bottomNav = document.querySelector('.bottom-nav');
-  const closeBtn = document.querySelector('.nav-close-btn');
-  
   if (mobileMenuBtn && bottomNav) {
     mobileMenuBtn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -436,14 +417,6 @@ document.addEventListener('DOMContentLoaded', () => {
         bottomNav.classList.add('show');
       }
     }, true);
-    
-    // Close button functionality
-    if (closeBtn) {
-      closeBtn.addEventListener('click', () => {
-        mobileMenuBtn.classList.remove('active');
-        bottomNav.classList.remove('show');
-      });
-    }
     
     // Close menu when clicking outside
     document.addEventListener('click', (e) => {

@@ -421,14 +421,6 @@ html, body {
     margin: 0 auto;
   }
 
-  .skills-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .values-grid {
-    grid-template-columns: 1fr;
-  }
-
   /* Hide navigation bar completely in vertical mode */
   .bottom-nav {
     display: none !important;

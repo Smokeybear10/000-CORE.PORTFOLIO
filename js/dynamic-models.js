@@ -126,6 +126,7 @@ document.addEventListener('DOMContentLoaded', async () => {
               child.material = faceGlowMaterial.clone();
             }
           });
+          faceGlowMaterial.dispose();
 
           currentScene.add(currentModel);
 

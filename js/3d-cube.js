@@ -119,8 +119,9 @@ window.cleanup3DCube = function() {
     window.removeEventListener('resize', cubeResizeHandler);
     cubeResizeHandler = null;
   }
-  if (cubeRenderer) cubeRenderer.dispose();
+  if (cube && cube.geometry) cube.geometry.dispose();
   if (cubeMaterial) cubeMaterial.dispose();
+  if (cubeRenderer) cubeRenderer.dispose();
   cubeScene = null; cubeCamera = null; cubeRenderer = null;
   cube = null; cubeMaterial = null;
   isCubeInitialized = false;

@@ -143,10 +143,9 @@ class SPARouter {
   updateNavigation(route) {
     document.querySelectorAll('.nav-link').forEach(link => {
       link.classList.remove('active');
-    });
-    document.querySelectorAll('.spa-nav-btn').forEach(btn => {
-      const btnRoute = btn.getAttribute('data-route');
-      btn.classList.toggle('active', btnRoute === route);
+      if (link.getAttribute('data-spa-route') === route) {
+        link.classList.add('active');
+      }
     });
   }
 

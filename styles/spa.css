@@ -27,15 +27,6 @@
   transform: translateY(-1px);
 }
 
-.bottom-nav .nav-link.active {
-  background: #ffffff !important;
-  color: #000000 !important;
-  text-shadow: none !important;
-  pointer-events: none !important;
-  user-select: none !important;
-  border-radius: 10px;
-}
-
 /* Normal scroll for route transitions */
 
 /* Ensure content doesn't jump during transitions */
@@ -51,15 +42,24 @@
   z-index: 1;
 }
 
-/* 3D elements should stay behind content */
-#cube-container,
+/* 3D elements layering: cube behind content, model above cube */
+#cube-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 50;
+  pointer-events: none;
+}
+
 #model-container {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 0;
+  z-index: 100;
   pointer-events: none;
 }
 
@@ -70,48 +70,9 @@
 }
 
 
-/* Navigation positioning */
-.bottom-nav {
-  position: fixed;
-  bottom: 0.75rem;
-  right: 0.75rem;
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  align-items: flex-end;
-  padding: 0;
-  margin: 0;
-  border: none;
-  background: transparent;
-}
-
-.nav-link {
-  background: transparent;
-  color: #ffffff;
-  font-family: 'Inter', Arial, sans-serif;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 1rem;
-  text-decoration: none;
-  padding: 6px 14px;
-  border-radius: 10px;
-  transition: all 0.15s ease;
-  display: inline-block;
-  width: auto;
-  align-self: flex-end;
-}
-
-.nav-link::before {
-  display: none !important;
-}
-
+/* Suppress any ::before pseudo-elements on nav links */
+.nav-link::before,
 .bottom-nav .nav-link::before {
-  display: none !important;
-}
-
-.bottom-nav .nav-link:hover::before {
   display: none !important;
 }
 
@@ -141,6 +102,7 @@
   position: fixed !important;
   bottom: 0.5rem !important;
   right: 0.5rem !important;
+  z-index: 1000 !important;
   margin: 0 !important;
   padding: 0 !important;
   border-radius: 15px !important;

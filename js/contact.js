@@ -1,18 +1,20 @@
 // Contact page JavaScript for SPA
+import * as THREE from 'three';
 
-// Global variables for falling shapes
 let fallingShapesInterval = null;
 let fallingShapesInterval2 = null;
 let fallingShapesRunning = false;
 let fallingShapesStartTimeout = null;
 let fallingShapeBurstTimeouts = [];
 let contactInitTimeout = null;
-let globalRenderer = null;
-let globalScene = null;
-let globalCamera = null;
-let activeMeshes = [];
 let contactButtonCleanupFns = [];
 let activeFallingShapes = [];
+
+// Shared renderer to avoid WebGL context exhaustion
+let sharedRenderer = null;
+let sharedScene = null;
+let sharedCamera = null;
+let sharedAnimationId = null;
 
 function clearContactButtonHandlers() {
   contactButtonCleanupFns.forEach((cleanupFn) => cleanupFn());
@@ -20,20 +22,12 @@ function clearContactButtonHandlers() {
 }
 
 function disposeFallingShape(shapeRecord) {
-  if (!shapeRecord || shapeRecord.disposed) {
-    return;
-  }
-
+  if (!shapeRecord || shapeRecord.disposed) return;
   shapeRecord.disposed = true;
 
   if (shapeRecord.removalTimeoutId) {
     clearTimeout(shapeRecord.removalTimeoutId);
     shapeRecord.removalTimeoutId = null;
-  }
-
-  if (shapeRecord.animationId) {
-    cancelAnimationFrame(shapeRecord.animationId);
-    shapeRecord.animationId = null;
   }
 
   if (shapeRecord.styleSheet?.parentNode) {
@@ -44,89 +38,46 @@ function disposeFallingShape(shapeRecord) {
     shapeRecord.element.parentNode.removeChild(shapeRecord.element);
   }
 
-  if (shapeRecord.geometry?.dispose) {
-    shapeRecord.geometry.dispose();
-  }
+  if (shapeRecord.geometry?.dispose) shapeRecord.geometry.dispose();
+  if (shapeRecord.material?.dispose) shapeRecord.material.dispose();
+  if (shapeRecord.mesh && sharedScene) sharedScene.remove(shapeRecord.mesh);
 
-  if (shapeRecord.material?.dispose) {
-    shapeRecord.material.dispose();
-  }
-
-  if (shapeRecord.renderer?.dispose) {
-    shapeRecord.renderer.dispose();
-  }
-
-  try {
-    const loseContext = shapeRecord.renderer?.getContext?.()?.getExtension?.('WEBGL_lose_context');
-    loseContext?.loseContext?.();
-  } catch (error) {
-    console.warn('CONTACT JS: Unable to lose WebGL context cleanly', error);
-  }
-
-  activeFallingShapes = activeFallingShapes.filter((activeShape) => activeShape !== shapeRecord);
+  activeFallingShapes = activeFallingShapes.filter((s) => s !== shapeRecord);
 }
 
-// Initialize contact functionality
 function initContact() {
-  console.log('CONTACT JS: Starting contact initialization...');
-
   cleanupContact();
-  
-  // Check if Three.js is available
-  if (typeof THREE === 'undefined') {
-    console.error('CONTACT JS: Three.js is not loaded!');
-    return;
-  } else {
-    console.log('CONTACT JS: Three.js is available');
-  }
-  
-  // Force show contact content
+
   const contactContent = document.getElementById('contact-content');
   if (contactContent) {
-    console.log('CONTACT JS: Found contact content, forcing visibility...');
     contactContent.style.display = 'block';
     contactContent.style.opacity = '1';
     contactContent.style.visibility = 'visible';
     contactContent.style.pointerEvents = 'auto';
     contactContent.style.zIndex = '1000';
-  } else {
-    console.error('CONTACT JS: Contact content not found!');
   }
-  
-  // Wait a bit then setup functionality
+
   contactInitTimeout = setTimeout(() => {
     contactInitTimeout = null;
-    console.log('CONTACT JS: Setting up contact buttons and falling shapes...');
     setupContactButtons();
     startFallingShapes();
-    console.log('CONTACT JS: Contact functionality initialized successfully');
   }, 100);
 }
 
-// Setup contact button functionality
 function setupContactButtons() {
   const contactButtons = document.querySelectorAll('.contact-btn');
-  
-  if (!contactButtons.length) {
-    console.error('Contact buttons not found');
-    return;
-  }
-  
-  console.log('Setting up contact buttons for', contactButtons.length, 'buttons');
+  if (!contactButtons.length) return;
+
   clearContactButtonHandlers();
-  
-  contactButtons.forEach((button, index) => {
+
+  contactButtons.forEach((button) => {
     const contactType = button.dataset.contact;
-    console.log(`Setting up button ${index}: ${contactType}`);
-    
+
     const handleClick = (e) => {
       e.preventDefault();
       e.stopPropagation();
-      
-      console.log('Contact button clicked:', contactType);
-      
-      // Handle different contact types
-      switch(contactType) {
+
+      switch (contactType) {
         case 'email':
           window.open('mailto:thomasou@sas.upenn.edu', '_blank');
           break;
@@ -136,286 +87,215 @@ function setupContactButtons() {
         case 'github':
           window.open('https://github.com/Smokeybear10', '_blank');
           break;
-        default:
-          console.log('Unknown contact type:', contactType);
       }
     };
 
     button.addEventListener('click', handleClick);
-    contactButtonCleanupFns.push(() => {
-      button.removeEventListener('click', handleClick);
-    });
-    
-    // Force pointer events
+    contactButtonCleanupFns.push(() => button.removeEventListener('click', handleClick));
     button.style.pointerEvents = 'auto';
     button.style.cursor = 'pointer';
   });
 }
 
-// Start falling shapes animation
+function ensureSharedRenderer() {
+  if (sharedRenderer) return;
+  const canvas = document.createElement('canvas');
+  canvas.style.display = 'none';
+  document.body.appendChild(canvas);
+  sharedRenderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  sharedRenderer.setPixelRatio(1);
+}
+
 function startFallingShapes() {
-  if (fallingShapesRunning) {
-    console.log('CONTACT JS: Falling shapes already running, skipping...');
-    return;
-  }
-  
-  console.log('CONTACT JS: Starting complex falling 3D shapes...');
-  console.log('CONTACT JS: THREE object:', typeof THREE);
-  
-  if (typeof THREE === 'undefined') {
-    console.error('CONTACT JS: Three.js is not available for falling shapes!');
-    return;
-  }
-  
+  if (fallingShapesRunning) return;
   fallingShapesRunning = true;
-  
-  // Vaporwave color palette
+  ensureSharedRenderer();
+
   const vaporwaveColors = [
-    '#00ffff', '#00e5ff', '#00ccff', '#00b7ff', '#ffcc00', 
+    '#00ffff', '#00e5ff', '#00ccff', '#00b7ff', '#ffcc00',
     '#00ff80', '#00aaff', '#00ccff', '#00ccff', '#ff3300'
   ];
 
   function createComplexFallingShape() {
-    console.log('CONTACT JS: Creating new falling shape...');
     const fallingModel = document.createElement('div');
     fallingModel.className = 'falling-model';
-    
-    // Much bigger containers for larger shapes
+
     const containerSize = Math.max(180, Math.min(500, window.innerWidth * 0.24));
     fallingModel.style.width = containerSize + 'px';
     fallingModel.style.height = containerSize + 'px';
-    
-    // Random position
+
     const leftPosition = Math.random() * (window.innerWidth - containerSize);
     fallingModel.style.left = leftPosition + 'px';
     fallingModel.style.top = '-' + (containerSize + 50) + 'px';
-    
-    // Create canvas for Three.js
+
     const canvas = document.createElement('canvas');
+    canvas.width = containerSize;
+    canvas.height = containerSize;
     canvas.style.width = '100%';
     canvas.style.height = '100%';
     canvas.style.filter = 'drop-shadow(0 0 140px rgba(255, 255, 255, 1.0))';
     fallingModel.appendChild(canvas);
-    
-    // Three.js setup
+
+    // Use a dedicated offscreen renderer per shape, but limit total active shapes
+    if (activeFallingShapes.length >= 6) {
+      const oldest = activeFallingShapes[0];
+      disposeFallingShape(oldest);
+    }
+
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
     renderer.setSize(containerSize, containerSize);
-    
-    // Colored axis lighting setup (optimized for visibility)
+
     const ambientLight = new THREE.AmbientLight(0x202020, 0.1);
     scene.add(ambientLight);
-    
-  // X-axis lights - Cyan
-  const xLightPos = new THREE.DirectionalLight(0x00ffff, 0.8);
-    xLightPos.position.set(1, 0, 0);
-    scene.add(xLightPos);
-    
-  const xLightNeg = new THREE.DirectionalLight(0x00ffff, 0.8);
-    xLightNeg.position.set(-1, 0, 0);
-    scene.add(xLightNeg);
-    
-    // Y-axis lights - Cyan
-    const yLightPos = new THREE.DirectionalLight(0x00ffff, 0.8);
-    yLightPos.position.set(0, 1, 0);
-    scene.add(yLightPos);
-    
-    const yLightNeg = new THREE.DirectionalLight(0x00ffff, 0.8);
-    yLightNeg.position.set(0, -1, 0);
-    scene.add(yLightNeg);
-    
-    // Z-axis lights - Gold
-    const zLightPos = new THREE.DirectionalLight(0xffff00, 0.8);
-    zLightPos.position.set(0, 0, 1);
-    scene.add(zLightPos);
-    
-    const zLightNeg = new THREE.DirectionalLight(0xffff00, 0.8);
-    zLightNeg.position.set(0, 0, -1);
-    scene.add(zLightNeg);
-    
-    // Create simple 3D shapes
-    const shapeType = Math.floor(Math.random() * 5);
-    const baseColor = vaporwaveColors[Math.floor(Math.random() * vaporwaveColors.length)];
-    
-    // Angular 3D geometries (no round shapes)
-    const geometries = [
-      new THREE.BoxGeometry(1, 1, 1),                    // Cube
-      new THREE.OctahedronGeometry(0.7),               // Octahedron
-      new THREE.TetrahedronGeometry(0.8),              // Tetrahedron/Pyramid
-      new THREE.IcosahedronGeometry(0.6),              // Icosahedron
-      new THREE.DodecahedronGeometry(0.6)              // Dodecahedron
+
+    const lights = [
+      [0x00ffff, [1, 0, 0]], [0x00ffff, [-1, 0, 0]],
+      [0x00ffff, [0, 1, 0]], [0x00ffff, [0, -1, 0]],
+      [0xffff00, [0, 0, 1]], [0xffff00, [0, 0, -1]]
     ];
-    
+    lights.forEach(([color, pos]) => {
+      const light = new THREE.DirectionalLight(color, 0.8);
+      light.position.set(...pos);
+      scene.add(light);
+    });
+
+    const shapeType = Math.floor(Math.random() * 5);
+    const geometries = [
+      new THREE.BoxGeometry(1, 1, 1),
+      new THREE.OctahedronGeometry(0.7),
+      new THREE.TetrahedronGeometry(0.8),
+      new THREE.IcosahedronGeometry(0.6),
+      new THREE.DodecahedronGeometry(0.6)
+    ];
     const geometry = geometries[shapeType];
-    
-    // Use standard material that responds to lights
+
     const material = new THREE.MeshPhongMaterial({
       color: 0xffffff,
       shininess: 100,
       specular: 0x222222
     });
-    
+
     const mesh = new THREE.Mesh(geometry, material);
+    const baseScale = Math.max(1.4, Math.min((window.innerWidth / 1920) * 2.5, 2.0));
+    const randomScale = 0.8 + Math.random() * 1.2;
+    const finalScale = Math.max(4.0, baseScale * randomScale);
+    mesh.scale.setScalar(finalScale);
+    scene.add(mesh);
+    camera.position.z = 5;
+
     const shapeRecord = {
       element: fallingModel,
       renderer,
       geometry,
       material,
+      mesh,
+      scene,
+      camera,
       styleSheet: null,
       animationId: null,
       removalTimeoutId: null,
       disposed: false
     };
     activeFallingShapes.push(shapeRecord);
-    
-    // Scale based on screen width for responsive sizing (smaller overall)
-    const baseScale = Math.max(1.4, Math.min((window.innerWidth / 1920) * 2.5, 2.0)); // Min 1.4, Max 2.0
-    const randomScale = 0.8 + Math.random() * 1.2; // Random variation (0.8-2.0)
-    const finalScale = Math.max(4.0, baseScale * randomScale); // Minimum final size of 4.0
-    mesh.scale.setScalar(finalScale);
-    
-    scene.add(mesh);
-    // Move camera further back to make shapes appear smaller in bigger containers
-    camera.position.z = 5;
-    
-    // Animation loop with rotation
-    function animate() {
-      if (shapeRecord.disposed) {
-        return;
-      }
 
+    function animate() {
+      if (shapeRecord.disposed) return;
       shapeRecord.animationId = requestAnimationFrame(animate);
-      
       mesh.rotation.x += 0.003;
       mesh.rotation.y += 0.005;
       mesh.rotation.z += 0.004;
-      
       renderer.render(scene, camera);
     }
     animate();
-    
-    console.log('CONTACT JS: Adding falling shape to contact content...');
+
     const contactContent = document.getElementById('contact-content');
     if (contactContent) {
       contactContent.appendChild(fallingModel);
     } else {
-      console.error('CONTACT JS: Contact content not found, cannot add falling shape');
       disposeFallingShape(shapeRecord);
       return;
     }
-    
-    // Fall animation with random fade out point
+
     const fallDuration = 8 + Math.random() * 4;
-    const fadeStartPercent = 40 + Math.random() * 35; // Random between 40% and 75%
+    const fadeStartPercent = 40 + Math.random() * 35;
     const uniqueId = 'fall-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-    
-    // Create unique keyframe animation for this shape
+
     const styleSheet = document.createElement('style');
     styleSheet.textContent = `
       @keyframes ${uniqueId} {
-        0% {
-          transform: translateY(-150px) rotate(0deg);
-          opacity: 1;
-        }
-        ${fadeStartPercent}% {
-          transform: translateY(${fadeStartPercent}vh) rotate(${fadeStartPercent * 3.6}deg);
-          opacity: 1;
-        }
-        100% {
-          transform: translateY(calc(100vh + 150px)) rotate(360deg);
-          opacity: 0;
-        }
+        0% { transform: translateY(-150px) rotate(0deg); opacity: 1; }
+        ${fadeStartPercent}% { transform: translateY(${fadeStartPercent}vh) rotate(${fadeStartPercent * 3.6}deg); opacity: 1; }
+        100% { transform: translateY(calc(100vh + 150px)) rotate(360deg); opacity: 0; }
       }
     `;
     document.head.appendChild(styleSheet);
     shapeRecord.styleSheet = styleSheet;
     fallingModel.style.animation = `${uniqueId} ${fallDuration}s linear forwards`;
-    
-    // Cleanup
+
     shapeRecord.removalTimeoutId = setTimeout(() => {
       disposeFallingShape(shapeRecord);
     }, fallDuration * 1000);
   }
 
-  // Start complex falling shapes with delays
-  console.log('CONTACT JS: Setting up falling shapes intervals...');
   fallingShapesStartTimeout = setTimeout(() => {
     fallingShapesStartTimeout = null;
-    console.log('CONTACT JS: Creating first falling shape...');
     createComplexFallingShape();
     const burstTimeoutId = setTimeout(() => {
-      fallingShapeBurstTimeouts = fallingShapeBurstTimeouts.filter((timeoutId) => timeoutId !== burstTimeoutId);
-      console.log('CONTACT JS: Creating second falling shape...');
+      fallingShapeBurstTimeouts = fallingShapeBurstTimeouts.filter((id) => id !== burstTimeoutId);
       createComplexFallingShape();
     }, 800);
     fallingShapeBurstTimeouts.push(burstTimeoutId);
-    
-    fallingShapesInterval = setInterval(() => {
-      createComplexFallingShape();
-    }, 2000 + Math.random() * 2000);
-    
-    fallingShapesInterval2 = setInterval(() => {
-      if (Math.random() < 0.6) {
+
+    // Use setTimeout chains instead of setInterval with Math.random() so delay varies each time
+    function scheduleNext() {
+      if (!fallingShapesRunning) return;
+      const delay = 2000 + Math.random() * 2000;
+      fallingShapesInterval = setTimeout(() => {
         createComplexFallingShape();
-      }
-    }, 3500);
+        scheduleNext();
+      }, delay);
+    }
+    scheduleNext();
+
+    function scheduleSecondary() {
+      if (!fallingShapesRunning) return;
+      fallingShapesInterval2 = setTimeout(() => {
+        if (Math.random() < 0.6) createComplexFallingShape();
+        scheduleSecondary();
+      }, 3500);
+    }
+    scheduleSecondary();
   }, 1000);
 }
 
-// Stop falling shapes animation
 function stopFallingShapes() {
-  console.log('CONTACT JS: Stopping falling shapes');
-  if (contactInitTimeout) {
-    clearTimeout(contactInitTimeout);
-    contactInitTimeout = null;
-  }
-  if (fallingShapesStartTimeout) {
-    clearTimeout(fallingShapesStartTimeout);
-    fallingShapesStartTimeout = null;
-  }
-  fallingShapeBurstTimeouts.forEach((timeoutId) => clearTimeout(timeoutId));
+  if (contactInitTimeout) { clearTimeout(contactInitTimeout); contactInitTimeout = null; }
+  if (fallingShapesStartTimeout) { clearTimeout(fallingShapesStartTimeout); fallingShapesStartTimeout = null; }
+  fallingShapeBurstTimeouts.forEach((id) => clearTimeout(id));
   fallingShapeBurstTimeouts = [];
-  if (fallingShapesInterval) {
-    clearInterval(fallingShapesInterval);
-    fallingShapesInterval = null;
-  }
-  if (fallingShapesInterval2) {
-    clearInterval(fallingShapesInterval2);
-    fallingShapesInterval2 = null;
-  }
+  if (fallingShapesInterval) { clearTimeout(fallingShapesInterval); fallingShapesInterval = null; }
+  if (fallingShapesInterval2) { clearTimeout(fallingShapesInterval2); fallingShapesInterval2 = null; }
   fallingShapesRunning = false;
   activeFallingShapes.slice().forEach(disposeFallingShape);
-  
-  // Clean up any existing falling shapes from contact content specifically
+
   const contactContent = document.getElementById('contact-content');
   if (contactContent) {
-    const existingShapes = contactContent.querySelectorAll('.falling-model');
-    console.log('CONTACT JS: Cleaning up', existingShapes.length, 'falling shapes');
-    existingShapes.forEach(shape => {
-      if (shape.parentNode) {
-        shape.parentNode.removeChild(shape);
-      }
+    contactContent.querySelectorAll('.falling-model').forEach(shape => {
+      if (shape.parentNode) shape.parentNode.removeChild(shape);
     });
   }
-  
-  // Also clean up any that might be in body (safety cleanup)
-  const bodyShapes = document.querySelectorAll('.falling-model');
-  bodyShapes.forEach(shape => {
-    if (shape.parentNode) {
-      shape.parentNode.removeChild(shape);
-    }
+  document.querySelectorAll('.falling-model').forEach(shape => {
+    if (shape.parentNode) shape.parentNode.removeChild(shape);
   });
 }
 
-// Cleanup function
 function cleanupContact() {
-  console.log('Cleaning up contact functionality');
   clearContactButtonHandlers();
   stopFallingShapes();
 }
 
-// Export for SPA system
 window.contactRoute = {
   init: initContact,
   cleanup: cleanupContact

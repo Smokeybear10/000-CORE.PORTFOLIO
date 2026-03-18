@@ -21,8 +21,7 @@
       }
     }
   </script>
-  <!-- Three.js for contact page falling shapes -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <!-- Three.js global removed: contact.js now uses ES module import via importmap -->
   <!-- Model Viewer for 3D GLB files -->
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   <!-- Styles -->
@@ -720,7 +719,7 @@
   <script defer src="js/navigation.js"></script>
   <script defer src="js/about.js"></script>
   <script defer src="js/experience.js"></script>
-  <script defer src="js/contact.js"></script>
+  <script defer type="module" src="js/contact.js"></script>
 
   <!-- Bottom navigation -->
   <div class="bottom-nav">

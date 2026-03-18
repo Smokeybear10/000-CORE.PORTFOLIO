@@ -4,9 +4,6 @@ html, body {
   padding: 0 !important;
 }
 
-body {
-  opacity: 1;
-}
 
 
 
@@ -51,27 +48,6 @@ body {
   letter-spacing: 0.05em;
 }
 
-.title-experience {
-  font-size: 8rem;
-  font-weight: 400;
-  font-family: 'Anton', Arial, sans-serif;
-  color: #ffffff;
-  text-align: left;
-  letter-spacing: 0.05em;
-  text-transform: none;
-  margin: 0;
-}
-
-.title-journey {
-  font-size: 30rem;
-  font-weight: 400;
-  font-family: 'Anton', Arial, sans-serif;
-  color: #ffffff;
-  text-align: left;
-  letter-spacing: 0.05em;
-  text-transform: none;
-  margin: 0;
-}
 
 /* Left half - Thomas section */
 .left-section {
@@ -136,20 +112,6 @@ body {
 
 
 
-/* Dropdown Container in left section */
-.left-section .dropdown-container {
-  position: relative;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  z-index: 3;
-  background: rgba(0, 0, 0, 0.1);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  border-radius: 15px;
-}
 
 /* Top Container */
 .top-container {
@@ -521,23 +483,11 @@ body.modal-open .profile-photo {
   }
 }
 
-/* Override Thomas text to be white */
-.left-section .hello-i-am,
-.left-section .thomas-name {
-  color: #ffffff !important;
-}
-
-/* Summary text - white with different font */
-.left-section .about-hi-sub {
-  color: #ffffff !important;
-  font-family: 'Inter', Arial, sans-serif !important;
-  font-weight: 400 !important;
-}
 
 
 
-/* MY JOURNEY Title */
-.journey-title {
+/* PROFESSIONAL EXPERIENCE Title - scoped to experience route */
+#experience-content .journey-title {
   position: absolute !important;
   top: 1rem;
   left: 1rem;

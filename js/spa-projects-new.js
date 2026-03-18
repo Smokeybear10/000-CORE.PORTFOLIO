@@ -152,33 +152,24 @@ function runCleanup(cleanupFns) {
 
 // Initialize projects functionality
 function initProjects() {
-  console.log('PROJECTS JS: Starting projects initialization...');
   cleanupProjects();
   
   // Force show projects content
   const projectsContent = document.getElementById('projects-content');
   if (projectsContent) {
-    console.log('PROJECTS JS: Found projects content, forcing visibility...');
     projectsContent.style.display = 'block';
     projectsContent.style.opacity = '1';
     projectsContent.style.visibility = 'visible';
     projectsContent.style.pointerEvents = 'auto';
     projectsContent.style.zIndex = '1000';
   } else {
-    console.error('PROJECTS JS: Projects content not found!');
+    return;
   }
   
   // Wait a bit then setup functionality
   projectsInitTimeout = setTimeout(() => {
-    console.log('PROJECTS JS: Setting up wheel and modals...');
-    
-    // Setup wheel rotation
     setupWheelRotation();
-    
-    // Setup project modals
     setupProjectModals();
-    
-    console.log('PROJECTS JS: Projects functionality initialized successfully');
   }, 100);
 }
 
@@ -186,11 +177,8 @@ function initProjects() {
 function setupWheelRotation() {
   const wheelContainer = document.querySelector('.wheel-container');
   if (!wheelContainer) {
-    console.error('Wheel container not found');
     return;
   }
-  
-  console.log('Setting up wheel rotation...');
   
   // Auto rotation with hover slowdown
   function autoRotate() {
@@ -267,27 +255,20 @@ function setupProjectModals() {
   const backBtn = document.getElementById('backToProjects');
   
   if (!modal) {
-    console.error('Modal elements not found');
     return;
   }
-  
-  console.log('Setting up project modals for', projectCards.length, 'cards');
   runCleanup(modalCleanupFns);
   
   // Add click handlers to project cards
   projectCards.forEach((card, index) => {
     const projectId = card.dataset.project;
-    console.log(`Setting up card ${index}: ${projectId}`);
-    
     const handleClick = (e) => {
       e.preventDefault();
       e.stopPropagation();
       
-      console.log('Card clicked:', projectId);
-      
       const project = projectData[projectId];
       if (!project) {
-        console.error('Project data not found:', projectId);
+        
         return;
       }
       
@@ -500,18 +481,6 @@ function populateModalContent(project) {
   }
 }
 
-// Lightbox functionality
-function openLightbox(imageSrc) {
-  const lightbox = document.getElementById('imageLightbox');
-  const lightboxImage = document.getElementById('lightboxImage');
-
-  if (lightbox && lightboxImage) {
-    lightboxImage.src = imageSrc;
-    lightbox.classList.add('active');
-    document.body.style.overflow = 'hidden';
-  }
-}
-
 function closeLightbox() {
   const lightbox = document.getElementById('imageLightbox');
 
@@ -565,7 +534,7 @@ function getLinkIcon(type) {
 
 // Cleanup function
 function cleanupProjects() {
-  console.log('Cleaning up projects functionality');
+  
   if (projectsInitTimeout) {
     clearTimeout(projectsInitTimeout);
     projectsInitTimeout = null;
@@ -609,7 +578,7 @@ function cleanupProjects() {
 
 // Global navigation control functions
 function hideAllNavigation() {
-  console.log('Hiding all navigation elements');
+  
   const navigationSelectors = [
     '.bottom-nav',
     '.mobile-menu-btn', 
@@ -632,7 +601,7 @@ function hideAllNavigation() {
 }
 
 function showAllNavigation() {
-  console.log('Showing all navigation elements');
+  
   const navigationElements = [
     { selector: '.bottom-nav', display: 'flex' },
     { selector: '.mobile-menu-btn', display: 'flex' },
