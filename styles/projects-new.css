@@ -22,15 +22,10 @@
   pointer-events: auto !important;
 }
 
-/* Grid overlay - REMOVED */
-.projects-container::before {
-  display: none;
-}
-
 /* Section titles */
 .section-title {
   position: absolute;
-  top: 0;
+  top: 1rem;
   left: 1rem;
   z-index: 1010;
   opacity: 1;

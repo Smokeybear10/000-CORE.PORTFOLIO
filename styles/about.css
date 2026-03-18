@@ -1,39 +1,11 @@
-/* Base styles */
-html, body {
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
-  overflow-x: hidden;
-}
-
-body {
-  overscroll-behavior: auto;
-  -webkit-overscroll-behavior: auto;
-  opacity: 1;
-  animation: none;
-}
-
 .about-container {
   width: 100%;
   min-height: 100vh;
   margin: 0;
-  padding: 2rem;
+  padding: 1rem;
   background: transparent;
   position: relative;
   box-sizing: border-box;
-}
-
-/* Dot pattern overlay removed for clean black background */
-
-@keyframes gradientShift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
 }
 
 /* Title */
@@ -59,7 +31,6 @@ body {
   animation: none;
 }
 
-@keyframes fadeInTitle {}
 
 .title-subtitle {
   font-size: 1rem;
@@ -134,17 +105,6 @@ body {
   font-family: 'Inter', Arial, sans-serif;
 }
 
-.profile-text p {
-  font-family: 'Inter', Arial, sans-serif;
-  font-size: 1.8rem;
-  font-weight: 400;
-  color: #ffffff;
-  margin: 0 0 2rem 0;
-  line-height: 1.6;
-  letter-spacing: normal;
-  opacity: 0.9;
-}
-
 /* Info sections */
 .info-section {
   background: rgba(255, 255, 255, 0.05);
@@ -179,51 +139,6 @@ body {
   opacity: 0.9;
 }
 
-/* Skills grid */
-.skills-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1rem;
-}
-
-.skill-category {
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 10px;
-  padding: 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.skill-category h4 {
-  font-family: 'Inter', Arial, sans-serif;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #00ffff;
-  margin: 0 0 1rem 0;
-}
-
-.skill-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.skill-tag {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: #ffffff;
-  padding: 0.25rem 0.75rem;
-  border-radius: 15px;
-  font-family: 'Fira Mono', 'Courier New', monospace;
-  font-size: 0.85rem;
-  transition: all 0.3s ease;
-}
-
-.skill-tag:hover {
-  border-color: #ffffff;
-  color: #ffffff;
-  transform: scale(1.05);
-}
 
 /* Stack section styles */
 .stack-container {
@@ -337,37 +252,6 @@ body {
   transform: translate(-50%, -50%);
 }
 
-/* Values/interests section */
-.values-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1rem;
-}
-
-.value-item {
-  text-align: center;
-  padding: 1.5rem;
-}
-
-.value-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  display: block;
-}
-
-.value-item h4 {
-  font-family: 'Inter', Arial, sans-serif;
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #ffffff;
-  margin-bottom: 0.5rem;
-}
-
-.value-item p {
-  font-size: 0.95rem;
-  opacity: 0.8;
-}
 
 /* SCROLL PROGRESS INDICATOR */
 .scroll-progress {
@@ -551,15 +435,6 @@ html, body {
   }
 }
 
-/* Hide custom cursor and use natural cursor */
-* {
-  cursor: auto !important;
-}
-
-#custom-cursor {
-  display: none !important;
-}
-
 /* Profile text styling improvements */
 .profile-text h2 {
   font-family: 'Inter', Arial, sans-serif;
@@ -582,69 +457,3 @@ html, body {
   opacity: 0.9;
 }
 
-/* Image positioning adjustments */
-.profile-image {
-  float: right;
-  width: 40vw;
-  max-width: 350px;
-  aspect-ratio: 1;
-  border-radius: 20px;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  margin: 2rem 1rem 2rem 3rem;
-  shape-outside: circle(50%);
-}
-
-
-/* Mute container hover effects */
-.mute-container:hover .mute-icon {
-  fill: #ffffff !important;
-  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8)) !important;
-}
-
-.mute-container:hover .mute-text {
-  color: #ffffff !important;
-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.5) !important;
-}
-
-/* Mute icon and vaporwave text */
-.mute-container {
-  position: fixed;
-  bottom: 1.5rem;
-  left: 1.5rem;
-  z-index: 1001;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  opacity: 1;
-  transition: opacity 0.3s ease;
-}
-
-.mute-icon {
-  width: 24px;
-  height: 24px;
-  fill: #ffffff;
-  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
-  transition: all 0.3s ease;
-}
-
-.mute-text {
-  color: #ffffff;
-  font-family: 'Inter', Arial, sans-serif;
-  font-size: 1rem;
-  font-weight: 400;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.mute-container:hover .mute-icon {
-  fill: #ffffff;
-  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
-}
-
-.mute-container:hover .mute-text {
-  color: #ffffff;
-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-}

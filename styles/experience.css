@@ -1,53 +1,22 @@
-/* Base styles to prevent bounce scrolling */
+/* Base styles */
 html, body {
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
   margin: 0 !important;
   padding: 0 !important;
 }
 
 body {
-  overscroll-behavior: auto;
-  -webkit-overscroll-behavior: auto;
-  opacity: 0;
-  animation: easeIn 0.8s ease-out forwards;
-}
-
-
-
-@keyframes easeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  opacity: 1;
 }
 
 
 
 
 
-@keyframes gradientShift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-
-  
 
 
 /* Full width content */
 .content-section {
   width: 100%;
-  height: (500vh - 180vw);
   padding: 2rem 2rem 0 2rem;
   overflow: visible;
   display: flex;
@@ -55,7 +24,6 @@ body {
   justify-content: center;
   align-items: center;
   cursor: auto !important;
-  position: relative;
   z-index: 2;
   border: none;
   position: absolute;
@@ -130,16 +98,6 @@ body {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-}
-
-/* 3D Bull Head Container */
-.bull-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  display: none; /* Hide the bull head */
 }
 
 /* 3D Horse Head Container */
@@ -245,6 +203,14 @@ body {
 .cards-container.in-view,
 .hello-content-mobile.in-view,
 .profile-photo.in-view {
+  opacity: 1 !important;
+}
+
+/* When modal is open, brighten everything so page doesn't look black */
+body.modal-open .timeline-container,
+body.modal-open .cards-container,
+body.modal-open .hello-content-mobile,
+body.modal-open .profile-photo {
   opacity: 1 !important;
 }
 
@@ -421,7 +387,7 @@ body {
   border-radius: 12px;
   padding: 1.5rem;
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  cursor: default;
+  cursor: pointer;
   opacity: 0;
   transform: translateY(30px);
   animation: fadeInCard 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
@@ -568,57 +534,7 @@ body {
   font-weight: 400 !important;
 }
 
-/* Add vertical stretch transform to navigation and icons */
-.left-section .education-nav-subtitle {
-  transform: scaleY(1) !important;
-  margin-top: 2rem;
-}
 
-.left-section .thomas-ou-social-links {
-  transform: scaleY(1) !important;
-}
-
-/* CUSTOM CURSOR */
-#custom-cursor {
-  position: fixed;
-  top: 0;
-  left: 0;
-  opacity: 1;
-  z-index: 999999;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  mix-blend-mode: normal;
-  transition: opacity 0.3s ease;
-  display: block;
-}
-
-body {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-/* Hide scrollbar for all elements */
-::-webkit-scrollbar {
-  display: none;
-  width: 0;
-  height: 0;
-}
-
-html, body {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-* {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-*::-webkit-scrollbar {
-  display: none;
-  width: 0;
-  height: 0;
-}
 
 /* MY JOURNEY Title */
 .journey-title {
@@ -635,7 +551,7 @@ html, body {
   font-family: 'Anton', Arial, sans-serif;
   color: #ffffff;
   text-align: left;
-  letter-spacing: 0.005em;
+  letter-spacing: 0.05em;
   text-transform: none;
   margin: 0;
   line-height: 0.9;
@@ -654,282 +570,6 @@ html, body {
   margin: 0;
 }
 
-/* SCROLL PROGRESS INDICATOR */
-.scroll-progress {
-  position: fixed;
-  top: 50%;
-  right: 2%;
-  transform: translateY(-50%);
-  width: 6px;
-  height: 100px;
-  border-radius: 3px;
-  background: rgba(255, 255, 255, 0.1);
-  overflow: hidden;
-  z-index: 100;
-}
-
-.scroll-progress-bar {
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(180deg, #ffffff 0%, #00ffff 100%);
-  border-radius: 3px;
-  transform: translateY(-100%);
-  transition: transform 0.1s ease-out;
-  box-shadow: none;
-}
-
-/* Navigation menu bottom right */
-.bottom-nav {
-  position: fixed;
-  bottom: 0rem;
-  right: 0rem;
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  align-items: flex-end;
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-  padding: 1rem 2rem;
-  border-radius: 15px;
-  border: none;
-}
-
-.nav-link {
-  color: #ffffff;
-  font-family: 'Inter', Arial, sans-serif;
-  font-size: 1.4rem;
-  font-weight: 700;
-  text-decoration: none;
-  text-transform: none;
-  letter-spacing: 0.08em;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  white-space: nowrap;
-  position: relative;
-}
-
-
-.nav-link::before {
-  content: '';
-  position: absolute;
-  left: -2.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 40px;
-  height: 40px;
-  background-image: url('Images/Hand.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.nav-link:nth-child(3)::before {
-  background-image: url('Images/Dophin.png');
-}
-
-.nav-link:hover {
-  color: #00ffff;
-}
-
-.nav-link:hover::before {
-  opacity: 1;
-}
-
-/* Mute icon and vaporwave text */
-.mute-container {
-  position: fixed;
-  bottom: 1.5rem;
-  left: 1.5rem;
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  opacity: 1;
-  transition: opacity 0.3s ease;
-}
-
-.mute-icon {
-  width: 24px;
-  height: 24px;
-  fill: #ffffff;
-  filter: none;
-  transition: all 0.3s ease;
-}
-
-.mute-text {
-  color: #ffffff;
-  font-family: 'Inter', Arial, sans-serif;
-  font-size: 1rem;
-  font-weight: 400;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.mute-text::before {
-  content: '';
-  position: absolute;
-  right: calc(100% + 2rem);
-  top: 50%;
-  transform: translateY(-50%);
-  width: 30px;
-  height: 30px;
-  background-image: url('Images/Hand.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: 10;
-}
-
-.mute-text:hover::before {
-  opacity: 1;
-}
-
-.mute-container:hover .mute-icon {
-  fill: #ffffff;
-  filter: none;
-}
-
-.mute-container:hover .mute-text {
-  color: #ffffff;
-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-}
-
-/* Table of Contents */
-.table-of-contents {
-  position: relative;
-  margin: 0 0 0.5rem 0;
-  width: 100%;
-  border: 1px solid #ffffff;
-}
-
-.toc-header {
-  display: block;
-  width: 100%;
-  padding: 0;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.toc-title {
-  color: #ffffff;
-  font-family: 'Anton', Arial, sans-serif;
-  font-size: 2rem;
-  font-weight: 400;
-  text-transform: none;
-  letter-spacing: 0.15em;
-  text-align: center;
-  transition: color 0.3s ease;
-  margin-left: 0;
-  padding-left: 0;
-}
-
-.toc-title:hover {
-  color: #00ffff;
-}
-
-
-.toc-dropdown {
-  background: transparent;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  border: none;
-  border-radius: 0;
-  padding: 0;
-  max-height: 0;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  z-index: 100;
-}
-
-.table-of-contents:hover .toc-dropdown {
-  max-height: 500px;
-}
-
-
-.table-of-contents:hover .toc-header {
-  border-radius: 15px 15px 0 0;
-  border-bottom-color: transparent;
-}
-
-.toc-item {
-  color: #ffffff;
-  font-family: 'Anton', Arial, sans-serif;
-  font-size: 1.25rem;
-  font-weight: 400;
-  text-transform: none;
-  letter-spacing: 0.05em;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  padding: 0;
-  text-align: left;
-  border-left: 3px solid transparent;
-  padding-left: 0;
-  display: block;
-}
-
-.toc-item:hover {
-  color: #ffffff;
-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
-  border-left-color: #ffffff;
-  padding-left: 2rem;
-}
-
-.toc-item:nth-child(2):hover {
-  color: #00ffff;
-  text-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
-  border-left-color: #00ffff;
-}
-
-.toc-item:nth-child(3):hover {
-  color: #ffa500;
-  text-shadow: 0 0 15px rgba(255, 165, 0, 0.8);
-  border-left-color: #ffa500;
-}
-
-/* Left Navigation */
-.left-nav {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  width: 100%;
-  margin-bottom: 2rem;
-}
-
-.nav-item {
-  color: #ffffff;
-  font-family: 'Anton', Arial, sans-serif;
-  font-size: 1.5rem;
-  font-weight: 400;
-  text-transform: none;
-  letter-spacing: 0.1em;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  opacity: 0.6;
-}
-
-.nav-item:hover {
-  color: #00ffff;
-  opacity: 1;
-  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
-}
-
-.nav-item.active {
-  color: #ffffff;
-  opacity: 1;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-}
 
 /* Profile Photo */
 .profile-photo {
@@ -1026,17 +666,6 @@ html, body {
   animation: none;
 }
 
-@keyframes pulse {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.4),
-                inset 0 0 20px rgba(255, 255, 255, 0.1);
-  }
-  50% {
-    box-shadow: 0 0 30px rgba(255, 255, 255, 0.6),
-                inset 0 0 30px rgba(255, 255, 255, 0.2);
-  }
-}
-
 /* Hello navigation buttons base styles */
 .hello-nav-btn {
   cursor: pointer !important;
@@ -1115,30 +744,6 @@ html, body {
   visibility: visible;
 }
 
-/* EDUCATION Title fade effect */
-.education-title {
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-.education-title.visible {
-  opacity: 1;
-  visibility: visible;
-}
-
-/* Navigation buttons fade effect */
-.nav-buttons.permanent-buttons {
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-.nav-buttons.permanent-buttons.visible {
-  opacity: 1;
-  visibility: visible;
-}
-
 /* Hide mobile menu button in desktop mode and on home page */
 .mobile-menu-btn {
   display: none !important;
@@ -1158,21 +763,6 @@ body[data-current-route="home"] .mobile-menu-btn {
   /* Hide green container (left-section) in vertical mode */
   .left-section {
     display: none !important;
-  }
-  
-  /* Show mobile menu button in vertical mode - but not on home page */
-  body:not([data-current-route="home"]) .mobile-menu-btn {
-    display: flex !important;
-  }
-  
-  /* Always show regular nav on home page, even in mobile */
-  body[data-current-route="home"] .bottom-nav {
-    transform: translateX(0) !important;
-    opacity: 1 !important;
-    position: fixed !important;
-    background: solid black !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
   }
   
   /* Make yellow container (top-container) 90vw and center it */
@@ -1325,160 +915,11 @@ body[data-current-route="home"] .mobile-menu-btn {
     padding: 0 0rem !important;
   }
   
-  /* Make text content container full width in vertical mode */
-  .text-content-container {
-    left: 0 !important;
-    right: 0 !important;
-    width: 100% !important;
-    padding: 1rem !important;
-  }
-  
-  /* Mobile menu button styles */
-  .mobile-menu-btn {
-    display: flex !important;
-    transition: all 0.3s ease;
-  }
-
-  .mobile-menu-btn:hover {
-    background: rgba(0, 0, 0, 0.5) !important;
-    border-color: rgba(255, 255, 255, 0.3) !important;
-  }
-
-  /* Hide hamburger when menu is open */
-  .mobile-menu-btn.active {
-    opacity: 0 !important;
-    pointer-events: none !important;
-  }
-
-  .mobile-menu-btn.active .hamburger span:nth-child(1) {
-    transform: rotate(-45deg) translate(-5px, 6px);
-    background: #ffffff;
-  }
-
-  .mobile-menu-btn.active .hamburger span:nth-child(2) {
-    opacity: 0;
-  }
-
-  .mobile-menu-btn.active .hamburger span:nth-child(3) {
-    transform: rotate(45deg) translate(-5px, -6px);
-    background: #ffffff;
-  }
-
-  /* Navigation mobile behavior */
-  .bottom-nav {
-    transform: translateX(200px) !important;
-    opacity: 0 !important;
-    transition: all 0.3s ease !important;
-    position: fixed !important;
-    background: rgba(0, 0, 0, 0.8) !important;
-    backdrop-filter: blur(10px) !important;
-    -webkit-backdrop-filter: blur(10px) !important;
-    border-radius: 15px 0 0 15px !important;
-    margin: 0.5rem !important;
-    width: calc(140px - 1rem) !important;
-  }
-
-  .bottom-nav.show {
-    transform: translateX(0) !important;
-    opacity: 1 !important;
-  }
-
-  /* Mobile nav backdrop overlay */
-  .bottom-nav.show::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, .8);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    z-index: -1;
-  }
-
-  /* Close button in navigation */
-  .nav-close-btn {
-    position: absolute;
-    top: 0.5rem;
-    left: 0.5rem;
-    width: 30px;
-    height: 30px;
-    background: transparent;
-    border: 1px solid #ffffff;
-    border-radius: 50%;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 10001;
-    transition: all 0.3s ease;
-  }
-
-  .bottom-nav.show .nav-close-btn {
-    display: flex !important;
-  }
-
-  .nav-close-btn:hover {
-    background: transparent !important;
-    border-color: #00ffff !important;
-    transform: scale(1.1);
-    box-shadow: none;
-  }
-  
-  .nav-close-btn:hover::before,
-  .nav-close-btn:hover::after {
-    background: #00ffff !important;
-  }
-
-  .nav-close-btn::before,
-  .nav-close-btn::after {
-    content: '';
-    position: absolute;
-    width: 12px;
-    height: 2px;
-    background: #ffffff;
-    border-radius: 1px;
-  }
-
-  .nav-close-btn::before {
-    transform: rotate(45deg);
-  }
-
-  .nav-close-btn::after {
-    transform: rotate(-45deg);
-  }
-  
-  /* Make cards clickable on mobile */
-  .card {
-    pointer-events: auto !important;
-    touch-action: manipulation !important;
-    cursor: pointer !important;
-    -webkit-tap-highlight-color: rgba(255, 255, 255, 0.3) !important;
-  }
-  
-  
-  /* Add blur background to mute container in vertical mode */
-  .mute-container {
-    background: rgba(0, 0, 0, 0.3) !important;
-    backdrop-filter: blur(10px) !important;
-    -webkit-backdrop-filter: blur(10px) !important;
-    border-radius: 12px !important;
-    padding: 0.4rem !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  }
-  
-  /* Hide navigation bar completely in vertical mode */
+  /* Hide navigation bar in vertical mode */
   .bottom-nav {
     display: none !important;
   }
   
-}
-
-/* Ensure cards are clickable on all devices */
-.card {
-  pointer-events: auto !important;
-  cursor: pointer !important;
 }
 
 /* Modal styles */
@@ -1490,22 +931,11 @@ body[data-current-route="home"] .mobile-menu-btn {
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: transparent;
+  background-color: rgba(0, 0, 0, 0.25);
   cursor: auto !important;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-
-/* Experience modal specific override */
-#experienceModal {
-  background-color: transparent !important;
-  backdrop-filter: blur(8px) !important;
-  -webkit-backdrop-filter: blur(8px) !important;
 }
 .modal-content {
-  background: rgba(0, 0, 0, 0.95);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.98);
   margin: 0 auto;
   padding: 2rem;
   border-radius: 12px;
@@ -1601,106 +1031,4 @@ body[data-current-route="home"] .mobile-menu-btn {
   }
 }
 
-/* Show container outlines for debugging layout - DISABLED */
-/*
-*/
 
-/* Override hand cursor hover effects for navigation buttons */
-.bottom-nav .nav-link::before {
-  display: none !important;
-}
-
-.bottom-nav .nav-link:hover::before {
-  display: none !important;
-}
-
-/* Add hover highlighting for nav text - highest specificity */
-.bottom-nav .nav-link:hover:not(.active) {
-  background: rgba(255, 255, 255, 0.12) !important;
-  color: #ffffff !important;
-  text-shadow: none !important;
-  border-radius: 10px !important;
-  transform: translateY(-1px) !important;
-  transition: all 0.15s ease !important;
-}
-
-/* Disable hover effects for active nav item */
-.bottom-nav .nav-link.active:hover {
-  background: #ffffff !important;
-  color: #000000 !important;
-  transform: none !important;
-  border-radius: 10px !important;
-}
-
-/* Hide container borders for production */
-.top-container {
-  border: 0px solid transparent !important;
-}
-
-.left-section {
-  border: 0px solid transparent !important;
-}
-
-.right-section {
-  border: 0px solid transparent !important;
-}
-
-.experience-container {
-  border: 0px solid transparent !important;
-}
-
-.timeline-container {
-  border: 0px solid transparent !important;
-}
-
-/* Hide profile photo debug border */
-.profile-photo {
-  border: none !important;
-}
-
-/* Hide text content container debug border */
-.text-content-container {
-  border: 0px solid transparent !important;
-}
-
-/* Mute icon and vaporwave text - override section */
-.mute-container {
-  position: fixed;
-  bottom: 1.5rem;
-  left: 1.5rem;
-  z-index: 1001;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  opacity: 1;
-  transition: opacity 0.3s ease;
-}
-
-.mute-icon {
-  width: 24px;
-  height: 24px;
-  fill: #ffffff;
-  filter: none;
-  transition: all 0.3s ease;
-}
-
-.mute-text {
-  color: #ffffff;
-  font-family: 'Inter', Arial, sans-serif;
-  font-size: 1rem;
-  font-weight: 400;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.mute-container:hover .mute-icon {
-  fill: #ffffff;
-  filter: none;
-}
-
-.mute-container:hover .mute-text {
-  color: #ffffff;
-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-}

@@ -69,7 +69,7 @@ const projectData = {
     title: "Personal Portfolio Website",
     description: "A modern portfolio website showcasing projects and technical expertise through interactive 3D animations and responsive design. Built as a vanilla JavaScript Single Page Application, the site features custom routing, Three.js 3D model rendering, and GSAP animations. The implementation prioritizes performance optimization and cross-device compatibility while demonstrating proficiency in modern web development practices including component architecture, asset management, and progressive enhancement strategies.",
     tech: ["HTML5", "CSS3", "JavaScript", "GSAP", "Three.js", "Responsive Design", "Web Performance"],
-    image: "Assets/Portfolio.gif",
+    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 720'%3E%3Crect width='1200' height='720' fill='%23070b14'/%3E%3Crect x='72' y='72' width='1056' height='576' rx='28' fill='%23131a27' stroke='%2300ffff' stroke-width='4'/%3E%3Crect x='120' y='132' width='260' height='28' rx='14' fill='%2300ffff' fill-opacity='0.85'/%3E%3Crect x='120' y='188' width='420' height='18' rx='9' fill='white' fill-opacity='0.9'/%3E%3Crect x='120' y='226' width='360' height='18' rx='9' fill='white' fill-opacity='0.55'/%3E%3Crect x='120' y='292' width='300' height='220' rx='18' fill='%230b1220' stroke='white' stroke-opacity='0.2'/%3E%3Crect x='450' y='292' width='570' height='64' rx='18' fill='%230b1220' stroke='white' stroke-opacity='0.2'/%3E%3Crect x='450' y='386' width='570' height='18' rx='9' fill='white' fill-opacity='0.8'/%3E%3Crect x='450' y='424' width='510' height='18' rx='9' fill='white' fill-opacity='0.4'/%3E%3Crect x='450' y='486' width='180' height='44' rx='22' fill='%2300ffff'/%3E%3Ctext x='600' y='600' fill='white' text-anchor='middle' font-family='Arial, sans-serif' font-size='56' font-weight='700'%3EPortfolio Website%3C/text%3E%3C/svg%3E",
     features: [
       { title: "Custom 3D Animations and Models", detail: "Three.js-powered 3D model rendering with optimized loading strategies, dynamic model switching, and interactive controls for enhanced visual engagement" },
       { title: "Single Page Application (SPA) Architecture", detail: "Custom routing and state management system built in vanilla JavaScript, enabling seamless navigation without page reloads and improved user experience" },
@@ -83,7 +83,7 @@ const projectData = {
       { text: "Live Website", url: "https://thomasou.com", type: "live" },
       { text: "Source Code", url: "https://github.com/Smokeybear10/PortfolioWebsite-Ver2.0", type: "github" }
     ],
-    gallery: ["Assets/Portfolio.gif"]
+    gallery: ["data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 720'%3E%3Crect width='1200' height='720' fill='%23070b14'/%3E%3Crect x='72' y='72' width='1056' height='576' rx='28' fill='%23131a27' stroke='%2300ffff' stroke-width='4'/%3E%3Crect x='120' y='132' width='260' height='28' rx='14' fill='%2300ffff' fill-opacity='0.85'/%3E%3Crect x='120' y='188' width='420' height='18' rx='9' fill='white' fill-opacity='0.9'/%3E%3Crect x='120' y='226' width='360' height='18' rx='9' fill='white' fill-opacity='0.55'/%3E%3Crect x='120' y='292' width='300' height='220' rx='18' fill='%230b1220' stroke='white' stroke-opacity='0.2'/%3E%3Crect x='450' y='292' width='570' height='64' rx='18' fill='%230b1220' stroke='white' stroke-opacity='0.2'/%3E%3Crect x='450' y='386' width='570' height='18' rx='9' fill='white' fill-opacity='0.8'/%3E%3Crect x='450' y='424' width='510' height='18' rx='9' fill='white' fill-opacity='0.4'/%3E%3Crect x='450' y='486' width='180' height='44' rx='22' fill='%2300ffff'/%3E%3Ctext x='600' y='600' fill='white' text-anchor='middle' font-family='Arial, sans-serif' font-size='56' font-weight='700'%3EPortfolio Website%3C/text%3E%3C/svg%3E"]
   },
   poker: {
     title: "Bayesian Poker Analysis Engine with Monte Carlo CFR",
@@ -139,10 +139,21 @@ let isHovering = false; // Track if hovering over a card
 let autoRotationSpeed = 0.3;
 let sectionCycleInterval = null;
 let currentSectionIndex = 0;
+let projectsInitTimeout = null;
+let modalHideTimeout = null;
+let wheelAnimationFrameId = null;
+let wheelCleanupFns = [];
+let modalCleanupFns = [];
+
+function runCleanup(cleanupFns) {
+  cleanupFns.forEach((cleanupFn) => cleanupFn());
+  cleanupFns.length = 0;
+}
 
 // Initialize projects functionality
 function initProjects() {
   console.log('PROJECTS JS: Starting projects initialization...');
+  cleanupProjects();
   
   // Force show projects content
   const projectsContent = document.getElementById('projects-content');
@@ -158,7 +169,7 @@ function initProjects() {
   }
   
   // Wait a bit then setup functionality
-  setTimeout(() => {
+  projectsInitTimeout = setTimeout(() => {
     console.log('PROJECTS JS: Setting up wheel and modals...');
     
     // Setup wheel rotation
@@ -200,7 +211,7 @@ function setupWheelRotation() {
       currentRotation += velocity;
       wheelContainer.style.transform = `rotateX(-13deg) rotateY(${currentRotation}deg)`;
     }
-    requestAnimationFrame(autoRotate);
+    wheelAnimationFrameId = requestAnimationFrame(autoRotate);
   }
   autoRotate();
   
@@ -213,6 +224,14 @@ function setupWheelRotation() {
   wheelContainer.addEventListener('touchstart', startDrag, { passive: false });
   document.addEventListener('touchmove', drag, { passive: false });
   document.addEventListener('touchend', endDrag);
+  wheelCleanupFns.push(
+    () => wheelContainer.removeEventListener('mousedown', startDrag),
+    () => document.removeEventListener('mousemove', drag),
+    () => document.removeEventListener('mouseup', endDrag),
+    () => wheelContainer.removeEventListener('touchstart', startDrag),
+    () => document.removeEventListener('touchmove', drag),
+    () => document.removeEventListener('touchend', endDrag)
+  );
   
   function startDrag(e) {
     isDragging = true;
@@ -253,13 +272,14 @@ function setupProjectModals() {
   }
   
   console.log('Setting up project modals for', projectCards.length, 'cards');
+  runCleanup(modalCleanupFns);
   
   // Add click handlers to project cards
   projectCards.forEach((card, index) => {
     const projectId = card.dataset.project;
     console.log(`Setting up card ${index}: ${projectId}`);
     
-    card.addEventListener('click', (e) => {
+    const handleClick = (e) => {
       e.preventDefault();
       e.stopPropagation();
       
@@ -284,16 +304,25 @@ function setupProjectModals() {
       setTimeout(() => {
         modal.classList.add('show');
       }, 10);
-    });
+    };
     
     // Add hover listeners to control wheel speed
-    card.addEventListener('mouseenter', () => {
+    const handleMouseEnter = () => {
       isHovering = true;
-    });
+    };
 
-    card.addEventListener('mouseleave', () => {
+    const handleMouseLeave = () => {
       isHovering = false;
-    });
+    };
+    
+    card.addEventListener('click', handleClick);
+    card.addEventListener('mouseenter', handleMouseEnter);
+    card.addEventListener('mouseleave', handleMouseLeave);
+    modalCleanupFns.push(
+      () => card.removeEventListener('click', handleClick),
+      () => card.removeEventListener('mouseenter', handleMouseEnter),
+      () => card.removeEventListener('mouseleave', handleMouseLeave)
+    );
     
     // Force pointer events
     card.style.pointerEvents = 'auto';
@@ -303,19 +332,27 @@ function setupProjectModals() {
   // Close modal handlers
   if (backBtn) {
     backBtn.addEventListener('click', closeModal);
+    modalCleanupFns.push(() => backBtn.removeEventListener('click', closeModal));
   }
   
-  modal.addEventListener('click', (e) => {
+  const handleModalClick = (e) => {
     if (e.target === modal) {
       closeModal();
     }
-  });
+  };
   
-  document.addEventListener('keydown', (e) => {
+  const handleEscape = (e) => {
     if (e.key === 'Escape' && isModalOpen) {
       closeModal();
     }
-  });
+  };
+  
+  modal.addEventListener('click', handleModalClick);
+  document.addEventListener('keydown', handleEscape);
+  modalCleanupFns.push(
+    () => modal.removeEventListener('click', handleModalClick),
+    () => document.removeEventListener('keydown', handleEscape)
+  );
   
   function closeModal() {
     if (sectionCycleInterval) {
@@ -328,7 +365,10 @@ function setupProjectModals() {
     // Show all navigation elements again
     showAllNavigation();
     
-    setTimeout(() => {
+    if (modalHideTimeout) {
+      clearTimeout(modalHideTimeout);
+    }
+    modalHideTimeout = setTimeout(() => {
       modal.style.display = 'none';
     }, 500);
   }
@@ -526,9 +566,45 @@ function getLinkIcon(type) {
 // Cleanup function
 function cleanupProjects() {
   console.log('Cleaning up projects functionality');
+  if (projectsInitTimeout) {
+    clearTimeout(projectsInitTimeout);
+    projectsInitTimeout = null;
+  }
+  if (modalHideTimeout) {
+    clearTimeout(modalHideTimeout);
+    modalHideTimeout = null;
+  }
+  if (sectionCycleInterval) {
+    clearInterval(sectionCycleInterval);
+    sectionCycleInterval = null;
+  }
+  if (wheelAnimationFrameId) {
+    cancelAnimationFrame(wheelAnimationFrameId);
+    wheelAnimationFrameId = null;
+  }
+  runCleanup(wheelCleanupFns);
+  runCleanup(modalCleanupFns);
+  const nextBtn = document.getElementById('sectionNext');
+  const prevBtn = document.getElementById('sectionPrev');
+  if (nextBtn) {
+    nextBtn.onclick = null;
+  }
+  if (prevBtn) {
+    prevBtn.onclick = null;
+  }
+  document.querySelectorAll('.section-dot').forEach((dot) => {
+    dot.onclick = null;
+  });
+  const modal = document.getElementById('projectModal');
+  if (modal) {
+    modal.classList.remove('show');
+    modal.style.display = 'none';
+  }
+  showAllNavigation();
   isModalOpen = false;
+  isHovering = false;
   isDragging = false;
-  velocity = 0;
+  velocity = autoRotationSpeed;
 }
 
 // Global navigation control functions

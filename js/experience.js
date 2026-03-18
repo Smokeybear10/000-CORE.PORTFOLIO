@@ -13,50 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Custom cursor animation
-document.addEventListener('DOMContentLoaded', () => {
-  const customCursor = document.getElementById('custom-cursor');
-
-  // Show cursor on all devices
-  // Mouse move handler for custom cursor
-  function handleMouseMove(e) {
-    if (!customCursor) return;
-    
-    gsap.set(customCursor, {
-      x: e.clientX,
-      y: e.clientY,
-      opacity: 1,
-    });
-  }
-  
-  // Touch device detection - hide custom cursor on touch devices
-  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-  if (isTouchDevice && customCursor) {
-    customCursor.style.display = 'none';
-    return;
-  }
-  
-  // Hide cursor when mouse leaves window
-  function handleMouseLeave() {
-    if (!customCursor) return;
-    gsap.to(customCursor, {
-      opacity: 0,
-      duration: 0.2
-    });
-  }
-  
-  // Force show cursor initially
-  if (customCursor) {
-    customCursor.style.opacity = '1';
-    customCursor.style.display = 'block';
-    customCursor.style.visibility = 'visible';
-  }
-  
-  window.addEventListener('mousemove', handleMouseMove);
-  // Touch events removed - allow normal touch interaction
-  window.addEventListener('mouseleave', handleMouseLeave);
-});
-
 // Scroll progress indicator
 document.addEventListener('DOMContentLoaded', () => {
   const scrollProgressBar = document.querySelector('.scroll-progress-bar');
@@ -77,32 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('scroll', updateScrollProgress);
 });
 
-// Experience text fade effect
-document.addEventListener('DOMContentLoaded', () => {
-  const experienceWhite = document.querySelector('.title-experience-white');
-  
-  function updateExperienceWhiteOpacity() {
-    const scrollY = window.scrollY;
-    const windowHeight = window.innerHeight;
-    const documentHeight = document.documentElement.scrollHeight;
-    
-    // Only fade in when reaching the bottom
-    const fadeInPoint = documentHeight - windowHeight - 100; // Start fading in 100px before bottom
-    
-    let opacity = 0;
-    if (scrollY >= fadeInPoint) {
-      opacity = Math.min(1, (scrollY - fadeInPoint) / 100);
-    }
-    
-    if (experienceWhite) {
-      experienceWhite.style.opacity = opacity;
-    }
-  }
-  
-  // Initial call and scroll listeners
-  updateExperienceWhiteOpacity();
-  window.addEventListener('scroll', updateExperienceWhiteOpacity);
-});
 
 // Reveal left 3D column and education title after initial scroll
 document.addEventListener('DOMContentLoaded', () => {
@@ -133,6 +63,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const navButtons = document.querySelector('.nav-buttons.permanent-buttons');
   
   function updateAnimalVisibility() {
+    // Skip while modal is open
+    if (document.body.classList.contains('modal-open')) return;
     // Check which section is in focus
     const timelineContainer = document.querySelector('.timeline-container');
     const experienceContainer = document.querySelector('.experience-cards');
@@ -235,27 +167,25 @@ function createSectionVisibilityHandler() {
   ].filter(section => section.element);
 
   return function updateSectionVisibility() {
+    // Skip all dimming while modal is open
+    if (document.body.classList.contains('modal-open')) return;
+
     const windowHeight = window.innerHeight;
     let activeSection = null;
     let maxVisibility = 0;
     
-    // Handle Hello section visibility
     const helloSections = document.querySelectorAll('.hello-section');
     const helloVisibleElements = document.querySelectorAll('.hello-visible');
-    let helloInView = false;
-    
+
     if (helloSection) {
       const helloRect = helloSection.getBoundingClientRect();
       const helloVisibleTop = Math.max(0, helloRect.top);
       const helloVisibleBottom = Math.min(windowHeight, helloRect.bottom);
       const helloVisibleHeight = Math.max(0, helloVisibleBottom - helloVisibleTop);
       const helloVisibilityRatio = helloRect.height > 0 ? helloVisibleHeight / helloRect.height : 0;
-      const helloScrollGate = window.scrollY < 200; // avoid keeping hello "in view" when scrolled far down
-      
-      // If Hello section is significantly visible
+      const helloScrollGate = window.scrollY < 200;
+
       if (helloVisibilityRatio > 0.3 && helloScrollGate) {
-        helloInView = true;
-        // Brighten hello sections
         helloSections.forEach(section => {
           section.style.opacity = '1';
         });
@@ -380,9 +310,6 @@ function createSectionVisibilityHandler() {
       }
       
       // Update button styling based on new active states
-      if (window.updateButtonStyling) {
-        window.updateButtonStyling();
-      }
       
       // Update hello button styling based on current section and hello visibility
       if (window.updateHelloButtonStyling) {
@@ -417,196 +344,77 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('resize', updateSectionVisibility);
 });
 
-     // Navigation button click handlers
- document.addEventListener('DOMContentLoaded', () => {
-   const navButtons = document.querySelectorAll('.nav-buttons.permanent-buttons .nav-btn');
-   
-   // Function to update button styling based on active state
-   window.updateButtonStyling = function() {
-     navButtons.forEach((button) => {
-       // Remove any inline styling that might override CSS
-       button.style.borderColor = '';
-       button.style.boxShadow = '';
-       button.style.background = '';
-       button.style.color = '';
-       button.style.textShadow = '';
-       // Let CSS handle the styling based on .active class
-     });
-   }
-   
-   // Initial styling update
-   window.updateButtonStyling();
-   
-   navButtons.forEach((button, index) => {
-     // Mouse enter event - let CSS handle hover styling
-     button.addEventListener('mouseenter', () => {
-       // Remove any conflicting inline styles and let CSS :hover handle it
-       button.style.borderColor = '';
-       button.style.boxShadow = '';
-       button.style.transform = 'translateY(-2px) scale(1.05)';
-     });
-     
-     // Mouse leave event - let CSS handle styling
-     button.addEventListener('mouseleave', () => {
-       // Remove inline styles and let CSS handle normal state
-       button.style.borderColor = '';
-       button.style.boxShadow = '';
-       button.style.transform = 'none';
-     });
-     
-     // Click handler
-     button.addEventListener('click', () => {
-       let targetElement = null;
-       
-       // Map buttons to sections (About=0, Education=1, Experience=2, Research=3)
-       switch(index) {
-         case 0: // About - scroll to top
-           window.scrollTo({ top: 0, behavior: 'smooth' });
-           return;
-         case 1: // Education
-           targetElement = document.querySelector('.timeline-container');
-           break;
-         case 2: // Experience
-           targetElement = document.querySelector('.experience-cards');
-           break;
-         case 3: // Research
-           targetElement = document.querySelector('.research-cards');
-           break;
-       }
-       
-       if (targetElement) {
-         targetElement.scrollIntoView({ 
-           behavior: 'smooth',
-           block: 'center'
-         });
-       }
-     });
-   });
+// Shared scroll-to-section logic
+function scrollToSection(sectionName) {
+  const sectionMap = {
+    'about': null,
+    'education': '.timeline-container',
+    'experience': '.experience-cards',
+    'research': '.research-cards'
+  };
 
-   // Hello navigation button click handlers
-   const helloNavButtons = document.querySelectorAll('.hello-nav-btn');
-   
-  // Function to update hello button styling - About button glows cyan when hello section is in view
-   window.updateHelloButtonStyling = function(currentSection, isHelloInView) {
-     helloNavButtons.forEach((button) => {
-       const section = button.getAttribute('data-section');
-       
-      // About button is cyan only when the hello section is actually in view
-       if (isHelloInView && section === 'about') {
+  if (sectionName === 'about') {
+    window.scrollTo({ top: 0 });
+    return;
+  }
+
+  const selector = sectionMap[sectionName];
+  if (selector) {
+    const el = document.querySelector(selector);
+    if (el) el.scrollIntoView({ block: 'center' });
+  }
+}
+
+// Navigation button click handlers
+document.addEventListener('DOMContentLoaded', () => {
+  const navButtons = document.querySelectorAll('.nav-buttons.permanent-buttons .nav-btn');
+  const sectionNames = ['about', 'education', 'experience', 'research'];
+
+  navButtons.forEach((button, index) => {
+    button.addEventListener('click', () => {
+      scrollToSection(sectionNames[index]);
+    });
+  });
+
+  // Hello navigation button click handlers
+  const helloNavButtons = document.querySelectorAll('.hello-nav-btn');
+
+  window.updateHelloButtonStyling = function(currentSection, isHelloInView) {
+    helloNavButtons.forEach((button) => {
+      const section = button.getAttribute('data-section');
+      if (isHelloInView && section === 'about') {
         button.style.borderColor = '#00ffff';
         button.style.boxShadow = '0 0 15px rgba(0, 255, 255, 0.6)';
-       } else {
-         button.style.borderColor = '#ffffff';
-         button.style.boxShadow = 'none';
-       }
-     });
-   }
-   
-   // Add hover effects with JavaScript
-   helloNavButtons.forEach((button) => {
-     const section = button.getAttribute('data-section');
-     
-     // Mouse enter event
-     button.addEventListener('mouseenter', () => {
-       if (button.style.borderColor === 'rgb(255, 0, 255)') {
-         // Active button gets stronger glow on hover
-         button.style.boxShadow = '0 0 25px rgba(255, 0, 255, 0.8)';
-       } else {
-         // Other buttons get cyan glow on hover
-         button.style.borderColor = '#00ffff';
-         button.style.boxShadow = '0 0 20px rgba(0, 255, 255, 0.6)';
-       }
-       button.style.transform = 'translateY(-2px) scale(1.05)';
-     });
-     
-     // Mouse leave event
-     button.addEventListener('mouseleave', () => {
-       // Restore the current section styling
-       const isHelloVisible = document.querySelector('.hello-section') && 
-                             document.querySelector('.hello-section').style.opacity === '1';
-       window.updateHelloButtonStyling(window.currentSection || 'about', isHelloVisible);
-       button.style.transform = 'none';
-     });
-     
-     // Click handler
-     button.addEventListener('click', (e) => {
-       console.log('Hello nav button clicked:', button.getAttribute('data-section'));
-       e.preventDefault();
-       e.stopPropagation();
-       
-       const section = button.getAttribute('data-section');
-       let targetElement = null;
-       
-       switch(section) {
-         case 'about':
-           console.log('About button clicked - scrolling to top');
-           window.scrollTo({ top: 0, behavior: 'smooth' });
-           return;
-         case 'education':
-           targetElement = document.querySelector('.timeline-container');
-           break;
-         case 'experience':
-           targetElement = document.querySelector('.experience-cards');
-           break;
-         case 'research':
-           targetElement = document.querySelector('.research-cards');
-           break;
-       }
-       
-       if (targetElement) {
-         console.log('Scrolling to:', section);
-         targetElement.scrollIntoView({ 
-           behavior: 'smooth',
-           block: 'center'
-         });
-       }
-     });
-   });
- });
+      } else {
+        button.style.borderColor = '#ffffff';
+        button.style.boxShadow = 'none';
+      }
+    });
+  };
+
+  helloNavButtons.forEach((button) => {
+    button.addEventListener('mouseenter', () => {
+      button.style.borderColor = '#00ffff';
+      button.style.boxShadow = '0 0 20px rgba(0, 255, 255, 0.6)';
+      button.style.transform = 'translateY(-2px) scale(1.05)';
+    });
+
+    button.addEventListener('mouseleave', () => {
+      const isHelloVisible = document.querySelector('.hello-section') &&
+                            document.querySelector('.hello-section').style.opacity === '1';
+      window.updateHelloButtonStyling(window.currentSection || 'about', isHelloVisible);
+      button.style.transform = 'none';
+    });
+
+    button.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      scrollToSection(button.getAttribute('data-section'));
+    });
+  });
+});
 
 
- // Simple navigation with ease-out
- document.addEventListener('DOMContentLoaded', () => {
-   const navLinks = document.querySelectorAll('.nav-link');
-   
-   navLinks.forEach(link => {
-     link.addEventListener('click', (e) => {
-       e.preventDefault();
-       
-       const linkText = link.textContent.toLowerCase().trim();
-       let targetPage = '';
-       
-       // Map navigation to target pages
-       switch(linkText) {
-         case 'home':
-           targetPage = 'index.html';
-           break;
-         case 'about':
-           targetPage = 'about.html';
-           break;
-         case 'projects':
-           targetPage = 'Projects.html';
-           break;
-                     case 'contact':
-          targetPage = 'contact.html';
-          break;
-         default:
-           return;
-       }
-       
-       if (targetPage) {
-         // Slow ease-out transition
-         document.body.style.transition = 'opacity 0.8s ease-out';
-         document.body.style.opacity = '0';
-         
-         // Navigate after ease-out
-         setTimeout(() => {
-           window.location.href = targetPage;
-         }, 800);
-       }
-     });
-   });
- });
 
 // Mobile menu toggle
 document.addEventListener('DOMContentLoaded', () => {
@@ -614,21 +422,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const bottomNav = document.querySelector('.bottom-nav');
   const closeBtn = document.querySelector('.nav-close-btn');
   
-  console.log('Mobile menu elements found:', {
-    mobileMenuBtn: !!mobileMenuBtn,
-    bottomNav: !!bottomNav,
-    closeBtn: !!closeBtn
-  });
-  
   if (mobileMenuBtn && bottomNav) {
-    // Use capture phase to run before spa-router
     mobileMenuBtn.addEventListener('click', (e) => {
-      console.log('Mobile menu clicked!');
       e.preventDefault();
       e.stopPropagation();
       e.stopImmediatePropagation();
-      
-      // Force the toggle with explicit if/else logic
+
       if (mobileMenuBtn.classList.contains('active')) {
         mobileMenuBtn.classList.remove('active');
         bottomNav.classList.remove('show');
@@ -636,14 +435,7 @@ document.addEventListener('DOMContentLoaded', () => {
         mobileMenuBtn.classList.add('active');
         bottomNav.classList.add('show');
       }
-      
-      console.log('After toggle - classes:', {
-        menuActive: mobileMenuBtn.classList.contains('active'),
-        navShow: bottomNav.classList.contains('show')
-      });
-      
-      return false;
-    }, true); // Use capture phase to run before spa-router
+    }, true);
     
     // Close button functionality
     if (closeBtn) {
@@ -703,24 +495,14 @@ const experienceData = {
   }
 };
 
-// Card click functionality with modal support (disabled)
+let experienceInitTimeout = null;
+let experienceModalOpenTimeout = null;
+let experienceModalCloseTimeout = null;
+let experienceCleanupFns = [];
 
-// Helper functions for SPA initialization
-function initScrollProgress() {
-  const scrollProgressBar = document.querySelector('.scroll-progress-bar');
-  if (!scrollProgressBar) return;
-
-  function updateScrollProgress() {
-    const { scrollHeight, clientHeight } = document.documentElement;
-    const scrollableHeight = scrollHeight - clientHeight;
-    const scrollY = window.scrollY;
-    const scrollProgress = (scrollY / scrollableHeight) * 100;
-    scrollProgressBar.style.transform = `translateY(-${100 - scrollProgress}%)`;
-  }
-  
-  window.experienceScrollHandlers.push(updateScrollProgress);
-  window.addEventListener('scroll', updateScrollProgress);
-  updateScrollProgress();
+function runExperienceCleanupFns() {
+  experienceCleanupFns.forEach((cleanupFn) => cleanupFn());
+  experienceCleanupFns = [];
 }
 
 function initModalFunctionality() {
@@ -729,22 +511,14 @@ function initModalFunctionality() {
   const modalContent = document.getElementById('modalContent');
   const closeBtn = document.querySelector('.close');
 
-  // Resume link click handler
-  const resumeLink = document.querySelector('.resume-link');
-  if (resumeLink) {
-    resumeLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      alert('Please contact thomasou@sas.upenn.edu for my resume.');
-    });
-  }
-
   if (!modal || !modalContent) return;
+  runExperienceCleanupFns();
   
   cards.forEach((card, index) => {
     const handleCardClick = (e) => {
       e.preventDefault();
       e.stopPropagation();
-      
+
       const experience = experienceData[index];
       if (experience) {
         modalContent.innerHTML = `
@@ -754,43 +528,76 @@ function initModalFunctionality() {
           <p>${experience.description}</p>
         `;
         modal.style.display = 'block';
-        setTimeout(() => modal.classList.add('show'), 10);
+        document.body.classList.add('modal-open');
+        document.querySelectorAll('.timeline-container, .cards-container, .hello-content-mobile, .profile-photo').forEach(el => {
+          el.style.setProperty('opacity', '1', 'important');
+        });
+        document.querySelectorAll('.hello-section').forEach(el => {
+          el.style.setProperty('opacity', '1', 'important');
+        });
+        if (experienceModalOpenTimeout) {
+          clearTimeout(experienceModalOpenTimeout);
+        }
+        experienceModalOpenTimeout = setTimeout(() => {
+          experienceModalOpenTimeout = null;
+          modal.classList.add('show');
+        }, 10);
       }
     };
     
     card.addEventListener('click', handleCardClick);
     card.addEventListener('touchend', handleCardClick);
+    experienceCleanupFns.push(
+      () => card.removeEventListener('click', handleCardClick),
+      () => card.removeEventListener('touchend', handleCardClick)
+    );
   });
   
-  if (closeBtn) {
-    closeBtn.addEventListener('click', () => {
-      modal.classList.remove('show');
-      setTimeout(() => modal.style.display = 'none', 400);
-    });
+  function closeModal() {
+    if (experienceModalOpenTimeout) {
+      clearTimeout(experienceModalOpenTimeout);
+      experienceModalOpenTimeout = null;
+    }
+    modal.classList.remove('show');
+    if (experienceModalCloseTimeout) {
+      clearTimeout(experienceModalCloseTimeout);
+    }
+    experienceModalCloseTimeout = setTimeout(() => {
+      experienceModalCloseTimeout = null;
+      modal.style.display = 'none';
+      document.body.classList.remove('modal-open');
+      // Restore normal dimming by clearing forced inline opacity
+      document.querySelectorAll('.timeline-container, .cards-container, .hello-content-mobile, .profile-photo').forEach(el => {
+        el.style.removeProperty('opacity');
+      });
+      document.querySelectorAll('.hello-section').forEach(el => {
+        el.style.removeProperty('opacity');
+      });
+    }, 400);
   }
 
-  // Close modal when clicking outside the content
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) {
-      modal.classList.remove('show');
-      setTimeout(() => modal.style.display = 'none', 400);
-    }
-  });
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeModal);
+    experienceCleanupFns.push(() => closeBtn.removeEventListener('click', closeModal));
+  }
 
-  // Close modal on ESC key
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal.style.display === 'block') {
-      modal.classList.remove('show');
-      setTimeout(() => modal.style.display = 'none', 400);
-    }
-  });
+  const handleModalClick = (e) => {
+    if (e.target === modal) closeModal();
+  };
+  modal.addEventListener('click', handleModalClick);
+  experienceCleanupFns.push(() => modal.removeEventListener('click', handleModalClick));
+
+  const handleEscape = (e) => {
+    if (e.key === 'Escape' && modal.style.display === 'block') closeModal();
+  };
+  document.addEventListener('keydown', handleEscape);
+  experienceCleanupFns.push(() => document.removeEventListener('keydown', handleEscape));
 }
 
 // SPA-specific initialization functions
 window.initExperienceAnimations = function() {
-  console.log('🚀 Initializing experience animations for SPA...');
-  
-  // Clean up existing handlers
+  window.cleanupExperienceAnimations();
+
   if (window.experienceScrollHandlers) {
     window.experienceScrollHandlers.forEach(handler => {
       window.removeEventListener('scroll', handler);
@@ -799,17 +606,12 @@ window.initExperienceAnimations = function() {
     window.experienceScrollHandlers = [];
   }
   
-  // Check if we're in vertical mode
   const isVerticalMode = window.innerHeight > window.innerWidth || window.innerWidth <= 768;
-  console.log('📱 Vertical mode detected:', isVerticalMode);
-  
-  // Set up initial state based on mode
-  setTimeout(() => {
+
+  experienceInitTimeout = setTimeout(() => {
+    experienceInitTimeout = null;
     if (isVerticalMode) {
-      // In vertical mode - hide left section 3D models and show about section first
-      console.log('🔧 Setting up vertical mode initial state...');
       
-      // Hide left section elements
       const leftSection = document.querySelector('.left-section');
       const horseContainer = document.querySelector('.horse-container');
       const bullContainer = document.querySelector('.bull-container-new');
@@ -826,7 +628,6 @@ window.initExperienceAnimations = function() {
       if (experienceTitle) experienceTitle.style.display = 'none';
       if (researchTitle) researchTitle.style.display = 'none';
       
-      // Show about section first (bright hello sections, dim other sections)
       const helloSections = document.querySelectorAll('.hello-section');
       const helloVisibleElements = document.querySelectorAll('.hello-visible');
       const profilePhotos = document.querySelectorAll('.profile-photo');
@@ -840,196 +641,64 @@ window.initExperienceAnimations = function() {
       profilePhotos.forEach(photo => {
         photo.style.display = 'block';
         photo.style.visibility = 'visible';
-        // Don't set inline opacity - let CSS classes handle it
         photo.classList.add('in-view');
       });
       
-      // Dim all content sections initially
       const sections = document.querySelectorAll('.timeline-container, .experience-cards, .research-cards');
       sections.forEach(section => {
         section.classList.remove('in-view');
       });
       
-      // Set about button as active
       const navButtons = document.querySelectorAll('.nav-buttons.permanent-buttons .nav-btn');
       navButtons.forEach(btn => btn.classList.remove('active'));
       if (navButtons[0]) navButtons[0].classList.add('active');
       
     } else {
-      // In horizontal mode - use normal initialization
-      console.log('🖥️ Setting up horizontal mode initial state...');
-      
-      // Show left section
       const leftSection = document.querySelector('.left-section');
       if (leftSection) leftSection.style.display = 'block';
       
-      // Ensure profile photos are visible
       const profilePhotos = document.querySelectorAll('.profile-photo');
       profilePhotos.forEach(photo => {
         photo.style.display = 'block';
         photo.style.visibility = 'visible';
-        // Don't set inline opacity - let CSS classes handle it
       });
     }
     
-    // Initialize core functionality
-    initScrollProgress();
-    initSectionFocusForSPA();
-    initNavigationButtonsForSPA();
     initModalFunctionality();
     
-    // Force update button styling
     if (window.updateButtonStyling) {
       window.updateButtonStyling();
     }
-    
   }, 150);
-  
-  console.log('✅ Experience animations initialized');
 };
 
 window.cleanupExperienceAnimations = function() {
+  if (experienceInitTimeout) {
+    clearTimeout(experienceInitTimeout);
+    experienceInitTimeout = null;
+  }
+  if (experienceModalOpenTimeout) {
+    clearTimeout(experienceModalOpenTimeout);
+    experienceModalOpenTimeout = null;
+  }
+  if (experienceModalCloseTimeout) {
+    clearTimeout(experienceModalCloseTimeout);
+    experienceModalCloseTimeout = null;
+  }
+  runExperienceCleanupFns();
   
   // Remove other scroll handlers
   if (window.experienceScrollHandlers) {
     window.experienceScrollHandlers.forEach(handler => {
       window.removeEventListener('scroll', handler);
+      window.removeEventListener('resize', handler);
     });
     window.experienceScrollHandlers = [];
   }
   
-  console.log('Experience animations cleaned up');
 };
 
 // Store scroll handlers for cleanup
 window.experienceScrollHandlers = [];
 
-// SPA-compatible section focus initialization
-function initSectionFocusForSPA() {
-  console.log('🔍 Setting up section focus detection for SPA...');
 
-  // Use the shared section visibility handler
-  const updateSectionVisibility = createSectionVisibilityHandler();
-
-  console.log('📋 Using shared section visibility handler');
-
-  // Store the handler for cleanup
-  window.experienceScrollHandlers.push(updateSectionVisibility);
-
-  // Initial call and scroll listener
-  updateSectionVisibility();
-  window.addEventListener('scroll', updateSectionVisibility);
-  window.addEventListener('resize', updateSectionVisibility);
-}
-
-// SPA-compatible navigation buttons initialization
-function initNavigationButtonsForSPA() {
-  if (!window.updateButtonStyling) {
-    const navButtons = document.querySelectorAll('.nav-buttons.permanent-buttons .nav-btn');
-
-    window.updateButtonStyling = function() {
-      navButtons.forEach((button) => {
-        if (button.classList.contains('active')) {
-          button.style.borderColor = '#00ffff';
-          button.style.boxShadow = '0 0 15px rgba(0, 255, 255, 0.6)';
-        } else {
-          button.style.borderColor = '#ffffff';
-          button.style.boxShadow = 'none';
-        }
-      });
-    }
-  }
-}
-
-// Animal visibility function that can be called from SPA
-function updateAnimalVisibility() {
-  // Check which section is in focus
-  const timelineContainer = document.querySelector('.timeline-container');
-  const experienceContainer = document.querySelector('.experience-cards');
-  const researchContainer = document.querySelector('.research-cards');
-  
-  const isEducationInFocus = timelineContainer && timelineContainer.classList.contains('in-view');
-  const isExperienceInFocus = experienceContainer && experienceContainer.classList.contains('in-view');
-  const isResearchInFocus = researchContainer && researchContainer.classList.contains('in-view');
-  
-  
-  const horseContainer = document.querySelector('.horse-container');
-  const bullContainer = document.querySelector('.bull-container-new');
-  const lionContainer = document.querySelector('.lion-container-new');
-  const educationTitle = document.querySelector('.education-title');
-  const navButtons = document.querySelector('.nav-buttons.permanent-buttons');
-  
-  
-  // Horse shows for education
-  if (horseContainer) {
-    if (isEducationInFocus) {
-      horseContainer.classList.add('visible');
-    } else {
-      horseContainer.classList.remove('visible');
-    }
-  }
-  
-  // Bull shows for experience
-  if (bullContainer) {
-    if (isExperienceInFocus) {
-      bullContainer.style.opacity = '1';
-      bullContainer.style.visibility = 'visible';
-    } else {
-      bullContainer.style.opacity = '0';
-      bullContainer.style.visibility = 'hidden';
-    }
-  }
-  
-  // Lion shows for research
-  if (lionContainer) {
-    if (isResearchInFocus) {
-      lionContainer.style.opacity = '1';
-      lionContainer.style.visibility = 'visible';
-    } else {
-      lionContainer.style.opacity = '0';
-      lionContainer.style.visibility = 'hidden';
-    }
-  }
-  
-  // Research title shows when research is in focus
-  const researchTitle = document.querySelector('.research-title');
-  if (researchTitle) {
-    if (isResearchInFocus) {
-      researchTitle.style.opacity = '1';
-      researchTitle.style.visibility = 'visible';
-    } else {
-      researchTitle.style.opacity = '0';
-      researchTitle.style.visibility = 'hidden';
-    }
-  }
-  
-  // Experience title shows when experience is in focus
-  const experienceTitle = document.querySelector('.experience-title');
-  if (experienceTitle) {
-    if (isExperienceInFocus) {
-      experienceTitle.style.opacity = '1';
-      experienceTitle.style.visibility = 'visible';
-    } else {
-      experienceTitle.style.opacity = '0';
-      experienceTitle.style.visibility = 'hidden';
-    }
-  }
-  
-  // Education title shows when education is in focus
-  if (isEducationInFocus) {
-    if (educationTitle) {
-      educationTitle.classList.add('visible');
-    }
-  } else {
-    if (educationTitle) {
-      educationTitle.classList.remove('visible');
-    }
-  }
-  
-  // Nav buttons show when education, experience, OR research is in focus (don't fade out until footer)
-  if (isEducationInFocus || isExperienceInFocus || isResearchInFocus) {
-    if (navButtons) navButtons.classList.add('visible');
-  } else {
-    if (navButtons) navButtons.classList.remove('visible');
-  }
-}

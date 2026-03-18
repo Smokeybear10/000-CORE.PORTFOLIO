@@ -4,14 +4,73 @@
 let fallingShapesInterval = null;
 let fallingShapesInterval2 = null;
 let fallingShapesRunning = false;
+let fallingShapesStartTimeout = null;
+let fallingShapeBurstTimeouts = [];
+let contactInitTimeout = null;
 let globalRenderer = null;
 let globalScene = null;
 let globalCamera = null;
 let activeMeshes = [];
+let contactButtonCleanupFns = [];
+let activeFallingShapes = [];
+
+function clearContactButtonHandlers() {
+  contactButtonCleanupFns.forEach((cleanupFn) => cleanupFn());
+  contactButtonCleanupFns = [];
+}
+
+function disposeFallingShape(shapeRecord) {
+  if (!shapeRecord || shapeRecord.disposed) {
+    return;
+  }
+
+  shapeRecord.disposed = true;
+
+  if (shapeRecord.removalTimeoutId) {
+    clearTimeout(shapeRecord.removalTimeoutId);
+    shapeRecord.removalTimeoutId = null;
+  }
+
+  if (shapeRecord.animationId) {
+    cancelAnimationFrame(shapeRecord.animationId);
+    shapeRecord.animationId = null;
+  }
+
+  if (shapeRecord.styleSheet?.parentNode) {
+    shapeRecord.styleSheet.parentNode.removeChild(shapeRecord.styleSheet);
+  }
+
+  if (shapeRecord.element?.parentNode) {
+    shapeRecord.element.parentNode.removeChild(shapeRecord.element);
+  }
+
+  if (shapeRecord.geometry?.dispose) {
+    shapeRecord.geometry.dispose();
+  }
+
+  if (shapeRecord.material?.dispose) {
+    shapeRecord.material.dispose();
+  }
+
+  if (shapeRecord.renderer?.dispose) {
+    shapeRecord.renderer.dispose();
+  }
+
+  try {
+    const loseContext = shapeRecord.renderer?.getContext?.()?.getExtension?.('WEBGL_lose_context');
+    loseContext?.loseContext?.();
+  } catch (error) {
+    console.warn('CONTACT JS: Unable to lose WebGL context cleanly', error);
+  }
+
+  activeFallingShapes = activeFallingShapes.filter((activeShape) => activeShape !== shapeRecord);
+}
 
 // Initialize contact functionality
 function initContact() {
   console.log('CONTACT JS: Starting contact initialization...');
+
+  cleanupContact();
   
   // Check if Three.js is available
   if (typeof THREE === 'undefined') {
@@ -35,7 +94,8 @@ function initContact() {
   }
   
   // Wait a bit then setup functionality
-  setTimeout(() => {
+  contactInitTimeout = setTimeout(() => {
+    contactInitTimeout = null;
     console.log('CONTACT JS: Setting up contact buttons and falling shapes...');
     setupContactButtons();
     startFallingShapes();
@@ -53,12 +113,13 @@ function setupContactButtons() {
   }
   
   console.log('Setting up contact buttons for', contactButtons.length, 'buttons');
+  clearContactButtonHandlers();
   
   contactButtons.forEach((button, index) => {
     const contactType = button.dataset.contact;
     console.log(`Setting up button ${index}: ${contactType}`);
     
-    button.addEventListener('click', (e) => {
+    const handleClick = (e) => {
       e.preventDefault();
       e.stopPropagation();
       
@@ -78,6 +139,11 @@ function setupContactButtons() {
         default:
           console.log('Unknown contact type:', contactType);
       }
+    };
+
+    button.addEventListener('click', handleClick);
+    contactButtonCleanupFns.push(() => {
+      button.removeEventListener('click', handleClick);
     });
     
     // Force pointer events
@@ -191,6 +257,17 @@ function startFallingShapes() {
     });
     
     const mesh = new THREE.Mesh(geometry, material);
+    const shapeRecord = {
+      element: fallingModel,
+      renderer,
+      geometry,
+      material,
+      styleSheet: null,
+      animationId: null,
+      removalTimeoutId: null,
+      disposed: false
+    };
+    activeFallingShapes.push(shapeRecord);
     
     // Scale based on screen width for responsive sizing (smaller overall)
     const baseScale = Math.max(1.4, Math.min((window.innerWidth / 1920) * 2.5, 2.0)); // Min 1.4, Max 2.0
@@ -203,9 +280,12 @@ function startFallingShapes() {
     camera.position.z = 5;
     
     // Animation loop with rotation
-    let animationId;
     function animate() {
-      animationId = requestAnimationFrame(animate);
+      if (shapeRecord.disposed) {
+        return;
+      }
+
+      shapeRecord.animationId = requestAnimationFrame(animate);
       
       mesh.rotation.x += 0.003;
       mesh.rotation.y += 0.005;
@@ -221,6 +301,7 @@ function startFallingShapes() {
       contactContent.appendChild(fallingModel);
     } else {
       console.error('CONTACT JS: Contact content not found, cannot add falling shape');
+      disposeFallingShape(shapeRecord);
       return;
     }
     
@@ -248,26 +329,27 @@ function startFallingShapes() {
       }
     `;
     document.head.appendChild(styleSheet);
+    shapeRecord.styleSheet = styleSheet;
     fallingModel.style.animation = `${uniqueId} ${fallDuration}s linear forwards`;
     
     // Cleanup
-    setTimeout(() => {
-      if (fallingModel.parentNode) {
-        cancelAnimationFrame(animationId);
-        fallingModel.parentNode.removeChild(fallingModel);
-      }
+    shapeRecord.removalTimeoutId = setTimeout(() => {
+      disposeFallingShape(shapeRecord);
     }, fallDuration * 1000);
   }
 
   // Start complex falling shapes with delays
   console.log('CONTACT JS: Setting up falling shapes intervals...');
-  setTimeout(() => {
+  fallingShapesStartTimeout = setTimeout(() => {
+    fallingShapesStartTimeout = null;
     console.log('CONTACT JS: Creating first falling shape...');
     createComplexFallingShape();
-    setTimeout(() => {
+    const burstTimeoutId = setTimeout(() => {
+      fallingShapeBurstTimeouts = fallingShapeBurstTimeouts.filter((timeoutId) => timeoutId !== burstTimeoutId);
       console.log('CONTACT JS: Creating second falling shape...');
       createComplexFallingShape();
     }, 800);
+    fallingShapeBurstTimeouts.push(burstTimeoutId);
     
     fallingShapesInterval = setInterval(() => {
       createComplexFallingShape();
@@ -284,6 +366,16 @@ function startFallingShapes() {
 // Stop falling shapes animation
 function stopFallingShapes() {
   console.log('CONTACT JS: Stopping falling shapes');
+  if (contactInitTimeout) {
+    clearTimeout(contactInitTimeout);
+    contactInitTimeout = null;
+  }
+  if (fallingShapesStartTimeout) {
+    clearTimeout(fallingShapesStartTimeout);
+    fallingShapesStartTimeout = null;
+  }
+  fallingShapeBurstTimeouts.forEach((timeoutId) => clearTimeout(timeoutId));
+  fallingShapeBurstTimeouts = [];
   if (fallingShapesInterval) {
     clearInterval(fallingShapesInterval);
     fallingShapesInterval = null;
@@ -293,6 +385,7 @@ function stopFallingShapes() {
     fallingShapesInterval2 = null;
   }
   fallingShapesRunning = false;
+  activeFallingShapes.slice().forEach(disposeFallingShape);
   
   // Clean up any existing falling shapes from contact content specifically
   const contactContent = document.getElementById('contact-content');
@@ -318,6 +411,7 @@ function stopFallingShapes() {
 // Cleanup function
 function cleanupContact() {
   console.log('Cleaning up contact functionality');
+  clearContactButtonHandlers();
   stopFallingShapes();
 }
 
