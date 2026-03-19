@@ -54,6 +54,24 @@
   line-height: 0.9;
 }
 
+/* Current Focus - below title */
+.contact-focus {
+  position: fixed;
+  top: 14vh;
+  left: 1rem;
+  right: auto;
+  max-width: 420px;
+  z-index: 100;
+}
+.contact-focus p {
+  color: #ffffff;
+  font-family: 'Inter', Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0 0 1rem 0;
+  opacity: 0.9;
+}
+
 /* Contact Buttons - Base */
 .contact-buttons {
   position: absolute;
