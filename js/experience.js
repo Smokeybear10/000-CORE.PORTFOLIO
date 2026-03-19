@@ -362,33 +362,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Hello navigation button click handlers
   const helloNavButtons = document.querySelectorAll('.hello-nav-btn');
 
-  window.updateHelloButtonStyling = function(currentSection, isHelloInView) {
-    helloNavButtons.forEach((button) => {
-      const section = button.getAttribute('data-section');
-      if (isHelloInView && section === 'about') {
-        button.style.borderColor = '#00ffff';
-        button.style.boxShadow = '0 0 15px rgba(0, 255, 255, 0.6)';
-      } else {
-        button.style.borderColor = '#ffffff';
-        button.style.boxShadow = 'none';
-      }
-    });
-  };
+  window.updateHelloButtonStyling = function() {};
 
   helloNavButtons.forEach((button) => {
-    button.addEventListener('mouseenter', () => {
-      button.style.borderColor = '#00ffff';
-      button.style.boxShadow = '0 0 20px rgba(0, 255, 255, 0.6)';
-      button.style.transform = 'translateY(-2px) scale(1.05)';
-    });
-
-    button.addEventListener('mouseleave', () => {
-      const isHelloVisible = document.querySelector('.hello-section') &&
-                            document.querySelector('.hello-section').style.opacity === '1';
-      window.updateHelloButtonStyling(window.currentSection || 'about', isHelloVisible);
-      button.style.transform = 'none';
-    });
-
     button.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
@@ -634,6 +610,16 @@ window.initExperienceAnimations = function() {
       profilePhotos.forEach(photo => {
         photo.style.display = 'block';
         photo.style.visibility = 'visible';
+        photo.classList.add('in-view');
+      });
+
+      const helloSections = document.querySelectorAll('.hello-section');
+      helloSections.forEach(section => {
+        section.style.opacity = '1';
+      });
+      const helloVisibleElements = document.querySelectorAll('.hello-visible');
+      helloVisibleElements.forEach(element => {
+        element.classList.add('show');
       });
     }
     

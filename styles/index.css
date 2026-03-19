@@ -75,6 +75,33 @@ body {
   display: inline;
   color: #ffffff;
   font-weight: 300;
+  position: relative;
+  top: -0.15em;
+}
+
+.home-subtitles {
+  font-family: 'Fira Mono', 'Courier New', monospace;
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.15em;
+  margin: 0.8rem 0 0 0.3rem;
+  padding: 0;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.home-subtitles.visible {
+  opacity: 1;
+}
+
+.cursor.blink {
+  animation: cursorBlink 1s step-end infinite;
+}
+
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
 
 /* 3D Cube Container */

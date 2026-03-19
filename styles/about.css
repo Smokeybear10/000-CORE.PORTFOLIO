@@ -77,6 +77,11 @@
   margin-bottom: 4rem;
   position: relative;
   overflow: hidden;
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 2rem;
+  box-sizing: border-box;
 }
 
 .profile-image {
@@ -107,18 +112,11 @@
 
 /* Info sections */
 .info-section {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
+  background: #0a0a0a;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 15px;
+  border-radius: 12px;
   padding: 2rem;
   margin-bottom: 2rem;
-  transition: background 0.3s ease, border-color 0.3s ease;
-}
-
-.info-section:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .info-section h3 {

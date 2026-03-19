@@ -1,5 +1,6 @@
-// Typing animation — runs independently on page load
+// Typing animation — runs once on first page load, then stays typed out
 (function() {
+  let hasTyped = false;
   let typingRunId = 0;
   let typingTimeoutIds = [];
 
@@ -14,16 +15,36 @@
       if (runId !== typingRunId) return;
       callback();
     }, delay);
-
     typingTimeoutIds.push(timeoutId);
   }
 
-  function startTyping() {
+  function showTextImmediately() {
     const typedText1 = document.querySelector('.typed-text-1');
     const typedText2 = document.querySelector('.typed-text-2');
     const cursor1 = document.querySelector('.cursor-1');
     const cursor2 = document.querySelector('.cursor-2');
+    if (!typedText1 || !typedText2) return;
+    typedText1.textContent = 'THOMAS';
+    typedText2.textContent = 'OU';
+    if (cursor1) cursor1.style.display = 'none';
+    if (cursor2) {
+      cursor2.style.display = 'inline-block';
+      cursor2.classList.add('blink');
+    }
+    const subtitles = document.querySelector('.home-subtitles');
+    if (subtitles) subtitles.classList.add('visible');
+  }
 
+  function startTyping() {
+    if (hasTyped) {
+      showTextImmediately();
+      return;
+    }
+
+    const typedText1 = document.querySelector('.typed-text-1');
+    const typedText2 = document.querySelector('.typed-text-2');
+    const cursor1 = document.querySelector('.cursor-1');
+    const cursor2 = document.querySelector('.cursor-2');
     if (!typedText1 || !typedText2) return;
 
     typingRunId += 1;
@@ -56,7 +77,12 @@
         i2++;
         scheduleTypingStep(typeLine2, typingDelay, runId);
       } else {
-        if (cursor2) cursor2.style.display = 'none';
+        if (cursor2) {
+          cursor2.classList.add('blink');
+        }
+        const subtitles = document.querySelector('.home-subtitles');
+        if (subtitles) subtitles.classList.add('visible');
+        hasTyped = true;
       }
     }
 
@@ -68,7 +94,6 @@
     scheduleTypingStep(typeLine1, 500, runId);
   }
 
-  // Also expose for SPA route re-entry
   window.initHomeAnimations = startTyping;
 
   if (document.readyState === 'loading') {
@@ -98,37 +123,58 @@ document.addEventListener('DOMContentLoaded', () => {
       if (nameHeading) nameHeading.style.display = 'block';
 
       const cubeContainer = document.querySelector('#cube-container');
-      if (cubeContainer) cubeContainer.style.display = 'block';
+      if (cubeContainer) {
+        cubeContainer.style.display = 'block';
+        cubeContainer.style.opacity = '1';
+      }
 
       const modelContainer = document.querySelector('#model-container');
-      if (modelContainer) modelContainer.style.display = 'block';
+      if (modelContainer) {
+        modelContainer.style.display = 'none';
+        modelContainer.style.opacity = '0';
+      }
+
+      if (window.setCubeVisible) window.setCubeVisible(true);
+      window.currentHoveredModel = null;
 
       const scrollProgress = document.querySelector('.scroll-progress');
       if (scrollProgress) scrollProgress.style.display = 'none';
+
+      window.scrollTo(0, 0);
 
       if (window.initHomeAnimations) {
         window.initHomeAnimations();
       }
 
-      if (window.init3DCube) {
-        window.init3DCube();
-      }
+      // Give the DOM a frame to lay out containers before initializing WebGL
+      requestAnimationFrame(() => {
+        if (window.init3DCube) {
+          window.init3DCube();
+        }
 
-      if (window.initializeNavigationModels) {
-        window.initializeNavigationModels();
-      }
-
-      window.scrollTo(0, 0);
+        if (window.initializeNavigationModels) {
+          window.initializeNavigationModels();
+        }
+      });
     },
     onExit: async () => {
       const nameHeading = document.querySelector('.name-heading');
       if (nameHeading) nameHeading.style.display = 'none';
 
       const cubeContainer = document.querySelector('#cube-container');
-      if (cubeContainer) cubeContainer.style.display = 'none';
+      if (cubeContainer) {
+        cubeContainer.style.display = 'none';
+        cubeContainer.style.opacity = '1';
+      }
 
       const modelContainer = document.querySelector('#model-container');
-      if (modelContainer) modelContainer.style.display = 'none';
+      if (modelContainer) {
+        modelContainer.style.display = 'none';
+        modelContainer.style.opacity = '0';
+      }
+
+      if (window.setCubeVisible) window.setCubeVisible(true);
+      window.currentHoveredModel = null;
 
       if (window.cleanup3DCube) {
         window.cleanup3DCube();
@@ -210,28 +256,26 @@ document.addEventListener('DOMContentLoaded', () => {
       const scrollProgress = document.querySelector('.scroll-progress');
       if (scrollProgress) scrollProgress.style.display = 'block';
 
+      // Brighten hello sections immediately so they don't flash dimmed
+      document.querySelectorAll('.hello-section').forEach(s => { s.style.opacity = '1'; });
+      document.querySelectorAll('.profile-photo').forEach(p => {
+        p.style.display = 'block';
+        p.style.visibility = 'visible';
+        p.classList.add('in-view');
+      });
+      document.querySelectorAll('.hello-visible').forEach(el => {
+        el.style.display = 'block';
+        el.style.visibility = 'visible';
+        el.classList.add('show');
+      });
+
       setTimeout(() => {
-        const allProfilePhotos = document.querySelectorAll('.profile-photo');
         const leftSection = document.querySelector('.left-section');
-        const helloVisibleElements = document.querySelectorAll('.hello-visible');
-
-        allProfilePhotos.forEach(photo => {
-          photo.style.display = 'block';
-          photo.style.visibility = 'visible';
-          photo.style.setProperty('display', 'block', 'important');
-        });
-
         if (leftSection) {
           leftSection.style.display = 'block';
           leftSection.style.visibility = 'visible';
           leftSection.style.setProperty('display', 'block', 'important');
         }
-
-        helloVisibleElements.forEach(element => {
-          element.style.display = 'block';
-          element.style.visibility = 'visible';
-          element.classList.add('show');
-        });
 
         if (window.initExperienceAnimations) {
           window.initExperienceAnimations();

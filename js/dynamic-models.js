@@ -52,9 +52,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       if (!currentScene) {
         currentScene = new Scene();
-        currentCamera = new PerspectiveCamera(75, container.offsetWidth / container.offsetHeight, 0.1, 1000);
+        const w = container.offsetWidth || window.innerWidth;
+        const h = container.offsetHeight || window.innerHeight;
+        currentCamera = new PerspectiveCamera(75, w / h, 0.1, 1000);
         currentRenderer = new WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
-        currentRenderer.setSize(container.offsetWidth, container.offsetHeight);
+        currentRenderer.setSize(w, h);
         currentRenderer.setPixelRatio(window.devicePixelRatio);
         currentRenderer.setClearColor(0x000000, 0);
         currentCamera.position.x = 12;
@@ -164,35 +166,5 @@ document.addEventListener('DOMContentLoaded', async () => {
       cancelAnimationFrame(animationId);
       animationId = null;
     }
-
-    if (currentModel) {
-      currentModel.traverse((child) => {
-        if (child.isMesh) {
-          if (child.geometry) child.geometry.dispose();
-          if (child.material) {
-            if (Array.isArray(child.material)) {
-              child.material.forEach(mat => mat.dispose());
-            } else {
-              child.material.dispose();
-            }
-          }
-        }
-      });
-      currentModel = null;
-    }
-
-    if (currentScene) {
-      while(currentScene.children.length > 0) {
-        currentScene.remove(currentScene.children[0]);
-      }
-      currentScene = null;
-    }
-
-    if (currentRenderer) {
-      currentRenderer.dispose();
-      currentRenderer = null;
-    }
-
-    currentCamera = null;
   };
 });
