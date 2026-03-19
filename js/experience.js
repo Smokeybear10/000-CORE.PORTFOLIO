@@ -3,6 +3,42 @@ window.addEventListener('load', () => {
   window.scrollTo(0, 0);
 });
 
+// Resume link: show notification instead of opening PDF
+document.addEventListener('DOMContentLoaded', () => {
+  const resumeLink = document.querySelector('.resume-link');
+  const toast = document.getElementById('resume-toast');
+  const toastClose = toast?.querySelector('.resume-toast-close');
+  let toastTimeout = null;
+
+  function showToast() {
+    if (!toast) return;
+    if (toastTimeout) clearTimeout(toastTimeout);
+    toast.classList.add('show');
+    toastTimeout = setTimeout(() => {
+      toast.classList.remove('show');
+      toastTimeout = null;
+    }, 6000);
+  }
+
+  function hideToast() {
+    if (!toast) return;
+    if (toastTimeout) clearTimeout(toastTimeout);
+    toast.classList.remove('show');
+    toastTimeout = null;
+  }
+
+  if (resumeLink) {
+    resumeLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      showToast();
+    });
+  }
+
+  if (toastClose) {
+    toastClose.addEventListener('click', hideToast);
+  }
+});
+
 // Nudge profile photo to bright on initial paint
 document.addEventListener('DOMContentLoaded', () => {
   const profilePhoto = document.querySelector('.profile-photo');
@@ -419,37 +455,37 @@ const experienceData = {
     title: "Investment Strategy Associate",
     company: "Wharton Investment and Trading Group",
     location: "Oct 2024 - Present",
-    description: "• Coordinated a team of 15 analysts in developing equity research reports and financial models (DCF, Comps) across Technology and Industrials sectors.<br>&nbsp;<br>• Prepared and presented weekly investment pitches to the group's executive board for potential capital allocation decisions."
+    description: "Coordinated 15 analysts in developing equity research reports and financial models across Technology and Industrials sectors."
   },
   1: { // Quant Intern at Astera Holdings
     title: "Quant Intern",
-    company: "Astera Holdings",
-    location: "Jan 2025 - May 2025",
-    description: "• Developed a low-latency arbitrage trading engine for prediction markets (Kalshi, Polymarket), utilizing Python AsyncIO and concurrent WebSocket connections to ingest real-time order books.<br>&nbsp;<br>• Engineered an event-driven execution system that identified cross-exchange price discrepancies and executed trades with sub-second latency, integrating robust error handling for API rate limits.<br>&nbsp;<br>• Built a scalable data ingestion pipeline to normalize fragmentation across disparate betting APIs, enabling the backtesting of arbitrage strategies against 1M+ historical market events."
+    company: "Astera Holdings · Internship",
+    location: "Jan 2025 - May 2025 · 5 mos",
+    description: "Event Derivative Arbitrage on Kalshi, Polymarket."
   },
-  2: { // Data Engineering Intern at Flushing CPA
-    title: "Data Engineering Intern",
-    company: "Flushing CPA Tax Center",
-    location: "Jun 2024 - Aug 2024",
-    description: "• Deployed robust ETL pipelines using Python and SQL to ingest 50K+ financial records, implementing automated schema validation to guarantee 99.9% data integrity.<br>&nbsp;<br>• Engineered a predictive time-series forecasting service achieving 92% accuracy on revenue projections, reducing dependency on manual heuristics and enabling data-driven planning.<br>&nbsp;<br>• Implemented a real-time anomaly detection system to identify potential fraud risks, automating compliance checks and reducing manual review workload by 40% across 200+ accounts."
+  2: { // Tax Intern at Flushing CPA
+    title: "Tax Intern",
+    company: "Flushing CPA Tax Center · Internship",
+    location: "Jun 2024 - Aug 2024 · 3 mos<br>New York, New York, United States · On-site",
+    description: "Regulatory Alpha Extraction"
   },
   3: { // Technology and Research Analyst at Penn Blockchain
     title: "Technology and Research Analyst",
     company: "Penn Blockchain",
     location: "Oct 2024 - Mar 2025",
-    description: "• Authored in-depth research reports on decentralized finance (DeFi) primitives, tokenomics, and the integration of blockchain technology into traditional finance infrastructure.<br>&nbsp;<br>• Developed foundational understanding of core smart contract development principles and technical audit processes to assess protocol risk."
+    description: "Authored research reports on DeFi primitives, tokenomics, and blockchain integration into traditional finance infrastructure."
   },
-  4: { // Data Analyst - CURF
-    title: "Data Analyst",
-    company: "University of Pennsylvania",
-    location: "Jul 2025 - Present",
-    description: "• Developing end-to-end Python OCR pipeline using Tesseract and custom preprocessing to digitize 50+ years of historical U.S. military appropriations records from archival documents for Prof. Michael C. Horowitz's defense innovation research.<br>&nbsp;<br>• Designing PostgreSQL database schema with normalized tables and indexing strategies; implementing NLP system for automated document classification, named entity extraction, and metadata tagging across unstructured historical text.<br>&nbsp;<br>• Building data validation and quality assurance workflows to ensure accuracy of digitized records; creating Python scripts for batch processing and error handling across 10TB+ document corpus."
+  4: { // Research Assistant - CURF
+    title: "Research Assistant",
+    company: "University of Pennsylvania Center for Undergraduate Research and Fellowships · Part-time",
+    location: "Jul 2025 - Present · 9 mos<br>Philadelphia, Pennsylvania, United States",
+    description: "DoD AI Policy under Prof. M. Horowitz, Ph.D"
   },
-  5: { // Software Engineering Intern - PPPL
+  5: { // Software Engineering Intern - PPPL (Research section)
     title: "Software Engineering Intern (Computational Physics)",
-    company: "Princeton Plasma Physics Laboratory (PPPL)",
-    location: "Feb 2024 - Apr 2024",
-    description: "• Developed a high-performance Monte Carlo simulation engine for particle modeling, achieving a 75% runtime reduction by implementing SIMD vectorization and multi-threaded parallel computing in C++.<br>&nbsp;<br>• Automated a CI/CD pipeline for validating 100GB+ simulation datasets, ensuring reproducibility and reducing regression testing turnaround time from days to under four hours.<br>&nbsp;<br>• Built interactive visualization dashboards using Python to profile simulation performance, enabling the rapid identification of bottlenecks and accelerating model calibration cycles."
+    company: "Princeton Plasma Physics Laboratory (PPPL) · Part-time",
+    location: "Feb 2024 - Apr 2024 · 3 mos<br>Princeton, New Jersey, United States · Hybrid",
+    description: "GPU optimization & backend databases for Monte-Carlo simulation."
   }
 };
 
