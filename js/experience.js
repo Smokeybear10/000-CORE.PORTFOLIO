@@ -49,9 +49,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const experienceContainer = document.querySelector('.experience-cards');
     const researchContainer = document.querySelector('.research-cards');
     
-    const isEducationInFocus = timelineContainer && timelineContainer.classList.contains('in-view');
     const isExperienceInFocus = experienceContainer && experienceContainer.classList.contains('in-view');
     const isResearchInFocus = researchContainer && researchContainer.classList.contains('in-view');
+    // Education is default — show it when nothing else is in focus
+    const isEducationInFocus = (timelineContainer && timelineContainer.classList.contains('in-view')) || (!isExperienceInFocus && !isResearchInFocus);
     
     // Horse shows for education
     if (horseContainer) {
