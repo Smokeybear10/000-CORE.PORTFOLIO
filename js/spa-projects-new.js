@@ -180,7 +180,7 @@ function setupWheelRotation() {
     return;
   }
   
-  // Wrap card content and create 3D face elements
+  // Wrap card content, create curved slices and 3D face elements
   const cards = wheelContainer.querySelectorAll('.project-card');
   cards.forEach(card => {
     card.querySelectorAll('.card-face').forEach(f => f.remove());
@@ -196,11 +196,13 @@ function setupWheelRotation() {
 
     const imageEl = card.querySelector('.project-image');
     const bgImage = imageEl ? imageEl.style.backgroundImage : '';
+    const bgColor = imageEl ? (imageEl.style.backgroundColor || '') : '';
 
     ['right', 'left', 'top', 'bottom', 'back'].forEach(side => {
       const face = document.createElement('div');
       face.className = `card-face card-face-${side}`;
       if (bgImage) face.style.backgroundImage = bgImage;
+      else if (bgColor) face.style.backgroundColor = bgColor;
       card.appendChild(face);
     });
   });
