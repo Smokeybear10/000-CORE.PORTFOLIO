@@ -49,26 +49,32 @@ html, body {
 }
 
 
-/* Left half - Thomas section */
+/* Left half - scrolls with page, sticks when scrolled down */
 .left-section {
-  position: fixed;
-  top: 5vh;
+  position: absolute;
+  top: 85vh;
   right: 50%;
   width: min(50%, 600px);
-  height: 90vh;
-  z-index: 10;
+  height: auto;
+  z-index: 50;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   align-items: center;
   text-align: center;
-  padding-top: 5vh;
   border: none;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
 }
+
+/* Stick when scrolled down past threshold */
+.left-section.is-stuck {
+  position: fixed !important;
+  top: 5vh !important;
+  bottom: 5vh !important;
+  right: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 
 .left-section.visible {
   opacity: 1;
@@ -95,7 +101,7 @@ html, body {
   visibility: visible;
 }
 
-/* Hide education title until scrolled */
+/* Education title - visible by default, transitions on section change */
 .education-title {
   opacity: 0;
   visibility: hidden;
@@ -129,7 +135,7 @@ html, body {
 /* Right half - Content */
 .right-section {
   position: absolute;
-  top: 75vh;
+  top: 85vh;
   left: 50%;
   width: min(50%, 600px);
   min-height: 100vh;
@@ -156,7 +162,8 @@ html, body {
 .timeline-container,
 .cards-container,
 .hello-content-mobile,
-.profile-photo {
+.profile-photo,
+.left-section {
   opacity: 0.3;
   transition: opacity 0.6s ease;
 }
@@ -164,7 +171,8 @@ html, body {
 .timeline-container.in-view,
 .cards-container.in-view,
 .hello-content-mobile.in-view,
-.profile-photo.in-view {
+.profile-photo.in-view,
+.left-section.in-view {
   opacity: 1 !important;
 }
 
@@ -172,7 +180,8 @@ html, body {
 body.modal-open .timeline-container,
 body.modal-open .cards-container,
 body.modal-open .hello-content-mobile,
-body.modal-open .profile-photo {
+body.modal-open .profile-photo,
+body.modal-open .left-section {
   opacity: 1 !important;
 }
 
@@ -483,7 +492,7 @@ body.modal-open .profile-photo {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
-  margin: 2rem 0;
+  margin: 2rem auto;
   width: 80%;
 }
 
@@ -564,13 +573,14 @@ body.modal-open .profile-photo {
 }
 
 .nav-buttons.permanent-buttons {
-  position: absolute;
-  top: 80vh;
-  left: 50%;
-  transform: translateX(-50%);
+  position: relative;
+  top: auto;
+  left: auto;
+  transform: none;
+  width: 80%;
+  align-self: center;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
   z-index: 15;
 }
 

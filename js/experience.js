@@ -17,24 +17,20 @@ document.addEventListener('DOMContentLoaded', () => {
 // to avoid duplicate listeners accumulating on route changes.
 
 
-// Reveal left 3D column and education title after initial scroll
+// Left section: scrolls with page, sticks when scrolled down past threshold
 document.addEventListener('DOMContentLoaded', () => {
   const leftSection = document.querySelector('.left-section');
-  const educationTitle = document.querySelector('.education-title');
-  const threshold = 600; // px of scroll before showing (further delay)
 
-  function updateLeftVisibility() {
-    const show = window.scrollY > threshold;
-    if (leftSection) {
-      leftSection.classList.toggle('visible', show);
-    }
-    if (educationTitle) {
-      educationTitle.classList.toggle('visible', show);
-    }
+  function updateLeftStick() {
+    if (!leftSection || document.body.getAttribute('data-current-route') !== 'experience') return;
+    const threshold = window.innerHeight * 0.8;
+    leftSection.classList.toggle('is-stuck', window.scrollY >= threshold);
   }
 
-  updateLeftVisibility();
-  window.addEventListener('scroll', updateLeftVisibility);
+  updateLeftStick();
+  window.addEventListener('scroll', updateLeftStick);
+  window.addEventListener('resize', updateLeftStick);
+  window.updateLeftSectionPosition = updateLeftStick;
 });
 
 // Animal containers fade in/out based on section focus
@@ -176,10 +172,12 @@ function createSectionVisibilityHandler() {
         helloVisibleElements.forEach(element => {
           element.classList.add('show');
         });
-        // Dim all other sections
+        // Dim all other sections including left-section (Education/3D/buttons)
         sections.forEach(section => {
           section.element.classList.remove('in-view');
         });
+        const leftSection = document.querySelector('.left-section');
+        if (leftSection) leftSection.classList.remove('in-view');
 
         // Brighten profile photo when at top
         const profilePhoto = document.querySelector('.profile-photo');
@@ -250,6 +248,16 @@ function createSectionVisibilityHandler() {
         section.element.classList.remove('in-view');
       }
     });
+
+    // Left-section bright only when education/experience/research in focus
+    const leftSection = document.querySelector('.left-section');
+    if (leftSection) {
+      if (activeSection && ['education', 'experience', 'research'].includes(activeSection.name)) {
+        leftSection.classList.add('in-view');
+      } else {
+        leftSection.classList.remove('in-view');
+      }
+    }
 
     // Update navigation button highlighting
     const navButtons = document.querySelectorAll('.nav-buttons.permanent-buttons .nav-btn');
