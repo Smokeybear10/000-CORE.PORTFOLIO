@@ -93,7 +93,7 @@
   height: clamp(200px, 25vh, 350px) !important;
   background: linear-gradient(145deg, #1a0d2e, #16213e) !important;
   border: none !important;
-  border-radius: 12px !important;
+  border-radius: 0 !important;
   padding: 0 !important;
   left: 50% !important;
   top: 50% !important;
@@ -131,13 +131,69 @@
 .project-card:nth-child(5) { transform: rotateY(240deg) translateZ(clamp(250px, 33vw, 460px)); }
 .project-card:nth-child(6) { transform: rotateY(300deg) translateZ(clamp(250px, 33vw, 460px)); }
 
+/* Card content wrapper - flattens children to prevent preserve-3d rendering bugs */
+.card-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: linear-gradient(145deg, #1a0d2e, #16213e);
+}
+
+/* 3D card face edges */
+.card-face {
+  position: absolute;
+  backface-visibility: hidden;
+  pointer-events: none;
+  background-size: cover;
+  background-position: center;
+  background-color: rgba(10, 5, 20, 0.85);
+  background-blend-mode: multiply;
+}
+
+.card-face-right {
+  top: 0;
+  left: 100%;
+  width: 20px;
+  height: 100%;
+  transform-origin: left center;
+  transform: rotateY(90deg);
+}
+
+.card-face-left {
+  top: 0;
+  right: 100%;
+  width: 20px;
+  height: 100%;
+  transform-origin: right center;
+  transform: rotateY(-90deg);
+}
+
+.card-face-top {
+  bottom: 100%;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  transform-origin: center bottom;
+  transform: rotateX(90deg);
+}
+
+.card-face-bottom {
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  transform-origin: center top;
+  transform: rotateX(-90deg);
+}
+
 /* Project card content */
 .project-image {
   width: 100%;
   height: calc(100% - 50px);
   background-size: cover;
   background-position: center;
-  border-radius: 8px 8px 0 0;
+  border-radius: 0;
   pointer-events: none;
 }
 
@@ -147,7 +203,7 @@
   align-items: center;
   justify-content: center;
   background: #000000;
-  border-radius: 0 0 8px 8px;
+  border-radius: 0;
   border-top: 2px solid transparent;
   pointer-events: none;
 }

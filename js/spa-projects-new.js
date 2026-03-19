@@ -180,6 +180,42 @@ function setupWheelRotation() {
     return;
   }
   
+  // Wrap card content and create 3D face elements
+  const cards = wheelContainer.querySelectorAll('.project-card');
+  cards.forEach(card => {
+    card.querySelectorAll('.card-face').forEach(f => f.remove());
+
+    if (!card.querySelector('.card-content')) {
+      const content = document.createElement('div');
+      content.className = 'card-content';
+      while (card.firstChild) {
+        content.appendChild(card.firstChild);
+      }
+      card.appendChild(content);
+    }
+
+    const imageEl = card.querySelector('.project-image');
+    const bgImage = imageEl ? imageEl.style.backgroundImage : '';
+
+    ['right', 'left', 'top', 'bottom'].forEach(side => {
+      const face = document.createElement('div');
+      face.className = `card-face card-face-${side}`;
+      if (bgImage) face.style.backgroundImage = bgImage;
+      card.appendChild(face);
+    });
+  });
+
+  function updateFaceVisibility() {
+    cards.forEach((card, i) => {
+      const angle = ((currentRotation + i * 60) % 360 + 360) % 360;
+      const show = angle < 85 || angle > 275;
+      card.querySelectorAll('.card-face').forEach(face => {
+        face.style.visibility = show ? 'visible' : 'hidden';
+      });
+    });
+  }
+  updateFaceVisibility();
+
   // Auto rotation with hover slowdown
   function autoRotate() {
     let targetSpeed = autoRotationSpeed;
@@ -198,6 +234,7 @@ function setupWheelRotation() {
       }
       currentRotation += velocity;
       wheelContainer.style.transform = `rotateX(-13deg) rotateY(${currentRotation}deg)`;
+      updateFaceVisibility();
     }
     wheelAnimationFrameId = requestAnimationFrame(autoRotate);
   }
@@ -236,6 +273,7 @@ function setupWheelRotation() {
 
     currentRotation += deltaX * 0.5;
     wheelContainer.style.transform = `rotateX(-13deg) rotateY(${currentRotation}deg)`;
+    updateFaceVisibility();
 
     startX = currentX;
     e.preventDefault();
