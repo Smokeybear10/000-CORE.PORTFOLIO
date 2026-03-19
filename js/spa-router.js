@@ -59,6 +59,7 @@ class SPARouter {
     const resolvedRoute = this.routes.has(route) ? route : 'home';
     if (!this.routes.has(resolvedRoute)) return;
 
+    window.scrollTo(0, 0);
     this.isTransitioning = true;
     const routeConfig = this.routes.get(resolvedRoute);
 

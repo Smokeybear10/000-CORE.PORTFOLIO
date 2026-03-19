@@ -162,8 +162,7 @@ html, body {
 .timeline-container,
 .cards-container,
 .hello-content-mobile,
-.profile-photo,
-.left-section {
+.profile-photo {
   opacity: 0.3;
   transition: opacity 0.6s ease;
 }
@@ -171,8 +170,12 @@ html, body {
 .timeline-container.in-view,
 .cards-container.in-view,
 .hello-content-mobile.in-view,
-.profile-photo.in-view,
-.left-section.in-view {
+.profile-photo.in-view {
+  opacity: 1 !important;
+}
+
+/* Left section always visible - titles/models handle their own fading */
+.left-section {
   opacity: 1 !important;
 }
 
