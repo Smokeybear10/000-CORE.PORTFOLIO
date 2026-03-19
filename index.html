@@ -281,88 +281,93 @@
           
           <!-- Left Half - Horse Model -->
           <div class="left-section">
-            
-            <!-- RESEARCH Title (in front of all) -->
-            <div class="research-title" style="position: fixed; top: 5vh; right: 50%; width: min(50%, 600px); z-index: 3; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;">
-              <div class="research-text" style="font-size: min(9vw, 8rem); font-weight: 400; font-family: 'Anton', Arial, sans-serif; color: #ffffff; text-align: center; letter-spacing: 0.05em; text-transform: none; margin: 0; line-height: 0.9; width: 100%;">
-                <div>RESEARCH</div>
+
+            <!-- Titles - stacked on top of each other, in flow -->
+            <div class="left-section-titles" style="position: relative; width: 100%; min-height: 8rem; margin-bottom: 0;">
+              <!-- RESEARCH Title (in front of all) -->
+              <div class="research-title" style="position: absolute; top: 0; left: 0; width: 100%; z-index: 3; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;">
+                <div class="research-text" style="font-size: min(9vw, 8rem); font-weight: 400; font-family: 'Anton', Arial, sans-serif; color: #ffffff; text-align: center; letter-spacing: 0.05em; text-transform: none; margin: 0; line-height: 0.9; width: 100%;">
+                  <div>RESEARCH</div>
+                </div>
+              </div>
+
+              <!-- EXPERIENCE Title (in front) -->
+              <div class="experience-title" style="position: absolute; top: 0; left: 0; width: 100%; z-index: 2; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;">
+                <div class="experience-text" style="font-size: min(9vw, 8rem); font-weight: 400; font-family: 'Anton', Arial, sans-serif; color: #ffffff; text-align: center; letter-spacing: -0.02em; text-transform: none; margin: 0; line-height: 0.9; width: 100%;">
+                  <div>EXPERIENCE</div>
+                </div>
+              </div>
+
+              <!-- EDUCATION Title -->
+              <div class="education-title visible" style="position: absolute; top: 0; left: 0; width: 100%; z-index: 1;">
+                <div class="education-text" style="font-size: min(9vw, 8rem); font-weight: 400; font-family: 'Anton', Arial, sans-serif; color: #ffffff; text-align: center; letter-spacing: -0.02em; text-transform: none; margin: 0; line-height: 0.9; width: 100%;">
+                  <div>EDUCATION</div>
+                </div>
               </div>
             </div>
-            
-            <!-- EXPERIENCE Title (in front) -->
-            <div class="experience-title" style="position: fixed; top: 5vh; right: 50%; width: min(50%, 600px); z-index: 2; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;">
-              <div class="experience-text" style="font-size: min(9vw, 8rem); font-weight: 400; font-family: 'Anton', Arial, sans-serif; color: #ffffff; text-align: center; letter-spacing: -0.02em; text-transform: none; margin: 0; line-height: 0.9; width: 100%;">
-                <div>EXPERIENCE</div>
+
+            <!-- 3D Models - stacked on top of each other, in flow -->
+            <div class="left-section-model" style="position: relative; width: 100%; height: 60vh; flex-shrink: 0; min-height: 60vh; margin-top: -2rem;">
+              <!-- 3D Lion Head (in front of all) -->
+              <div class="lion-container-new" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 7; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; border: none;">
+                <model-viewer
+                  src="Models/lion_head_4k.glb"
+                  alt="3D Lion Head"
+                  auto-rotate
+                  rotation-per-second="30deg"
+                  camera-orbit="0deg 75deg 115%"
+                  field-of-view="30deg"
+                  shadow-intensity="0"
+                  environment-image="neutral"
+                  exposure="1"
+                  shadow-softness="0"
+                  loading="lazy"
+                  reveal="auto"
+                  style="width: 100%; height: 100%;">
+                </model-viewer>
               </div>
-            </div>
-            
-            <!-- EDUCATION Title -->
-            <div class="education-title" style="position: fixed; top: 5vh; right: 50%; width: min(50%, 600px); z-index: 1;">
-              <div class="education-text" style="font-size: min(9vw, 8rem); font-weight: 400; font-family: 'Anton', Arial, sans-serif; color: #ffffff; text-align: center; letter-spacing: -0.02em; text-transform: none; margin: 0; line-height: 0.9; width: 100%;">
-                <div>EDUCATION</div>
+
+              <!-- 3D Bull Head (in front) -->
+              <div class="bull-container-new" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 6; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; border: none;">
+                <model-viewer
+                  src="Models/bull_head_4k.glb"
+                  alt="3D Bull Head"
+                  auto-rotate
+                  rotation-per-second="30deg"
+                  camera-orbit="0deg 75deg 115%"
+                  field-of-view="30deg"
+                  shadow-intensity="0"
+                  environment-image="neutral"
+                  exposure="1"
+                  shadow-softness="0"
+                  loading="lazy"
+                  reveal="auto"
+                  style="width: 100%; height: 100%;">
+                </model-viewer>
               </div>
-            </div>
-            
-            
-            <!-- 3D Lion Head (in front of all) -->
-            <div class="lion-container-new" style="position: fixed; top: 5vh; right: 50%; width: min(50%, 600px); height: 80vh; margin-top: 0; z-index: 7; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; border: none;">
-              <model-viewer
-                src="Models/lion_head_4k.glb"
-                alt="3D Lion Head"
-                auto-rotate
-                rotation-per-second="30deg"
-                camera-orbit="0deg 75deg 115%"
-                field-of-view="30deg"
-                shadow-intensity="0"
-                environment-image="neutral"
-                exposure="1"
-                shadow-softness="0"
-                loading="lazy"
-                reveal="auto"
-                style="width: 100%; height: 100%;">
-              </model-viewer>
-            </div>
-            
-            <!-- 3D Bull Head (in front) -->
-            <div class="bull-container-new" style="position: fixed; top: 5vh; right: 50%; width: min(50%, 600px); height: 80vh; margin-top: 0; z-index: 6; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; border: none;">
-              <model-viewer
-                src="Models/bull_head_4k.glb"
-                alt="3D Bull Head"
-                auto-rotate
-                rotation-per-second="30deg"
-                camera-orbit="0deg 75deg 115%"
-                field-of-view="30deg"
-                shadow-intensity="0"
-                environment-image="neutral"
-                exposure="1"
-                shadow-softness="0"
-                loading="lazy"
-                reveal="auto"
-                style="width: 100%; height: 100%;">
-              </model-viewer>
-            </div>
-            
-            <!-- 3D Horse Head -->
-            <div class="horse-container" style="position: fixed; top: 0vh; right: 50%; width: min(50%, 600px); height: 90vh; margin-top: 0;">
-              <model-viewer
-                src="Models/horse_head_4k.glb"
-                alt="3D Horse Head"
-                auto-rotate
-                rotation-per-second="30deg"
-                camera-orbit="0deg 75deg 85%"
-                field-of-view="30deg"
-                shadow-intensity="0"
-                environment-image="neutral"
-                exposure="1"
-                shadow-softness="0"
-                loading="eager"
-                reveal="auto"
-                style="width: 100%; height: 100%;">
-              </model-viewer>
+
+              <!-- 3D Horse Head -->
+              <div class="horse-container visible" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+                <model-viewer
+                  src="Models/horse_head_4k.glb"
+                  alt="3D Horse Head"
+                  auto-rotate
+                  rotation-per-second="30deg"
+                  camera-orbit="0deg 75deg 85%"
+                  field-of-view="30deg"
+                  shadow-intensity="0"
+                  environment-image="neutral"
+                  exposure="1"
+                  shadow-softness="0"
+                  loading="eager"
+                  reveal="auto"
+                  style="width: 100%; height: 100%;">
+                </model-viewer>
+              </div>
             </div>
 
             <!-- Navigation Buttons -->
-            <div class="nav-buttons permanent-buttons" style="position: absolute; top: 70vh; left: 50%; transform: translateX(-50%); z-index: 15;">
+            <div class="nav-buttons permanent-buttons" style="z-index: 15;">
               <button class="nav-btn">About</button>
               <button class="nav-btn">Education</button>
               <button class="nav-btn">Experience</button>
