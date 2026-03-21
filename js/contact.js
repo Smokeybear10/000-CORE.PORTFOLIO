@@ -112,7 +112,7 @@ function startFallingShapes() {
   ensureSharedRenderer();
 
   const vaporwaveColors = [
-    '#00ffff', '#00e5ff', '#00ccff', '#00b7ff', '#ffcc00',
+    '#00e5ff', '#00e5ff', '#00ccff', '#00b7ff', '#ffcc00',
     '#00ff80', '#00aaff', '#00ccff', '#00ccff', '#ff3300'
   ];
 
