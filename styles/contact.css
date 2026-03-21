@@ -54,24 +54,6 @@
   line-height: 0.9;
 }
 
-/* Current Focus - below title */
-.contact-focus {
-  position: fixed;
-  top: 14vh;
-  left: 1rem;
-  right: auto;
-  max-width: 420px;
-  z-index: 100;
-}
-.contact-focus p {
-  color: #f0f0f5;
-  font-family: 'Inter', Arial, sans-serif;
-  font-size: 1rem;
-  line-height: 1.6;
-  margin: 0 0 1rem 0;
-  opacity: 0.9;
-}
-
 /* Contact Buttons - Base */
 .contact-buttons {
   position: absolute;
@@ -95,12 +77,49 @@
   border-radius: 0;
   color: #ffffff;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background 0.3s ease, color 0.3s ease, filter 0.3s ease, transform 0.3s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
+  visibility: hidden;
+  transform-origin: center center;
+}
+
+.contact-btn.contact-btn-revealed {
+  visibility: visible;
+  animation: contactBtnPopIn 0.38s cubic-bezier(0.28, 1.5, 0.42, 1) forwards;
+}
+
+@keyframes contactBtnPopIn {
+  0% {
+    transform: scale(0.45);
+    opacity: 1;
+  }
+  68% {
+    transform: scale(1.06);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-btn {
+    visibility: visible;
+    animation: none;
+    transform: none;
+    opacity: 1;
+  }
+
+  .contact-btn.contact-btn-revealed {
+    animation: none;
+    transform: none;
+    opacity: 1;
+  }
 }
 
 .contact-btn svg {
@@ -164,40 +183,12 @@
   }
 }
 
-/* Falling 3D models - contained within contact content */
-.falling-model {
-  position: absolute;
-  width: 120px;
-  height: 120px;
-  pointer-events: none;
-  z-index: -1;
-  opacity: 1;
-  transition: none;
-}
-
 /* Ensure contact content can contain the falling shapes */
 #contact-content {
   position: relative;
   overflow: hidden;
   width: 100vw;
   height: 100vh;
-}
-
-.falling-model model-viewer {
-  width: 100%;
-  height: 100%;
-  --poster-color: transparent;
-}
-
-@keyframes fall {
-  0% {
-    transform: translateY(-150px) rotate(0deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(calc(100vh + 150px)) rotate(360deg);
-    opacity: 0;
-  }
 }
 
 /* Contact route visibility control */

@@ -247,7 +247,7 @@
               </div>
 
               <!-- EDUCATION Title -->
-              <div class="education-title visible" style="position: absolute; top: 0; left: 0; width: 100%; z-index: 1;">
+              <div class="education-title" style="position: absolute; top: 0; left: 0; width: 100%; z-index: 1;">
                 <div class="education-text" style="font-size: min(9vw, 8rem); font-weight: 400; font-family: 'Anton', Arial, sans-serif; color: #ffffff; text-align: center; letter-spacing: -0.02em; text-transform: none; margin: 0; line-height: 0.9; width: 100%;">
                   <div>EDUCATION</div>
                 </div>
@@ -327,7 +327,7 @@
           <!-- Top Container -->
           <div class="top-container">
             <!-- Text Content Container -->
-            <div class="text-content-container" style="position: absolute; left: calc(min(40vh, 480px) + 0rem); top: 0; right: 0; height: 100%; padding: 2rem; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center;">
+            <div class="text-content-container" style="position: absolute; left: calc(min(40vh, 480px) + clamp(0.75rem, 2.5vw, 1.75rem) + 0.35rem); top: 0; right: 0; height: 100%; padding: 2rem 2rem 2rem 0.5rem; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center;">
               <!-- Hello Thomas Header -->
               <div class="hello-section" style="font-size: min(7.5vw, 2.4rem); font-weight: 400; font-family: 'Anton', Arial, sans-serif; color: #ffffff; margin: 0; text-align: left; line-height: 1.05; opacity: 0.3; transition: opacity 0.6s ease; letter-spacing: 0.02em;">Hello. I am Thomas</div>
               
@@ -495,10 +495,10 @@
               </div>
             </div>
             
-            <div class="project-card" data-project="flywheel">
+            <div class="project-card" data-project="dj">
               <div class="project-image" style="background-image: url('Images/ProjectPhotos/MagneticallyLevitating.png');"></div>
               <div class="project-header">
-                <h3>Magnetically Levitating Flywheel Generator</h3>
+                <h3>Personal LLM DJ</h3>
               </div>
             </div>
             
@@ -510,7 +510,7 @@
             </div>
             
             <div class="project-card" data-project="website">
-              <div class="project-image" style="background-color: #111;"></div>
+              <div class="project-image" style="background-image: url('Images/ProjectPhotos/PersonalPortfolio.gif');"></div>
               <div class="project-header">
                 <h3>Personal Portfolio Website</h3>
               </div>
@@ -540,10 +540,12 @@
                 <div class="back-to-projects" id="backToProjects">← Back to Projects</div>
               </div>
               <div class="project-hero-image" id="projectHeroImageContainer">
-                <img id="projectHeroImage" src="" alt="" />
-                <button class="gallery-prev" id="galleryPrev" aria-label="Previous image">&#8249;</button>
-                <button class="gallery-next" id="galleryNext" aria-label="Next image">&#8250;</button>
-                <div class="gallery-dots" id="galleryDots"></div>
+                <div class="project-hero-image-inner">
+                  <img id="projectHeroImage" src="" alt="" />
+                  <button class="gallery-prev" id="galleryPrev" aria-label="Previous image">&#8249;</button>
+                  <button class="gallery-next" id="galleryNext" aria-label="Next image">&#8250;</button>
+                </div>
+                <div class="gallery-dots" id="galleryDots" aria-label="Gallery images"></div>
               </div>
               <div class="project-hero-info">
                 <h1 id="projectTitle" class="project-title"></h1>
@@ -579,11 +581,6 @@
       </div>
 
       <!-- Current Focus -->
-      <div class="contact-focus contact-only">
-        <p>I'm currently working on projects in artificial intelligence and blockchain/Web3 technologies. My research interests include machine learning applications in tech, algorithmic trading strategies, and the mathematical foundations of cryptographic systems.</p>
-        <p>In the past, I've always found great success in collaborating and connecting with new people. I'd love to connect, so don't hesitate to reach out.</p>
-      </div>
-
       <!-- Contact Buttons (outside container) -->
       <div class="contact-buttons contact-only">
         <button class="contact-btn" data-contact="email">

@@ -53,7 +53,7 @@
 
     const text1 = 'THOMAS';
     const text2 = 'OU';
-    const typingDelay = 250;
+    const typingDelay = 175;
     let i1 = 0;
     let i2 = 0;
 
@@ -83,6 +83,9 @@
         const subtitles = document.querySelector('.home-subtitles');
         if (subtitles) subtitles.classList.add('visible');
         hasTyped = true;
+        if (typeof window.notifyHomeCubeReadyAfterTitle === 'function') {
+          window.notifyHomeCubeReadyAfterTitle();
+        }
       }
     }
 
@@ -91,10 +94,11 @@
     if (cursor1) cursor1.style.display = 'inline-block';
     if (cursor2) cursor2.style.display = 'none';
 
-    scheduleTypingStep(typeLine1, 500, runId);
+    scheduleTypingStep(typeLine1, 350, runId);
   }
 
   window.initHomeAnimations = startTyping;
+  window.isHomeTypingComplete = () => hasTyped;
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', startTyping);
@@ -106,6 +110,54 @@
 // SPA Initialization and Route Management
 document.addEventListener('DOMContentLoaded', () => {
   const router = new SPARouter();
+
+  /** First-time title typing completion → same cube pop as return-home (cube stays hidden until this). */
+  window.notifyHomeCubeReadyAfterTitle = function notifyHomeCubeReadyAfterTitle() {
+    const cubeContainer = document.querySelector('#cube-container');
+    if (!cubeContainer || document.body.getAttribute('data-current-route') !== 'home') return;
+    scheduleHomeCubeReturnPop(cubeContainer);
+  };
+
+  /** After first visit: hide cube + nav models, then scale-pop the cube (no opacity fade). */
+  function scheduleHomeCubeReturnPop(cubeContainer) {
+    const reduceMotion =
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) {
+      cubeContainer.classList.remove('home-cube-pre-pop', 'home-cube-pop-in');
+      cubeContainer.style.opacity = '';
+      cubeContainer.style.transform = '';
+      document.body.classList.remove('home-awaiting-3d-reveal');
+      return;
+    }
+
+    cubeContainer.classList.remove('home-cube-pop-in');
+    cubeContainer.style.opacity = '';
+    cubeContainer.style.transform = '';
+    void cubeContainer.offsetWidth;
+
+    cubeContainer.classList.add('home-cube-pre-pop');
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (document.body.getAttribute('data-current-route') !== 'home') {
+          cubeContainer.classList.remove('home-cube-pre-pop');
+          return;
+        }
+        cubeContainer.classList.remove('home-cube-pre-pop');
+        cubeContainer.classList.add('home-cube-pop-in');
+        cubeContainer.addEventListener(
+          'animationend',
+          (e) => {
+            if (e.target !== cubeContainer) return;
+            cubeContainer.classList.remove('home-cube-pop-in');
+            document.body.classList.remove('home-awaiting-3d-reveal');
+          },
+          { once: true }
+        );
+      });
+    });
+  }
 
   router.addRoute('home', {
     title: 'Thomas Ou • Portfolio',
@@ -122,16 +174,27 @@ document.addEventListener('DOMContentLoaded', () => {
       const nameHeading = document.querySelector('.name-heading');
       if (nameHeading) nameHeading.style.display = 'block';
 
-      const cubeContainer = document.querySelector('#cube-container');
-      if (cubeContainer) {
-        cubeContainer.style.display = 'block';
-        cubeContainer.style.opacity = '1';
-      }
+      const isReturnHome =
+        typeof window.isHomeTypingComplete === 'function' &&
+        window.isHomeTypingComplete();
 
+      const cubeContainer = document.querySelector('#cube-container');
       const modelContainer = document.querySelector('#model-container');
+
       if (modelContainer) {
         modelContainer.style.display = 'none';
         modelContainer.style.opacity = '0';
+      }
+
+      if (cubeContainer) {
+        cubeContainer.style.display = 'block';
+        if (isReturnHome) {
+          scheduleHomeCubeReturnPop(cubeContainer);
+        } else {
+          cubeContainer.classList.remove('home-cube-pre-pop', 'home-cube-pop-in');
+          cubeContainer.style.opacity = '';
+          cubeContainer.style.transform = '';
+        }
       }
 
       if (window.setCubeVisible) window.setCubeVisible(true);
@@ -158,13 +221,17 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     },
     onExit: async () => {
+      document.body.classList.remove('home-awaiting-3d-reveal');
+
       const nameHeading = document.querySelector('.name-heading');
       if (nameHeading) nameHeading.style.display = 'none';
 
       const cubeContainer = document.querySelector('#cube-container');
       if (cubeContainer) {
+        cubeContainer.classList.remove('home-cube-pre-pop', 'home-cube-pop-in');
         cubeContainer.style.display = 'none';
         cubeContainer.style.opacity = '1';
+        cubeContainer.style.transform = '';
       }
 
       const modelContainer = document.querySelector('#model-container');

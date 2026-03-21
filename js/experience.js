@@ -84,13 +84,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const timelineContainer = document.querySelector('.timeline-container');
     const experienceContainer = document.querySelector('.experience-cards');
     const researchContainer = document.querySelector('.research-cards');
-    
+
     const isExperienceInFocus = experienceContainer && experienceContainer.classList.contains('in-view');
     const isResearchInFocus = researchContainer && researchContainer.classList.contains('in-view');
     // Education is default — show it when nothing else is in focus
-    const isEducationInFocus = (timelineContainer && timelineContainer.classList.contains('in-view')) || (!isExperienceInFocus && !isResearchInFocus);
-    
-    // Horse shows for education
+    const isEducationInFocus =
+      (timelineContainer && timelineContainer.classList.contains('in-view')) ||
+      (!isExperienceInFocus && !isResearchInFocus);
+
+    // Horse shows for education (fade-in timing matches timeline in experience.css)
     if (horseContainer) {
       if (isEducationInFocus) {
         horseContainer.classList.add('visible');
@@ -145,13 +147,13 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
     
-    // Education title shows when education is in focus
+    // Education title shows when education is in focus (fade-in timing matches timeline in experience.css)
     if (isEducationInFocus) {
       if (educationTitle) educationTitle.classList.add('visible');
     } else {
       if (educationTitle) educationTitle.classList.remove('visible');
     }
-    
+
     // Nav buttons show when education, experience, OR research is in focus (don't fade out until footer)
     if (isEducationInFocus || isExperienceInFocus || isResearchInFocus) {
       if (navButtons) navButtons.classList.add('visible');
@@ -159,13 +161,70 @@ document.addEventListener('DOMContentLoaded', () => {
       if (navButtons) navButtons.classList.remove('visible');
     }
   }
-  
+
+  // After first entrance animation finishes, don’t replay it when .visible toggles on scroll
+  if (horseContainer) {
+    horseContainer.addEventListener('animationend', (e) => {
+      if (e.target !== horseContainer) return;
+      if (e.animationName !== 'experienceFadeInSoft') return;
+      horseContainer.classList.add('horse-entrance-done');
+    });
+  }
+
+  if (educationTitle) {
+    educationTitle.addEventListener('animationend', (e) => {
+      if (e.target !== educationTitle) return;
+      if (e.animationName !== 'experienceFadeInSoft') return;
+      educationTitle.classList.add('education-title-entrance-done');
+    });
+  }
+
   // Initial call and scroll listener
   updateAnimalVisibility();
   window.addEventListener('scroll', updateAnimalVisibility);
   window.addEventListener('resize', updateAnimalVisibility);
 });
 
+
+/**
+ * Title + horse: same entrance as timeline (CSS), then brighten when timeline has .in-view.
+ * Nav: stays at post-entrance dim (0.3) on About; experience-nav-bright when in Education / Exp / Research.
+ */
+function syncExperienceEducationDimming() {
+  const route = document.body.getAttribute('data-current-route');
+  const title = document.querySelector('.education-title');
+  const horse = document.querySelector('.horse-container');
+  const nav = document.querySelector('.nav-buttons.permanent-buttons');
+  const timeline = document.querySelector('.timeline-container');
+
+  if (route !== 'experience') {
+    [title, horse, nav].forEach((el) => {
+      if (!el) {
+        return;
+      }
+      el.classList.remove(
+        'education-timeline-focused',
+        'experience-nav-bright',
+        'experience-education-dimmed'
+      );
+    });
+    return;
+  }
+
+  const timelineFocused = Boolean(timeline && timeline.classList.contains('in-view'));
+  const section = window.currentSection || 'about';
+
+  [title, horse].forEach((el) => {
+    if (!el) return;
+    el.classList.toggle('education-timeline-focused', timelineFocused);
+    el.classList.remove('experience-education-dimmed');
+  });
+
+  if (nav) {
+    nav.classList.remove('experience-education-dimmed');
+    nav.classList.toggle('experience-nav-bright', section !== 'about');
+  }
+}
 
 // Shared section visibility function - used by both normal page load and SPA mode
 function createSectionVisibilityHandler() {
@@ -185,6 +244,10 @@ function createSectionVisibilityHandler() {
   return function updateSectionVisibility() {
     // Skip all dimming while modal is open
     if (document.body.classList.contains('modal-open')) return;
+
+    if (document.body.getAttribute('data-current-route') !== 'experience') {
+      syncExperienceEducationDimming();
+    }
 
     const windowHeight = window.innerHeight;
     let activeSection = null;
@@ -227,6 +290,8 @@ function createSectionVisibilityHandler() {
         if (window.updateHelloButtonStyling) {
           window.updateHelloButtonStyling('about', true);
         }
+        window.currentSection = 'about';
+        syncExperienceEducationDimming();
         return;
       } else {
         // Dim hello sections
@@ -322,7 +387,7 @@ function createSectionVisibilityHandler() {
       
       // Store current section globally
       window.currentSection = currentSectionName;
-      
+
       // Handle hello-content-mobile in vertical mode
       const isVerticalMode = window.innerHeight > window.innerWidth || window.innerWidth <= 768;
       const helloContentMobile = document.querySelector('.hello-content-mobile');
@@ -359,6 +424,8 @@ function createSectionVisibilityHandler() {
         profilePhoto.classList.remove('in-view');
       }
     }
+
+    syncExperienceEducationDimming();
   };
 }
 
@@ -671,6 +738,10 @@ window.initExperienceAnimations = function() {
 };
 
 window.cleanupExperienceAnimations = function() {
+  document.querySelector('.horse-container')?.classList.remove('horse-entrance-done');
+  document.querySelector('.education-title')?.classList.remove('education-title-entrance-done');
+
+  syncExperienceEducationDimming();
   if (experienceInitTimeout) {
     clearTimeout(experienceInitTimeout);
     experienceInitTimeout = null;

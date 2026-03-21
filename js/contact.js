@@ -1,48 +1,50 @@
 // Contact page JavaScript for SPA
 import * as THREE from 'three';
 
-let fallingShapesInterval = null;
-let fallingShapesInterval2 = null;
-let fallingShapesRunning = false;
-let fallingShapesStartTimeout = null;
-let fallingShapeBurstTimeouts = [];
+// Button state
 let contactInitTimeout = null;
 let contactButtonCleanupFns = [];
-let activeFallingShapes = [];
+let contactButtonRevealTimeouts = [];
 
-// Shared renderer to avoid WebGL context exhaustion
-let sharedRenderer = null;
-let sharedScene = null;
-let sharedCamera = null;
-let sharedAnimationId = null;
+// Falling shapes state — single renderer architecture
+let renderer = null;
+let scene = null;
+let camera = null;
+let canvasEl = null;
+let glowCanvas = null;
+let glowCtx = null;
+let animationId = null;
+let running = false;
+let shapes = [];
+let spawnTimers = [];
+let resizeHandler = null;
+let lastTime = 0;
+// Shape palette (harmonized with site: dark bg, cyan/purple accents)
+const SHAPE_COLORS = [
+  { color: 0xffffff, weight: 40 },
+  { color: 0x00e5ff, weight: 30 },
+  { color: 0x8b5cf6, weight: 20 },
+  { color: 0xccddff, weight: 10 },
+];
+
+function pickWeightedColor() {
+  const totalWeight = SHAPE_COLORS.reduce((sum, c) => sum + c.weight, 0);
+  let r = Math.random() * totalWeight;
+  for (const entry of SHAPE_COLORS) {
+    r -= entry.weight;
+    if (r <= 0) return entry.color;
+  }
+  return 0xffffff;
+}
 
 function clearContactButtonHandlers() {
   contactButtonCleanupFns.forEach((cleanupFn) => cleanupFn());
   contactButtonCleanupFns = [];
 }
 
-function disposeFallingShape(shapeRecord) {
-  if (!shapeRecord || shapeRecord.disposed) return;
-  shapeRecord.disposed = true;
-
-  if (shapeRecord.removalTimeoutId) {
-    clearTimeout(shapeRecord.removalTimeoutId);
-    shapeRecord.removalTimeoutId = null;
-  }
-
-  if (shapeRecord.styleSheet?.parentNode) {
-    shapeRecord.styleSheet.parentNode.removeChild(shapeRecord.styleSheet);
-  }
-
-  if (shapeRecord.element?.parentNode) {
-    shapeRecord.element.parentNode.removeChild(shapeRecord.element);
-  }
-
-  if (shapeRecord.geometry?.dispose) shapeRecord.geometry.dispose();
-  if (shapeRecord.material?.dispose) shapeRecord.material.dispose();
-  if (shapeRecord.mesh && sharedScene) sharedScene.remove(shapeRecord.mesh);
-
-  activeFallingShapes = activeFallingShapes.filter((s) => s !== shapeRecord);
+function clearContactButtonRevealTimeouts() {
+  contactButtonRevealTimeouts.forEach((id) => clearTimeout(id));
+  contactButtonRevealTimeouts = [];
 }
 
 function initContact() {
@@ -69,6 +71,19 @@ function setupContactButtons() {
   if (!contactButtons.length) return;
 
   clearContactButtonHandlers();
+  clearContactButtonRevealTimeouts();
+
+  contactButtons.forEach((button) => {
+    button.classList.remove('contact-btn-revealed');
+  });
+
+  const staggerDelayMs = 115;
+  contactButtons.forEach((button, index) => {
+    const timeoutId = setTimeout(() => {
+      button.classList.add('contact-btn-revealed');
+    }, index * staggerDelayMs);
+    contactButtonRevealTimeouts.push(timeoutId);
+  });
 
   contactButtons.forEach((button) => {
     const contactType = button.dataset.contact;
@@ -97,172 +112,251 @@ function setupContactButtons() {
   });
 }
 
-function ensureSharedRenderer() {
-  if (sharedRenderer) return;
-  const canvas = document.createElement('canvas');
-  canvas.style.display = 'none';
-  document.body.appendChild(canvas);
-  sharedRenderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-  sharedRenderer.setPixelRatio(1);
+// --- Falling shapes system (single-canvas architecture) ---
+
+function createGeometry() {
+  const type = Math.floor(Math.random() * 7);
+  switch (type) {
+    case 0: return new THREE.BoxGeometry(1, 1, 1);
+    case 1: return new THREE.OctahedronGeometry(0.7);
+    case 2: return new THREE.TetrahedronGeometry(0.8);
+    case 3: return new THREE.IcosahedronGeometry(0.6);
+    case 4: return new THREE.DodecahedronGeometry(0.6);
+    case 5: return new THREE.TorusGeometry(0.5, 0.2, 8, 16);
+    case 6: return new THREE.ConeGeometry(0.5, 1.0, 6);
+    default: return new THREE.OctahedronGeometry(0.7);
+  }
+}
+
+function createMaterial(color) {
+  const roll = Math.random();
+  if (roll < 0.60) {
+    return new THREE.MeshStandardMaterial({
+      color,
+      emissive: color,
+      emissiveIntensity: 0.35,
+      transparent: true,
+      opacity: 0.85,
+      metalness: 0.2,
+      roughness: 0.3,
+    });
+  } else if (roll < 0.85) {
+    return new THREE.MeshBasicMaterial({
+      color,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.7,
+    });
+  } else {
+    return new THREE.MeshStandardMaterial({
+      color,
+      emissive: color,
+      emissiveIntensity: 0.6,
+      transparent: true,
+      opacity: 0.8,
+      metalness: 0.1,
+      roughness: 0.4,
+    });
+  }
+}
+
+function spawnShape() {
+  if (!scene || !running) return;
+
+  const color = pickWeightedColor();
+  const geometry = createGeometry();
+  const material = createMaterial(color);
+  const mesh = new THREE.Mesh(geometry, material);
+
+  const baseSize = Math.max(30, Math.min(120, window.innerWidth * 0.06));
+  const sizeMultiplier = 0.5 + Math.random() * 2.0;
+  const size = baseSize * sizeMultiplier;
+  mesh.scale.setScalar(size);
+
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  const x = (Math.random() - 0.5) * w;
+  const y = h / 2 + size + 50;
+  mesh.position.set(x, y, Math.random() * 10);
+
+  scene.add(mesh);
+
+  const baseOpacity = material.opacity;
+
+  const record = {
+    mesh,
+    geometry,
+    material,
+    baseOpacity,
+    size,
+    startX: x,
+    elapsed: 0,
+    velocity: {
+      y: -(60 + Math.random() * 90),
+      rotX: (Math.random() - 0.5) * 0.04,
+      rotY: (Math.random() - 0.5) * 0.04,
+      rotZ: (Math.random() - 0.5) * 0.04,
+    },
+    driftAmplitude: 20 + Math.random() * 60,
+    driftFrequency: 0.3 + Math.random() * 0.5,
+    fadeStart: 0.5 + Math.random() * 0.3,
+  };
+
+  shapes.push(record);
+
+  if (shapes.length > 8) {
+    removeShape(shapes[0]);
+  }
+}
+
+function removeShape(record) {
+  if (!record) return;
+  scene.remove(record.mesh);
+  record.geometry.dispose();
+  record.material.dispose();
+  shapes = shapes.filter((s) => s !== record);
+}
+
+function updateShapes(dt) {
+  const h = window.innerHeight;
+  const bottom = -h / 2;
+
+  for (let i = shapes.length - 1; i >= 0; i--) {
+    const s = shapes[i];
+
+    s.elapsed += dt;
+    s.mesh.position.y += s.velocity.y * dt;
+    s.mesh.position.x = s.startX + Math.sin(s.elapsed * s.driftFrequency) * s.driftAmplitude;
+
+    s.mesh.rotation.x += s.velocity.rotX;
+    s.mesh.rotation.y += s.velocity.rotY;
+    s.mesh.rotation.z += s.velocity.rotZ;
+
+    const fadeZone = h * (1 - s.fadeStart);
+    const distFromBottom = s.mesh.position.y - bottom;
+    if (distFromBottom < fadeZone && fadeZone > 0) {
+      const fadeProgress = 1 - distFromBottom / fadeZone;
+      s.material.opacity = Math.max(0, s.baseOpacity * (1 - fadeProgress));
+    }
+
+    if (s.mesh.position.y < bottom - s.size - 50) {
+      removeShape(s);
+    }
+  }
+}
+
+function animate(now) {
+  if (!running) return;
+  animationId = requestAnimationFrame(animate);
+
+  const dt = lastTime ? Math.min((now - lastTime) / 1000, 0.1) : 0.016;
+  lastTime = now;
+
+  updateShapes(dt);
+  renderer.render(scene, camera);
+
+  // Copy frame to glow canvas (CSS blur makes it a colored contour glow)
+  if (glowCtx && canvasEl) {
+    glowCtx.clearRect(0, 0, glowCanvas.width, glowCanvas.height);
+    glowCtx.drawImage(canvasEl, 0, 0, glowCanvas.width, glowCanvas.height);
+  }
 }
 
 function startFallingShapes() {
-  if (fallingShapesRunning) return;
-  fallingShapesRunning = true;
-  ensureSharedRenderer();
+  if (running) return;
+  running = true;
 
-  const vaporwaveColors = [
-    '#00e5ff', '#00e5ff', '#00ccff', '#00b7ff', '#ffcc00',
-    '#00ff80', '#00aaff', '#00ccff', '#00ccff', '#ff3300'
-  ];
+  const contactContent = document.getElementById('contact-content');
+  if (!contactContent) return;
 
-  function createComplexFallingShape() {
-    const fallingModel = document.createElement('div');
-    fallingModel.className = 'falling-model';
+  const w = window.innerWidth;
+  const h = window.innerHeight;
 
-    const containerSize = Math.max(180, Math.min(500, window.innerWidth * 0.24));
-    fallingModel.style.width = containerSize + 'px';
-    fallingModel.style.height = containerSize + 'px';
+  // Glow canvas (behind, blurred copy of the scene)
+  glowCanvas = document.createElement('canvas');
+  glowCanvas.width = w;
+  glowCanvas.height = h;
+  glowCanvas.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:-2;filter:blur(35px);opacity:0.6;';
+  contactContent.appendChild(glowCanvas);
+  glowCtx = glowCanvas.getContext('2d');
 
-    const leftPosition = Math.random() * (window.innerWidth - containerSize);
-    fallingModel.style.left = leftPosition + 'px';
-    fallingModel.style.top = '-' + (containerSize + 50) + 'px';
+  // Main canvas (sharp shapes)
+  canvasEl = document.createElement('canvas');
+  canvasEl.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:-1;';
+  contactContent.appendChild(canvasEl);
 
-    const canvas = document.createElement('canvas');
-    canvas.width = containerSize;
-    canvas.height = containerSize;
-    canvas.style.width = '100%';
-    canvas.style.height = '100%';
-    canvas.style.filter = 'drop-shadow(0 0 140px rgba(255, 255, 255, 1.0))';
-    fallingModel.appendChild(canvas);
+  // Renderer (preserveDrawingBuffer needed for glow canvas copy)
+  renderer = new THREE.WebGLRenderer({ canvas: canvasEl, alpha: true, antialias: true, preserveDrawingBuffer: true });
+  renderer.setSize(w, h);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setClearColor(0x000000, 0);
 
-    // Use a dedicated offscreen renderer per shape, but limit total active shapes
-    if (activeFallingShapes.length >= 6) {
-      const oldest = activeFallingShapes[0];
-      disposeFallingShape(oldest);
+  // Orthographic camera (pixel-mapped, wide near/far to avoid clipping large shapes)
+  camera = new THREE.OrthographicCamera(-w / 2, w / 2, h / 2, -h / 2, -2000, 2000);
+  camera.position.z = 0;
+
+  // Scene + lighting
+  scene = new THREE.Scene();
+  scene.add(new THREE.AmbientLight(0x404060, 0.4));
+
+  const cyanLight = new THREE.DirectionalLight(0x00e5ff, 0.7);
+  cyanLight.position.set(1, 1, 1);
+  scene.add(cyanLight);
+
+  const purpleLight = new THREE.DirectionalLight(0x8b5cf6, 0.5);
+  purpleLight.position.set(-1, -0.5, 0.5);
+  scene.add(purpleLight);
+
+  const fillLight = new THREE.DirectionalLight(0xffffff, 0.3);
+  fillLight.position.set(0, 0, 1);
+  scene.add(fillLight);
+
+  // Resize handler
+  resizeHandler = () => {
+    const nw = window.innerWidth;
+    const nh = window.innerHeight;
+    renderer.setSize(nw, nh);
+    if (glowCanvas) {
+      glowCanvas.width = nw;
+      glowCanvas.height = nh;
     }
+    camera.left = -nw / 2;
+    camera.right = nw / 2;
+    camera.top = nh / 2;
+    camera.bottom = -nh / 2;
+    camera.updateProjectionMatrix();
+  };
+  window.addEventListener('resize', resizeHandler);
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-    renderer.setSize(containerSize, containerSize);
+  // Start animation loop
+  lastTime = 0;
+  animationId = requestAnimationFrame(animate);
 
-    const ambientLight = new THREE.AmbientLight(0x202020, 0.1);
-    scene.add(ambientLight);
+  // Spawn schedule
+  const scheduleTimer = (fn, delay) => {
+    const id = setTimeout(fn, delay);
+    spawnTimers.push(id);
+    return id;
+  };
 
-    const lights = [
-      [0x00ffff, [1, 0, 0]], [0x00ffff, [-1, 0, 0]],
-      [0x00ffff, [0, 1, 0]], [0x00ffff, [0, -1, 0]],
-      [0xffff00, [0, 0, 1]], [0xffff00, [0, 0, -1]]
-    ];
-    lights.forEach(([color, pos]) => {
-      const light = new THREE.DirectionalLight(color, 0.8);
-      light.position.set(...pos);
-      scene.add(light);
-    });
+  scheduleTimer(() => {
+    spawnShape();
+    scheduleTimer(() => spawnShape(), 800);
 
-    const shapeType = Math.floor(Math.random() * 5);
-    const geometries = [
-      new THREE.BoxGeometry(1, 1, 1),
-      new THREE.OctahedronGeometry(0.7),
-      new THREE.TetrahedronGeometry(0.8),
-      new THREE.IcosahedronGeometry(0.6),
-      new THREE.DodecahedronGeometry(0.6)
-    ];
-    const geometry = geometries[shapeType];
-
-    const material = new THREE.MeshPhongMaterial({
-      color: 0xffffff,
-      shininess: 100,
-      specular: 0x222222
-    });
-
-    const mesh = new THREE.Mesh(geometry, material);
-    const baseScale = Math.max(1.4, Math.min((window.innerWidth / 1920) * 2.5, 2.0));
-    const randomScale = 0.8 + Math.random() * 1.2;
-    const finalScale = Math.max(4.0, baseScale * randomScale);
-    mesh.scale.setScalar(finalScale);
-    scene.add(mesh);
-    camera.position.z = 5;
-
-    const shapeRecord = {
-      element: fallingModel,
-      renderer,
-      geometry,
-      material,
-      mesh,
-      scene,
-      camera,
-      styleSheet: null,
-      animationId: null,
-      removalTimeoutId: null,
-      disposed: false
-    };
-    activeFallingShapes.push(shapeRecord);
-
-    function animate() {
-      if (shapeRecord.disposed) return;
-      shapeRecord.animationId = requestAnimationFrame(animate);
-      mesh.rotation.x += 0.003;
-      mesh.rotation.y += 0.005;
-      mesh.rotation.z += 0.004;
-      renderer.render(scene, camera);
-    }
-    animate();
-
-    const contactContent = document.getElementById('contact-content');
-    if (contactContent) {
-      contactContent.appendChild(fallingModel);
-    } else {
-      disposeFallingShape(shapeRecord);
-      return;
-    }
-
-    const fallDuration = 8 + Math.random() * 4;
-    const fadeStartPercent = 40 + Math.random() * 35;
-    const uniqueId = 'fall-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-
-    const styleSheet = document.createElement('style');
-    styleSheet.textContent = `
-      @keyframes ${uniqueId} {
-        0% { transform: translateY(-150px) rotate(0deg); opacity: 1; }
-        ${fadeStartPercent}% { transform: translateY(${fadeStartPercent}vh) rotate(${fadeStartPercent * 3.6}deg); opacity: 1; }
-        100% { transform: translateY(calc(100vh + 150px)) rotate(360deg); opacity: 0; }
-      }
-    `;
-    document.head.appendChild(styleSheet);
-    shapeRecord.styleSheet = styleSheet;
-    fallingModel.style.animation = `${uniqueId} ${fallDuration}s linear forwards`;
-
-    shapeRecord.removalTimeoutId = setTimeout(() => {
-      disposeFallingShape(shapeRecord);
-    }, fallDuration * 1000);
-  }
-
-  fallingShapesStartTimeout = setTimeout(() => {
-    fallingShapesStartTimeout = null;
-    createComplexFallingShape();
-    const burstTimeoutId = setTimeout(() => {
-      fallingShapeBurstTimeouts = fallingShapeBurstTimeouts.filter((id) => id !== burstTimeoutId);
-      createComplexFallingShape();
-    }, 800);
-    fallingShapeBurstTimeouts.push(burstTimeoutId);
-
-    // Use setTimeout chains instead of setInterval with Math.random() so delay varies each time
     function scheduleNext() {
-      if (!fallingShapesRunning) return;
+      if (!running) return;
       const delay = 2000 + Math.random() * 2000;
-      fallingShapesInterval = setTimeout(() => {
-        createComplexFallingShape();
+      scheduleTimer(() => {
+        spawnShape();
         scheduleNext();
       }, delay);
     }
     scheduleNext();
 
     function scheduleSecondary() {
-      if (!fallingShapesRunning) return;
-      fallingShapesInterval2 = setTimeout(() => {
-        if (Math.random() < 0.6) createComplexFallingShape();
+      if (!running) return;
+      scheduleTimer(() => {
+        if (Math.random() < 0.6) spawnShape();
         scheduleSecondary();
       }, 3500);
     }
@@ -272,26 +366,60 @@ function startFallingShapes() {
 
 function stopFallingShapes() {
   if (contactInitTimeout) { clearTimeout(contactInitTimeout); contactInitTimeout = null; }
-  if (fallingShapesStartTimeout) { clearTimeout(fallingShapesStartTimeout); fallingShapesStartTimeout = null; }
-  fallingShapeBurstTimeouts.forEach((id) => clearTimeout(id));
-  fallingShapeBurstTimeouts = [];
-  if (fallingShapesInterval) { clearTimeout(fallingShapesInterval); fallingShapesInterval = null; }
-  if (fallingShapesInterval2) { clearTimeout(fallingShapesInterval2); fallingShapesInterval2 = null; }
-  fallingShapesRunning = false;
-  activeFallingShapes.slice().forEach(disposeFallingShape);
 
-  const contactContent = document.getElementById('contact-content');
-  if (contactContent) {
-    contactContent.querySelectorAll('.falling-model').forEach(shape => {
-      if (shape.parentNode) shape.parentNode.removeChild(shape);
-    });
+  running = false;
+
+  // Clear spawn timers
+  spawnTimers.forEach((id) => clearTimeout(id));
+  spawnTimers = [];
+
+  // Cancel animation loop
+  if (animationId) {
+    cancelAnimationFrame(animationId);
+    animationId = null;
   }
-  document.querySelectorAll('.falling-model').forEach(shape => {
-    if (shape.parentNode) shape.parentNode.removeChild(shape);
+
+  // Dispose all shapes
+  shapes.forEach((record) => {
+    if (scene) scene.remove(record.mesh);
+    record.geometry.dispose();
+    record.material.dispose();
   });
+  shapes = [];
+
+  // Dispose renderer
+  if (renderer) {
+    renderer.dispose();
+    renderer = null;
+  }
+
+  // Remove canvases
+  if (canvasEl && canvasEl.parentNode) {
+    canvasEl.parentNode.removeChild(canvasEl);
+    canvasEl = null;
+  }
+  if (glowCanvas && glowCanvas.parentNode) {
+    glowCanvas.parentNode.removeChild(glowCanvas);
+    glowCanvas = null;
+    glowCtx = null;
+  }
+
+  // Remove resize listener
+  if (resizeHandler) {
+    window.removeEventListener('resize', resizeHandler);
+    resizeHandler = null;
+  }
+
+  scene = null;
+  camera = null;
+  lastTime = 0;
 }
 
 function cleanupContact() {
+  clearContactButtonRevealTimeouts();
+  document.querySelectorAll('.contact-btn').forEach((btn) => {
+    btn.classList.remove('contact-btn-revealed');
+  });
   clearContactButtonHandlers();
   stopFallingShapes();
 }

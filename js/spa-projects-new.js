@@ -4,7 +4,7 @@
 const projectData = {
   fightvision: {
     title: "Computer Vision Strike Detection System for MMA",
-    description: "Developed an automated strike detection and classification system for Mixed Martial Arts footage using computer vision and deep learning. The system integrates Meta's Segment Anything Model 2 (SAM2) with Label Studio to create a semi-automated annotation pipeline, generating 200+ annotated training frames across 40 fight sequences. Designed a Temporal Segment Network (TSN) architecture using MMAction2 framework for spatio-temporal feature extraction and real-time action recognition.",
+    description: "A computer vision project using SAM2 and MMAction2 to detect and classify MMA strikes. It leverages foundational segmentation models and Temporal Segment Networks (TSN) to provide a functional proof-of-concept for automated combat sports analysis using a custom, high-precision dataset.",
     tech: ["Python", "Computer Vision", "Deep Learning", "SAM2", "Label Studio", "MMAction2", "Temporal Segment Networks", "3D CNN"],
     image: "Images/ProjectPhotos/Strikezone1.gif",
     features: [
@@ -18,46 +18,43 @@ const projectData = {
     technical: "The system architecture combines Meta's SAM2 for mask-based object segmentation with Label Studio's annotation interface, creating a semi-automated labeling workflow for generating training data. The detection pipeline utilizes a Temporal Segment Network (TSN) pre-trained model accessed through the MMAction2 computer vision framework, which processes spatio-temporal features across sequential frames. Initially explored 3D CNN architectures for direct spatio-temporal inference, but pivoted to TSN due to computational constraints. The model processes 5-frame temporal windows representing discrete fight moments, with each frame annotated for fighter masks, strike events, and miss classifications. Training was conducted on 200 labeled frames across 40 sequences using transfer learning from pre-trained TSN weights.",
     challenges: "Primary bottleneck was dataset size limitations - only 200 frames across 40 sequences were manually annotated due to Label Studio Premium subscription access issues, which would have enabled automated learning of labeling patterns after 3-4 examples. Initial 3D CNN architecture was abandoned due to excessive RAM requirements that exceeded Google Colab runtime capacity, even with batching optimizations. Manual mask refinement remained time-consuming despite SAM2 automation. Model accuracy remains below production standards due to limited training data, though results were impressive given the constraint of only 40 data points for transfer learning.",
     links: [
-      { text: "GitHub Repository", url: "https://github.com/Smokeybear10/Strike_Detection_ML", type: "github" },
+      { text: "GitHub Repository", url: "https://github.com/Smokeybear10/STR1KE", type: "github" },
       { text: "Project Documentation", url: "#", type: "docs", error: "Not publicly available" }
     ],
     gallery: ["Images/ProjectPhotos/Strikezone1.gif", "Images/ProjectPhotos/Strikezone4.gif", "Images/ProjectPhotos/Strikezone2.png", "Images/ProjectPhotos/Strikezone3.png"]
   },
-  flywheel: {
-    title: "Magnetically Levitating Flywheel Generator",
-    description: "Developed an innovative energy storage system using magnetic levitation technology to reduce friction losses in flywheel energy storage. The project integrated electromagnetic controls, power electronics, and real-time monitoring systems to achieve stable levitation and energy conversion.",
-    tech: ["Electromagnetic Design", "Power Electronics", "Control Systems", "MATLAB/Simulink", "PCB Design", "Embedded Systems"],
+  dj: {
+    title: "Personal LLM DJ",
+    description: "A browser-based DJ system powered by Grok AI, built with Next.js, React, and the Web Audio API. Features a dual-deck engine with full mixer controls (3-band EQ, filters, reverb, delay, crossfader), voice and text command processing via natural language, and AI-generated transition plans with crossfade automation, EQ bass swapping, and phrase-aware tempo matching. Includes real-time BPM detection, audio-reactive 3D visualization via Three.js, and cloud-backed track management with automatic metadata analysis.",
+    tech: ["Next.js", "React", "Web Audio API", "Grok AI", "Three.js", "TypeScript", "NLP"],
     image: "Images/ProjectPhotos/MagneticallyLevitating.png",
     features: [
-      "Magnetic bearing system with 5 degrees of freedom control",
-      "High-speed flywheel (up to 15,000 RPM)",
-      "Power electronics for motor/generator operation",
-      "Real-time control system with feedback loops",
-      "Energy storage capacity of 1kWh",
-      "Efficiency rating of 92% round-trip"
+      { title: "Dual-Deck Engine with Full Mixer Controls", detail: "3-band EQ, filters, reverb, delay, and crossfader provide complete mixing capability directly in the browser via the Web Audio API" },
+      { title: "AI-Powered Natural Language Commands", detail: "Voice and text command processing via Grok AI allows DJs to control mixing through natural language instructions" },
+      { title: "AI-Generated Transition Plans", detail: "Automated crossfade, EQ bass swapping, and phrase-aware tempo matching powered by AI-generated transition planning" },
+      { title: "Real-Time BPM Detection", detail: "Automatic beat detection and tempo analysis for precise beat-matching and sync across decks" },
+      { title: "Audio-Reactive 3D Visualization", detail: "Three.js-powered visualizations that respond to audio in real time for an immersive experience" },
+      { title: "Cloud-Backed Track Management", detail: "Cloud storage with automatic metadata analysis for organizing and managing track libraries" }
     ],
-    technical: "The system uses active magnetic bearings controlled by PID loops running at 10kHz. The power electronics stage features a three-phase inverter with space vector PWM control. The flywheel is made from carbon fiber composite for optimal strength-to-weight ratio. MATLAB/Simulink was used for control system design and simulation.",
-    challenges: "Achieving stable levitation required extensive control system tuning and vibration analysis. The high-speed rotation introduced gyroscopic effects that needed compensation. Electromagnetic interference was minimized through careful PCB layout and shielding.",
+    technical: "Built on Next.js and React with the Web Audio API handling all audio processing including EQ, filters, effects, and crossfading. Grok AI processes natural language commands for mixing control and generates intelligent transition plans. Three.js renders real-time audio-reactive 3D visualizations. BPM detection runs client-side for low-latency beat analysis. Cloud infrastructure handles track storage and automatic metadata extraction.",
     links: [
-      { text: "Project Report", url: "#", type: "docs", error: "Not publicly available" },
-      { text: "CAD Models", url: "#", type: "design", error: "Not publicly available" }
+      { text: "Live Website", url: "https://d4-nce.vercel.app", type: "live" },
+      { text: "Source Code", url: "https://github.com/Smokeybear10/D4NCE", type: "github" }
     ],
     gallery: ["Images/ProjectPhotos/MagneticallyLevitating.png"]
   },
   fightiq: {
     title: "Predictive Analysis of Fight Outcomes in MMA",
-    description: "This machine learning system predicts MMA fight outcomes by analyzing comprehensive fighter statistics and historical performance data. The project leverages a differential-based approach to compare fighters across 183+ attributes spanning striking mechanics, grappling proficiency, physical characteristics, and career trajectories. Rather than evaluating fighters in isolation, the system calculates relative advantages between opponents—capturing crucial factors like reach differentials, striking accuracy gaps, and defensive capability disparities. By training and benchmarking seven supervised learning algorithms on historical UFC data, the system generates probabilistic confidence scores for hypothetical matchups, with Gradient Boosting selected as the production model through rigorous cross-validation and comparative performance analysis.",
-    tech: ["Python", "Machine Learning", "Gradient Boosting", "Random Forest", "scikit-learn", "pandas", "NumPy", "Data Analysis"],
+    description: "A machine learning project that predicts MMA fight outcomes using historical UFC fight data. Differential calculations across 100+ fighter attributes (striking, grappling, physical metrics, career performance) are used to train and compare multiple classification models including Random Forest, Gradient Boosting, SVM, and K-Nearest Neighbors. The system accepts two fighter inputs, standardizes their career statistics, and outputs win probability predictions across each model.",
+    tech: ["Python", "Machine Learning", "scikit-learn", "Random Forest", "Gradient Boosting", "SVM", "K-Nearest Neighbors", "pandas", "NumPy"],
     image: "Images/ProjectPhotos/FightIQ.png",
     features: [
-      { title: "Differential-Based Feature Extraction", detail: "Compares 183+ fighter attributes across striking metrics, grappling statistics, physical characteristics, and historical performance indicators to capture relative advantages rather than absolute statistics" },
-      { title: "Multi-Domain Career Statistics", detail: "Processes and normalizes fighter data across striking accuracy by target and range, takedown defense percentages, submission attempts, control time, stamina metrics, and competition frequency" },
-      { title: "Ensemble Algorithm Benchmarking", detail: "Evaluates 7 supervised learning models including Gradient Boosting, Random Forest, SVM, KNN, MLP Neural Network, Decision Tree, and Logistic Regression" },
-      { title: "Feature Importance Analysis", detail: "Implements cross-validation and statistical evaluation to identify key predictive attributes including win/loss ratios, striking differentials, defensive capabilities, and physical advantages" },
-      { title: "Interactive Prediction Interface", detail: "Accepts any two fighter names as input and generates fight outcome predictions with probabilistic confidence scores based on model certainty levels" },
-      { title: "Real-Time Differential Computation", detail: "Automatically calculates fighter attribute differentials from career-averaged statistics for novel matchup predictions" }
+      { title: "Historical UFC Data & Differential Features", detail: "Builds pairwise differentials from 100+ attributes spanning striking, grappling, physical metrics, and career performance so models learn from relative matchup signals rather than raw solo stats" },
+      { title: "Multi-Model Classification", detail: "Trains and compares Random Forest, Gradient Boosting, Support Vector Machine, and K-Nearest Neighbors classifiers on the same engineered feature set" },
+      { title: "Standardized Fighter Inputs", detail: "Accepts two fighters, applies consistent preprocessing and standardization to career statistics, and aligns them with the training pipeline" },
+      { title: "Per-Model Win Probabilities", detail: "Outputs win probability predictions from each model so you can compare agreement and uncertainty across approaches for the same matchup" }
     ],
-    technical: "The system processes historical UFC data from Kaggle through a preprocessing pipeline that transforms raw statistics into differential features across 183+ attributes covering striking, grappling, physical, and career metrics. Seven supervised learning algorithms undergo stratified cross-validation with performance evaluated via precision, recall, F1-scores, and ROC-AUC metrics. Gradient Boosting Classifier is selected as the production model based on superior accuracy and feature importance rankings, effectively capturing non-linear relationships while maintaining generalization on unseen matchups. The prediction interface implements a real-time pipeline that accepts fighter names, computes career-averaged differentials dynamically, and generates probabilistic predictions with confidence scores, with feature analysis identifying win/loss ratios, strike differentials, takedown defense, and physical advantages as primary predictors.",
+    technical: "Historical UFC fight data is transformed into differential features across 100+ striking, grappling, physical, and career attributes. Career statistics are standardized before training and at inference so two selected fighters map to the same feature space as historical bouts. Random Forest, Gradient Boosting, SVM, and K-Nearest Neighbors are fit on the differential dataset and evaluated side by side. The prediction path takes two fighter inputs, recomputes standardized differentials, and returns win probability estimates from each classifier.",
     links: [
       { text: "GitHub Repository", url: "https://github.com/Smokeybear10/UFC-Analytics-Engine", type: "github" },
       { text: "Model Documentation", url: "#", type: "docs", error: "Not publicly available" },
@@ -69,7 +66,7 @@ const projectData = {
     title: "Personal Portfolio Website",
     description: "A modern portfolio website showcasing projects and technical expertise through interactive 3D animations and responsive design. Built as a vanilla JavaScript Single Page Application, the site features custom routing, Three.js 3D model rendering, and GSAP animations. The implementation prioritizes performance optimization and cross-device compatibility while demonstrating proficiency in modern web development practices including component architecture, asset management, and progressive enhancement strategies.",
     tech: ["HTML5", "CSS3", "JavaScript", "GSAP", "Three.js", "Responsive Design", "Web Performance"],
-    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 720'%3E%3Crect width='1200' height='720' fill='%23070b14'/%3E%3Crect x='72' y='72' width='1056' height='576' rx='28' fill='%23131a27' stroke='%2300ffff' stroke-width='4'/%3E%3Crect x='120' y='132' width='260' height='28' rx='14' fill='%2300ffff' fill-opacity='0.85'/%3E%3Crect x='120' y='188' width='420' height='18' rx='9' fill='white' fill-opacity='0.9'/%3E%3Crect x='120' y='226' width='360' height='18' rx='9' fill='white' fill-opacity='0.55'/%3E%3Crect x='120' y='292' width='300' height='220' rx='18' fill='%230b1220' stroke='white' stroke-opacity='0.2'/%3E%3Crect x='450' y='292' width='570' height='64' rx='18' fill='%230b1220' stroke='white' stroke-opacity='0.2'/%3E%3Crect x='450' y='386' width='570' height='18' rx='9' fill='white' fill-opacity='0.8'/%3E%3Crect x='450' y='424' width='510' height='18' rx='9' fill='white' fill-opacity='0.4'/%3E%3Crect x='450' y='486' width='180' height='44' rx='22' fill='%2300ffff'/%3E%3Ctext x='600' y='600' fill='white' text-anchor='middle' font-family='Arial, sans-serif' font-size='56' font-weight='700'%3EPortfolio Website%3C/text%3E%3C/svg%3E",
+    image: "Images/ProjectPhotos/PersonalPortfolio.gif",
     features: [
       { title: "Custom 3D Animations and Models", detail: "Three.js-powered 3D model rendering with optimized loading strategies, dynamic model switching, and interactive controls for enhanced visual engagement" },
       { title: "Single Page Application (SPA) Architecture", detail: "Custom routing and state management system built in vanilla JavaScript, enabling seamless navigation without page reloads and improved user experience" },
@@ -83,22 +80,22 @@ const projectData = {
       { text: "Live Website", url: "https://thomasou.com", type: "live" },
       { text: "Source Code", url: "https://github.com/Smokeybear10/PortfolioWebsite-Ver2.0", type: "github" }
     ],
-    gallery: ["data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 720'%3E%3Crect width='1200' height='720' fill='%23070b14'/%3E%3Crect x='72' y='72' width='1056' height='576' rx='28' fill='%23131a27' stroke='%2300ffff' stroke-width='4'/%3E%3Crect x='120' y='132' width='260' height='28' rx='14' fill='%2300ffff' fill-opacity='0.85'/%3E%3Crect x='120' y='188' width='420' height='18' rx='9' fill='white' fill-opacity='0.9'/%3E%3Crect x='120' y='226' width='360' height='18' rx='9' fill='white' fill-opacity='0.55'/%3E%3Crect x='120' y='292' width='300' height='220' rx='18' fill='%230b1220' stroke='white' stroke-opacity='0.2'/%3E%3Crect x='450' y='292' width='570' height='64' rx='18' fill='%230b1220' stroke='white' stroke-opacity='0.2'/%3E%3Crect x='450' y='386' width='570' height='18' rx='9' fill='white' fill-opacity='0.8'/%3E%3Crect x='450' y='424' width='510' height='18' rx='9' fill='white' fill-opacity='0.4'/%3E%3Crect x='450' y='486' width='180' height='44' rx='22' fill='%2300ffff'/%3E%3Ctext x='600' y='600' fill='white' text-anchor='middle' font-family='Arial, sans-serif' font-size='56' font-weight='700'%3EPortfolio Website%3C/text%3E%3C/svg%3E"]
+    gallery: ["Images/ProjectPhotos/PersonalPortfolio.gif"]
   },
   poker: {
     title: "Bayesian Poker Analysis Engine with Monte Carlo CFR",
-    description: "A high-performance poker solver implementing Bayesian inference and Monte Carlo Counterfactual Regret Minimization to achieve superhuman-level play in multiplayer No Limit Texas Hold'em. Built in Rust, the engine combines probabilistic modeling with game theory optimization to analyze opponent behavior patterns, estimate bluffing tendencies, and compute optimal decision-making strategies. Hierarchical hand abstraction reduces computational complexity while maintaining strategic fidelity, enabling the system to process billions of game states and generate near-optimal blueprint strategies. The architecture leverages thread-safe parallel processing and memory-efficient data structures to handle the intensive computational demands of poker strategy generation.",
-    tech: ["Rust", "Monte Carlo CFR", "Game Theory", "Hand Abstraction", "PostgreSQL", "Parallel Computing"],
+    description: "A Rust library for solving No-Limit Texas Hold'em, built toward functional parity with Pluribus. Combines hierarchical k-means clustering over isomorphic hand abstractions, Earth Mover's Distance metrics via optimal transport, and Monte Carlo Counterfactual Regret Minimization (MCCFR) to converge on near-optimal poker strategies. Features nanosecond hand evaluation, exhaustive equity calculation, and efficient serialization of abstraction and blueprint data for persistent training pipelines.",
+    tech: ["Rust", "MCCFR", "k-means Clustering", "Optimal Transport", "Hand Abstraction", "NLHE", "Serialization"],
     image: "Images/ProjectPhotos/Montepoke1.gif",
     features: [
-      { title: "Hierarchical Hand Abstraction", detail: "Reduces game complexity through efficient representation across all betting streets (preflop, flop, turn, river) using k-means++ seeding and strategic clustering" },
-      { title: "Monte Carlo Counterfactual Regret Minimization (CFR) Training", detail: "Implements external sampling MCCFR with iterative regret updates, strategy accumulation with linear weighting, and convergence-based checkpointing" },
-      { title: "Real-Time Strategy Optimization and Blueprint Generation", detail: "Produces near-optimal strategies through resource-intensive offline training, persisting abstractions and policies to disk for rapid gameplay analysis" },
-      { title: "Memory-Efficient Abstractions for No Limit Texas Hold'em", detail: "Utilizes precise struct and trait systems with bijective card representations to minimize memory footprint while maintaining strategic fidelity" },
-      { title: "Parallel Computing for Accelerated Training", detail: "Leverages thread-safe multi-processing and idiomatic Rust concurrency patterns to handle computationally intensive strategy generation" },
-      { title: "Advanced Gameplay Analysis and Strategy Evaluation", detail: "PostgreSQL-backed query system with extensive indexing enables efficient lookups across learned strategies, abstractions, and distance metrics" }
+      { title: "Pluribus-Style NLHE Solver", detail: "Rust library targeting functional parity with Pluribus-style solving: abstractions, distances, and MCCFR training wired for near-optimal strategies in No-Limit Hold'em" },
+      { title: "Hierarchical k-means on Isomorphic Abstractions", detail: "Clusters isomorphic hand abstractions hierarchically to compress the state space while preserving strategically meaningful structure" },
+      { title: "Earth Mover's Distance & Optimal Transport", detail: "Uses EMD-style metrics via optimal transport to compare abstraction distributions and inform clustering and training" },
+      { title: "MCCFR Training", detail: "Monte Carlo Counterfactual Regret Minimization drives iterative regret updates and strategy convergence toward strong blueprint policies" },
+      { title: "Fast Evaluation & Equity", detail: "Nanosecond hand evaluation and exhaustive equity calculation keep the core loop practical for large-scale solving" },
+      { title: "Persistent Training Pipelines", detail: "Efficient serialization of abstraction and blueprint data supports checkpointing and long-running, resumable training jobs" }
     ],
-    technical: "The system architecture consists of five core modules: the cards module provides nanosecond hand evaluation and fast equity calculations, the gameplay module implements complete NLHE rules with complex showdown logic, and the clustering module exhaustively iterates through 3.1 trillion isomorphic situations while running hierarchical k-means clustering and calculating Earth Mover's Distance. The mccfr module performs iterative training using external sampling with dynamic tree construction, updating regret values and accumulating strategy updates with linear weighting until convergence. The analysis module provides a PostgreSQL-backed query interface with CLI tools and an Actix web server, enabling efficient lookups across learned strategies, abstractions, and distance metrics for advanced gameplay analysis.",
+    technical: "The codebase is organized as a Rust library for NLHE: hand evaluation and equity sit in a fast path for nanosecond-level work; isomorphic abstractions feed hierarchical k-means; Earth Mover's Distance is computed through optimal transport between abstraction masses. MCCFR (external sampling and regret accumulation) trains blueprint strategies toward near-optimal play. Abstractions, distance structures, and learned strategies serialize cleanly so training can persist and resume without rebuilding state from scratch.",
     links: [
       { text: "GitHub Repository", url: "https://github.com/Smokeybear10/MontePokerG", type: "github" },
       { text: "Strategy Analyzer", url: "#", type: "demo", error: "Website is currently down" },
@@ -108,18 +105,16 @@ const projectData = {
   },
   smartcv: {
     title: "AI-Powered Resume Optimizer",
-    description: "An intelligent resume optimization tool that streamlines the job application process through AI-driven analysis and professional template building. The platform leverages Google Gemini AI to provide comprehensive resume analysis, ATS compatibility checks, skills gap identification, and content optimization suggestions. Users can build tailored, recruiter-ready resumes from scratch using four premium templates or import existing documents for enhancement. The system integrates multi-portal job search capabilities with LinkedIn scraping, location-based filtering, and company insights, while providing analytics dashboards to track resume performance and optimization metrics over time.",
-    tech: ["Python", "Streamlit", "Google Gemini AI", "Selenium", "SQLite", "NLP", "ATS Optimization"],
+    description: "An AI-powered resume optimization tool built with Python and Streamlit, leveraging Google Gemini for intelligent content analysis. Features ATS compatibility scoring, skills gap identification, keyword density analysis, and AI-driven content suggestions across 50+ target job roles. Includes a professional resume builder with four exportable templates (PDF/DOCX), multi-portal job search with LinkedIn integration, and a comprehensive analytics dashboard for tracking resume performance metrics.",
+    tech: ["Python", "Streamlit", "Google Gemini", "ATS Optimization", "Selenium", "SQLite", "PDF/DOCX"],
     image: "Images/ProjectPhotos/SmartCV.png",
     features: [
-      { title: "AI-Powered Resume Analysis", detail: "Utilizes Google Gemini AI for advanced content analysis, ATS compatibility scoring, skills gap identification, and optimization recommendations across 50+ predefined job roles" },
-      { title: "Professional Resume Builder", detail: "Offers 4 premium templates (Modern, Professional, Minimal, Creative) with real-time preview and export capabilities in PDF and DOCX formats" },
-      { title: "Smart Job Matching System", detail: "Integrates LinkedIn scraping and multi-portal search with location-based filtering, company insights, and market analysis for targeted job discovery" },
-      { title: "Document Import & Parsing", detail: "Supports existing resume uploads in PDF and DOCX formats with intelligent parsing for content extraction and enhancement" },
-      { title: "Comprehensive Analytics Dashboard", detail: "Tracks resume performance metrics, improvement trends, success rates, and provides exportable reports for detailed analysis" },
-      { title: "Keyword & Skills Optimization", detail: "Analyzes keyword density, validates section structure, identifies missing skills for target roles, and provides course recommendations based on skill gaps" }
+      { title: "Gemini-Powered Analysis", detail: "Google Gemini drives content analysis with ATS compatibility scoring, skills gap identification, keyword density insights, and AI suggestions tailored to 50+ target job roles" },
+      { title: "Resume Builder & Exports", detail: "Four professional templates with export to PDF and DOCX for polished, shareable documents" },
+      { title: "Multi-Portal Job Search", detail: "Aggregates opportunities across portals with LinkedIn integration for a unified search workflow" },
+      { title: "Analytics Dashboard", detail: "Tracks resume performance metrics over time so users can see trends and iterate on their materials" }
     ],
-    technical: "The application is built using Streamlit as the web framework with a modular Python architecture. The AI analysis engine integrates Google Gemini API for natural language processing and content quality assessment, generating performance scores from 0-100 with actionable optimization suggestions. The resume parsing module handles document import using PDF and DOCX libraries, while the builder generates professional documents with customizable templates. Job search functionality implements web scraping with Selenium ChromeDriver for LinkedIn integration and multi-portal aggregation. A SQLite database manages user data, resume versions, and analytics metrics through a lightweight ORM layer. The system employs ATS optimization algorithms that analyze keyword density, validate formatting compatibility, and check section structure against industry standards to maximize applicant tracking system parse rates.",
+    technical: "Streamlit provides the app shell in Python; the analysis layer calls Google Gemini for NLP-style review, ATS-oriented scoring, skills-gap and keyword-density signals, and role-aware suggestions across 50+ job profiles. The builder renders four templates and exports via PDF/DOCX libraries. Job discovery combines multi-portal logic with Selenium-backed LinkedIn workflows where needed. SQLite backs user data, resume versions, and analytics series for the dashboard.",
     links: [
       { text: "GitHub Repository", url: "https://github.com/Smokeybear10/SmartCV", type: "github" },
       { text: "Live Demo", url: "#", type: "demo", error: "Website is currently down" },
@@ -137,6 +132,8 @@ let velocity = 0.3;
 let isModalOpen = false;
 let isHovering = false; // Track if hovering over a card
 let autoRotationSpeed = 0.3;
+/** Fraction of auto speed while hovering a card */
+const HOVER_ROTATION_FACTOR = 0.35;
 let sectionCycleInterval = null;
 let currentSectionIndex = 0;
 let projectsInitTimeout = null;
@@ -144,6 +141,88 @@ let modalHideTimeout = null;
 let wheelAnimationFrameId = null;
 let wheelCleanupFns = [];
 let modalCleanupFns = [];
+/** Set in setupWheelRotation — used to snap the wheel before opening a project */
+let projectsWheelEl = null;
+let snapRafId = null;
+let isSnappingToCard = false;
+
+function stopSnapAnimation() {
+  if (snapRafId !== null) {
+    cancelAnimationFrame(snapRafId);
+    snapRafId = null;
+  }
+  isSnappingToCard = false;
+}
+
+function getProjectCardAngleStep() {
+  const n = projectsWheelEl
+    ? projectsWheelEl.querySelectorAll('.project-card').length
+    : 6;
+  return 360 / Math.max(1, n);
+}
+
+function getNearestSnapRotationForCard(cardIndex) {
+  const step = getProjectCardAngleStep();
+  const ideal = -cardIndex * step;
+  const cur = currentRotation;
+  let bestAngle = ideal;
+  let minAbs = Infinity;
+  for (let k = -5; k <= 5; k += 1) {
+    const cand = ideal + 360 * k;
+    const dist = Math.abs(cand - cur);
+    if (dist < minAbs) {
+      minAbs = dist;
+      bestAngle = cand;
+    }
+  }
+  return { targetRotation: bestAngle, distanceDeg: minAbs };
+}
+
+/**
+ * Rotates the wheel so the given card faces forward, then runs onComplete.
+ * Matches init convention: card i is centered at rotateY(-i * step).
+ */
+function snapWheelToCardIndex(cardIndex, onComplete) {
+  if (!projectsWheelEl) {
+    onComplete();
+    return;
+  }
+  stopSnapAnimation();
+  const { targetRotation, distanceDeg } = getNearestSnapRotationForCard(cardIndex);
+  const SNAP_THRESHOLD_DEG = 2.5;
+  if (distanceDeg < SNAP_THRESHOLD_DEG) {
+    currentRotation = targetRotation;
+    projectsWheelEl.style.transform = `rotateX(-10deg) rotateY(${currentRotation}deg)`;
+    requestAnimationFrame(() => {
+      onComplete();
+    });
+    return;
+  }
+
+  const durationMs = Math.min(950, Math.max(320, distanceDeg * 2.8));
+  const start = currentRotation;
+  const delta = targetRotation - start;
+  const startTime = performance.now();
+  isSnappingToCard = true;
+  velocity = 0;
+
+  function tick(now) {
+    const t = Math.min(1, (now - startTime) / durationMs);
+    const eased = 1 - (1 - t) ** 3;
+    currentRotation = start + delta * eased;
+    projectsWheelEl.style.transform = `rotateX(-10deg) rotateY(${currentRotation}deg)`;
+    if (t < 1) {
+      snapRafId = requestAnimationFrame(tick);
+    } else {
+      currentRotation = targetRotation;
+      projectsWheelEl.style.transform = `rotateX(-10deg) rotateY(${currentRotation}deg)`;
+      snapRafId = null;
+      isSnappingToCard = false;
+      onComplete();
+    }
+  }
+  snapRafId = requestAnimationFrame(tick);
+}
 
 function runCleanup(cleanupFns) {
   cleanupFns.forEach((cleanupFn) => cleanupFn());
@@ -177,8 +256,10 @@ function initProjects() {
 function setupWheelRotation() {
   const wheelContainer = document.querySelector('.wheel-container');
   if (!wheelContainer) {
+    projectsWheelEl = null;
     return;
   }
+  projectsWheelEl = wheelContainer;
   
   // Wrap card content, create curved slices and 3D face elements
   const cards = wheelContainer.querySelectorAll('.project-card');
@@ -218,15 +299,18 @@ function setupWheelRotation() {
 
   // Staggered fade-in: start from center card, then go right (increasing index)
   let introComplete = false;
-  const staggerDelay = 200;
+  const staggerDelayMs = 115;
+  const cardFadeMs = 350; // keep in sync with cardFadeIn in projects-new.css
   for (let step = 0; step < cardCount; step++) {
     const cardIdx = (startIndex + step) % cardCount;
     setTimeout(() => {
       cards[cardIdx].classList.add('revealed');
       if (step === cardCount - 1) {
-        setTimeout(() => { introComplete = true; }, 500);
+        setTimeout(() => {
+          introComplete = true;
+        }, cardFadeMs + 40);
       }
-    }, step * staggerDelay);
+    }, step * staggerDelayMs);
   }
 
   // Auto rotation with hover slowdown
@@ -235,10 +319,10 @@ function setupWheelRotation() {
     if (isModalOpen) {
       targetSpeed = 0; // Stop completely when modal is open
     } else if (isHovering) {
-      targetSpeed = autoRotationSpeed * 0.1; // Slow down significantly when hovering
+      targetSpeed = autoRotationSpeed * HOVER_ROTATION_FACTOR;
     }
-    
-    if (!isDragging) {
+
+    if (!isDragging && !isSnappingToCard) {
       if (!introComplete) {
         targetSpeed = 0;
         velocity = 0;
@@ -250,6 +334,9 @@ function setupWheelRotation() {
         velocity = targetSpeed;
       }
       currentRotation += velocity;
+    }
+
+    if (!isSnappingToCard) {
       wheelContainer.style.transform = `rotateX(-10deg) rotateY(${currentRotation}deg)`;
     }
     wheelAnimationFrameId = requestAnimationFrame(autoRotate);
@@ -318,26 +405,27 @@ function setupProjectModals() {
     const handleClick = (e) => {
       e.preventDefault();
       e.stopPropagation();
-      
-      const project = projectData[projectId];
-      if (!project) {
-        
+
+      if (isDragging || isSnappingToCard) {
         return;
       }
-      
-      // Populate modal content
-      populateModalContent(project);
-      
-      // Show modal
-      isModalOpen = true;
-      modal.style.display = 'block';
-      
-      // Hide all navigation elements
-      hideAllNavigation();
-      
-      setTimeout(() => {
-        modal.classList.add('show');
-      }, 10);
+
+      const project = projectData[projectId];
+      if (!project) {
+        return;
+      }
+
+      const openModal = () => {
+        populateModalContent(project);
+        isModalOpen = true;
+        modal.style.display = 'block';
+        hideAllNavigation();
+        setTimeout(() => {
+          modal.classList.add('show');
+        }, 10);
+      };
+
+      snapWheelToCardIndex(index, openModal);
     };
     
     // Add hover listeners to control wheel speed
@@ -562,6 +650,8 @@ function cleanupProjects() {
     cancelAnimationFrame(wheelAnimationFrameId);
     wheelAnimationFrameId = null;
   }
+  stopSnapAnimation();
+  projectsWheelEl = null;
   runCleanup(wheelCleanupFns);
   runCleanup(modalCleanupFns);
   const nextBtn = document.getElementById('sectionNext');

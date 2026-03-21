@@ -113,14 +113,28 @@
   visibility: visible;
 }
 
-.project-card.revealed .card-content,
-.project-card.revealed .card-face {
+.project-card.revealed .card-content {
   opacity: 1;
-  animation: cardFadeIn 0.5s ease;
+  animation: cardPopIn 0.55s cubic-bezier(0.28, 1.5, 0.42, 1) forwards;
 }
 
-@keyframes cardFadeIn {
-  from { opacity: 0; }
+.project-card.revealed .card-face {
+  opacity: 1;
+}
+
+@keyframes cardPopIn {
+  0% {
+    transform: scale(0.45);
+    opacity: 1;
+  }
+  68% {
+    transform: scale(1.06);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .project-card:focus,
@@ -132,18 +146,6 @@
 .project-card:hover {
   translate: 0 -8px;
   cursor: pointer !important;
-}
-
-.project-card:hover .card-content {
-  opacity: 0.85;
-}
-
-.project-card:hover .card-face {
-  opacity: 0.85;
-}
-
-.project-card:hover .project-header {
-  opacity: 1;
 }
 
 /* Position cards in 3D circle - responsive radius like Projects.html */
@@ -243,8 +245,19 @@
   border: none;
   pointer-events: none;
   z-index: 2;
-  opacity: 0.85;
+  opacity: 1;
   transition: opacity 0.3s ease;
+}
+
+/* Title + gradient bar: hidden until hover (fine pointer only); touch keeps text visible */
+@media (hover: hover) and (pointer: fine) {
+  .project-header {
+    opacity: 0;
+  }
+
+  .project-card:hover .project-header {
+    opacity: 1;
+  }
 }
 
 .project-header h3 {
@@ -397,21 +410,23 @@
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 0.25rem 0;
+  padding: 0.5rem 0.85rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   gap: 0.5rem;
   border: none;
-  border-radius: 0;
+  border-radius: 8px;
   background: transparent;
-  transition: color 0.15s ease;
+  transition: background 0.2s ease, color 0.2s ease;
   box-sizing: border-box;
 }
 
+/* Match Experience `.nav-btn:hover` treatment */
 .back-to-projects:hover {
   color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 /* Equal flex spacers center content vertically; shrink when tall so overflow scrolls */
@@ -474,13 +489,23 @@
 }
 
 .project-hero-image {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  max-height: none;
+  align-self: center;
+}
+
+.project-hero-image-inner {
   position: relative;
+  width: 100%;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: none;
   border: 1px solid rgba(255, 255, 255, 0.12);
   max-height: 50vh;
-  align-self: center;
 }
 
 .project-hero-image img {
@@ -530,13 +555,11 @@
 .gallery-next { right: 0.6rem; }
 
 .gallery-dots {
-  position: absolute;
-  bottom: 0.5rem;
-  left: 50%;
-  transform: translateX(-50%);
   display: flex;
+  justify-content: center;
+  align-items: center;
   gap: 0.4rem;
-  z-index: 2;
+  flex-shrink: 0;
 }
 
 .gallery-dot {
@@ -576,13 +599,10 @@
 }
 
 .project-description {
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
   font-size: 0.85rem;
   line-height: 1.55;
   margin: 0;
+  color: rgba(240, 240, 245, 0.92);
 }
 
 .project-tech-stack {
@@ -982,7 +1002,7 @@
     gap: 1rem;
   }
 
-  .project-hero-image {
+  .project-hero-image-inner {
     max-height: 30vh;
   }
 
@@ -992,10 +1012,6 @@
 
   .project-title {
     font-size: 1.5rem;
-  }
-
-  .project-description {
-    -webkit-line-clamp: 3;
   }
 
   .project-links-inline {

@@ -72,10 +72,17 @@ class SPARouter {
 
     await this.fadeOut();
     this.closeMobileNav();
-    this.updateElementVisibility(routeConfig);
 
     document.title = routeConfig.title;
     document.body.setAttribute('data-current-route', resolvedRoute);
+
+    if (resolvedRoute === 'home') {
+      document.body.classList.add('home-awaiting-3d-reveal');
+    } else {
+      document.body.classList.remove('home-awaiting-3d-reveal');
+    }
+
+    this.updateElementVisibility(routeConfig);
     this.showContent(routeConfig.contentSelector);
     this.updateNavigation(resolvedRoute);
 

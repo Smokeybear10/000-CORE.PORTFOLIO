@@ -30,12 +30,13 @@
   animation-delay: 0.15s;
 }
 
-.profile-image {
+/* First body paragraph (after h2) fades in before the portrait */
+.profile-text > p:nth-of-type(1) {
   animation: aboutFadeUp 1.2s cubic-bezier(0.25, 0.1, 0.25, 1) both;
   animation-delay: 0.3s;
 }
 
-.profile-text > p:nth-of-type(1) {
+.profile-image {
   animation: aboutFadeUp 1.2s cubic-bezier(0.25, 0.1, 0.25, 1) both;
   animation-delay: 0.45s;
 }
@@ -47,7 +48,7 @@
 
 .profile-text > p:last-child {
   animation: aboutFadeUp 1.2s cubic-bezier(0.25, 0.1, 0.25, 1) both;
-  animation-delay: 0.9s;
+  animation-delay: 0.75s;
 }
 
 .about-tagline {

@@ -9,6 +9,7 @@ class FakeElement {
   constructor() {
     this.textContent = '';
     this.style = {};
+    this.classList = { add() {}, remove() {}, contains() { return false; } };
   }
 }
 
@@ -21,6 +22,7 @@ class FakeDocument {
       '.typed-text-2': new FakeElement(),
       '.cursor-1': new FakeElement(),
       '.cursor-2': new FakeElement(),
+      '.home-subtitles': new FakeElement(),
     };
   }
 

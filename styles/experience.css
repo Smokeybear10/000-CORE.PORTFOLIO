@@ -28,20 +28,115 @@ html, body {
   }
 }
 
-/* Staggered entrance: title → top section → left & right simultaneously */
-#experience-content .journey-title {
-  animation: none;
+/* Right-column blocks: land at 0.3 opacity to match scroll “dimmed” state until .in-view */
+@keyframes experienceFadeInSoft {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
 }
 
+@keyframes experienceSlideUp {
+  from {
+    transform: translateY(26px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Staggered entrance: hero (title + top hello) first → left column → education timeline → experience → research */
 #experience-content .top-container {
-  animation: experienceFadeUpCenter 1.2s cubic-bezier(0.25, 0.1, 0.25, 1) both;
-  animation-delay: 0.25s;
+  animation: experienceFadeUpCenter 0.95s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+  animation-delay: 0.18s;
 }
 
-#experience-content .left-section,
-#experience-content .right-section {
-  animation: experienceFadeUp 1.2s cubic-bezier(0.25, 0.1, 0.25, 1) both;
-  animation-delay: 0.5s;
+#experience-content .left-section {
+  animation: experienceSlideUp 0.95s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+  animation-delay: 0.68s;
+}
+
+#experience-content .right-section > .timeline-container {
+  animation: experienceFadeInSoft 0.9s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+  animation-delay: 0.68s;
+}
+
+#experience-content .right-section > .experience-cards {
+  animation: experienceFadeInSoft 0.85s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+  animation-delay: 0.86s;
+}
+
+#experience-content .right-section > .research-cards {
+  animation: experienceFadeInSoft 0.85s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+  animation-delay: 1s;
+}
+
+#experience-content .right-section > div:has(.resume-link) {
+  animation: experienceFadeUp 0.75s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+  animation-delay: 1.12s;
+}
+
+/* Education title: first .visible per route visit runs entrance; .education-title-entrance-done skips replay on scroll */
+#experience-content .education-title.visible:not(.education-title-entrance-done) {
+  opacity: 0;
+  animation: experienceFadeInSoft 0.9s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  animation-delay: 0.68s;
+}
+
+#experience-content .education-title.visible.education-title-entrance-done {
+  animation: none;
+  opacity: 0.3;
+}
+
+/* First time .visible per route visit: run entrance. After .horse-entrance-done, show without replaying (scroll in/out of education). */
+#experience-content .horse-container.visible:not(.horse-entrance-done) {
+  opacity: 0;
+  animation: experienceFadeInSoft 0.9s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  animation-delay: 0.68s;
+}
+
+#experience-content .horse-container.visible.horse-entrance-done {
+  animation: none;
+  opacity: 0.3;
+}
+
+#experience-content .education-title.visible.education-timeline-focused,
+#experience-content .horse-container.visible.education-timeline-focused {
+  opacity: 1 !important;
+  transition: opacity 0.6s ease;
+}
+
+/* Nav: same entrance as timeline; beat generic .visible { opacity: 1 } */
+#experience-content .nav-buttons.permanent-buttons.visible {
+  opacity: 0;
+  animation: experienceFadeInSoft 0.9s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  animation-delay: 0.68s;
+}
+
+#experience-content .nav-buttons.permanent-buttons.visible.experience-nav-bright {
+  opacity: 1 !important;
+  transition: opacity 0.6s ease;
+}
+
+/* Card stagger starts after its section begins fading in */
+#experience-content .experience-cards > .card:nth-child(1) {
+  animation-delay: 0.92s;
+}
+#experience-content .experience-cards > .card:nth-child(2) {
+  animation-delay: 1.02s;
+}
+#experience-content .experience-cards > .card:nth-child(3) {
+  animation-delay: 1.12s;
+}
+#experience-content .research-cards > .card:nth-child(1) {
+  animation-delay: 1.06s;
+}
+#experience-content .research-cards > .card:nth-child(2) {
+  animation-delay: 1.16s;
 }
 
 
@@ -167,7 +262,9 @@ html, body {
   transform: translateX(-50%);
   width: min(100%, 1200px);
   height: 50vh;
-  padding: 0;
+  box-sizing: border-box;
+  padding-left: clamp(2rem, 8vw, 5.5rem);
+  padding-right: clamp(2rem, 8vw, 5.5rem);
   z-index: 3;
   border: none;
 }
@@ -224,7 +321,10 @@ body.modal-open .timeline-container,
 body.modal-open .cards-container,
 body.modal-open .hello-content-mobile,
 body.modal-open .profile-photo,
-body.modal-open .left-section {
+body.modal-open .left-section,
+body.modal-open #experience-content .education-title.visible,
+body.modal-open #experience-content .horse-container.visible,
+body.modal-open #experience-content .nav-buttons.permanent-buttons.visible {
   opacity: 1 !important;
 }
 
@@ -472,7 +572,8 @@ body.modal-open .left-section {
   top: 1rem;
   left: 1rem;
   z-index: 10;
-  opacity: 1;
+  animation: experienceFadeUp 0.9s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+  animation-delay: 0.04s;
 }
 
 .journey-text {
@@ -514,7 +615,8 @@ body.modal-open .left-section {
   box-shadow: none;
   transition: all 0.3s ease;
   position: absolute !important;
-  left: 0px !important;
+  /* Extra inset from container padding so the circle isn’t hugging the edge */
+  left: clamp(0.75rem, 2.5vw, 1.75rem) !important;
   top: 50% !important;
   transform: translateY(-50%) !important;
   object-fit: cover;

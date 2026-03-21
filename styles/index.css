@@ -10,6 +10,10 @@ body {
   font-family: 'Inter', Arial, sans-serif;
   min-height: 100vh;
   position: relative;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 @keyframes easeIn {
@@ -104,6 +108,16 @@ body {
   50% { opacity: 0; }
 }
 
+/* Hide home WebGL layers through router fadeIn (runs before onEnter); released in spa-init */
+body.home-awaiting-3d-reveal[data-current-route="home"] #model-container {
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+body.home-awaiting-3d-reveal[data-current-route="home"] #cube-container:not(.home-cube-pop-in) {
+  visibility: hidden !important;
+}
+
 /* 3D Cube Container */
 #cube-container {
   position: fixed;
@@ -115,6 +129,30 @@ body {
   pointer-events: none;
   opacity: 1;
   transition: opacity 0.3s ease;
+  transform-origin: center center;
+}
+
+/* Re-entry to home (after first title run): cube + models start hidden, then scale pop */
+@keyframes homeCubeReturnPop {
+  0% {
+    transform: scale(0.42);
+  }
+  70% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+#cube-container.home-cube-pre-pop {
+  visibility: hidden;
+  transform: scale(0.42);
+}
+
+#cube-container.home-cube-pop-in {
+  visibility: visible;
+  animation: homeCubeReturnPop 0.36s cubic-bezier(0.28, 1.5, 0.42, 1) forwards;
 }
 
 #cube-canvas {
