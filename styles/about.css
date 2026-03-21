@@ -58,7 +58,7 @@
 
 /* Left-to-right highlight sweep - runs after fade-in, highlight stays, theme-matched */
 .highlight-sweep {
-  background-image: linear-gradient(90deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.12));
+  background-image: linear-gradient(90deg, rgba(139, 92, 246, 0.12), rgba(139, 92, 246, 0.12));
   background-size: 0 100%;
   background-repeat: no-repeat;
   background-position: left center;
@@ -114,7 +114,7 @@
   align-items: center;
   gap: 0.5rem;
   background: #ffffff;
-  color: #000000;
+  color: #0a0a16;
   padding: 0.2rem 0.6rem;
   border-radius: 9999px;
   font-weight: 600;
@@ -132,7 +132,7 @@
 
 /* Thematic clickable links - dotted underline fits black/white aesthetic */
 .profile-text a {
-  color: #ffffff;
+  color: #f0f0f5;
   text-decoration: underline;
   text-decoration-style: dotted;
   text-decoration-color: rgba(255, 255, 255, 0.6);
@@ -226,7 +226,7 @@
 }
 
 .profile-text {
-  color: #ffffff;
+  color: #f0f0f5;
   font-family: 'Inter', Arial, sans-serif;
 }
 
@@ -249,7 +249,7 @@
 }
 
 .info-section p {
-  color: #ffffff;
+  color: #f0f0f5;
   font-family: 'Inter', Arial, sans-serif;
   font-size: 1rem;
   line-height: 1.6;
@@ -260,7 +260,7 @@
 
 /* Stack intro - woven into profile narrative */
 .stack-intro {
-  color: #ffffff;
+  color: #f0f0f5;
   font-family: 'Inter', Arial, sans-serif;
   font-size: 1rem;
   line-height: 1.6;
@@ -282,7 +282,7 @@
   font-family: 'Inter', Arial, sans-serif;
   font-size: min(1.8rem, 3.5vw);
   font-weight: 400;
-  color: #ffffff;
+  color: #f0f0f5;
   text-decoration: underline;
   text-decoration-style: dotted;
   text-decoration-color: rgba(255, 255, 255, 0.6);
@@ -299,9 +299,9 @@
 
 .tools-dropdown.active .tools-dropdown-header {
   background: #ffffff;
-  color: #000000;
+  color: #0a0a16;
   text-decoration-style: solid;
-  text-decoration-color: #000000;
+  text-decoration-color: #0a0a16;
 }
 
 .tools-dropdown.active .tools-dropdown-header:hover {
@@ -319,12 +319,12 @@
 
 .tools-dropdown.active .tools-dropdown-content {
   max-height: 600px;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(10, 10, 22, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 12px;
   margin-top: 0.5rem;
   padding: 1rem 1.25rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 20px rgba(10, 10, 22, 0.3);
 }
 
 .tools-section {
@@ -397,7 +397,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(10, 10, 22, 0.85);
   color: #ffffff;
   padding: 0.35rem 0.7rem;
   border-radius: 6px;
@@ -423,7 +423,7 @@
 .scroll-progress-bar {
   width: 100%;
   height: 100%;
-  background: linear-gradient(180deg, #ffffff 0%, #00ffff 100%);
+  background: linear-gradient(180deg, #8b5cf6 0%, #00e5ff 100%);
   border-radius: 3px;
   transform: translateY(-100%);
   transition: transform 0.1s ease-out;
@@ -465,7 +465,7 @@ html, body {
 }
 
 .mobile-menu-btn:hover {
-  background: rgba(0, 0, 0, 0.5) !important;
+  background: rgba(10, 10, 22, 0.5) !important;
   border-color: rgba(255, 255, 255, 0.3) !important;
 }
 
@@ -601,7 +601,7 @@ html, body {
   font-family: 'Inter', Arial, sans-serif;
   font-size: min(1.8rem, 3.5vw);
   font-weight: 400;
-  color: #ffffff;
+  color: #f0f0f5;
   margin: 0 0 2rem 0;
   line-height: 1.6;
   letter-spacing: normal;
