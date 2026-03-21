@@ -207,6 +207,28 @@ function setupWheelRotation() {
     });
   });
 
+  // Pick a random card as the front-facing center card (instant, no transition)
+  const cardCount = cards.length;
+  const startIndex = Math.floor(Math.random() * cardCount);
+  currentRotation = -(startIndex * 60);
+  wheelContainer.style.transition = 'none';
+  wheelContainer.style.transform = `rotateX(-10deg) rotateY(${currentRotation}deg)`;
+  wheelContainer.offsetHeight; // force reflow so the position applies instantly
+  wheelContainer.style.transition = '';
+
+  // Staggered fade-in: start from center card, then go right (increasing index)
+  let introComplete = false;
+  const staggerDelay = 200;
+  for (let step = 0; step < cardCount; step++) {
+    const cardIdx = (startIndex + step) % cardCount;
+    setTimeout(() => {
+      cards[cardIdx].classList.add('revealed');
+      if (step === cardCount - 1) {
+        setTimeout(() => { introComplete = true; }, 500);
+      }
+    }, step * staggerDelay);
+  }
+
   // Auto rotation with hover slowdown
   function autoRotate() {
     let targetSpeed = autoRotationSpeed;
@@ -217,6 +239,10 @@ function setupWheelRotation() {
     }
     
     if (!isDragging) {
+      if (!introComplete) {
+        targetSpeed = 0;
+        velocity = 0;
+      }
       // Smoothly transition velocity towards target speed
       if (Math.abs(velocity - targetSpeed) > 0.01) {
         velocity += (targetSpeed - velocity) * 0.1; // Smooth transition
@@ -554,6 +580,9 @@ function cleanupProjects() {
     modal.classList.remove('show');
     modal.style.display = 'none';
   }
+  document.querySelectorAll('.project-card').forEach(card => {
+    card.classList.remove('revealed');
+  });
   showAllNavigation();
   isModalOpen = false;
   isHovering = false;
