@@ -118,6 +118,17 @@ body[data-current-route="contact"]::before {
   background: radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(10, 10, 22, 0.5) 100%);
 }
 
+/* === PAGE TITLE SWEEP EXIT === */
+.page-title {
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.page-title.sweep-out {
+  clip-path: inset(0 0 100% 0);
+}
+
+
 /* === NOISE OVERLAY === */
 .noise-overlay {
   position: fixed;
