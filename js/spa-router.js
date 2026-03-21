@@ -75,6 +75,7 @@ class SPARouter {
     this.updateElementVisibility(routeConfig);
 
     document.title = routeConfig.title;
+    document.body.setAttribute('data-current-route', resolvedRoute);
     this.showContent(routeConfig.contentSelector);
     this.updateNavigation(resolvedRoute);
 
@@ -138,6 +139,7 @@ class SPARouter {
     const targetContent = document.querySelector(contentSelector);
     if (targetContent) {
       targetContent.style.display = 'block';
+      targetContent.style.opacity = '';
     }
   }
 
@@ -152,23 +154,51 @@ class SPARouter {
 
   fadeOut() {
     return new Promise(resolve => {
-      document.querySelectorAll('[data-route-content]').forEach(content => {
-        content.style.transition = 'opacity 0.4s ease-out';
-        content.style.opacity = '0';
+      document.querySelectorAll('.page-title').forEach(title => {
+        title.classList.add('sweep-out');
       });
-      setTimeout(resolve, 400);
+      document.querySelectorAll('[data-route-content]').forEach(content => {
+        Array.from(content.children).forEach(child => {
+          if (!child.classList.contains('page-title')) {
+            child.style.transition = 'opacity 0.25s ease-out';
+            child.style.opacity = '0';
+          }
+        });
+      });
+      setTimeout(resolve, 300);
     });
   }
 
   fadeIn() {
     return new Promise(resolve => {
-      setTimeout(() => {
-        document.querySelectorAll('[data-route-content]:not([style*="display: none"])').forEach(content => {
-          content.style.transition = 'opacity 0.4s ease-in';
-          content.style.opacity = '1';
+      // Get visible content's title
+      const visibleContent = document.querySelector('[data-route-content]:not([style*="display: none"])');
+      const titles = visibleContent ? visibleContent.querySelectorAll('.page-title') : [];
+
+      // Set titles to clipped-from-top instantly (no transition)
+      titles.forEach(title => {
+        title.classList.remove('sweep-out');
+        title.style.transition = 'none';
+        title.style.clipPath = 'inset(0 0 100% 0)';
+        title.offsetHeight; // force reflow per element
+      });
+
+      requestAnimationFrame(() => {
+        // Restore transition and animate to fully visible
+        titles.forEach(title => {
+          title.style.transition = '';
+          title.style.clipPath = '';
         });
-        setTimeout(resolve, 400);
-      }, 100);
+        if (visibleContent) {
+          Array.from(visibleContent.children).forEach(child => {
+            if (!child.classList.contains('page-title')) {
+              child.style.transition = 'opacity 0.25s ease-in';
+              child.style.opacity = '1';
+            }
+          });
+        }
+        setTimeout(resolve, 300);
+      });
     });
   }
 

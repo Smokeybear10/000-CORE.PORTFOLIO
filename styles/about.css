@@ -22,8 +22,7 @@
 
 /* Staggered entrance animations */
 .about-title {
-  animation: aboutFadeUp 1.2s cubic-bezier(0.25, 0.1, 0.25, 1) both;
-  animation-delay: 0s;
+  animation: none;
 }
 
 .profile-text h2 {

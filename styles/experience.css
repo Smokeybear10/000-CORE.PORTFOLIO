@@ -30,8 +30,7 @@ html, body {
 
 /* Staggered entrance: title → top section → left & right simultaneously */
 #experience-content .journey-title {
-  animation: experienceFadeUp 1.2s cubic-bezier(0.25, 0.1, 0.25, 1) both;
-  animation-delay: 0s;
+  animation: none;
 }
 
 #experience-content .top-container {
