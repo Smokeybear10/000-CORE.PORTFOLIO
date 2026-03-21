@@ -198,7 +198,7 @@
               </div>
               
               <!-- Bio Section -->
-              <div style="color: #ffffff; font-family: 'Inter', Arial, sans-serif; font-size: clamp(0.9rem, 3vw, 1.4rem); line-height: 1.6; margin: 1rem 0; opacity: 1;">I am a student with experience across a wide range of fields, from fintech to law. At present, I am completing both my undergraduate and accelerated master's degree in Philadelphia, while also conducting research with faculty.</div>
+              <div style="color: #ffffff; font-family: 'Inter', Arial, sans-serif; font-size: clamp(0.9rem, 3vw, 1.4rem); line-height: 1.6; margin: 1rem 0; opacity: 1;">Hello. I'm Thomas. I'm a math and CS student at Penn with experience across quantitative research, derivatives, and defense tech. At present, I'm completing both my undergrad and accelerated master's in Philadelphia, while also conducting research with faculty.</div>
               
               
               <!-- Navigation Buttons -->
@@ -318,7 +318,7 @@
               <div class="hello-section" style="font-size: min(7.5vw, 2.4rem); font-weight: 400; font-family: 'Anton', Arial, sans-serif; color: #ffffff; margin: 0; text-align: left; line-height: 1.05; opacity: 0.3; transition: opacity 0.6s ease; letter-spacing: 0.02em;">Hello. I am Thomas</div>
               
               <!-- Bio Section - positioned relative to header -->
-              <div class="hello-section" style="color: #ffffff; font-family: 'Inter', Arial, sans-serif; font-size: 1.4rem; line-height: 1.6; margin: 2rem 0 1rem 0; opacity: 0.3; transition: opacity 0.6s ease;">I am a student with experience across a wide range of fields, from fintech to law. At present, I am completing both my undergraduate and accelerated master's degree in Philadelphia, while also conducting research with faculty.</div>
+              <div class="hello-section" style="color: #ffffff; font-family: 'Inter', Arial, sans-serif; font-size: 1.4rem; line-height: 1.6; margin: 2rem 0 1rem 0; opacity: 0.3; transition: opacity 0.6s ease;">Hello. I'm Thomas. I'm a math and CS student at Penn with experience across quantitative research, derivatives, and defense tech. At present, I'm completing both my undergrad and accelerated master's in Philadelphia, while also conducting research with faculty.</div>
               
               
               <!-- Navigation Buttons - positioned relative to header -->
@@ -346,7 +346,7 @@
               <div class="timeline-item">
                 <div class="timeline-dot"></div>
                 <div class="timeline-content">
-                  <h3>Accelerated Masters in Computer Science</h3>
+                  <h3>Master of Science in Engineering in Computer and Information Science</h3>
                   <div class="timeline-school">University of Pennsylvania</div>
                   <div class="timeline-details">
                     <div class="course-grid">
@@ -381,12 +381,12 @@
 
               <div class="card">
                 <div class="card-header">
-                  <h3>Investment Strategy Associate</h3>
-                  <div class="card-company">Wharton Investment and Trading Group</div>
-                  <div class="card-location">Oct 2024 - Present</div>
+                  <h3>Software Engineer</h3>
+                  <div class="card-company">Visa</div>
+                  <div class="card-location">Mar 2026 - May 2026 · 3 mos</div>
                 </div>
                 <div class="card-preview">
-                  <p>Coordinated 15 analysts in developing equity research reports and financial models across Technology and Industrials sectors.</p>
+                  <p>Software engineering internship at Visa.</p>
                 </div>
               </div>
 
@@ -409,17 +409,6 @@
                 </div>
                 <div class="card-preview">
                   <p>Regulatory Alpha Extraction</p>
-                </div>
-              </div>
-
-              <div class="card">
-                <div class="card-header">
-                  <h3>Technology and Research Analyst</h3>
-                  <div class="card-company">Penn Blockchain</div>
-                  <div class="card-location">Oct 2024 - Mar 2025</div>
-                </div>
-                <div class="card-preview">
-                  <p>Authored research reports on DeFi primitives, tokenomics, and blockchain integration into traditional finance infrastructure.</p>
                 </div>
               </div>
             </div>
@@ -536,32 +525,20 @@
               <div class="back-to-projects" id="backToProjects">← Back to Projects</div>
             </div>
             <div class="project-hero-section">
-              <div class="project-hero-image">
+              <div class="project-hero-image" id="projectHeroImageContainer">
                 <img id="projectHeroImage" src="" alt="" />
+                <button class="gallery-prev" id="galleryPrev" aria-label="Previous image">&#8249;</button>
+                <button class="gallery-next" id="galleryNext" aria-label="Next image">&#8250;</button>
+                <div class="gallery-dots" id="galleryDots"></div>
               </div>
               <div class="project-hero-info">
                 <h1 id="projectTitle" class="project-title"></h1>
-                <div id="projectTechStack" class="project-tech-stack">
-                  <!-- Tech stack badges will be inserted here -->
-                </div>
+                <p id="projectDescription" class="project-description"></p>
+                <div id="projectTechStack" class="project-tech-stack"></div>
                 <div id="projectLinks" class="project-links project-links-inline"></div>
               </div>
             </div>
-            
-            <div class="project-details-grid">
-              <div class="project-section-stack">
-                <div class="project-overview-section project-section">
-                  <h2>Project Overview</h2>
-                  <p id="projectDescription" class="project-description"></p>
-                </div>
-              </div>
-
-              <div class="project-section-nav">
-                <button id="sectionPrev" class="section-nav-btn" aria-label="Previous section">‹</button>
-                <div class="section-dots" id="sectionDots"></div>
-                <button id="sectionNext" class="section-nav-btn" aria-label="Next section">›</button>
-              </div>
-            </div>
+            <div id="projectFeatures" class="project-features-grid"></div>
           </div>
         </div>
 
