@@ -451,11 +451,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Experience and Research data for modals
 const experienceData = {
-  0: { // Investment Strategy Associate at WITG
-    title: "Investment Strategy Associate",
-    company: "Wharton Investment and Trading Group",
-    location: "Oct 2024 - Present",
-    description: "Coordinated 15 analysts in developing equity research reports and financial models across Technology and Industrials sectors."
+  0: { // Software Engineer at Visa
+    title: "Software Engineer",
+    company: "Visa · Internship",
+    location: "Mar 2026 - May 2026 · 3 mos",
+    description: "Software engineering internship at Visa."
   },
   1: { // Quant Intern at Astera Holdings
     title: "Quant Intern",
@@ -469,19 +469,13 @@ const experienceData = {
     location: "Jun 2024 - Aug 2024 · 3 mos<br>New York, New York, United States · On-site",
     description: "Regulatory Alpha Extraction"
   },
-  3: { // Technology and Research Analyst at Penn Blockchain
-    title: "Technology and Research Analyst",
-    company: "Penn Blockchain",
-    location: "Oct 2024 - Mar 2025",
-    description: "Authored research reports on DeFi primitives, tokenomics, and blockchain integration into traditional finance infrastructure."
-  },
-  4: { // Research Assistant - CURF
+  3: { // Research Assistant - CURF
     title: "Research Assistant",
     company: "University of Pennsylvania Center for Undergraduate Research and Fellowships · Part-time",
     location: "Jul 2025 - Present · 9 mos<br>Philadelphia, Pennsylvania, United States",
     description: "DoD AI Policy under Prof. M. Horowitz, Ph.D"
   },
-  5: { // Software Engineering Intern - PPPL (Research section)
+  4: { // Software Engineering Intern - PPPL (Research section)
     title: "Software Engineering Intern (Computational Physics)",
     company: "Princeton Plasma Physics Laboratory (PPPL) · Part-time",
     location: "Feb 2024 - Apr 2024 · 3 mos<br>Princeton, New Jersey, United States · Hybrid",
