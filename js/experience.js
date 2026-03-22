@@ -493,7 +493,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!bottomNav || !triggerZone) return;
 
   let hideTimeout = null;
-  const isSmallScreen = () => window.matchMedia('(orientation: portrait), (max-width: 768px)').matches;
+  const isSmallScreen = () => window.matchMedia('(orientation: portrait), (max-width: 1100px)').matches;
 
   function showNav() {
     if (!isSmallScreen()) return;
