@@ -78,8 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const navButtons = document.querySelector('.nav-buttons.permanent-buttons');
   
   function updateAnimalVisibility() {
-    // Skip while modal is open
-    if (document.body.classList.contains('modal-open')) return;
     // Check which section is in focus
     const timelineContainer = document.querySelector('.timeline-container');
     const experienceContainer = document.querySelector('.experience-cards');
@@ -545,138 +543,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// Experience and Research data for modals
-const experienceData = {
-  0: { // Software Engineer at Visa
-    title: "Software Engineer",
-    company: "Visa · Internship",
-    location: "Mar 2026 - May 2026",
-    description: "Software engineering internship at Visa."
-  },
-  1: { // Quant Intern at Astera Holdings
-    title: "Quant Intern",
-    company: "Astera Holdings · Internship",
-    location: "Jan 2025 - May 2025",
-    description: "Event Derivative Arbitrage on Kalshi, Polymarket."
-  },
-  2: { // Tax Intern at Flushing CPA
-    title: "Tax Intern",
-    company: "Flushing CPA Tax Center · Internship",
-    location: "Jun 2024 - Aug 2024<br>New York, New York, United States · On-site",
-    description: "Regulatory Alpha Extraction"
-  },
-  3: { // Research Assistant - CURF
-    title: "Research Assistant",
-    company: "Penn Center for Undergrad Research and Fellowships",
-    location: "Jul 2025 - Present<br>Philadelphia, Pennsylvania, United States",
-    description: "Built a computer vision pipeline using OpenCV to digitize over 50,000 pages of unstructured historical archives, applying Gaussian blur, adaptive thresholding, and morphological operations to clean noisy legacy datasets. Reduced processing latency by 95% through an on-premise inference solution that eliminated cloud dependency. Applied Named Entity Recognition (NER) to structure military records into SQL for historical sentiment analysis. Additionally analyzed 50+ years of historical financial data to forecast defense sector capital flows, detailing $12B+ in government spending anomalies and identifying a 40% allocation shift toward dual-use startups."
-  },
-  4: { // Software Engineering Intern - PPPL (Research section)
-    title: "Software Engineering Intern (Computational Physics)",
-    company: "Princeton Plasma Physics Laboratory (PPPL)",
-    location: "Feb 2024 - Apr 2024<br>Princeton, New Jersey, United States · Hybrid",
-    description: "GPU optimization & backend databases for Monte-Carlo simulation."
-  }
-};
-
 let experienceInitTimeout = null;
-let experienceModalOpenTimeout = null;
-let experienceModalCloseTimeout = null;
-let experienceCleanupFns = [];
-
-function runExperienceCleanupFns() {
-  experienceCleanupFns.forEach((cleanupFn) => cleanupFn());
-  experienceCleanupFns = [];
-}
-
-function initModalFunctionality() {
-  const cards = document.querySelectorAll('.card');
-  const modal = document.getElementById('experienceModal');
-  const modalContent = document.getElementById('modalContent');
-  const closeBtn = document.querySelector('.close');
-
-  if (!modal || !modalContent) return;
-  runExperienceCleanupFns();
-  
-  cards.forEach((card, index) => {
-    const handleCardClick = (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-
-      const experience = experienceData[index];
-      if (experience) {
-        modalContent.innerHTML = `
-          <h2>${experience.title}</h2>
-          <div class="modal-company">${experience.company}</div>
-          <div class="modal-location">${experience.location}</div>
-          <p>${experience.description}</p>
-        `;
-        modal.style.display = 'block';
-        document.body.classList.add('modal-open');
-        document.querySelectorAll('.timeline-container, .cards-container, .hello-content-mobile, .profile-photo').forEach(el => {
-          el.style.setProperty('opacity', '1', 'important');
-        });
-        document.querySelectorAll('.hello-section').forEach(el => {
-          el.style.setProperty('opacity', '1', 'important');
-        });
-        if (experienceModalOpenTimeout) {
-          clearTimeout(experienceModalOpenTimeout);
-        }
-        experienceModalOpenTimeout = setTimeout(() => {
-          experienceModalOpenTimeout = null;
-          modal.classList.add('show');
-        }, 10);
-      }
-    };
-    
-    card.addEventListener('click', handleCardClick);
-    card.addEventListener('touchend', handleCardClick);
-    experienceCleanupFns.push(
-      () => card.removeEventListener('click', handleCardClick),
-      () => card.removeEventListener('touchend', handleCardClick)
-    );
-  });
-  
-  function closeModal() {
-    if (experienceModalOpenTimeout) {
-      clearTimeout(experienceModalOpenTimeout);
-      experienceModalOpenTimeout = null;
-    }
-    modal.classList.remove('show');
-    if (experienceModalCloseTimeout) {
-      clearTimeout(experienceModalCloseTimeout);
-    }
-    experienceModalCloseTimeout = setTimeout(() => {
-      experienceModalCloseTimeout = null;
-      modal.style.display = 'none';
-      document.body.classList.remove('modal-open');
-      // Restore normal dimming by clearing forced inline opacity
-      document.querySelectorAll('.timeline-container, .cards-container, .hello-content-mobile, .profile-photo').forEach(el => {
-        el.style.removeProperty('opacity');
-      });
-      document.querySelectorAll('.hello-section').forEach(el => {
-        el.style.removeProperty('opacity');
-      });
-    }, 400);
-  }
-
-  if (closeBtn) {
-    closeBtn.addEventListener('click', closeModal);
-    experienceCleanupFns.push(() => closeBtn.removeEventListener('click', closeModal));
-  }
-
-  const handleModalClick = (e) => {
-    if (e.target === modal) closeModal();
-  };
-  modal.addEventListener('click', handleModalClick);
-  experienceCleanupFns.push(() => modal.removeEventListener('click', handleModalClick));
-
-  const handleEscape = (e) => {
-    if (e.key === 'Escape' && modal.style.display === 'block') closeModal();
-  };
-  document.addEventListener('keydown', handleEscape);
-  experienceCleanupFns.push(() => document.removeEventListener('keydown', handleEscape));
-}
 
 // SPA-specific initialization functions
 window.initExperienceAnimations = function() {
@@ -758,8 +625,6 @@ window.initExperienceAnimations = function() {
       });
     }
     
-    initModalFunctionality();
-    
     if (window.updateButtonStyling) {
       window.updateButtonStyling();
     }
@@ -775,16 +640,7 @@ window.cleanupExperienceAnimations = function() {
     clearTimeout(experienceInitTimeout);
     experienceInitTimeout = null;
   }
-  if (experienceModalOpenTimeout) {
-    clearTimeout(experienceModalOpenTimeout);
-    experienceModalOpenTimeout = null;
-  }
-  if (experienceModalCloseTimeout) {
-    clearTimeout(experienceModalCloseTimeout);
-    experienceModalCloseTimeout = null;
-  }
-  runExperienceCleanupFns();
-  
+
   // Remove other scroll handlers
   if (window.experienceScrollHandlers) {
     window.experienceScrollHandlers.forEach(handler => {
