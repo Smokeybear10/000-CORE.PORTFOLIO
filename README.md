@@ -4,6 +4,10 @@ A single-page portfolio site with custom SPA routing, interactive 3D models, and
 
 Live at [thomasou.com](https://thomasou.com)
 
+![Portfolio Demo](Images/ProjectPhotos/THOMAS.gif)
+
+![Portfolio Demo 2](Images/ProjectPhotos/THOMAS2.gif)
+
 ## Quick Start
 
 ```bash
@@ -27,16 +31,13 @@ Five routes handled by a custom hash-based SPA router with animated transitions,
 - Languages, frameworks, databases organized by category
 
 **Experience**
-- Dual-panel layout: left side shows rotating 3D animal heads (horse, bull, lion) that swap based on which section is scrolled into view
-- Education timeline (Penn — Master's in CS, Bachelor's in Math/Statistics)
-- Professional experience cards (Visa, Astera Holdings, Flushing CPA)
-- Research cards (Penn CURF, Princeton Plasma Physics Lab)
+- Dual-panel layout: left side shows rotating 3D animal heads that swap based on which section is scrolled into view
+- Education timeline, professional experience cards, and research cards
 - Scroll-driven section focus dimming — only the active section is bright
 
 **Projects**
 - Rotating wheel carousel for featured projects
 - Full-screen modal with image gallery, tech stack, and links
-- Six projects: Strike Detection ML, D4NCE, FightIQ, this portfolio, MontePoker, SmartCV
 
 **Contact**
 - Email, LinkedIn, GitHub links with SVG icons and Three.js background

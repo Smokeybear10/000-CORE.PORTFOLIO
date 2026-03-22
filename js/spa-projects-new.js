@@ -6,7 +6,7 @@ const projectData = {
     title: "Computer Vision Strike Detection System for MMA",
     description: "A computer vision project using SAM2 and MMAction2 to detect and classify MMA strikes. It leverages foundational segmentation models and Temporal Segment Networks (TSN) to provide a functional proof-of-concept for automated combat sports analysis using a custom, high-precision dataset.",
     tech: ["Python", "Computer Vision", "Deep Learning", "SAM2", "Label Studio", "MMAction2", "Temporal Segment Networks", "3D CNN"],
-    image: "Images/ProjectPhotos/Strikezone1.gif",
+    image: "Images/ProjectPhotos/STR1KE1.gif",
     features: [
       { title: "Meta SAM2 Integration for Automated Segmentation", detail: "Leverages Meta's Segment Anything Model 2 as a backend for Label Studio, enabling semi-automated mask generation for fighter segmentation with significantly reduced manual annotation time" },
       { title: "Semi-Automated Annotation Pipeline", detail: "Integrated workflow combining SAM2's promptable visual segmentation with Label Studio's browser-based interface, achieving 60% reduction in manual annotation time through automated mask generation and refinement" },
@@ -21,13 +21,13 @@ const projectData = {
       { text: "GitHub Repository", url: "https://github.com/Smokeybear10/STR1KE", type: "github" },
       { text: "Project Documentation", url: "#", type: "docs", error: "Not publicly available" }
     ],
-    gallery: ["Images/ProjectPhotos/Strikezone1.gif", "Images/ProjectPhotos/Strikezone4.gif", "Images/ProjectPhotos/Strikezone2.png", "Images/ProjectPhotos/Strikezone3.png"]
+    gallery: ["Images/ProjectPhotos/STR1KE1.gif", "Images/ProjectPhotos/STR1KE4.gif", "Images/ProjectPhotos/STR1KE2.png", "Images/ProjectPhotos/STR1KE3.png"]
   },
   dj: {
     title: "AI-Powered DJ System",
     description: "A browser-based DJ system powered by Grok AI, built with Next.js, React, and the Web Audio API. Features a dual-deck engine with full mixer controls (3-band EQ, filters, reverb, delay, crossfader), voice and text command processing via natural language, and AI-generated transition plans with crossfade automation, EQ bass swapping, and phrase-aware tempo matching. Includes real-time BPM detection, audio-reactive 3D visualization via Three.js, and cloud-backed track management with automatic metadata analysis.",
     tech: ["Next.js", "React", "Web Audio API", "Grok AI", "Three.js", "TypeScript", "NLP"],
-    image: "Images/ProjectPhotos/Dj.gif",
+    image: "Images/ProjectPhotos/D4NCE.gif",
     features: [
       { title: "Dual-Deck Engine with Full Mixer Controls", detail: "3-band EQ, filters, reverb, delay, and crossfader provide complete mixing capability directly in the browser via the Web Audio API" },
       { title: "AI-Powered Natural Language Commands", detail: "Voice and text command processing via Grok AI allows DJs to control mixing through natural language instructions" },
@@ -41,13 +41,13 @@ const projectData = {
       { text: "Live Website", url: "https://d4-nce.vercel.app", type: "live" },
       { text: "Source Code", url: "https://github.com/Smokeybear10/D4NCE", type: "github" }
     ],
-    gallery: ["Images/ProjectPhotos/Dj.gif"]
+    gallery: ["Images/ProjectPhotos/D4NCE.gif"]
   },
   fightiq: {
     title: "Predictive Analysis of Fight Outcomes in MMA",
     description: "A machine learning project that predicts MMA fight outcomes using historical UFC fight data. Differential calculations across 100+ fighter attributes (striking, grappling, physical metrics, career performance) are used to train and compare multiple classification models including Random Forest, Gradient Boosting, SVM, and K-Nearest Neighbors. The system accepts two fighter inputs, standardizes their career statistics, and outputs win probability predictions across each model.",
     tech: ["Python", "Machine Learning", "scikit-learn", "Random Forest", "Gradient Boosting", "SVM", "K-Nearest Neighbors", "pandas", "NumPy"],
-    image: "Images/ProjectPhotos/FightIQ.png",
+    image: "Images/ProjectPhotos/STRATOS.png",
     features: [
       { title: "Historical UFC Data & Differential Features", detail: "Builds pairwise differentials from 100+ attributes spanning striking, grappling, physical metrics, and career performance so models learn from relative matchup signals rather than raw solo stats" },
       { title: "Multi-Model Classification", detail: "Trains and compares Random Forest, Gradient Boosting, Support Vector Machine, and K-Nearest Neighbors classifiers on the same engineered feature set" },
@@ -60,13 +60,13 @@ const projectData = {
       { text: "Model Documentation", url: "#", type: "docs", error: "Not publicly available" },
       { text: "Feature Analysis Report", url: "#", type: "docs", error: "Not publicly available" }
     ],
-    gallery: ["Images/ProjectPhotos/FightIQ.png"]
+    gallery: ["Images/ProjectPhotos/STRATOS.png"]
   },
   website: {
     title: "Personal Portfolio Website",
     description: "A modern portfolio website showcasing projects and technical expertise through interactive 3D animations and responsive design. Built as a vanilla JavaScript Single Page Application, the site features custom routing, Three.js 3D model rendering, and GSAP animations. The implementation prioritizes performance optimization and cross-device compatibility while demonstrating proficiency in modern web development practices including component architecture, asset management, and progressive enhancement strategies.",
     tech: ["HTML5", "CSS3", "JavaScript", "GSAP", "Three.js", "Responsive Design", "Web Performance"],
-    image: "Images/ProjectPhotos/PersonalPortfolio.gif",
+    image: "Images/ProjectPhotos/THOMAS.gif",
     features: [
       { title: "Custom 3D Animations and Models", detail: "Three.js-powered 3D model rendering with optimized loading strategies, dynamic model switching, and interactive controls for enhanced visual engagement" },
       { title: "Single Page Application (SPA) Architecture", detail: "Custom routing and state management system built in vanilla JavaScript, enabling seamless navigation without page reloads and improved user experience" },
@@ -80,13 +80,13 @@ const projectData = {
       { text: "Live Website", url: "https://thomasou.com", type: "live" },
       { text: "Source Code", url: "https://github.com/Smokeybear10/PortfolioWebsite-Ver2.0", type: "github" }
     ],
-    gallery: ["Images/ProjectPhotos/PersonalPortfolio.gif"]
+    gallery: ["Images/ProjectPhotos/THOMAS.gif", "Images/ProjectPhotos/THOMAS2.gif"]
   },
   poker: {
     title: "Bayesian Poker Analysis Engine with Monte Carlo CFR",
     description: "A Rust library for solving No-Limit Texas Hold'em, built toward functional parity with Pluribus. Combines hierarchical k-means clustering over isomorphic hand abstractions, Earth Mover's Distance metrics via optimal transport, and Monte Carlo Counterfactual Regret Minimization (MCCFR) to converge on near-optimal poker strategies. Features nanosecond hand evaluation, exhaustive equity calculation, and efficient serialization of abstraction and blueprint data for persistent training pipelines.",
     tech: ["Rust", "MCCFR", "k-means Clustering", "Optimal Transport", "Hand Abstraction", "NLHE", "Serialization"],
-    image: "Images/ProjectPhotos/Montepoke1.gif",
+    image: "Images/ProjectPhotos/R1VER1.gif",
     features: [
       { title: "Pluribus-Style NLHE Solver", detail: "Rust library targeting functional parity with Pluribus-style solving: abstractions, distances, and MCCFR training wired for near-optimal strategies in No-Limit Hold'em" },
       { title: "Hierarchical k-means on Isomorphic Abstractions", detail: "Clusters isomorphic hand abstractions hierarchically to compress the state space while preserving strategically meaningful structure" },
@@ -101,13 +101,13 @@ const projectData = {
       { text: "Strategy Analyzer", url: "#", type: "demo", error: "Website is currently down" },
       { text: "Technical Documentation", url: "#", type: "docs", error: "Website is currently down" }
     ],
-    gallery: ["Images/ProjectPhotos/Montepoke1.gif", "Images/ProjectPhotos/Montepoke2.gif"]
+    gallery: ["Images/ProjectPhotos/R1VER1.gif", "Images/ProjectPhotos/R1VER2.gif"]
   },
   smartcv: {
     title: "AI-Powered Resume Optimizer",
     description: "An AI-powered resume optimization tool built with Python and Streamlit, leveraging Google Gemini for intelligent content analysis. Features ATS compatibility scoring, skills gap identification, keyword density analysis, and AI-driven content suggestions across 50+ target job roles. Includes a professional resume builder with four exportable templates (PDF/DOCX), multi-portal job search with LinkedIn integration, and a comprehensive analytics dashboard for tracking resume performance metrics.",
     tech: ["Python", "Streamlit", "Google Gemini", "ATS Optimization", "Selenium", "SQLite", "PDF/DOCX"],
-    image: "Images/ProjectPhotos/SmartCV.png",
+    image: "Images/ProjectPhotos/PR0XIM.png",
     features: [
       { title: "Gemini-Powered Analysis", detail: "Google Gemini drives content analysis with ATS compatibility scoring, skills gap identification, keyword density insights, and AI suggestions tailored to 50+ target job roles" },
       { title: "Resume Builder & Exports", detail: "Four professional templates with export to PDF and DOCX for polished, shareable documents" },
@@ -120,7 +120,7 @@ const projectData = {
       { text: "Live Demo", url: "#", type: "demo", error: "Website is currently down" },
       { text: "Documentation", url: "#", type: "docs", error: "Website is currently down" }
     ],
-    gallery: ["Images/ProjectPhotos/SmartCV.png"]
+    gallery: ["Images/ProjectPhotos/PR0XIM.png"]
   }
 };
 
