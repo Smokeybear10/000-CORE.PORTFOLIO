@@ -49,6 +49,48 @@ html, body {
   }
 }
 
+/* School portrait: full size on regular desktop; shrink only below each breakpoint */
+#experience-content {
+  --school-photo-gap: clamp(0.75rem, 2.5vw, 1.75rem);
+  --school-photo-size: min(44vw, 52vh, 560px);
+}
+
+@media (max-width: 1400px) {
+  #experience-content {
+    --school-photo-size: min(36vw, 44vh, 440px);
+  }
+}
+
+@media (max-width: 1200px) {
+  #experience-content {
+    --school-photo-size: min(30vw, 38vh, 380px);
+  }
+}
+
+@media (max-width: 1150px) {
+  #experience-content {
+    --school-photo-size: min(26vw, 34vh, 300px);
+  }
+}
+
+/* Short viewport + already sub-desktop width */
+@media (max-width: 1300px) and (max-height: 700px) {
+  #experience-content {
+    --school-photo-size: min(24vw, 32vh, 280px);
+  }
+}
+
+#experience-content .text-content-container {
+  left: calc(var(--school-photo-size) + var(--school-photo-gap) + 0.35rem) !important;
+}
+
+@media (max-width: 400px) {
+  #experience-content .hello-content-mobile .profile-photo-mobile {
+    width: min(56vw, 240px) !important;
+    max-width: 100% !important;
+  }
+}
+
 /* Staggered entrance: hero (title + top hello) first → left column → education timeline → experience → research */
 #experience-content .top-container {
   animation: experienceFadeUpCenter 0.95s cubic-bezier(0.25, 0.1, 0.25, 1) both;
@@ -599,11 +641,10 @@ html, body {
 }
 
 
-/* Profile Photo */
+/* Profile Photo — landscape hero; size from #experience-content --school-photo-size */
 .profile-photo {
-  width: auto;
-  height: min(40vh, 480px);
-  aspect-ratio: 1;
+  width: var(--school-photo-size, min(44vw, 52vh, 560px));
+  height: var(--school-photo-size, min(44vw, 52vh, 560px));
   margin: 0 !important;
   padding: 0 !important;
   border-radius: 50%;
@@ -616,11 +657,38 @@ html, body {
   left: clamp(0.75rem, 2.5vw, 1.75rem) !important;
   top: 50% !important;
   transform: translateY(-50%) !important;
-  object-fit: cover;
   box-sizing: border-box !important;
 }
 
 .profile-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  margin: 0;
+  padding: 0;
+  border: none;
+  display: block;
+}
+
+.profile-photo-mobile {
+  flex-shrink: 0;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(62vw, 340px);
+  max-width: 100%;
+  aspect-ratio: 1;
+  height: auto;
+  border-radius: 50%;
+  overflow: hidden;
+  border: none;
+  box-shadow: none;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.profile-photo-mobile img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -805,7 +873,7 @@ body[data-current-route="home"] .mobile-menu-btn {
 }
 
 /* Hide profile photo and remove margins in mobile/vertical mode */
-@media (orientation: portrait), (max-width: 768px) {
+@media (orientation: portrait), (max-width: 1100px) {
   .profile-photo {
     display: none !important;
   }
@@ -823,6 +891,7 @@ body[data-current-route="home"] .mobile-menu-btn {
     padding: 1rem !important;
     box-sizing: border-box !important;
     top: min(40vh, 40vw) !important;
+    height: auto !important;
   }
   
   /* Make text and buttons fit inside the yellow container */
@@ -844,7 +913,7 @@ body[data-current-route="home"] .mobile-menu-btn {
   /* Make orange container (right-section) 90vw and position under top-container */
   .right-section {
     position: absolute !important;
-    top: calc(min(40vh, 40vw) + 60vh) !important;
+    top: calc(min(40vh, 40vw) + 45vh) !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
     width: 90vw !important;
@@ -915,6 +984,11 @@ body[data-current-route="home"] .mobile-menu-btn {
     box-sizing: border-box !important;
     margin: 2rem 0 !important;
   }
+
+  .hello-content-mobile .profile-photo-mobile {
+    width: min(70vw, 380px) !important;
+    max-width: 100% !important;
+  }
   
   /* Hide original hello sections in vertical mode */
   .hello-section {
@@ -963,11 +1037,6 @@ body[data-current-route="home"] .mobile-menu-btn {
     width: 100% !important;
     box-sizing: border-box !important;
     padding: 0 0rem !important;
-  }
-  
-  /* Hide navigation bar in vertical mode */
-  .bottom-nav {
-    display: none !important;
   }
   
 }

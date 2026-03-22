@@ -156,7 +156,7 @@
 }
 
 /* Mobile/Vertical mode - stack vertically */
-@media (max-width: 768px) {
+@media (max-width: 1100px) {
   .contact-buttons {
     flex-direction: column;
     gap: 1.5rem;
@@ -175,7 +175,7 @@
 }
 
 /* Desktop/Horizontal mode - buttons in a row (must come AFTER mobile to override) */
-@media (min-width: 769px) {
+@media (min-width: 1101px) {
   .contact-buttons {
     flex-direction: row !important;
     flex-wrap: nowrap;

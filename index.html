@@ -191,29 +191,28 @@
             
             <!-- Mobile Hello Content (hidden by default, shown in vertical mode) -->
             <div class="hello-content-mobile" style="display: none; border: none !important; background: transparent !important;">
-              <!-- Photo and Hello Header Container -->
-              <div style="display: flex; align-items: center; gap: 1rem; margin: 0 0 1rem 0;">
+              <!-- Photo + Text Container -->
+              <div style="display: flex; gap: 1.25rem; margin: 0 0 0.5rem 0;">
                 <!-- Profile Photo -->
-                <div class="profile-photo-mobile" style="width: auto; height: min(20vh, 160px); aspect-ratio: 1; flex-shrink: 0; border-radius: 50%; overflow: hidden; border: none; box-shadow: none; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center;">
-                  <img src="Images/SchoolPortrait.png" alt="Thomas Ou" style="width: 100%; height: 100%; object-fit: cover; margin: 0; padding: 0; border: none; display: block;" />
+                <div class="profile-photo-mobile">
+                  <img src="Images/SchoolPortrait.png" alt="Thomas Ou" />
                 </div>
-                
-                <!-- Hello Thomas Header -->
-                <div style="font-size: 2.4rem; font-weight: 400; font-family: 'Anton', Arial, sans-serif; color: #ffffff; margin: 0; text-align: left; line-height: 1.05; flex: 1; letter-spacing: 0.02em;">Hello. I am Thomas.</div>
+
+                <!-- Hello + Bio -->
+                <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+                  <div style="font-size: 2.4rem; font-weight: 400; font-family: 'Anton', Arial, sans-serif; color: #ffffff; margin: 0 0 0.5rem 0; text-align: left; line-height: 1.05; letter-spacing: 0.02em;">Hello. I am Thomas.</div>
+                  <div style="color: #ffffff; font-family: 'Inter', Arial, sans-serif; font-size: clamp(0.85rem, 2.5vw, 1.1rem); line-height: 1.5; opacity: 0.85;">I'm a math and CS student at Penn with experience across quantitative research, derivatives, and defense tech. At present, I'm completing both my undergrad and accelerated master's in Philadelphia, while also conducting research with faculty.</div>
+                </div>
               </div>
-              
-              <!-- Bio Section -->
-              <div style="color: #ffffff; font-family: 'Inter', Arial, sans-serif; font-size: clamp(0.9rem, 3vw, 1.4rem); line-height: 1.6; margin: 1rem 0; opacity: 1;">I'm a math and CS student at Penn with experience across quantitative research, derivatives, and defense tech. At present, I'm completing both my undergrad and accelerated master's in Philadelphia, while also conducting research with faculty.</div>
-              
-              
+
+
               <!-- Navigation Buttons -->
-              <div style="margin: 1rem 0 0 0; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.5rem; opacity: 1;">
-                <button class="hello-nav-btn" data-section="about" style="background: transparent; border: 2px solid #ffffff; color: #ffffff; font-family: 'Anton', Arial, sans-serif; font-size: 0.8rem; font-weight: 400; text-transform: none; letter-spacing: 0.1em; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">About</button>
+              <div style="margin: 1rem 0 0 0; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem; opacity: 1;">
                 <button class="hello-nav-btn" data-section="education" style="background: transparent; border: 2px solid #ffffff; color: #ffffff; font-family: 'Anton', Arial, sans-serif; font-size: 0.8rem; font-weight: 400; text-transform: none; letter-spacing: 0.1em; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">Education</button>
                 <button class="hello-nav-btn" data-section="experience" style="background: transparent; border: 2px solid #ffffff; color: #ffffff; font-family: 'Anton', Arial, sans-serif; font-size: 0.8rem; font-weight: 400; text-transform: none; letter-spacing: 0.1em; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">Experience</button>
                 <button class="hello-nav-btn" data-section="research" style="background: transparent; border: 2px solid #ffffff; color: #ffffff; font-family: 'Anton', Arial, sans-serif; font-size: 0.8rem; font-weight: 400; text-transform: none; letter-spacing: 0.1em; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">Research</button>
               </div>
-              
+
             </div>
           </div>
 
@@ -318,7 +317,7 @@
           <!-- Top Container -->
           <div class="top-container">
             <!-- Text Content Container -->
-            <div class="text-content-container" style="position: absolute; left: calc(min(40vh, 480px) + clamp(0.75rem, 2.5vw, 1.75rem) + 0.35rem); top: 0; right: 0; height: 100%; padding: 2rem 2rem 2rem 0.5rem; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center;">
+            <div class="text-content-container" style="position: absolute; top: 0; right: 0; height: 100%; padding: 2rem 2rem 2rem 0.5rem; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center;">
               <!-- Hello Thomas Header -->
               <div class="hello-section" style="font-size: min(7.5vw, 2.4rem); font-weight: 400; font-family: 'Anton', Arial, sans-serif; color: #ffffff; margin: 0; text-align: left; line-height: 1.05; opacity: 0.3; transition: opacity 0.6s ease; letter-spacing: 0.02em;">Hello. I am Thomas.</div>
               

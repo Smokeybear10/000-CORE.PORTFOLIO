@@ -387,7 +387,7 @@ function createSectionVisibilityHandler() {
       window.currentSection = currentSectionName;
 
       // Handle hello-content-mobile in vertical mode
-      const isVerticalMode = window.innerHeight > window.innerWidth || window.innerWidth <= 768;
+      const isVerticalMode = window.innerHeight > window.innerWidth || window.innerWidth <= 1100;
       const helloContentMobile = document.querySelector('.hello-content-mobile');
       
       if (isVerticalMode && helloContentMobile) {
@@ -557,7 +557,7 @@ window.initExperienceAnimations = function() {
     window.experienceScrollHandlers = [];
   }
   
-  const isVerticalMode = window.innerHeight > window.innerWidth || window.innerWidth <= 768;
+  const isVerticalMode = window.innerHeight > window.innerWidth || window.innerWidth <= 1100;
 
   experienceInitTimeout = setTimeout(() => {
     experienceInitTimeout = null;
