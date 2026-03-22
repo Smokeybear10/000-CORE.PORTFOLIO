@@ -449,14 +449,14 @@ function scrollToSection(sectionName) {
   };
 
   if (sectionName === 'about') {
-    window.scrollTo({ top: 0 });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     return;
   }
 
   const selector = sectionMap[sectionName];
   if (selector) {
     const el = document.querySelector(selector);
-    if (el) el.scrollIntoView({ block: 'center' });
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 }
 
@@ -487,33 +487,62 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-// Mobile menu toggle
+// Mobile/small-screen nav auto-show
 document.addEventListener('DOMContentLoaded', () => {
-  const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
   const bottomNav = document.querySelector('.bottom-nav');
-  if (mobileMenuBtn && bottomNav) {
-    mobileMenuBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      e.stopImmediatePropagation();
+  const triggerZone = document.querySelector('.nav-trigger-zone');
+  const triggerDot = document.querySelector('.nav-trigger-dot');
+  if (!bottomNav || !triggerZone) return;
 
-      if (mobileMenuBtn.classList.contains('active')) {
-        mobileMenuBtn.classList.remove('active');
-        bottomNav.classList.remove('show');
-      } else {
-        mobileMenuBtn.classList.add('active');
-        bottomNav.classList.add('show');
-      }
-    }, true);
-    
-    // Close menu when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!mobileMenuBtn.contains(e.target) && !bottomNav.contains(e.target)) {
-        mobileMenuBtn.classList.remove('active');
-        bottomNav.classList.remove('show');
-      }
-    });
+  let hideTimeout = null;
+  const isSmallScreen = () => window.matchMedia('(orientation: portrait), (max-width: 768px)').matches;
+
+  function showNav() {
+    if (!isSmallScreen()) return;
+    clearTimeout(hideTimeout);
+    bottomNav.classList.add('show');
+    if (triggerDot) triggerDot.classList.add('hidden');
   }
+
+  function hideNav(delay) {
+    clearTimeout(hideTimeout);
+    hideTimeout = setTimeout(() => {
+      bottomNav.classList.remove('show');
+      if (triggerDot) triggerDot.classList.remove('hidden');
+    }, delay || 400);
+  }
+
+  // Mouse: hover near right edge or nav to reveal, leave to hide
+  triggerZone.addEventListener('mouseenter', showNav);
+  triggerZone.addEventListener('mouseleave', () => hideNav(600));
+
+  bottomNav.addEventListener('mouseenter', showNav);
+  bottomNav.addEventListener('mouseleave', () => hideNav(600));
+
+  // Touch: tap trigger zone or dot to toggle
+  triggerZone.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    if (bottomNav.classList.contains('show')) {
+      hideNav(0);
+    } else {
+      showNav();
+    }
+  }, { passive: false });
+
+  // Close nav when tapping elsewhere (touch)
+  document.addEventListener('touchstart', (e) => {
+    if (!isSmallScreen()) return;
+    if (!bottomNav.contains(e.target) && !triggerZone.contains(e.target)) {
+      hideNav(0);
+    }
+  });
+
+  // Close nav after clicking a nav link
+  bottomNav.addEventListener('click', (e) => {
+    if (e.target.closest('.nav-link')) {
+      hideNav(200);
+    }
+  });
 });
 
 // Experience and Research data for modals
@@ -521,31 +550,31 @@ const experienceData = {
   0: { // Software Engineer at Visa
     title: "Software Engineer",
     company: "Visa · Internship",
-    location: "Mar 2026 - May 2026 · 3 mos",
+    location: "Mar 2026 - May 2026",
     description: "Software engineering internship at Visa."
   },
   1: { // Quant Intern at Astera Holdings
     title: "Quant Intern",
     company: "Astera Holdings · Internship",
-    location: "Jan 2025 - May 2025 · 5 mos",
+    location: "Jan 2025 - May 2025",
     description: "Event Derivative Arbitrage on Kalshi, Polymarket."
   },
   2: { // Tax Intern at Flushing CPA
     title: "Tax Intern",
     company: "Flushing CPA Tax Center · Internship",
-    location: "Jun 2024 - Aug 2024 · 3 mos<br>New York, New York, United States · On-site",
+    location: "Jun 2024 - Aug 2024<br>New York, New York, United States · On-site",
     description: "Regulatory Alpha Extraction"
   },
   3: { // Research Assistant - CURF
     title: "Research Assistant",
-    company: "University of Pennsylvania Center for Undergraduate Research and Fellowships · Part-time",
-    location: "Jul 2025 - Present · 9 mos<br>Philadelphia, Pennsylvania, United States",
-    description: "DoD AI Policy under Prof. M. Horowitz, Ph.D"
+    company: "Penn Center for Undergrad Research and Fellowships",
+    location: "Jul 2025 - Present<br>Philadelphia, Pennsylvania, United States",
+    description: "Built a computer vision pipeline using OpenCV to digitize over 50,000 pages of unstructured historical archives, applying Gaussian blur, adaptive thresholding, and morphological operations to clean noisy legacy datasets. Reduced processing latency by 95% through an on-premise inference solution that eliminated cloud dependency. Applied Named Entity Recognition (NER) to structure military records into SQL for historical sentiment analysis. Additionally analyzed 50+ years of historical financial data to forecast defense sector capital flows, detailing $12B+ in government spending anomalies and identifying a 40% allocation shift toward dual-use startups."
   },
   4: { // Software Engineering Intern - PPPL (Research section)
     title: "Software Engineering Intern (Computational Physics)",
-    company: "Princeton Plasma Physics Laboratory (PPPL) · Part-time",
-    location: "Feb 2024 - Apr 2024 · 3 mos<br>Princeton, New Jersey, United States · Hybrid",
+    company: "Princeton Plasma Physics Laboratory (PPPL)",
+    location: "Feb 2024 - Apr 2024<br>Princeton, New Jersey, United States · Hybrid",
     description: "GPU optimization & backend databases for Monte-Carlo simulation."
   }
 };

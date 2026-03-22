@@ -152,6 +152,12 @@
   z-index: 10000;
 }
 
+/* Nav trigger zone + dot hidden on desktop */
+.nav-trigger-zone,
+.nav-trigger-dot {
+  display: none;
+}
+
 /* Ensure proper display for route-specific elements */
 .home-only {
   display: block;
@@ -186,12 +192,83 @@ body[data-current-route="home"] .about-only {
   }
 
   .bottom-nav .nav-link:hover:not(.active) {
-    background: none !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    border-radius: 0 !important;
+    background: rgba(255, 255, 255, 0.12) !important;
+    color: #ffffff !important;
+    text-shadow: none !important;
+    border-radius: 10px !important;
     transform: none !important;
-    color: #00e5ff !important;
-    text-shadow: 0 0 10px rgba(0, 229, 255, 0.8) !important;
+  }
+
+  /* Auto-hide nav: collapsed by default, reveal on hover/tap */
+  .bottom-nav {
+    transform: translateX(160px) !important;
+    opacity: 0 !important;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease !important;
+    pointer-events: none !important;
+  }
+
+  .bottom-nav.show {
+    transform: translateX(0) !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    z-index: 1200 !important;
+  }
+
+  /* Nav trigger zone — invisible hit area on right edge */
+  .nav-trigger-zone {
+    display: block !important;
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    width: 80px !important;
+    height: 100% !important;
+    z-index: 1099 !important;
+    pointer-events: auto !important;
+  }
+
+  /* Visible nav icon indicator on right edge */
+  .nav-trigger-dot {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: fixed !important;
+    bottom: 1rem !important;
+    right: 0.7rem !important;
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 8px !important;
+    background: rgba(10, 10, 22, 0.5) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    z-index: 1100 !important;
+    transition: opacity 0.3s ease, transform 0.3s ease !important;
+    pointer-events: none !important;
+  }
+
+  .nav-trigger-dot::before {
+    content: '' !important;
+    display: block !important;
+    width: 16px !important;
+    height: 2px !important;
+    background: rgba(255, 255, 255, 0.6) !important;
+    border-radius: 1px !important;
+    box-shadow: 0 6px 0 rgba(255, 255, 255, 0.6) !important;
+  }
+
+  .nav-trigger-dot::after {
+    content: '' !important;
+    display: block !important;
+    width: 16px !important;
+    height: 2px !important;
+    background: rgba(255, 255, 255, 0.6) !important;
+    border-radius: 1px !important;
+  }
+
+  .nav-trigger-dot.hidden {
+    opacity: 0 !important;
+    transform: scale(0) !important;
   }
 }

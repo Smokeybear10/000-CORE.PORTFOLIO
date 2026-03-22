@@ -24,10 +24,10 @@ const projectData = {
     gallery: ["Images/ProjectPhotos/Strikezone1.gif", "Images/ProjectPhotos/Strikezone4.gif", "Images/ProjectPhotos/Strikezone2.png", "Images/ProjectPhotos/Strikezone3.png"]
   },
   dj: {
-    title: "Personal LLM DJ",
+    title: "AI-Powered DJ System",
     description: "A browser-based DJ system powered by Grok AI, built with Next.js, React, and the Web Audio API. Features a dual-deck engine with full mixer controls (3-band EQ, filters, reverb, delay, crossfader), voice and text command processing via natural language, and AI-generated transition plans with crossfade automation, EQ bass swapping, and phrase-aware tempo matching. Includes real-time BPM detection, audio-reactive 3D visualization via Three.js, and cloud-backed track management with automatic metadata analysis.",
     tech: ["Next.js", "React", "Web Audio API", "Grok AI", "Three.js", "TypeScript", "NLP"],
-    image: "Images/ProjectPhotos/MagneticallyLevitating.png",
+    image: "Images/ProjectPhotos/Dj.gif",
     features: [
       { title: "Dual-Deck Engine with Full Mixer Controls", detail: "3-band EQ, filters, reverb, delay, and crossfader provide complete mixing capability directly in the browser via the Web Audio API" },
       { title: "AI-Powered Natural Language Commands", detail: "Voice and text command processing via Grok AI allows DJs to control mixing through natural language instructions" },
@@ -41,7 +41,7 @@ const projectData = {
       { text: "Live Website", url: "https://d4-nce.vercel.app", type: "live" },
       { text: "Source Code", url: "https://github.com/Smokeybear10/D4NCE", type: "github" }
     ],
-    gallery: ["Images/ProjectPhotos/MagneticallyLevitating.png"]
+    gallery: ["Images/ProjectPhotos/Dj.gif"]
   },
   fightiq: {
     title: "Predictive Analysis of Fight Outcomes in MMA",
