@@ -109,8 +109,8 @@
   width: 140px !important;
   height: auto !important;
   position: fixed !important;
-  bottom: 0.5rem !important;
-  right: 0.5rem !important;
+  bottom: 0 !important;
+  right: 0 !important;
   z-index: 1000 !important;
   margin: 0 !important;
   padding: 0 !important;
