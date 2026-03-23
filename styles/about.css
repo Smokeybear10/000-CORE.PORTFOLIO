@@ -485,73 +485,6 @@ html, body {
 
 /* Responsive design */
 @media (orientation: portrait), (max-width: 768px) {
-  /* Show mobile menu button and hide navigation */
-  .mobile-menu-btn {
-    display: flex !important;
-  }
-
-  /* Hide hamburger when menu is open */
-  .mobile-menu-btn.active {
-    opacity: 0 !important;
-    pointer-events: none !important;
-  }
-
-  .bottom-nav {
-    transform: translateX(200px) !important;
-    opacity: 0 !important;
-    transition: all 0.3s ease !important;
-    position: relative !important;
-  }
-
-  .bottom-nav.show {
-    transform: translateX(0) !important;
-    opacity: 1 !important;
-  }
-
-  /* Close button in navigation */
-  .nav-close-btn {
-    position: absolute;
-    top: 0.5rem;
-    left: 0.5rem;
-    width: 30px;
-    height: 30px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 10001;
-    transition: all 0.3s ease;
-  }
-
-  .bottom-nav.show .nav-close-btn {
-    display: flex !important;
-  }
-
-  .nav-close-btn:hover {
-    background: rgba(255, 255, 255, 0.2) !important;
-    border-color: rgba(255, 255, 255, 0.5) !important;
-  }
-
-  .nav-close-btn::before,
-  .nav-close-btn::after {
-    content: '';
-    position: absolute;
-    width: 12px;
-    height: 2px;
-    background: #ffffff;
-    border-radius: 1px;
-  }
-
-  .nav-close-btn::before {
-    transform: rotate(45deg);
-  }
-
-  .nav-close-btn::after {
-    transform: rotate(-45deg);
-  }
   .about-title {
     position: relative;
     top: 0;
@@ -579,11 +512,6 @@ html, body {
   .about-tagline {
     text-align: center;
     margin: 3rem 0 3rem 0;
-  }
-
-  /* Hide navigation bar completely in vertical mode */
-  .bottom-nav {
-    display: none !important;
   }
 }
 
