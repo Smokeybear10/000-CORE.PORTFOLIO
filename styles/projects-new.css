@@ -336,18 +336,25 @@
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {
+  #projects-content {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    overflow: hidden !important;
+  }
+
   .projects-wheel {
     width: 300px !important;
     height: 300px !important;
   }
-  
+
   .project-card {
     width: 200px !important;
     height: 150px !important;
     margin-left: -100px !important;
     margin-top: -75px !important;
   }
-  
+
   .project-card:nth-child(1) { transform: rotateY(0deg) translateZ(200px); }
   .project-card:nth-child(2) { transform: rotateY(60deg) translateZ(200px); }
   .project-card:nth-child(3) { transform: rotateY(120deg) translateZ(200px); }
@@ -366,7 +373,8 @@
   height: 100vh;
   background: #0a0a16;
   z-index: 3000;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   opacity: 0;
   transform: scale(0.95);
   transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
@@ -432,7 +440,6 @@
 /* Equal flex spacers center content vertically; shrink when tall so overflow scrolls */
 .fullscreen-modal-content {
   min-height: 100vh;
-  max-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
