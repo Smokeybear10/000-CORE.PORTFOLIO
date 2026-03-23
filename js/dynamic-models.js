@@ -76,7 +76,8 @@ document.addEventListener('DOMContentLoaded', async () => {
           const size = box.getSize(new Vector3());
 
           const maxDim = Math.max(size.x, size.y, size.z);
-          const targetSize = 14;
+          const vw = window.innerWidth;
+          const targetSize = Math.max(10, Math.min(14, vw / 80));
           const scale = targetSize / maxDim;
           currentModel.scale.setScalar(scale);
 

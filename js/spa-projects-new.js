@@ -361,28 +361,38 @@ function setupWheelRotation() {
     () => document.removeEventListener('touchend', endDrag)
   );
   
+  let dragStarted = false;
+  const DRAG_THRESHOLD = 5;
+
   function startDrag(e) {
-    isDragging = true;
+    dragStarted = true;
+    isDragging = false;
     startX = e.type === 'mousedown' ? e.clientX : e.touches[0].clientX;
     velocity = 0;
-    e.preventDefault();
+    if (e.type === 'mousedown') e.preventDefault();
   }
-  
+
   function drag(e) {
-    if (!isDragging) return;
-    
+    if (!dragStarted) return;
+
     const currentX = e.type === 'mousemove' ? e.clientX : e.touches[0].clientX;
     const deltaX = currentX - startX;
 
-    currentRotation += deltaX * 0.5;
-    wheelContainer.style.transform = `rotateX(-10deg) rotateY(${currentRotation}deg)`;
+    if (!isDragging && Math.abs(deltaX) > DRAG_THRESHOLD) {
+      isDragging = true;
+    }
 
-    startX = currentX;
-    e.preventDefault();
+    if (isDragging) {
+      currentRotation += deltaX * 0.5;
+      wheelContainer.style.transform = `rotateX(-10deg) rotateY(${currentRotation}deg)`;
+      startX = currentX;
+      e.preventDefault();
+    }
   }
-  
+
   function endDrag() {
-    if (!isDragging) return;
+    if (!dragStarted) return;
+    dragStarted = false;
     isDragging = false;
     velocity = autoRotationSpeed; // Resume auto rotation
   }
