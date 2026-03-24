@@ -233,16 +233,9 @@ body[data-current-route="home"] .about-only {
     border-radius: 10px !important;
   }
 
-  /* Nav trigger zone — invisible hit area on right edge */
+  /* Nav trigger zone — disabled, no longer intercepts touches */
   .nav-trigger-zone {
-    display: block !important;
-    position: fixed !important;
-    top: 0 !important;
-    right: 0 !important;
-    width: 80px !important;
-    height: 100% !important;
-    z-index: 1099 !important;
-    pointer-events: auto !important;
+    display: none !important;
   }
 
   /* Visible nav icon indicator on right edge */
@@ -264,7 +257,8 @@ body[data-current-route="home"] .about-only {
     border: 1px solid rgba(255, 255, 255, 0.12) !important;
     z-index: 1100 !important;
     transition: opacity 0.3s ease, transform 0.3s ease !important;
-    pointer-events: none !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
   }
 
   .nav-trigger-dot::before {

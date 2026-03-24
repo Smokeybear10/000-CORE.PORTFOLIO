@@ -485,63 +485,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-// Mobile/small-screen nav auto-show
+// Mobile/small-screen nav — tap trigger dot to toggle, no auto-show on proximity
 document.addEventListener('DOMContentLoaded', () => {
   const bottomNav = document.querySelector('.bottom-nav');
-  const triggerZone = document.querySelector('.nav-trigger-zone');
   const triggerDot = document.querySelector('.nav-trigger-dot');
-  if (!bottomNav || !triggerZone) return;
+  if (!bottomNav || !triggerDot) return;
 
-  let hideTimeout = null;
   const isSmallScreen = () => window.matchMedia('(orientation: portrait), (max-width: 1100px)').matches;
 
   function showNav() {
     if (!isSmallScreen()) return;
-    // Don't show nav during route transitions or within 500ms after navigation
     if (window.spaRouter && window.spaRouter.isTransitioning) return;
-    if (window._navClosedAt && Date.now() - window._navClosedAt < 500) return;
-    clearTimeout(hideTimeout);
     bottomNav.classList.add('show');
-    if (triggerDot) triggerDot.classList.add('hidden');
+    triggerDot.classList.add('hidden');
   }
 
-  function hideNav(delay) {
-    clearTimeout(hideTimeout);
-    hideTimeout = setTimeout(() => {
-      bottomNav.classList.remove('show');
-      if (triggerDot) triggerDot.classList.remove('hidden');
-    }, delay || 400);
+  function hideNav() {
+    bottomNav.classList.remove('show');
+    triggerDot.classList.remove('hidden');
   }
 
-  // Mouse: hover near right edge or nav to reveal, leave to hide
-  triggerZone.addEventListener('mouseenter', showNav);
-  triggerZone.addEventListener('mouseleave', () => hideNav(600));
-
-  bottomNav.addEventListener('mouseenter', showNav);
-  bottomNav.addEventListener('mouseleave', () => hideNav(600));
-
-  // Touch: tap trigger zone or dot to toggle
-  triggerZone.addEventListener('touchstart', (e) => {
-    e.preventDefault();
+  // Tap trigger dot to toggle nav
+  triggerDot.addEventListener('click', (e) => {
+    e.stopPropagation();
     if (bottomNav.classList.contains('show')) {
-      hideNav(0);
+      hideNav();
     } else {
       showNav();
     }
-  }, { passive: false });
+  });
 
-  // Close nav when tapping elsewhere (touch)
+  // Close nav when tapping elsewhere
   document.addEventListener('touchstart', (e) => {
     if (!isSmallScreen()) return;
-    if (!bottomNav.contains(e.target) && !triggerZone.contains(e.target)) {
-      hideNav(0);
+    if (!bottomNav.contains(e.target) && !triggerDot.contains(e.target)) {
+      hideNav();
     }
   });
 
   // Close nav after clicking a nav link
   bottomNav.addEventListener('click', (e) => {
     if (e.target.closest('.nav-link')) {
-      hideNav(200);
+      hideNav();
     }
   });
 });
