@@ -212,10 +212,17 @@ class SPARouter {
   closeMobileNav() {
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const bottomNav = document.querySelector('.bottom-nav');
-    if (mobileMenuBtn && bottomNav) {
-      mobileMenuBtn.classList.remove('active');
+    if (mobileMenuBtn) mobileMenuBtn.classList.remove('active');
+    if (bottomNav) {
       bottomNav.classList.remove('show');
+      // Clear ALL inline styles that may have been set by showAllNavigation()
+      // or other JS — let CSS media queries handle visibility per route
+      bottomNav.removeAttribute('style');
     }
+    const triggerDot = document.querySelector('.nav-trigger-dot');
+    if (triggerDot) triggerDot.classList.remove('hidden');
+    // Timestamp so experience.js showNav() can debounce after navigation
+    window._navClosedAt = Date.now();
   }
 
   getCurrentRoute() {

@@ -497,6 +497,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function showNav() {
     if (!isSmallScreen()) return;
+    // Don't show nav during route transitions or within 500ms after navigation
+    if (window.spaRouter && window.spaRouter.isTransitioning) return;
+    if (window._navClosedAt && Date.now() - window._navClosedAt < 500) return;
     clearTimeout(hideTimeout);
     bottomNav.classList.add('show');
     if (triggerDot) triggerDot.classList.add('hidden');
