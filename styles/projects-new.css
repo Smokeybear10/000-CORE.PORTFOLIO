@@ -376,9 +376,10 @@
   overflow-y: auto;
   overflow-x: hidden;
   opacity: 0;
-  transform: scale(0.95);
-  transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-              transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: scale(0.4);
+  transform-origin: center center;
+  transition: opacity 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 0.35s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 .project-fullscreen-modal::-webkit-scrollbar {
@@ -598,7 +599,7 @@
 
 .project-title {
   font-family: 'Anton', Arial, sans-serif;
-  font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+  font-size: clamp(1.5rem, min(3.5vw, 5vh), 2.5rem);
   font-weight: 400;
   margin: 0 0 0.75rem 0;
   color: #ffffff !important;

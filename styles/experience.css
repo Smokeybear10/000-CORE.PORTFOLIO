@@ -52,7 +52,7 @@ html, body {
 /* School portrait: full size on regular desktop; shrink only below each breakpoint */
 #experience-content {
   --school-photo-gap: clamp(0.75rem, 2.5vw, 1.75rem);
-  --school-photo-size: 400px;
+  --school-photo-size: min(400px, 45vh);
 }
 
 #experience-content .text-content-container {
@@ -61,7 +61,7 @@ html, body {
 
 @media (max-width: 400px) {
   #experience-content .hello-content-mobile .profile-photo-mobile {
-    width: min(56vw, 240px) !important;
+    width: min(56vw, 240px, 30vh) !important;
     max-width: 100% !important;
   }
 }
@@ -416,7 +416,7 @@ html, body {
   margin: 0 0 0.15rem 0;
   color: #ffffff;
   font-family: 'Anton', Arial, sans-serif;
-  font-size: 1.6rem !important;
+  font-size: min(1.6rem, 3.5vh) !important;
   font-weight: 400;
   letter-spacing: 0.05em;
 }
@@ -426,7 +426,7 @@ html, body {
   color: rgba(255, 255, 255, 0.7);
   margin-bottom: 1rem;
   font-family: 'Inter', Arial, sans-serif;
-  font-size: 1rem;
+  font-size: min(1rem, 2.2vh);
 }
 
 .course-grid {
@@ -440,7 +440,7 @@ html, body {
   color: rgba(240, 240, 245, 0.8);
   padding: 0.3rem 0.8rem;
   border-radius: 20px;
-  font-size: clamp(0.65rem, 2.2vw, 0.875rem);
+  font-size: clamp(0.65rem, min(2.2vw, 2vh), 0.875rem);
   font-family: 'Fira Mono', 'Courier New', monospace;
   border: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow: none;
@@ -449,7 +449,7 @@ html, body {
 
 /* Enhanced section titles with animations */
 .section-title {
-  font-size: 1.8rem;
+  font-size: min(1.8rem, 4vh);
   font-weight: 400;
   font-family: 'Anton', Arial, sans-serif;
   color: #ffffff;
@@ -520,7 +520,7 @@ html, body {
   margin: 0 0 0.15rem 0;
   color: #ffffff;
   font-family: 'Anton', Arial, sans-serif;
-  font-size: 1.6rem !important;
+  font-size: min(1.6rem, 3.5vh) !important;
   font-weight: 400;
   letter-spacing: 0.05em;
   display: flex;
@@ -557,12 +557,12 @@ html, body {
   color: #ffffff;
   margin-bottom: 0.25rem;
   font-family: 'Inter', Arial, sans-serif;
-  font-size: 1.15rem;
+  font-size: min(1.15rem, 2.5vh);
 }
 
 .card-location {
   color: #f5f5f5;
-  font-size: 1rem;
+  font-size: min(1rem, 2.2vh);
   margin-bottom: 1rem;
   font-family: 'Fira Mono', 'Courier New', monospace;
 }
@@ -572,7 +572,7 @@ html, body {
   color: #999999;
   line-height: 1.6;
   font-family: 'Inter', Arial, sans-serif;
-  font-size: 1rem;
+  font-size: min(1rem, 2.2vh);
   text-align: left;
 }
 
@@ -651,7 +651,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: min(62vw, 340px);
+  width: min(62vw, 340px, 40vh);
   max-width: 100%;
   aspect-ratio: 1;
   height: auto;
@@ -687,7 +687,7 @@ html, body {
   border: 2px solid #ffffff;
   color: #ffffff;
   font-family: 'Anton', Arial, sans-serif;
-  font-size: 1rem;
+  font-size: min(1rem, 2.2vh);
   font-weight: 400;
   text-transform: none;
   letter-spacing: 0.1em;
@@ -933,7 +933,7 @@ body[data-current-route="home"] .mobile-menu-btn {
   .timeline-container::before {
     content: 'EDUCATION';
     display: block;
-    font-size: 4.5rem;
+    font-size: min(4.5rem, 12vw, 10vh);
     font-weight: 400;
     font-family: 'Anton', Arial, sans-serif;
     color: #ffffff;
@@ -954,7 +954,7 @@ body[data-current-route="home"] .mobile-menu-btn {
   .experience-cards::before {
     content: 'EXPERIENCE';
     display: block;
-    font-size: 4.5rem;
+    font-size: min(4.5rem, 12vw, 10vh);
     font-weight: 400;
     font-family: 'Anton', Arial, sans-serif;
     color: #ffffff;
@@ -970,7 +970,7 @@ body[data-current-route="home"] .mobile-menu-btn {
   .research-cards::before {
     content: 'RESEARCH';
     display: block;
-    font-size: 4.5rem;
+    font-size: min(4.5rem, 12vw, 10vh);
     font-weight: 400;
     font-family: 'Anton', Arial, sans-serif;
     color: #ffffff;
@@ -999,7 +999,7 @@ body[data-current-route="home"] .mobile-menu-btn {
   }
 
   .hello-content-mobile .profile-photo-mobile {
-    width: clamp(150px, 40vw, 380px) !important;
+    width: clamp(150px, min(40vw, 40vh), 380px) !important;
     max-width: 100% !important;
   }
   

@@ -428,6 +428,13 @@ function setupProjectModals() {
       const openModal = () => {
         populateModalContent(project);
         isModalOpen = true;
+
+        // Set transform-origin to the card's screen position
+        const cardRect = card.getBoundingClientRect();
+        const originX = cardRect.left + cardRect.width / 2;
+        const originY = cardRect.top + cardRect.height / 2;
+        modal.style.transformOrigin = `${originX}px ${originY}px`;
+
         modal.style.display = 'block';
         hideAllNavigation();
         setTimeout(() => {

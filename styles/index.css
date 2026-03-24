@@ -53,7 +53,7 @@ body {
   left: 1rem;
   z-index: 1000;
   font-family: 'Anton', Arial, sans-serif;
-  font-size: clamp(2rem, 12vw, 8rem);
+  font-size: clamp(2rem, min(12vw, 13vh), 8rem);
   font-weight: 400;
   color: #ffffff;
   text-transform: none;
@@ -85,7 +85,7 @@ body {
 
 .home-subtitles {
   font-family: 'Fira Mono', 'Courier New', monospace;
-  font-size: clamp(0.5rem, 1.8vw, 1.2rem);
+  font-size: clamp(0.5rem, min(1.8vw, 2.5vh), 1.2rem);
   font-weight: 400;
   color: rgba(255, 255, 255, 0.7);
   letter-spacing: 0.15em;

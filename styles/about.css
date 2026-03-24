@@ -280,7 +280,7 @@
   margin: 0 -0.2rem 0 -0.2rem;
   cursor: pointer;
   font-family: 'Inter', Arial, sans-serif;
-  font-size: min(1.8rem, 3.5vw);
+  font-size: min(1.8rem, 3.5vw, 4vh);
   font-weight: 400;
   color: #f0f0f5;
   text-decoration: underline;
@@ -518,7 +518,7 @@ html, body {
 /* Profile text styling improvements */
 .profile-text h2 {
   font-family: 'Inter', Arial, sans-serif;
-  font-size: min(1.8rem, 3.5vw);
+  font-size: min(1.8rem, 3.5vw, 4vh);
   font-weight: 400;
   color: #ffffff;
   margin: 0 0 2rem 0;
@@ -528,7 +528,7 @@ html, body {
 
 .profile-text p {
   font-family: 'Inter', Arial, sans-serif;
-  font-size: min(1.8rem, 3.5vw);
+  font-size: min(1.8rem, 3.5vw, 4vh);
   font-weight: 400;
   color: #f0f0f5;
   margin: 0 0 2rem 0;
