@@ -12,10 +12,10 @@ Live at [thomasou.com](https://thomasou.com)
 
 ```bash
 # no build step — just serve the files
-npx serve .
+npx serve . -l 2000
 ```
 
-Open `http://localhost:3000`.
+Open `http://localhost:2000`.
 
 ## What It Does
 
