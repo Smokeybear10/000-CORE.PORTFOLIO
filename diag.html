@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Three.js Diagnostic</title>
+<script type="importmap">
+{ "imports": { "three": "https://unpkg.com/three@0.155.0/build/three.module.js" } }
+</script>
+<style>
+  html, body { margin: 0; padding: 0; background: #111; color: #eee; font-family: ui-monospace, monospace; }
+  #log { position: fixed; top: 0; left: 0; right: 0; padding: 10px; background: rgba(0,0,0,0.7); font-size: 12px; z-index: 10; }
+  #log .pass { color: #10e08d; }
+  #log .fail { color: #ff5252; }
+  canvas { display: block; width: 100vw; height: 100vh; }
+</style>
+</head>
+<body>
+<div id="log">
+  <div>Running diagnostic...</div>
+</div>
+<canvas id="c"></canvas>
+
+<script type="module">
+const log = document.getElementById('log');
+function l(msg, pass) {
+  const d = document.createElement('div');
+  d.textContent = (pass ? '✓ ' : '✗ ') + msg;
+  d.className = pass ? 'pass' : 'fail';
+  log.appendChild(d);
+}
+
+try {
+  // Check 1: WebGL
+  const testCanvas = document.createElement('canvas');
+  const gl = testCanvas.getContext('webgl2') || testCanvas.getContext('webgl');
+  l('WebGL ' + (gl ? 'available (' + (gl.constructor?.name || 'ok') + ')' : 'NOT available'), !!gl);
+
+  // Check 2: Three.js import
+  const THREE = await import('three');
+  l('Three.js imported, version ' + THREE.REVISION, !!THREE);
+
+  // Check 3: Create a scene with a spinning cube
+  const canvas = document.getElementById('c');
+  const renderer = new THREE.WebGLRenderer({ canvas });
+  renderer.setSize(innerWidth, innerHeight);
+  renderer.setClearColor(0x1a0a06);
+  l('Renderer created', true);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, innerWidth/innerHeight, 0.1, 100);
+  camera.position.z = 3;
+
+  const geo = new THREE.BoxGeometry(1, 1, 1);
+  const mat = new THREE.MeshStandardMaterial({ color: 0xdaa520 });
+  const cube = new THREE.Mesh(geo, mat);
+  scene.add(cube);
+
+  const light = new THREE.PointLight(0xffa85c, 10, 10);
+  light.position.set(2, 2, 3);
+  scene.add(light);
+  const amb = new THREE.AmbientLight(0xffffff, 0.3);
+  scene.add(amb);
+
+  l('Scene built (golden cube + amber light)', true);
+
+  let f = 0;
+  function loop() {
+    requestAnimationFrame(loop);
+    cube.rotation.x += 0.01;
+    cube.rotation.y += 0.015;
+    renderer.render(scene, camera);
+    f++;
+  }
+  loop();
+
+  setTimeout(() => l('Rendered ' + f + ' frames after 2s', f > 60), 2000);
+} catch (err) {
+  l('ERROR: ' + err.message, false);
+  console.error(err);
+}
+</script>
+</body>
+</html>
