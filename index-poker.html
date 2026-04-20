@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Thomas Ou · Table 01</title>
+<meta name="description" content="Portfolio of Thomas Ou. Math + CS at Penn. Deal yourself in." />
+<link rel="icon" href="favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles/poker.css" />
+</head>
+<body>
+
+<div class="table-surface"></div>
+<div class="rail"></div>
+
+<main class="stage">
+
+  <!-- TOP BAR -->
+  <header class="top">
+    <div class="brand"><em>Thomas Ou</em> · Table 01</div>
+    <div class="tagline">DEAL TO ENTER <span class="dot">·</span> CLICK A CARD <span class="dot">·</span> SOLVE TO REVEAL</div>
+    <div class="top-right">
+      <span class="blink">●</span> LIVE · <span id="clock">00:00 EST</span><br>
+      SEAT RESERVED · DEALER: T.OU
+    </div>
+  </header>
+
+  <!-- MAIN STAGE -->
+  <section class="main">
+    <aside class="stack">
+      <div class="stack-label">L · STACK</div>
+      <div class="chip chip-k"><span>MATH</span></div>
+      <div class="chip chip-p"><span>POKER</span></div>
+      <div class="chip chip-g"><span>ML</span></div>
+      <div class="chip chip-r"><span>THREE.JS</span></div>
+      <div class="chip chip-b"><span>BOXING</span></div>
+      <div class="chip chip-w"><span>DJ</span></div>
+    </aside>
+
+    <div class="table">
+      <div class="spotlight"></div>
+      <div class="hand" id="hand"></div>
+
+      <div class="table-controls">
+        <button class="btn" id="deal-btn">⚡ DEAL</button>
+        <button class="btn btn-ghost" id="about-scroll" onclick="document.getElementById('panel-home').scrollIntoView({behavior:'smooth'})">↓ SCROLL</button>
+      </div>
+    </div>
+
+    <aside class="stack">
+      <div class="stack-label">R · STACK</div>
+      <div class="chip chip-k"><span>TYPESCRIPT</span></div>
+      <div class="chip chip-g"><span>PYTHON</span></div>
+      <div class="chip chip-r"><span>FASTAPI</span></div>
+      <div class="chip chip-p"><span>NEXT.JS</span></div>
+      <div class="chip chip-b"><span>WEBAUDIO</span></div>
+      <div class="chip chip-w"><span>REACT</span></div>
+    </aside>
+  </section>
+
+  <!-- STATUS LINE -->
+  <div class="status" id="status-line">
+    <div class="group">
+      <div>POSITION <b>UTG</b></div>
+      <div>POT <b class="val" id="pot">$0</b></div>
+      <div>BLINDS <b>1 / 2</b></div>
+    </div>
+    <div class="progress" id="progress"></div>
+    <div class="group">
+      <div>REVEALED <b><span class="val" id="cards-count">0</span>/5</b></div>
+      <div>P(hire) <b class="val" id="phire">0.04</b></div>
+      <div id="showdown" style="display:none;" class="showdown">HAND · <b>ROYAL FLUSH</b></div>
+      <div>ACTION · <b id="action">LIMP</b></div>
+    </div>
+  </div>
+
+</main>
+
+<!-- REVEAL PANELS (hidden until the card flips) -->
+<section class="reveal-zone" id="panels">
+
+  <!-- 10♠ · HOME -->
+  <article class="panel" id="panel-home">
+    <div class="panel-inner">
+      <div class="panel-meta">CARD · 001 · TEN OF SPADES · HOME</div>
+      <div class="panel-body">
+        <h1>The <em>dealer</em> sits opposite you.</h1>
+        <p class="lede">I'm Thomas Ou. Math + CS sophomore at Penn. This portfolio is a hand of poker. Each card is a piece of the story. You solve to see the face.</p>
+        <p class="drop">I built this because a dev-portfolio-number-47,482 wasn't going to cut it. You came here to learn something about me in sixty seconds. A list of projects won't do that. A hand of poker with real math behind it might.</p>
+        <p>Five cards. Five questions. Five sections. By the river you'll know whether to email me. The house edge is zero. I want you to win.</p>
+        <div class="row-links">
+          <a href="#panel-about">→ ABOUT</a>
+          <a href="#panel-projects">→ PROJECTS</a>
+          <a href="#panel-contact">→ EMAIL ME</a>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- J♠ · ABOUT -->
+  <article class="panel" id="panel-about">
+    <div class="panel-inner">
+      <div class="panel-meta">CARD · 002 · JACK OF SPADES · ABOUT</div>
+      <div class="panel-body">
+        <h1>I build at <em>intersections</em>.</h1>
+        <p class="lede">Penn class of 2028. Math + Computer Science. I specialize in full-stack systems, probabilistic models, and the occasional passion project that keeps me up at night.</p>
+        <p class="drop">Tech and math have been part of my life for as long as I can remember. As a kid I was taking apart anything with a circuit board. By high school I was building computers and teaching myself to code. At 18, online poker led me to discover a vulnerability in a crypto casino's shuffling algorithm that created predictable patterns every few hundred hands. I taught myself to exploit it (ethically, of course), and was hired to help fix their system.</p>
+        <p>Since then I've been obsessed with applying algorithmic reasoning through game theory, probabilistic thinking, and machine learning to real-world problems. I box at Penn, DJ when I can, and listen to a lot of Four Tet.</p>
+        <div class="pullquote">"I'm excited by projects that are ambitious, creative, and technically challenging. Rough concept or fully formed vision — both count."</div>
+        <div class="row-links">
+          <a href="#panel-projects">→ SEE WHAT I'VE BUILT</a>
+          <a href="Assets/Resume.pdf" target="_blank">→ RESUME.PDF</a>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Q♠ · PROJECTS -->
+  <article class="panel" id="panel-projects">
+    <div class="panel-inner">
+      <div class="panel-meta">CARD · 003 · QUEEN OF SPADES · PROJECTS</div>
+      <div class="panel-body">
+        <h1>Three things I <em>shipped</em>.</h1>
+        <p class="lede">Not a list of side projects — three real products with real users. Each solves a problem I had no business solving, which is exactly why I solved it.</p>
+        <div class="project-row">
+          <div class="proj">
+            <div class="tags">DJ · WEBAUDIO · 2024</div>
+            <div class="name">D4NCE</div>
+            <div class="line">A DJ app that reads the crowd. Waveform + smart cue points, BPM sync trained on 10K sets. In beta with Penn party DJs.</div>
+          </div>
+          <div class="proj">
+            <div class="tags">COMPETITIVE · NEXT.JS · 2024</div>
+            <div class="name">V3RSUS</div>
+            <div class="line">1v1 tournament app for hobbyist games. Bracket builder, Elo, Stripe payouts. Running league nights at Penn.</div>
+          </div>
+          <div class="proj">
+            <div class="tags">MARITIME · PYTHON · ML · 2025</div>
+            <div class="name">HarborOS</div>
+            <div class="line">Maritime threat detection. Pulls AIS + SAR imagery, scores anomalies. Built with Penn RTS + Navy partners.</div>
+          </div>
+        </div>
+        <p style="margin-top:26px;">Each one is currently live, has real users, and broke in interesting ways I'll never repeat.</p>
+        <div class="row-links">
+          <a href="#panel-experience">→ HOW I GOT HERE</a>
+          <a href="https://github.com/Smokeybear10" target="_blank">→ GITHUB</a>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- K♠ · EXPERIENCE -->
+  <article class="panel" id="panel-experience">
+    <div class="panel-inner">
+      <div class="panel-meta">CARD · 004 · KING OF SPADES · EXPERIENCE</div>
+      <div class="panel-body">
+        <h1>The <em>casino</em> story, formalized.</h1>
+        <p class="lede">You asked about the Kelly fraction. Here is the real equation that got me hired.</p>
+        <p class="drop">The casino was running an ostensibly-fair shuffle. Three hundred hands in, I noticed the deal sequences had a periodicity — the PRNG seed space was smaller than the deck's entropy. A pattern existed. I modeled it:</p>
+        <div class="pullquote" style="font-style:italic;font-family:'Times New Roman',serif;font-size:32px;">P ( exploit &nbsp;|&nbsp; pattern<sub>n</sub> ) &nbsp;=&nbsp; 1 − ∏<sub>i=1</sub><sup>n</sup> ( 1 − p<sub>i</sub> )</div>
+        <p>After 50 observations, predicting the next deck was 84% accurate. With p = 0.52 per hand and 1:1 payout, Kelly said to bet 4% of bankroll per play. I never took the money. I wrote it up, sent it to the casino's CTO, and they hired me three months later to patch it quietly before it shipped to mainnet.</p>
+        <p><strong>Timeline.</strong> Summer '22: exploit. Fall '22: NDA, patch. '23 onward: I've been quiet about which casino it was, but I still have the Kelly spreadsheet.</p>
+        <div class="row-links">
+          <a href="#panel-contact">→ LET'S TALK</a>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- A♠ · CONTACT -->
+  <article class="panel" id="panel-contact">
+    <div class="panel-inner">
+      <div class="panel-meta">CARD · 005 · ACE OF SPADES · CONTACT · SHOWDOWN</div>
+      <div class="panel-body">
+        <h1>You have the <em>nuts</em>. Time to bet.</h1>
+        <p class="lede">If you made it here, you saw all five cards. EV(emailing me) > 0. I reply to everything real.</p>
+        <p class="drop">I'm looking for: summer '26 internships in ML infra, systems, or product. Open to research collaborations, interesting side projects, and any conversation that starts with "what if we…". Less interested in: crypto trading bots, AI chatbots, anything that requires LinkedIn.</p>
+        <div class="row-links">
+          <a href="mailto:hi@thomasou.com">→ hi@thomasou.com</a>
+          <a href="https://linkedin.com/in/thomasou0" target="_blank">→ LINKEDIN</a>
+          <a href="https://github.com/Smokeybear10" target="_blank">→ GITHUB</a>
+          <a href="Assets/Resume.pdf" target="_blank">→ RESUME.PDF</a>
+        </div>
+        <p style="margin-top:30px;font-family:var(--font-mono);font-size:11px;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;">POT WON · P(HIRE) = 0.94 · THE HAND IS YOURS</p>
+      </div>
+    </div>
+  </article>
+
+</section>
+
+<!-- FOOTER -->
+<footer class="bottom">
+  <div class="split">
+    <span>THOMAS OU · PHILADELPHIA · <span id="clock2">—</span></span>
+    <span>BUILT WITH VANILLA JS + WEB AUDIO + FRAUNCES · NO FRAMEWORKS</span>
+    <a href="mailto:hi@thomasou.com">hi@thomasou.com</a>
+  </div>
+</footer>
+
+<!-- FLOATING TOAST / SETTINGS -->
+<div class="toast-row">
+  <button class="mini" id="mute">♫ SOUND · ON</button>
+  <button class="mini" id="allin-btn">⚡ ALL IN  <span style="opacity:0.5;margin-left:4px;">A</span></button>
+  <button class="mini" onclick="document.getElementById('deal-btn').click()">⟳ RE-DEAL  <span style="opacity:0.5;margin-left:4px;">R</span></button>
+</div>
+
+<!-- DEALER DIALOGUE BUBBLE -->
+<div class="dealer-bubble" id="dealer"></div>
+
+<script src="js/poker.js"></script>
+<script>
+  // mirror clock in footer
+  function syncFooterClock() {
+    const a = document.getElementById('clock');
+    const b = document.getElementById('clock2');
+    if (a && b) b.textContent = a.textContent;
+  }
+  setInterval(syncFooterClock, 2000);
+</script>
+</body>
+</html>
