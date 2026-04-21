@@ -58,25 +58,29 @@ const SEATED_YAW_RANGE   = 0.55;  // ±31° horizontal sweep
 const SEATED_PITCH_RANGE = 0.28;  // ±16° vertical sweep
 const SEATED_LERP        = 0.035; // look smoothing (lower = slower / more cinematic)
 
+
 // Station diorama: each route has a lit island in the void, reached by a camera tween.
-// For now only PROJECTS is built; mirror the pattern for about/experience/contact later.
 const STATIONS = {
   projects: {
     center:     [12, 1.5, -6],
-    cameraPos:  [12, 1.8, -3.1],
-    cameraLook: [12, 1.45, -6.2],
+    // Shelf at y=1.05, stack up to ~1.6. Camera above + in front, angled down so
+    // the covers on top of each box are clearly visible as a receding set of tiers.
+    cameraPos:  [12, 2.15, -4.8],
+    cameraLook: [12, 1.30, -6.05],
   },
+  // ABOUT → journal on a writing desk, forward from the poker table
   about: {
-    center:     [-12, 0, -6],
-    // Station pose: overview of the whole desk + computer, from standing-in-front-of-desk distance
-    cameraPos:  [-12, 1.55, -4.3],
-    cameraLook: [-12, 1.10, -5.80],
-    // Close-up pose: right up against the screen, text readable, monitor fills the frame
-    closeupPos:  [-12, 1.135, -4.99],
-    closeupLook: [-12, 1.135, -5.789],
-    initialPage: 'about',
+    center:     [0, 0, -10],
+    // Default: normal reading angle, whole desk visible in front of you
+    cameraPos:  [0, 1.45, -8.4],
+    cameraLook: [0, 0.78, -10.0],
+    // Hover-triggered close-up: book dominates the viewport (~85%) but a strip of desk
+    // stays visible around it so hovering-off is a reachable gesture.
+    closeupPos:  [0, 1.42, -9.87],
+    closeupLook: [0, 0.776, -10.0],
+    noParallax:  true,   // lock camera so hover-raycast stays steady on the journal
   },
-  // Experience card → same diorama, opens experience.log as the initial file
+  // EXPERIENCE → the CRT computer, left of the table
   experience: {
     center:     [-12, 0, -6],
     cameraPos:  [-12, 1.55, -4.3],
@@ -91,7 +95,11 @@ let stationTweening = false;
 let stationCloseup = false; // true when camera is pushed up against the monitor
 let stationYaw = 0, stationPitch = 0;
 let stationLights = {};
-let aboutScreen = null; // reference to the CRT screen mesh, set in buildAboutStation
+let computerScreen = null; // CRT screen mesh, set in buildExperienceStation
+let aboutJournal  = null; // open-journal plane mesh, set in buildAboutStation
+let journalExitTimer  = null;  // debounce timer for hover-off-to-exit closeup
+let journalEnterArmed = false; // must be OFF the journal at rest before a fresh enter can fire
+let projectBoxes = [];         // Project-shelf boxes — hover animates them toward the camera
 
 /* Cinematic: drop in from above, settle into a Heffernan-style iso/3-quarter park.
    Park position is up-and-off-to-the-right, looking down at the table. */
@@ -170,19 +178,23 @@ function dispose() {
   }
 }
 
-/* ---------- Entry ---------- */
+/* ---------- Entry ----------
+   buildWorld calls into station builders that reference const values (WIN98,
+   JOURNAL_SPREADS, SCREEN_PAGES…) declared further down this file. `const` is
+   hoisted but lives in the temporal dead zone until its line is reached, so we
+   MUST let the whole module finish initializing before the first build call.
+   queueMicrotask is the simplest way: it fires after the current synchronous
+   task (= this module body) completes. */
 if (!overlay || !canvas || !hasWebGL) {
   finishIntroOverlay();
 } else if (hasPlayed && !reduceMotion) {
-  // Skip cinematic. We still build the room silently so the rewind/back-to-room button works.
   finishIntroOverlay();
-  // Build the room invisibly for later use
   setTimeout(() => { buildWorld(true); }, 50);
 } else if (reduceMotion) {
   finishIntroOverlay();
 } else {
   document.body.classList.add('intro-playing');
-  buildWorld(false);
+  queueMicrotask(() => buildWorld(false));
 }
 
 skipBtn?.addEventListener('click', () => {
@@ -252,8 +264,9 @@ function buildWorld(silent=false) {
   buildChipStack();
   buildDeckAndCards();
   buildPendantChain();
-  try { buildProjectsStation(); } catch (e) { console.error('[station:projects] build failed:', e); }
-  try { buildAboutStation();    } catch (e) { console.error('[station:about] build failed:', e);    }
+  try { buildProjectsStation();   } catch (e) { console.error('[station:projects] build failed:', e); }
+  try { buildExperienceStation(); } catch (e) { console.error('[station:experience] build failed:', e); }
+  try { buildAboutStation();      } catch (e) { console.error('[station:about] build failed:', e); }
   // portals removed until user approves the void look
   // buildPortals();
 
@@ -816,42 +829,110 @@ function buildDeckAndCards() {
 /* ============================================================= */
 /*                      PROJECTS DIORAMA                          */
 /* ============================================================= */
-function makeProjectSlabTex(title, sub, desc, accent) {
-  const c = document.createElement('canvas'); c.width = 480; c.height = 640;
-  const g = c.getContext('2d');
-  // Deep felt background with faint radial vignette
-  const grad = g.createRadialGradient(240, 320, 40, 240, 320, 400);
-  grad.addColorStop(0, '#155440');
-  grad.addColorStop(1, '#07241b');
-  g.fillStyle = grad; g.fillRect(0, 0, 480, 640);
-  // Gold hairline border
-  g.strokeStyle = 'rgba(218,165,32,0.75)'; g.lineWidth = 2; g.strokeRect(18, 18, 444, 604);
-  g.strokeStyle = 'rgba(218,165,32,0.25)'; g.lineWidth = 1; g.strokeRect(26, 26, 428, 588);
-  // Accent pip top
-  g.fillStyle = accent;
-  g.beginPath(); g.arc(240, 90, 5, 0, Math.PI*2); g.fill();
-  // Title
-  g.fillStyle = accent;
-  g.font = 'italic 700 68px Georgia, serif';
+/* Shared box cover: gradient bg + publisher banner + title + image zone + tagline footer.
+   Draws into `canvas` (mutated in place) and marks `tex.needsUpdate = true` on the caller. */
+function drawProjectBoxCover(canvas, p, img) {
+  const W = canvas.width, H = canvas.height;
+  const g = canvas.getContext('2d');
+
+  // Diagonal palette gradient
+  const bg = g.createLinearGradient(0, 0, W, H);
+  bg.addColorStop(0, p.bg1); bg.addColorStop(1, p.bg2);
+  g.fillStyle = bg; g.fillRect(0, 0, W, H);
+
+  // Paper-print noise
+  for (let i = 0; i < 2200; i++) {
+    g.fillStyle = `rgba(255,255,255,${Math.random() * 0.04})`;
+    g.fillRect(Math.random() * W, Math.random() * H, 1, 1);
+  }
+
+  // Top "publisher" banner
+  g.fillStyle = p.accent;
+  g.fillRect(0, 0, W, 46);
+  g.fillStyle = p.bg1;
+  g.font = "700 14px 'JetBrains Mono', monospace";
+  g.textAlign = 'left'; g.textBaseline = 'middle';
+  g.fillText('T.OU SOFTWARE', 18, 23);
+  g.textAlign = 'right';
+  g.fillText('v1.0', W - 18, 23);
+
+  // Title strip
+  g.fillStyle = p.accent;
+  g.font = "italic 900 72px Georgia, 'Times New Roman', serif";
   g.textAlign = 'center'; g.textBaseline = 'middle';
-  g.fillText(title, 240, 170);
-  // Subtitle
-  g.fillStyle = 'rgba(245,240,225,0.65)';
-  g.font = '700 13px "JetBrains Mono", ui-monospace, monospace';
-  g.fillText(sub, 240, 230);
-  // Hairline divider
-  g.strokeStyle = 'rgba(218,165,32,0.4)'; g.lineWidth = 1;
-  g.beginPath(); g.moveTo(140, 265); g.lineTo(340, 265); g.stroke();
-  // Description lines
-  g.fillStyle = '#f5f0e1';
-  g.font = '18px Georgia, serif';
-  desc.split('\n').forEach((line, i) => g.fillText(line, 240, 310 + i * 32));
-  // Footer: "PRESS TO EXPLORE"
-  g.fillStyle = 'rgba(245,240,225,0.4)';
-  g.font = '10px "JetBrains Mono", ui-monospace, monospace';
-  g.fillText('▸ CLICK TO EXPLORE', 240, 580);
-  const tex = new THREE.CanvasTexture(c);
+  g.fillText(p.title, W / 2, 110);
+
+  // Image / cover art zone — inset rectangle filled with the loaded image (cover-fit)
+  const ix = 36, iy = 180, iw = W - 72, ih = 300;
+  // Dark frame under the image
+  g.fillStyle = 'rgba(0,0,0,0.45)';
+  g.fillRect(ix, iy, iw, ih);
+  if (img) {
+    // Fit-cover: crop to maintain aspect ratio
+    const imgAR = img.width / img.height;
+    const frameAR = iw / ih;
+    let sx, sy, sw, sh;
+    if (imgAR > frameAR) {
+      sh = img.height;
+      sw = sh * frameAR;
+      sx = (img.width - sw) / 2;
+      sy = 0;
+    } else {
+      sw = img.width;
+      sh = sw / frameAR;
+      sx = 0;
+      sy = (img.height - sh) / 2;
+    }
+    g.drawImage(img, sx, sy, sw, sh, ix, iy, iw, ih);
+  } else {
+    // Fallback — "COMING SOON" treatment in the accent color
+    g.fillStyle = p.accent;
+    g.globalAlpha = 0.2;
+    g.fillRect(ix + 6, iy + 6, iw - 12, ih - 12);
+    g.globalAlpha = 1;
+    g.fillStyle = p.accent;
+    g.font = "700 18px 'JetBrains Mono', monospace";
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillText('· COMING SOON ·', W / 2, iy + ih / 2);
+  }
+  // Hairline around image frame
+  g.strokeStyle = p.accent; g.lineWidth = 2;
+  g.strokeRect(ix, iy, iw, ih);
+
+  // Tagline bar
+  g.fillStyle = p.accent;
+  g.fillRect(36, 510, W - 72, 48);
+  g.fillStyle = p.bg1;
+  g.font = "italic 700 22px Georgia, serif";
+  g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.fillText(p.tagline, W / 2, 534);
+
+  // Footer
+  g.fillStyle = p.accent;
+  g.fillRect(0, H - 28, W, 28);
+  g.fillStyle = p.bg1;
+  g.font = "700 10px 'JetBrains Mono', monospace";
+  g.fillText('MADE · NEW YORK · PHILADELPHIA', W / 2, H - 14);
+}
+
+/* Build + return the canvas texture for a single project box.
+   If `imgSrc` exists, async-loads the image and re-renders the cover when it arrives. */
+function makeProjectBoxTex(p) {
+  const canvas = document.createElement('canvas');
+  canvas.width = 480; canvas.height = 620;
+  drawProjectBoxCover(canvas, p, null); // initial paint with placeholder
+  const tex = new THREE.CanvasTexture(canvas);
   tex.colorSpace = THREE.SRGBColorSpace;
+  if (p.img) {
+    const im = new Image();
+    im.crossOrigin = 'anonymous';
+    im.onload = () => {
+      drawProjectBoxCover(canvas, p, im);
+      tex.needsUpdate = true;
+    };
+    im.onerror = () => { console.warn('[project-box] failed to load image', p.img); };
+    im.src = p.img;
+  }
   return tex;
 }
 
@@ -860,7 +941,7 @@ function buildProjectsStation() {
 
   // Private spotlight — starts OFF, ramps on when camera arrives.
   const spot = new THREE.SpotLight(0xffc67a, 0, 9, Math.PI / 3.2, 0.55, 1.3);
-  spot.position.set(cx, cy + 3.2, cz + 1.2); // front-top so slab fronts catch the light
+  spot.position.set(cx, cy + 3.0, cz + 1.2);
   spot.target.position.set(cx, cy - 0.2, cz);
   spot.castShadow = true;
   spot.shadow.mapSize.set(1024, 1024);
@@ -878,50 +959,92 @@ function buildProjectsStation() {
   ground.receiveShadow = true;
   scene.add(ground);
 
-  // Three floating slabs in a gentle fan
-  const projects = [
-    { title: 'D4NCE',     sub: 'DJ · LIVE MIXING',      desc: 'Waveform-first UI.\nSmart cue points.\nBeatmatch visualizer.',    accent: '#ff6bb3', dx: -1.55, dz: 0.25, rot:  0.28 },
-    { title: 'V3RSUS',    sub: 'COMPETITIVE · REALTIME', desc: 'Bracket automation.\nLive scoring.\nNo-friction entry.',         accent: '#f0c808', dx:  0.00, dz: 0.00, rot:  0.00 },
-    { title: 'HARBOROS',  sub: 'MARITIME · DEFENSE',    desc: 'Sensor fusion.\nAutonomous alerting.\nBlue-water command.',       accent: '#64d2ff', dx:  1.55, dz: 0.25, rot: -0.28 },
-  ];
-
-  projects.forEach((p) => {
-    const tex = makeProjectSlabTex(p.title, p.sub, p.desc, p.accent);
-    const slab = new THREE.Mesh(
-      new THREE.PlaneGeometry(1.3, 1.73),
-      new THREE.MeshStandardMaterial({
-        map: tex, roughness: 0.55, metalness: 0.1,
-        emissive: 0x000000, emissiveMap: tex, emissiveIntensity: 0.12,
-      })
+  /* -------- FLOATING WOODEN SHELF -------------------------------------- */
+  const SHELF_TOP_Y = 1.05; // top surface of the shelf
+  const SHELF_W = 1.2, SHELF_D = 0.58, SHELF_T = 0.06;
+  const shelfPlank = new THREE.Mesh(
+    new THREE.BoxGeometry(SHELF_W, SHELF_T, SHELF_D),
+    new THREE.MeshStandardMaterial({ color: 0x3a2210, roughness: 0.75, metalness: 0.05 })
+  );
+  shelfPlank.position.set(cx, SHELF_TOP_Y - SHELF_T/2, cz);
+  shelfPlank.castShadow = true; shelfPlank.receiveShadow = true;
+  scene.add(shelfPlank);
+  // Brass trim along the front edge
+  const shelfTrim = new THREE.Mesh(
+    new THREE.BoxGeometry(SHELF_W, 0.012, 0.012),
+    new THREE.MeshStandardMaterial({ color: 0xd4a840, metalness: 0.85, roughness: 0.3 })
+  );
+  shelfTrim.position.set(cx, SHELF_TOP_Y - SHELF_T + 0.006, cz + SHELF_D/2 - 0.006);
+  scene.add(shelfTrim);
+  // Two hanging brackets underneath so the shelf reads as "shelf" not "floor"
+  [-SHELF_W/2 + 0.2, SHELF_W/2 - 0.2].forEach(dx => {
+    const bracket = new THREE.Mesh(
+      new THREE.BoxGeometry(0.05, 0.22, SHELF_D - 0.08),
+      new THREE.MeshStandardMaterial({ color: 0x1a1008, roughness: 0.72 })
     );
-    slab.position.set(cx + p.dx, cy, cz + p.dz);
-    slab.rotation.y = p.rot;
-    slab.castShadow = true;
-    // Not clickable yet — just readable. Will wire click-to-zoom in a follow-up.
-    scene.add(slab);
+    bracket.position.set(cx + dx, SHELF_TOP_Y - SHELF_T - 0.11, cz);
+    bracket.castShadow = true;
+    scene.add(bracket);
   });
 
-  // Station heading: floating italic "PROJECTS" above the slabs
-  const headTex = (() => {
-    const c = document.createElement('canvas'); c.width = 512; c.height = 128;
-    const g = c.getContext('2d');
-    g.clearRect(0, 0, 512, 128);
-    g.fillStyle = '#daa520';
-    g.font = 'italic 700 72px Georgia, serif';
-    g.textAlign = 'center'; g.textBaseline = 'middle';
-    g.fillText('projects', 256, 72);
-    g.fillStyle = 'rgba(245,240,225,0.55)';
-    g.font = '700 11px "JetBrains Mono", ui-monospace, monospace';
-    g.fillText('TABLE 01 · HAND TWO', 256, 112);
-    const tex = new THREE.CanvasTexture(c);
-    tex.colorSpace = THREE.SRGBColorSpace;
-    return tex;
-  })();
+  /* -------- STACKED SOFTWARE BOXES (lying flat, covers up) ---------------
+     Boxes are real 3D volumes — 34cm × 12cm thick × 44cm deep — stacked on
+     the shelf like a pile of books. Cover texture sits on the +y (top) face.
+     Hover lifts the box off the pile.
+  ------------------------------------------------------------------------ */
+  const projects = [
+    { id: 'd4nce',   title: 'D4NCE',    tagline: 'WAVEFORM FIRST',   bg1: '#6a0e38', bg2: '#20081c', accent: '#ff7bc6', img: 'Images/ProjectPhotos/D4NCE.gif'   },
+    { id: 'str1ke',  title: 'STR1KE',   tagline: 'TAKE THE BELT',    bg1: '#3a0a04', bg2: '#0c0808', accent: '#ff6a3c', img: 'Images/ProjectPhotos/STR1KE1.gif' },
+    { id: 'r1ver',   title: 'R1VER',    tagline: 'FLOW · REALTIME',  bg1: '#0a2244', bg2: '#04101e', accent: '#5adcff', img: 'Images/ProjectPhotos/R1VER1.gif'  },
+    { id: 'pr0xim',  title: 'PR0XIM',   tagline: 'PROXIMITY SOCIAL', bg1: '#2a3608', bg2: '#0a1004', accent: '#cdff4a', img: 'Images/ProjectPhotos/PR0XIM.png'  },
+    { id: 'stratos', title: 'STRATOS',  tagline: 'AERO · DATA',      bg1: '#1a1e46', bg2: '#080a24', accent: '#b0b8ff', img: 'Images/ProjectPhotos/STRATOS.png' },
+    { id: 'harboros',title: 'HARBOROS', tagline: 'BLUE-WATER CMD',   bg1: '#0a2040', bg2: '#061424', accent: '#7ad2ff', img: null },
+  ];
+
+  const BOX_W = 0.34, BOX_THICK = 0.09, BOX_D = 0.44;
+  const STACK_GAP = 0.004; // flush pile
+
+  projectBoxes.length = 0;
+  projects.forEach((p, i) => {
+    const coverTex = makeProjectBoxTex(p);
+    const sideMat  = new THREE.MeshStandardMaterial({ color: p.bg2,  roughness: 0.6 });
+    const edgeMat  = new THREE.MeshStandardMaterial({ color: p.bg1,  roughness: 0.55 });
+    const coverMat = new THREE.MeshStandardMaterial({
+      map: coverTex, roughness: 0.5, metalness: 0.05,
+      emissiveMap: coverTex, emissive: 0x222222, emissiveIntensity: 0.1,
+    });
+    // BoxGeometry face order: [+x, -x, +y (TOP — cover art), -y, +z (front edge), -z (back)]
+    // Cover on top face; front/back edges get the accent palette; sides darker.
+    const mats = [sideMat, sideMat, coverMat, sideMat, edgeMat, edgeMat];
+    const box = new THREE.Mesh(new THREE.BoxGeometry(BOX_W, BOX_THICK, BOX_D), mats);
+    // Stacked flat along y. Bottom box rests on the shelf.
+    const y = SHELF_TOP_Y + BOX_THICK/2 + i * (BOX_THICK + STACK_GAP);
+    box.position.set(cx, y, cz);
+    // Deterministic jitter — boxes don't land perfectly stacked
+    const jitter = Math.sin(i * 3.7) * Math.cos(i * 1.9);
+    box.rotation.y = jitter * 0.04;
+    box.position.x += jitter * 0.008;
+    box.position.z += jitter * 0.01;
+    box.castShadow = true; box.receiveShadow = true;
+    box.userData.isInteractive = true;
+    box.userData.isProjectBox = true;
+    box.userData.project = p;
+    box.userData.hoverLabel = '⊙ ' + p.title;
+    // Rest pose snapshots for the hover-pickup animation
+    box.userData.restPos = box.position.clone();
+    box.userData.restRotX = 0;
+    box.userData.restRotY = box.rotation.y;
+    projectBoxes.push(box);
+    scene.add(box);
+  });
+
+  /* -------- STATION HEADING (above the stack) -------- */
+  const stackTopY = SHELF_TOP_Y + projects.length * (BOX_THICK + STACK_GAP);
   const heading = new THREE.Mesh(
-    new THREE.PlaneGeometry(2.6, 0.65),
-    new THREE.MeshBasicMaterial({ map: headTex, transparent: true, opacity: 0.9 })
+    new THREE.PlaneGeometry(2.4, 0.6),
+    new THREE.MeshBasicMaterial({ map: makeStationHeadingTex('projects', 'T.OU SOFTWARE · HAND TWO'), transparent: true, opacity: 0.9 })
   );
-  heading.position.set(cx, cy + 1.3, cz - 0.1);
+  heading.position.set(cx, stackTopY + 0.75, cz - 0.25);
   scene.add(heading);
 }
 
@@ -1372,9 +1495,9 @@ function handleScreenClick(screen, u, v) {
   }
 }
 
-function buildAboutStation() {
-  console.log('[about] build start');
-  const [cx, cy, cz] = STATIONS.about.center;
+function buildExperienceStation() {
+  console.log('[experience] build start');
+  const [cx, cy, cz] = STATIONS.experience.center;
   const deskTopH = 0.76, topT = 0.05;
 
   // --- Spotlight (starts off, fades in on entry) ---
@@ -1384,13 +1507,13 @@ function buildAboutStation() {
   spot.castShadow = true;
   spot.shadow.mapSize.set(1024, 1024);
   scene.add(spot); scene.add(spot.target);
-  stationLights.about = spot;
+  stationLights.experience = spot;
 
   // --- Always-on low fill so the station is at least visible during the tween in ---
   const fill = new THREE.PointLight(0xffe2b6, 0.55, 10, 1.3);
   fill.position.set(cx, 2.2, cz + 0.8);
   scene.add(fill);
-  console.log('[about] lights ok');
+  console.log('[experience] lights ok');
 
   // Shadow-catcher floor
   const ground = new THREE.Mesh(
@@ -1422,7 +1545,7 @@ function buildAboutStation() {
     leg.castShadow = true; leg.receiveShadow = true;
     scene.add(leg);
   });
-  console.log('[about] desk ok');
+  console.log('[experience] desk ok');
 
   /* ---------- CRT Monitor ---------- */
   const monW = 0.95, monH = 0.70, monD = 0.65;
@@ -1471,9 +1594,9 @@ function buildAboutStation() {
   screenMesh.userData.tex = screenTex;
   screenMesh.userData.page = 'desktop';
   scene.add(screenMesh);
-  aboutScreen = screenMesh;
+  computerScreen = screenMesh;
   renderScreenDesktop(screenMesh);
-  console.log('[about] monitor + screen ok');
+  console.log('[experience] monitor + screen ok');
 
   /* ---------- Keyboard + Mouse (simple boxes) ---------- */
   const keyboard = new THREE.Mesh(
@@ -1491,7 +1614,7 @@ function buildAboutStation() {
   mouseBody.position.set(cx + 0.42, deskTopH + topT / 2 + 0.013, cz + 0.22);
   mouseBody.castShadow = true;
   scene.add(mouseBody);
-  console.log('[about] keyboard + mouse ok');
+  console.log('[experience] keyboard + mouse ok');
 
   /* ---------- Station heading ---------- */
   const heading = new THREE.Mesh(
@@ -1499,6 +1622,660 @@ function buildAboutStation() {
     new THREE.MeshBasicMaterial({ map: makeStationHeadingTex('about', 'THOMASOS · v1.0'), transparent: true, opacity: 0.9 })
   );
   heading.position.set(cx, monY + monH / 2 + 0.45, cz - 0.25);
+  scene.add(heading);
+  console.log('[experience] build complete');
+}
+
+/* ============================================================= */
+/*                    ABOUT DIORAMA · JOURNAL                     */
+/* ============================================================= */
+/* Editorial journal spreads — magazine-style layout with drop caps, pull quotes,
+   a taped-on polaroid, handwritten marginalia, and a signature. Canvas is 2048×1280
+   so text at 28-32px reads clearly from the close-up camera pose (~0.7m off the pages). */
+const JOURNAL_SPREADS = [
+  {
+    chapter: 'CHAPTER ONE',
+    title: 'The Dealer',
+    subtitle: 'on getting dealt a hand',
+    dropCap: 'H',
+    leftBody: [
+      "i. I'm Thomas. Welcome to my book.",
+      "Sophomore at the University of Pennsylvania, studying math and computer science. Born in New York, splitting my days now between Philly and the city.",
+      "This isn't a résumé. It's a record of how I got here and why I build the way I do.",
+    ],
+    polaroid: { caption: 'T. OU · MMXXVI' },
+    rightBody: [
+      "I specialize in full-stack systems, probabilistic models, and the occasional passion project that keeps me up until four a.m.",
+      "Tech and math have been part of my life as long as I can remember. I like problems where the math is honest and the stakes are real — where you either get the answer or you don't.",
+      "When I'm not at a terminal, you'll find me at Penn Boxing, lifting, playing no-limit hold'em, or writing code that tells the truth about what it does.",
+    ],
+    pullQuote: 'A hand starts with\nwhat you were dealt.\nThen you decide\nwhat to do with it.',
+    margin: '— New York, MMXXVI.',
+  },
+  {
+    chapter: 'CHAPTER TWO',
+    title: 'Early Hands',
+    subtitle: 'before anything was named',
+    dropCap: 'A',
+    leftBody: [
+      "s a kid I was taking apart anything with a circuit board — remotes, old laptops, an alarm clock I was definitely not supposed to touch. I wanted to see what was inside, and then I wanted to see if I could make it do something it wasn't designed to do.",
+      "By high school I was building PCs and teaching myself to code. First bad C++. First worse Python. First joy of making a machine listen.",
+    ],
+    rightBody: [
+      "I liked math for the same reason I liked taking things apart: the pieces always fit together if you looked hard enough. Every problem had a clean inside under the messy outside.",
+      "Every problem I worked on taught me the same thing — the interesting part is always one layer below where everyone else stopped looking.",
+      "That lesson has shown up in every serious thing I've built since.",
+    ],
+    pullQuote: "The interesting part\nis always one layer\nbelow where everyone\nstops looking.",
+    margin: '— algebra notebook, 2021.',
+  },
+  {
+    chapter: 'CHAPTER THREE',
+    title: 'The Exploit',
+    subtitle: 'on reading what the house isn\'t telling you',
+    dropCap: 'A',
+    leftBody: [
+      "t eighteen, I was playing online poker when I noticed something off in a crypto casino's hand history. Too many hands showing patterns that shouldn't exist in a properly shuffled deck.",
+      "The shuffle was reseeding its PRNG on a predictable cycle. Every few hundred hands, the same pattern came back around.",
+    ],
+    rightBody: [
+      "I spent a month proving it. Then I wrote a script to ride the cycle.",
+      "Before I used it on anything but my own sandbox, I told them. They hired me to help them patch it.",
+      "That month taught me more than my first year of college did. Not because the math was hard — it wasn't — but because nobody had looked. The exploit was sitting in plain sight.",
+      "Since then I've been obsessed with applying probabilistic thinking to real-world systems, and asking whether the system is fair before I trust its output.",
+    ],
+    margin: '(ethically, of course.)',
+    inkBlot: true,
+  },
+  {
+    chapter: 'CHAPTER FOUR',
+    title: 'How I Build',
+    subtitle: 'what gets into production',
+    dropCap: 'I',
+    leftBody: [
+      " don't trust shiny software. I trust software that does what it says, fails loud, and doesn't pretend to be more than it is.",
+      "Most bad software fails because someone prioritized the demo over the system. The demo works on the happy path and falls apart everywhere else.",
+      "I'd rather ship something smaller that's honest.",
+    ],
+    rightBody: [
+      "My rules:",
+      "· Do the whole thing, not the appearance of the whole thing.",
+      "· If the math isn't clean, the feature isn't done.",
+      "· Fail loud. Silent failures ruin everything.",
+      "· Be explicit about what you don't know.",
+      "· Build for the 1% case that breaks real users.",
+      "I'd rather be the one who catches the bug before it ships than the one explaining it to the customer at 3 a.m.",
+    ],
+    stamp: 'BUILD · OPTIMIZE · DELIVER',
+    margin: '— March, 2026.',
+  },
+  {
+    chapter: 'CHAPTER FIVE',
+    title: 'The Toolkit',
+    subtitle: 'what I reach for',
+    leftBody: [
+      "LANGUAGES",
+      "Python · C++ · R · OCaml",
+      "Java · MATLAB · HTML + CSS",
+      "JavaScript · TypeScript",
+      "",
+      "FRAMEWORKS",
+      "NumPy · Pandas · Scikit-learn",
+      "PyTorch · TensorFlow",
+      "React · Next.js · Three.js",
+      "FastAPI · Matplotlib",
+    ],
+    rightBody: [
+      "DATABASES",
+      "PostgreSQL · MySQL",
+      "MongoDB · Redis",
+      "",
+      "TOOLS",
+      "Node · Git · Docker",
+      "Linux · VSCode · Vim",
+      "",
+      "I keep the list short because the list doesn't matter. The thinking behind the tool does.",
+      "I'd rather pick the right thing for the problem than collect every framework on the landing page.",
+    ],
+    margin: '(ask me how I feel about pandas.)',
+    tabular: true,
+  },
+  {
+    chapter: 'CHAPTER SIX',
+    title: 'Deal Me In',
+    subtitle: 'the end of the book, for now',
+    dropCap: 'W',
+    leftBody: [
+      "hat I'm working on —",
+      "· D4NCE — a DJ app that treats the waveform as the primary UI.",
+      "· V3RSUS — a competitive bracket tool for events without the budget for big platforms.",
+      "· HarborOS — maritime sensor fusion for blue-water command.",
+    ],
+    rightBody: [
+      "If you're hiring, building, or want to compare notes on a hand:",
+      "email · hi@thomasou.com",
+      "github · github.com/Smokeybear10",
+      "linkedin · linkedin.com/in/thomasou0",
+      "If you've read this far — thank you. The book stays open.",
+    ],
+    signature: 'T. Ou',
+    margin: 'FIN. / deal me in.',
+  },
+];
+
+// Portrait placeholder for the polaroid — loaded async, re-renders when ready.
+let journalPortraitImg = null;
+let journalPortraitReady = false;
+(function preloadJournalPortrait() {
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = () => {
+    journalPortraitImg = img;
+    journalPortraitReady = true;
+    if (aboutJournal) renderJournalSpread(aboutJournal, aboutJournal.userData.spread || 0);
+  };
+  img.onerror = () => { console.warn('[journal] portrait failed to load — using silhouette fallback'); };
+  img.src = 'Images/ThomasPortrait.png';
+})();
+
+function wrapText(ctx, text, maxWidth) {
+  const words = text.split(' ');
+  const lines = [];
+  let line = '';
+  for (const word of words) {
+    const test = line ? line + ' ' + word : word;
+    if (ctx.measureText(test).width > maxWidth && line) {
+      lines.push(line);
+      line = word;
+    } else {
+      line = test;
+    }
+  }
+  if (line) lines.push(line);
+  return lines;
+}
+
+function drawBody(ctx, x, y, w, paragraphs, opts = {}) {
+  const { dropCap, tabular } = opts;
+  const bodyFont = tabular
+    ? "500 30px 'JetBrains Mono', ui-monospace, monospace"
+    : "italic 30px Georgia, 'Times New Roman', serif";
+  const lineH = tabular ? 42 : 44;
+  let cy = y;
+  let dcW = 0;
+  const DROP_SIZE = 132;          // Drop cap height — ~3 body lines
+  const DROP_LINES = 3;           // How many body lines wrap around the drop cap
+
+  if (dropCap) {
+    ctx.save();
+    ctx.font = `900 italic ${DROP_SIZE}px Georgia, 'Times New Roman', serif`;
+    ctx.fillStyle = '#7a1a2e';
+    ctx.textBaseline = 'top';
+    dcW = ctx.measureText(dropCap).width + 22;
+    // Italic overshoot — nudge up a hair so the drop cap's visible top lines up with body cap-height
+    ctx.fillText(dropCap, x, y - 10);
+    ctx.restore();
+  }
+
+  ctx.font = bodyFont;
+  ctx.fillStyle = '#1a0f08';
+  ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+  let linesEmitted = 0;
+
+  for (let pIdx = 0; pIdx < paragraphs.length; pIdx++) {
+    const p = paragraphs[pIdx];
+    if (p === '') { cy += lineH * 0.55; continue; }
+    ctx.font = bodyFont;
+
+    // Section headers (all-caps short lines) get a red monospace treatment
+    const isHeader = /^[A-Z0-9 +·&]+$/.test(p) && p.length < 40 && pIdx > 0;
+    if (isHeader) {
+      ctx.save();
+      ctx.fillStyle = '#7a1a2e';
+      ctx.font = "700 24px 'JetBrains Mono', monospace";
+      ctx.fillText(p, x, cy + 8);
+      ctx.restore();
+      cy += lineH * 1.0;
+      continue;
+    }
+
+    let pX = x;
+    let pW = w;
+    if (dropCap && linesEmitted < DROP_LINES) {
+      pX = x + dcW;
+      pW = w - dcW;
+    }
+
+    let lines = wrapText(ctx, p, pW);
+    let i = 0;
+    while (i < lines.length) {
+      ctx.fillStyle = '#1a0f08';
+      ctx.fillText(lines[i], pX, cy);
+      cy += lineH;
+      linesEmitted++;
+      i++;
+      // Exiting the drop-cap indent zone — re-wrap remaining text at full column width
+      if (dropCap && linesEmitted === DROP_LINES && i < lines.length) {
+        const remaining = lines.slice(i).join(' ');
+        pX = x; pW = w;
+        lines = wrapText(ctx, remaining, pW);
+        i = 0;
+      }
+    }
+    cy += lineH * 0.38; // paragraph spacing
+  }
+  return cy; // caller can flow pull-quote / signature below
+}
+
+function drawPolaroid(ctx, x, y, w, h, caption) {
+  ctx.save();
+  ctx.translate(x + w / 2, y + h / 2);
+  ctx.rotate(-0.055);
+  ctx.translate(-w / 2, -h / 2);
+  // Shadow
+  ctx.fillStyle = 'rgba(0,0,0,0.28)';
+  ctx.fillRect(5, 9, w, h);
+  // White paper
+  ctx.fillStyle = '#fefaf0';
+  ctx.fillRect(0, 0, w, h);
+  // Photo area
+  const pX = 15, pY = 16, pW = w - 30, pH = h - 80;
+  if (journalPortraitReady && journalPortraitImg) {
+    // Fit the portrait into the photo area, crop if necessary
+    const imgAR = journalPortraitImg.width / journalPortraitImg.height;
+    const frameAR = pW / pH;
+    let sx, sy, sw, sh;
+    if (imgAR > frameAR) {
+      // Portrait wider — crop sides
+      sh = journalPortraitImg.height;
+      sw = sh * frameAR;
+      sx = (journalPortraitImg.width - sw) / 2;
+      sy = 0;
+    } else {
+      sw = journalPortraitImg.width;
+      sh = sw / frameAR;
+      sx = 0;
+      sy = Math.max(0, (journalPortraitImg.height - sh) * 0.15); // bias toward face
+    }
+    ctx.drawImage(journalPortraitImg, sx, sy, sw, sh, pX, pY, pW, pH);
+  } else {
+    // Fallback: dark gradient + silhouette
+    const g = ctx.createRadialGradient(pX + pW / 2, pY + pH * 0.42, 30, pX + pW / 2, pY + pH * 0.5, pW * 0.8);
+    g.addColorStop(0, '#7a5a3a');
+    g.addColorStop(1, '#1a0f08');
+    ctx.fillStyle = g;
+    ctx.fillRect(pX, pY, pW, pH);
+    ctx.fillStyle = 'rgba(200,160,100,0.55)';
+    ctx.beginPath(); ctx.arc(pX + pW / 2, pY + pH * 0.38, 32, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(pX + pW * 0.2, pY + pH);
+    ctx.quadraticCurveTo(pX + pW / 2, pY + pH * 0.5, pX + pW * 0.8, pY + pH);
+    ctx.closePath(); ctx.fill();
+  }
+  // Thin photo border
+  ctx.strokeStyle = 'rgba(0,0,0,0.15)'; ctx.lineWidth = 1;
+  ctx.strokeRect(pX, pY, pW, pH);
+  // Caption
+  ctx.fillStyle = '#1a0f08';
+  ctx.font = "italic 20px Georgia, serif";
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(caption, w / 2, h - 30);
+  // Tape corners
+  ctx.fillStyle = 'rgba(210,180,110,0.55)';
+  ctx.fillRect(-10, -6, 34, 18);
+  ctx.fillRect(w - 24, -6, 34, 18);
+  ctx.restore();
+}
+
+function drawPullQuote(ctx, x, y, w, text) {
+  const lines = text.split('\n');
+  const fontSize = 40;
+  const lineH = 52;
+  const blockH = lines.length * lineH;
+  ctx.save();
+  // Vertical inked rule on the left
+  ctx.fillStyle = 'rgba(122,26,46,0.6)';
+  ctx.fillRect(x + 30, y, 3, blockH);
+  // Big italic serif quote
+  ctx.fillStyle = '#7a1a2e';
+  ctx.font = `italic ${fontSize}px Georgia, 'Times New Roman', serif`;
+  ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+  lines.forEach((line, i) => ctx.fillText(line, x + 54, y + i * lineH));
+  ctx.restore();
+  return y + blockH + 14;
+}
+
+function drawStamp(ctx, x, y, w, h, text) {
+  ctx.save();
+  ctx.translate(x + w / 2, y + h / 2);
+  ctx.rotate(-0.09);
+  // Double border
+  ctx.strokeStyle = '#7a1a2e';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(-w / 2, -h / 2, w, h);
+  ctx.lineWidth = 1;
+  ctx.strokeRect(-w / 2 + 6, -h / 2 + 6, w - 12, h - 12);
+  ctx.fillStyle = '#7a1a2e';
+  ctx.font = "700 24px 'JetBrains Mono', monospace";
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(text, 0, 0);
+  ctx.restore();
+}
+
+function drawSignature(ctx, x, y, text) {
+  ctx.save();
+  ctx.fillStyle = '#2a1008';
+  ctx.font = "italic 700 68px Georgia, 'Brush Script MT', cursive";
+  ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+  ctx.fillText(text, x, y);
+  // Flourish underline
+  ctx.strokeStyle = '#2a1008';
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  const tW = ctx.measureText(text).width;
+  ctx.moveTo(x - 4, y + 70);
+  ctx.quadraticCurveTo(x + tW * 0.5, y + 95, x + tW + 20, y + 72);
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawInkBlot(ctx, x, y) {
+  ctx.save();
+  ctx.fillStyle = 'rgba(40,20,10,0.32)';
+  ctx.beginPath();
+  for (let i = 0; i < 7; i++) {
+    const ang = (i / 7) * Math.PI * 2;
+    const r = 22 + Math.sin(i * 2.3) * 10;
+    const px = x + Math.cos(ang) * r;
+    const py = y + Math.sin(ang) * r;
+    if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+  }
+  ctx.closePath(); ctx.fill();
+  // Inner dark droplet
+  ctx.fillStyle = 'rgba(20,10,5,0.5)';
+  ctx.beginPath(); ctx.arc(x + 4, y - 3, 8, 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
+}
+
+function renderJournalSpread(journal, index) {
+  const { ctx, canvas } = journal.userData;
+  const W = canvas.width, H = canvas.height;
+  const spread = JOURNAL_SPREADS[index];
+  if (!spread) return;
+
+  // ----- paper -----
+  const bg = ctx.createRadialGradient(W / 2, H * 0.48, W * 0.2, W / 2, H * 0.5, W * 0.78);
+  bg.addColorStop(0, '#fbf4e0');
+  bg.addColorStop(0.75, '#e8d9b2');
+  bg.addColorStop(1, '#c8b078');
+  ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+  for (let i = 0; i < 3200; i++) {
+    ctx.fillStyle = `rgba(110,80,40,${Math.random() * 0.055})`;
+    ctx.fillRect(Math.random() * W, Math.random() * H, 1, 1);
+  }
+  const gutter = ctx.createLinearGradient(W / 2 - 110, 0, W / 2 + 110, 0);
+  gutter.addColorStop(0, 'rgba(0,0,0,0)');
+  gutter.addColorStop(0.5, 'rgba(40,20,8,0.5)');
+  gutter.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = gutter; ctx.fillRect(W / 2 - 110, 0, 220, H);
+
+  // Layout constants for each page
+  const PAGE_OUTER = 120;   // canvas-edge margin
+  const PAGE_INNER = 160;   // distance from canvas center (gutter buffer)
+  const BODY_Y = 340;       // body top — same on both pages so they align
+
+  const leftColX  = PAGE_OUTER;
+  const leftColW  = W / 2 - PAGE_OUTER - PAGE_INNER;
+  const rightColX = W / 2 + PAGE_INNER;
+  const rightColW = W / 2 - PAGE_OUTER - PAGE_INNER;
+
+  // ===== LEFT PAGE =====
+  // Chapter marker
+  ctx.fillStyle = '#7a1a2e';
+  ctx.font = "700 18px 'JetBrains Mono', ui-monospace, monospace";
+  ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  ctx.fillText(spread.chapter, leftColX + leftColW / 2, 110);
+  // Title
+  ctx.fillStyle = '#2a1a08';
+  ctx.font = "italic 700 96px Georgia, 'Times New Roman', serif";
+  ctx.fillText(spread.title, leftColX + leftColW / 2, 138);
+  // Subtitle
+  if (spread.subtitle) {
+    ctx.fillStyle = '#7a1a2e';
+    ctx.font = "italic 28px Georgia, serif";
+    ctx.fillText(spread.subtitle, leftColX + leftColW / 2, 252);
+  }
+  // Divider
+  ctx.strokeStyle = 'rgba(122,26,46,0.5)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(leftColX + leftColW / 2 - 110, 300);
+  ctx.lineTo(leftColX + leftColW / 2 + 110, 300);
+  ctx.stroke();
+
+  // Polaroid — in the top-right of the left page, outside the body column
+  let leftBodyW = leftColW;
+  if (spread.polaroid) {
+    const polW = 210, polH = 240;
+    const polX = leftColX + leftColW - polW;
+    drawPolaroid(ctx, polX, BODY_Y, polW, polH, spread.polaroid.caption);
+    // Body wraps narrower to avoid the polaroid's horizontal span
+    leftBodyW = leftColW - polW - 30; // 30px gap
+  }
+  // Ink blot (decorative)
+  if (spread.inkBlot) drawInkBlot(ctx, leftColX + leftColW - 60, 360);
+
+  // LEFT body
+  let leftEndY = drawBody(ctx, leftColX, BODY_Y, leftBodyW, spread.leftBody, {
+    dropCap: spread.dropCap,
+    tabular: spread.tabular,
+  });
+
+  // ===== RIGHT PAGE =====
+  let rightEndY = drawBody(ctx, rightColX, BODY_Y, rightColW, spread.rightBody, {
+    tabular: spread.tabular,
+  });
+
+  // Pull quote flows BELOW the right body
+  if (spread.pullQuote) {
+    rightEndY = drawPullQuote(ctx, rightColX, rightEndY + 30, rightColW, spread.pullQuote);
+  }
+  // Stamp — right page, lower area
+  if (spread.stamp) {
+    drawStamp(ctx, rightColX + rightColW - 360, H - 260, 340, 90, spread.stamp);
+  }
+  // Signature — right page, lower area, offset if stamp also present
+  if (spread.signature) {
+    drawSignature(ctx, rightColX + rightColW - 300, H - 260, spread.signature);
+  }
+  // Marginalia (bottom-right italic note)
+  if (spread.margin) {
+    ctx.fillStyle = '#5a2a14';
+    ctx.font = "italic 28px Georgia, serif";
+    ctx.textAlign = 'right'; ctx.textBaseline = 'bottom';
+    ctx.fillText(spread.margin, rightColX + rightColW, H - 130);
+  }
+
+  // Page numbers
+  ctx.fillStyle = 'rgba(50,30,10,0.5)';
+  ctx.font = "italic 22px Georgia, serif";
+  ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+  ctx.fillText('— ' + (index * 2 + 1) + ' —', leftColX  + leftColW / 2,  H - 80);
+  ctx.fillText('— ' + (index * 2 + 2) + ' —', rightColX + rightColW / 2, H - 80);
+
+  // Nav glyphs
+  ctx.fillStyle = 'rgba(60,30,10,0.6)';
+  ctx.font = "italic 56px Georgia, serif";
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  if (index > 0) ctx.fillText('◀', 60, H / 2);
+  if (index < JOURNAL_SPREADS.length - 1) ctx.fillText('▶', W - 60, H / 2);
+
+  journal.userData.spread = index;
+  journal.userData.tex.needsUpdate = true;
+}
+
+function handleJournalClick(journal, u, v) {
+  const spread = journal.userData.spread || 0;
+  if (u < 0.5 && spread > 0) {
+    SFX.click();
+    renderJournalSpread(journal, spread - 1);
+  } else if (u >= 0.5 && spread < JOURNAL_SPREADS.length - 1) {
+    SFX.click();
+    renderJournalSpread(journal, spread + 1);
+  }
+}
+
+function buildAboutStation() {
+  console.log('[about] build start');
+  const [cx, cy, cz] = STATIONS.about.center;
+  const deskTopH = 0.76, topT = 0.045;
+
+  // Warm reading-lamp spotlight
+  const spot = new THREE.SpotLight(0xffd9a0, 0, 10, Math.PI / 3.2, 0.6, 1.3);
+  spot.position.set(cx + 0.4, 3.4, cz + 0.5);
+  spot.target.position.set(cx, deskTopH, cz);
+  spot.castShadow = true;
+  spot.shadow.mapSize.set(1024, 1024);
+  scene.add(spot); scene.add(spot.target);
+  stationLights.about = spot;
+
+  // Always-on fill so the area is faintly visible even before fade-in
+  const fill = new THREE.PointLight(0xffd9a0, 0.5, 8, 1.5);
+  fill.position.set(cx, 2.0, cz + 0.5);
+  scene.add(fill);
+
+  // Shadow ground
+  const ground = new THREE.Mesh(
+    new THREE.PlaneGeometry(10, 10),
+    new THREE.ShadowMaterial({ opacity: 0.55 })
+  );
+  ground.rotation.x = -Math.PI / 2;
+  ground.position.set(cx, 0, cz);
+  ground.receiveShadow = true;
+  scene.add(ground);
+
+  // Writing desk
+  const deskW = 1.6, deskD = 0.9;
+  const desk = new THREE.Mesh(
+    new THREE.BoxGeometry(deskW, topT, deskD),
+    new THREE.MeshStandardMaterial({ color: 0x3a2410, roughness: 0.65 })
+  );
+  desk.position.set(cx, deskTopH, cz);
+  desk.castShadow = true; desk.receiveShadow = true;
+  scene.add(desk);
+  // Legs
+  [[-0.74, -0.4], [0.74, -0.4], [-0.74, 0.4], [0.74, 0.4]].forEach(([dx, dz]) => {
+    const leg = new THREE.Mesh(
+      new THREE.BoxGeometry(0.065, deskTopH - topT / 2, 0.065),
+      new THREE.MeshStandardMaterial({ color: 0x1a1008, roughness: 0.72 })
+    );
+    leg.position.set(cx + dx, (deskTopH - topT / 2) / 2, cz + dz);
+    leg.castShadow = true; leg.receiveShadow = true;
+    scene.add(leg);
+  });
+  console.log('[about] desk ok');
+
+  // Journal — cover edges + an open pages plane
+  const coverMat = new THREE.MeshStandardMaterial({ color: 0x4a2414, roughness: 0.85 });
+  const leftCover = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.014, 0.42), coverMat);
+  leftCover.position.set(cx - 0.165, deskTopH + topT / 2 + 0.007, cz);
+  leftCover.castShadow = true;
+  scene.add(leftCover);
+  const rightCover = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.014, 0.42), coverMat);
+  rightCover.position.set(cx + 0.165, deskTopH + topT / 2 + 0.007, cz);
+  rightCover.castShadow = true;
+  scene.add(rightCover);
+  // Spine ridge between covers
+  const spine = new THREE.Mesh(
+    new THREE.BoxGeometry(0.02, 0.024, 0.42),
+    new THREE.MeshStandardMaterial({ color: 0x2a1408, roughness: 0.85 })
+  );
+  spine.position.set(cx, deskTopH + topT / 2 + 0.012, cz);
+  scene.add(spine);
+
+  // Pages plane — interactive
+  const journalCanvas = document.createElement('canvas');
+  journalCanvas.width = 2048; journalCanvas.height = 1280;
+  const journalTex = new THREE.CanvasTexture(journalCanvas);
+  journalTex.colorSpace = THREE.SRGBColorSpace;
+  const pages = new THREE.Mesh(
+    new THREE.PlaneGeometry(0.60, 0.38),
+    new THREE.MeshStandardMaterial({
+      map: journalTex, roughness: 0.9,
+      emissive: 0x222018, emissiveMap: journalTex, emissiveIntensity: 0.14,
+    })
+  );
+  pages.rotation.x = -Math.PI / 2; // lay flat
+  pages.position.set(cx, deskTopH + topT / 2 + 0.016, cz);
+  pages.userData.isInteractive = true;
+  pages.userData.isJournal = true;
+  pages.userData.name = 'about-journal';
+  pages.userData.hoverLabel = '⊙ READ JOURNAL';
+  pages.userData.canvas = journalCanvas;
+  pages.userData.ctx = journalCanvas.getContext('2d');
+  pages.userData.tex = journalTex;
+  pages.userData.spread = 0;
+  scene.add(pages);
+  aboutJournal = pages;
+  renderJournalSpread(pages, 0);
+  console.log('[about] journal ok');
+
+  // Brass desk lamp (decorative only — real light is the spotlight above)
+  const lampBase = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.07, 0.09, 0.025, 16),
+    new THREE.MeshStandardMaterial({ color: 0x2a1810, roughness: 0.7 })
+  );
+  lampBase.position.set(cx - 0.65, deskTopH + topT / 2 + 0.013, cz - 0.28);
+  scene.add(lampBase);
+  const lampStem = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.014, 0.014, 0.35, 10),
+    new THREE.MeshStandardMaterial({ color: 0xd4a840, roughness: 0.35, metalness: 0.85 })
+  );
+  lampStem.position.set(cx - 0.65, deskTopH + topT / 2 + 0.2, cz - 0.28);
+  scene.add(lampStem);
+  const lampShade = new THREE.Mesh(
+    new THREE.ConeGeometry(0.10, 0.14, 20, 1, true),
+    new THREE.MeshStandardMaterial({ color: 0xc4a055, roughness: 0.35, metalness: 0.85, side: THREE.DoubleSide })
+  );
+  lampShade.position.set(cx - 0.55, deskTopH + topT / 2 + 0.42, cz - 0.24);
+  lampShade.rotation.z = 0.45;
+  scene.add(lampShade);
+  const lampBulb = new THREE.Mesh(
+    new THREE.SphereGeometry(0.028, 12, 10),
+    new THREE.MeshBasicMaterial({ color: 0xffe8a0 })
+  );
+  lampBulb.position.set(cx - 0.55, deskTopH + topT / 2 + 0.40, cz - 0.24);
+  scene.add(lampBulb);
+
+  // Inkwell + quill
+  const ink = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.038, 0.045, 0.058, 16),
+    new THREE.MeshStandardMaterial({ color: 0x0a0a0a, roughness: 0.25, metalness: 0.15 })
+  );
+  ink.position.set(cx + 0.58, deskTopH + topT / 2 + 0.029, cz - 0.24);
+  ink.castShadow = true;
+  scene.add(ink);
+  const inkTop = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.036, 0.036, 0.002, 16),
+    new THREE.MeshStandardMaterial({ color: 0x101018, roughness: 0.1, metalness: 0.4 })
+  );
+  inkTop.position.set(cx + 0.58, deskTopH + topT / 2 + 0.059, cz - 0.24);
+  scene.add(inkTop);
+  const quill = new THREE.Mesh(
+    new THREE.ConeGeometry(0.013, 0.28, 8, 1, false),
+    new THREE.MeshStandardMaterial({ color: 0xe8dcbc, roughness: 0.7 })
+  );
+  quill.rotation.set(-Math.PI / 5, 0, Math.PI / 7);
+  quill.position.set(cx + 0.5, deskTopH + topT / 2 + 0.14, cz - 0.15);
+  quill.castShadow = true;
+  scene.add(quill);
+
+  // Station heading
+  const heading = new THREE.Mesh(
+    new THREE.PlaneGeometry(2.4, 0.6),
+    new THREE.MeshBasicMaterial({ map: makeStationHeadingTex('the dealer', 'BOOK I · T. OU'), transparent: true, opacity: 0.9 })
+  );
+  heading.position.set(cx, 2.0, cz - 0.5);
   scene.add(heading);
   console.log('[about] build complete');
 }
@@ -1585,7 +2362,7 @@ function renderLoop() {
   if (mode === MODES.INTRO) updateIntro(t);
   else if (mode === MODES.WALKING) updateWalking(t);
   else if (mode === MODES.SEATED) { updateSeatedLook(); updateCardFlips(); }
-  else if (mode === MODES.STATION) updateStationView();
+  else if (mode === MODES.STATION) { updateStationView(); updateProjectBoxes(); }
   // TABLE mode: 2D UI, camera frozen
 
   updateAmbient(t);
@@ -1703,8 +2480,10 @@ function interpolatePath(path, t) {
   camera.lookAt(lerp(a.look[0], b.look[0], k), lerp(a.look[1], b.look[1], k), lerp(a.look[2], b.look[2], k));
 }
 
-/* ---------- Walking bounds (void is infinite — clamp softer) ---------- */
-const WALK_MIN = -10, WALK_MAX = 10; // soft limits so you can't walk into true nothing
+/* ---------- Walking bounds (wide enough to reach every station) ----------
+   Stations live at x=±12 (experience, projects) and z=-10 (about journal).
+   Room on each side so you can stand comfortably at each diorama. */
+const WALK_MIN = -18, WALK_MAX = 18;
 
 /* ---------- Walking mode ---------- */
 const walkSpeed = 3.2;
@@ -1840,15 +2619,60 @@ function updateHovered() {
       if (hoveredObj.userData.cardRef) setObjectEmissive(hoveredObj.userData.cardRef, 0x000000);
     }
     hoveredObj = obj;
+
     if (hoveredObj) {
       setObjectEmissive(hoveredObj, 0xffbf5c);
       if (hoveredObj.userData.cardRef) setObjectEmissive(hoveredObj.userData.cardRef, 0xffbf5c);
       canvas.style.cursor = 'pointer';
       if (tooltip) { tooltip.textContent = hoveredObj.userData.hoverLabel || ''; tooltip.classList.add('show'); }
+      // If the cursor re-entered the journal while a pending-exit is queued, cancel it
+      if (hoveredObj === aboutJournal && journalExitTimer) {
+        clearTimeout(journalExitTimer);
+        journalExitTimer = null;
+      }
     } else {
       canvas.style.cursor = '';
       if (tooltip) tooltip.classList.remove('show');
     }
+
+    // Hover-OFF the journal while at close-up → queue an exit back to the desk view.
+    // A short debounce prevents cursor twitches over the margin from bouncing the camera.
+    if (
+      mode === MODES.STATION &&
+      currentStation === 'about' &&
+      stationCloseup &&
+      !stationTweening &&
+      hoveredObj !== aboutJournal
+    ) {
+      if (!journalExitTimer) {
+        journalExitTimer = setTimeout(() => {
+          journalExitTimer = null;
+          if (stationCloseup && hoveredObj !== aboutJournal && !stationTweening) {
+            exitCloseup();
+          }
+        }, 350);
+      }
+    }
+  }
+
+  // Arm the hover-to-zoom whenever the cursor is OFF the journal at rest (not during a tween).
+  // Gating on !stationTweening means intermediate camera positions during the arrival/exit
+  // tween can't falsely arm the trigger.
+  if (!stationTweening && hoveredObj !== aboutJournal) journalEnterArmed = true;
+
+  // Hover-to-zoom: fires when armed, cursor lands on the journal, at wide desk view.
+  // journalEnterArmed was reset on arrival/exit, so the cursor has to INTENTIONALLY leave
+  // the journal and come back for the zoom to trigger again.
+  if (
+    journalEnterArmed &&
+    hoveredObj === aboutJournal &&
+    mode === MODES.STATION &&
+    currentStation === 'about' &&
+    !stationCloseup &&
+    !stationTweening
+  ) {
+    journalEnterArmed = false; // consume — must leave journal again to re-arm
+    enterCloseup();
   }
   // Position tooltip near cursor
   if (tooltip && hoveredObj && mode !== MODES.WALKING) {
@@ -1884,6 +2708,19 @@ function onPointerClick() {
   if (hoveredObj === chairObj) {
     if (mode === MODES.WALKING) pointerControls.unlock();
     takeSeat();
+    return;
+  }
+  // Journal (About): at bird's-eye view, click → dolly down to reading pose.
+  // At reading pose, click left/right half of pages to turn spreads.
+  if (hoveredObj.userData.isJournal) {
+    if (!stationCloseup) {
+      SFX.click();
+      enterCloseup();
+    } else {
+      raycaster.setFromCamera(pointer, camera);
+      const hits = raycaster.intersectObject(hoveredObj, false);
+      if (hits[0]?.uv) handleJournalClick(hoveredObj, hits[0].uv.x, hits[0].uv.y);
+    }
     return;
   }
   // Monitor or screen: if not at close-up yet, dolly to the front of the monitor.
@@ -2051,7 +2888,7 @@ function fadeStationLight(route, to, duration=900) {
 }
 
 function enterStation(name) {
-  console.log('[enterStation]', name, 'aboutScreen?', !!aboutScreen, 'tweening?', stationTweening);
+  console.log('[enterStation]', name, 'computerScreen?', !!computerScreen, 'journal?', !!aboutJournal, 'tweening?', stationTweening);
   if (stationTweening) return;
   const st = STATIONS[name];
   if (!st) { console.warn('[enterStation] no station config for', name); return; }
@@ -2059,29 +2896,35 @@ function enterStation(name) {
   stationTweening = true;
   mode = MODES.STATION;
   currentStation = name;
+  journalEnterArmed = false; // must leave the journal first before hover-zoom can re-fire
   hideSeatedHud(); hideCloseupHud(); hideStationHud();
   stationYaw = 0; stationPitch = 0;
-  const lightKey = stationLights[name] ? name : 'about';
-  fadeStationLight(lightKey, 4.2, 1200);
+  if (stationLights[name]) fadeStationLight(name, 4.2, 1200);
 
-  // Render the initial file on the screen if the card specifies one
-  if (st.initialPage && aboutScreen) {
-    if (st.initialPage === 'desktop') renderScreenDesktop(aboutScreen);
-    else renderScreenWindow(aboutScreen, st.initialPage);
-    aboutScreen.userData.hoverLabel = '▸ CLICK A FILE';
+  // Experience station: CRT content gets rendered on arrival
+  if (st.initialPage && computerScreen) {
+    if (st.initialPage === 'desktop') renderScreenDesktop(computerScreen);
+    else renderScreenWindow(computerScreen, st.initialPage);
+    computerScreen.userData.hoverLabel = '▸ CLICK A FILE';
+  }
+  // About station: open the journal to its first spread
+  if (name === 'about' && aboutJournal) {
+    renderJournalSpread(aboutJournal, 0);
   }
 
-  // Go straight to the interactive close-up pose. No intermediate station view.
-  const toPos  = st.closeupPos  || st.cameraPos;
-  const toLook = st.closeupLook || st.cameraLook;
-  stationCloseup = !!st.closeupPos;
+  // Experience has initialPage → jump directly to the close-up screen.
+  // About (and future stations) land at the wide cameraPos; user clicks to zoom.
+  const goCloseup = !!st.initialPage && !!st.closeupPos;
+  const toPos  = goCloseup ? st.closeupPos  : st.cameraPos;
+  const toLook = goCloseup ? st.closeupLook : st.cameraLook;
+  stationCloseup = goCloseup;
   tweenCameraTo(toPos, toLook, 1800, () => {
     stationTweening = false;
     showCloseupHud();
   });
 }
 
-/* ---------- Second-level zoom: dolly up to the monitor for readable interaction ---------- */
+/* ---------- Second-level zoom: dolly up to a station's close-up pose ---------- */
 function enterCloseup() {
   console.log('[enterCloseup] tweening?', stationTweening, 'closeup?', stationCloseup, 'currentStation:', currentStation);
   if (stationTweening || stationCloseup || !currentStation) return;
@@ -2091,7 +2934,9 @@ function enterCloseup() {
   stationTweening = true;
   stationCloseup = true;
   hideStationHud();
-  if (aboutScreen) aboutScreen.userData.hoverLabel = '▸ CLICK A FILE';
+  // Per-station hover-label swap — tooltips read differently at the close-up than at the overview
+  if (currentStation === 'experience' && computerScreen) computerScreen.userData.hoverLabel = '▸ CLICK A FILE';
+  if (currentStation === 'about'      && aboutJournal)   aboutJournal.userData.hoverLabel   = '◀  TURN PAGE  ▶';
   tweenCameraTo(st.closeupPos, st.closeupLook, 1300, () => {
     stationTweening = false;
     showCloseupHud();
@@ -2102,10 +2947,13 @@ function exitCloseup() {
   if (stationTweening || !currentStation) return;
   const st = STATIONS[currentStation];
   if (!st) return;
+  if (journalExitTimer) { clearTimeout(journalExitTimer); journalExitTimer = null; }
   stationTweening = true;
   stationCloseup = false;
+  journalEnterArmed = false; // post-exit: wait for cursor to actively leave the book before re-entering
   hideCloseupHud();
-  if (aboutScreen) aboutScreen.userData.hoverLabel = '⌘ SIT AT COMPUTER';
+  if (currentStation === 'experience' && computerScreen) computerScreen.userData.hoverLabel = '⌘ SIT AT COMPUTER';
+  if (currentStation === 'about'      && aboutJournal)   aboutJournal.userData.hoverLabel   = '⊙ READ JOURNAL';
   tweenCameraTo(st.cameraPos, st.cameraLook, 1100, () => {
     stationTweening = false;
     showStationHud(currentStation);
@@ -2114,26 +2962,34 @@ function exitCloseup() {
 
 function showCloseupHud() {
   let hud = document.getElementById('closeup-hud');
-  if (!hud) {
-    hud = document.createElement('div');
-    hud.id = 'closeup-hud';
-    hud.className = 'world-hud seated';
+  if (hud) hud.remove(); // rebuild each time so per-station buttons stay current
+  hud = document.createElement('div');
+  hud.id = 'closeup-hud';
+  hud.className = 'world-hud seated';
+  // Journal close-up only offers "back to desk" — user can get back to table from the desk view.
+  // The computer close-up is the whole station (no distinct desk view), so it keeps back-to-table.
+  if (currentStation === 'about') {
+    hud.innerHTML = `<button class="world-btn" data-action="back-to-desk">← BACK TO DESK</button>`;
+  } else {
     hud.innerHTML = `<button class="world-btn" data-action="back-to-table">↩ BACK TO TABLE</button>`;
-    document.body.appendChild(hud);
-    hud.addEventListener('click', e => {
-      if (e.target.closest('[data-action="back-to-table"]')) exitStation();
-    });
   }
+  document.body.appendChild(hud);
+  hud.addEventListener('click', e => {
+    if (e.target.closest('[data-action="back-to-desk"]'))  exitCloseup();
+    if (e.target.closest('[data-action="back-to-table"]')) exitStation();
+  });
   hud.style.display = 'flex';
 }
 function hideCloseupHud() { const h = document.getElementById('closeup-hud'); if (h) h.style.display = 'none'; }
 
 function exitStation() {
   if (stationTweening) return;
+  if (journalExitTimer) { clearTimeout(journalExitTimer); journalExitTimer = null; }
   stationTweening = true;
   stationCloseup = false;
   hideStationHud(); hideCloseupHud();
-  if (aboutScreen) aboutScreen.userData.hoverLabel = '⌘ SIT AT COMPUTER';
+  if (computerScreen) computerScreen.userData.hoverLabel = '⌘ SIT AT COMPUTER';
+  if (aboutJournal)   aboutJournal.userData.hoverLabel   = '⊙ READ JOURNAL';
   const leaving = currentStation;
   if (leaving) fadeStationLight(leaving, 0, 900);
   tweenCameraTo(SEAT_POS.pos, SEAT_POS.look, 1600, () => {
@@ -2143,13 +2999,42 @@ function exitStation() {
   });
 }
 
+/* ---------- Project boxes: hover picks the hovered box up off the stack ---------- */
+const PROJECT_BOX_LIFT_Y   = 0.35;  // how high the hovered box rises
+const PROJECT_BOX_PULL_Z   = 0.12;  // small forward nudge — reads as "picking up"
+const PROJECT_BOX_TILT_X   = -0.28; // tilts the box so the cover faces the camera more
+const PROJECT_BOX_LERP     = 0.16;
+
+function updateProjectBoxes() {
+  if (currentStation !== 'projects') return;
+  projectBoxes.forEach(box => {
+    const rest = box.userData.restPos;
+    const restRotY = box.userData.restRotY;
+    const isHovered = (hoveredObj === box);
+    const targetY  = rest.y + (isHovered ? PROJECT_BOX_LIFT_Y : 0);
+    const targetZ  = rest.z + (isHovered ? PROJECT_BOX_PULL_Z : 0);
+    const targetRx = isHovered ? PROJECT_BOX_TILT_X : 0;
+    const targetRy = isHovered ? 0 : restRotY; // square up to camera while picked up
+    box.position.y += (targetY - box.position.y) * PROJECT_BOX_LERP;
+    box.position.z += (targetZ - box.position.z) * PROJECT_BOX_LERP;
+    box.rotation.x += (targetRx - box.rotation.x) * PROJECT_BOX_LERP;
+    box.rotation.y += (targetRy - box.rotation.y) * PROJECT_BOX_LERP;
+  });
+}
+
 function updateStationView() {
   if (stationTweening || !currentStation) return;
   const st = STATIONS[currentStation];
+  // At close-up: lock camera to closeupPos.
   if (stationCloseup) {
-    // Close-up: camera locked to the screen, no parallax so the cursor stays stable over icons
     camera.position.set(...st.closeupPos);
     camera.lookAt(...st.closeupLook);
+    return;
+  }
+  // Not at close-up — use cameraPos. If the station opts out of parallax, just lock it.
+  if (st.noParallax) {
+    camera.position.set(...st.cameraPos);
+    camera.lookAt(...st.cameraLook);
     return;
   }
   stationYaw   += (pointer.x * 0.18 - stationYaw)   * 0.04;
