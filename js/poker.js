@@ -247,6 +247,8 @@
   document.addEventListener('keydown', e => {
     if (e.target.matches('input, textarea')) return;
     if (document.body.getAttribute('data-current-route') !== 'home') return;
+    // When the 3D world is active (intro / walking / seated in 3D), intro.js owns the keyboard.
+    if (document.body.classList.contains('intro-playing')) return;
     const n = parseInt(e.key, 10);
     if (n >= 1 && n <= 5) {
       const card = CARDS[n-1];
@@ -311,6 +313,10 @@
   buildHand();
   updateStatus();
   resetIdle();
+
+  /* ---------- Back-to-room wiring ---------- */
+  // 3D world (intro.js) listens for this custom event.
+  // The table-cam-btn in the DOM is created/destroyed by intro.js itself.
 
   /* ---------- Respond to SPA route changes ---------- */
   window.addEventListener('spa-route-changed', e => {
