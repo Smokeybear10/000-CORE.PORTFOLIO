@@ -63,10 +63,10 @@ const SEATED_LERP        = 0.035; // look smoothing (lower = slower / more cinem
 const STATIONS = {
   projects: {
     center:     [12, 1.5, -6],
-    // Shelf at y=1.05, stack up to ~1.6. Camera above + in front, angled down so
-    // the covers on top of each box are clearly visible as a receding set of tiers.
-    cameraPos:  [12, 2.15, -4.8],
-    cameraLook: [12, 1.30, -6.05],
+    // Library cubby unit left (x≈10.05–12.03) + TV right (x≈12.23–14.08).
+    // Library is 2.15m tall — pull camera back far enough to frame top-to-bottom.
+    cameraPos:  [12, 1.20, -0.6],
+    cameraLook: [12, 1.10, -6.0],
   },
   // ABOUT → journal on a writing desk, forward from the poker table
   about: {
@@ -99,7 +99,9 @@ let computerScreen = null; // CRT screen mesh, set in buildExperienceStation
 let aboutJournal  = null; // open-journal plane mesh, set in buildAboutStation
 let journalExitTimer  = null;  // debounce timer for hover-off-to-exit closeup
 let journalEnterArmed = false; // must be OFF the journal at rest before a fresh enter can fire
-let projectBoxes = [];         // Project-shelf boxes — hover animates them toward the camera
+let projectBoxes = [];         // Project-shelf boxes — hover highlights + drives the TV
+let projectsTV = null;         // Live-canvas mesh that displays the hovered project's GIF
+let projectsActiveImg = null;  // Current Image element being drawn on the TV each frame
 
 /* Cinematic: drop in from above, settle into a Heffernan-style iso/3-quarter park.
    Park position is up-and-off-to-the-right, looking down at the table. */
@@ -179,22 +181,44 @@ function dispose() {
 }
 
 /* ---------- Entry ----------
-   buildWorld calls into station builders that reference const values (WIN98,
-   JOURNAL_SPREADS, SCREEN_PAGES…) declared further down this file. `const` is
-   hoisted but lives in the temporal dead zone until its line is reached, so we
-   MUST let the whole module finish initializing before the first build call.
-   queueMicrotask is the simplest way: it fires after the current synchronous
-   task (= this module body) completes. */
-if (!overlay || !canvas || !hasWebGL) {
-  finishIntroOverlay();
-} else if (hasPlayed && !reduceMotion) {
-  finishIntroOverlay();
-  setTimeout(() => { buildWorld(true); }, 50);
-} else if (reduceMotion) {
-  finishIntroOverlay();
+   The whole intro auto-start is gated on a user choice from the mode-splash.
+   The splash has two buttons (2D and 3D); whichever is clicked dispatches to
+   startExperience() which runs the old auto-start logic (or just finishes
+   the overlay if the user picked 2D). queueMicrotask defers any actual build
+   calls until module-level consts have finished initializing. */
+function startExperience(mode) {
+  if (mode === '2d') {
+    // Skip the 3D world entirely — finish the overlay so the 2D SPA home is visible
+    queueMicrotask(finishIntroOverlay);
+    return;
+  }
+  // 3D mode (unchanged)
+  if (!overlay || !canvas || !hasWebGL) {
+    finishIntroOverlay();
+  } else if (hasPlayed && !reduceMotion) {
+    finishIntroOverlay();
+    setTimeout(() => { buildWorld(true); }, 50);
+  } else if (reduceMotion) {
+    finishIntroOverlay();
+  } else {
+    document.body.classList.add('intro-playing');
+    queueMicrotask(() => buildWorld(false));
+  }
+}
+
+const modeSplash = document.getElementById('mode-splash');
+if (modeSplash) {
+  modeSplash.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-mode]');
+    if (!btn) return;
+    const mode = btn.dataset.mode;
+    modeSplash.classList.add('fading');
+    setTimeout(() => modeSplash.remove(), 820);
+    startExperience(mode);
+  });
 } else {
-  document.body.classList.add('intro-playing');
-  queueMicrotask(() => buildWorld(false));
+  // No splash in the DOM — fall back to the default (3D).
+  startExperience('3d');
 }
 
 skipBtn?.addEventListener('click', () => {
@@ -829,90 +853,94 @@ function buildDeckAndCards() {
 /* ============================================================= */
 /*                      PROJECTS DIORAMA                          */
 /* ============================================================= */
-/* Shared box cover: gradient bg + publisher banner + title + image zone + tagline footer.
-   Draws into `canvas` (mutated in place) and marks `tex.needsUpdate = true` on the caller. */
+/* Editorial / movie-poster style cover: big image with CONTAIN fit (so no gif frame is
+   cropped), gradient fade at bottom, oversized italic title overlay, accent side stripe.
+   The whole cover is designed to read at a distance and show the whole gif.           */
 function drawProjectBoxCover(canvas, p, img) {
   const W = canvas.width, H = canvas.height;
   const g = canvas.getContext('2d');
 
-  // Diagonal palette gradient
-  const bg = g.createLinearGradient(0, 0, W, H);
-  bg.addColorStop(0, p.bg1); bg.addColorStop(1, p.bg2);
-  g.fillStyle = bg; g.fillRect(0, 0, W, H);
+  // Rich dark background — the image letterboxes to this color
+  g.fillStyle = p.bg2;
+  g.fillRect(0, 0, W, H);
+  // Subtle palette gradient on top so the dark area isn't flat
+  const grad = g.createLinearGradient(0, 0, W, H);
+  grad.addColorStop(0, p.bg1); grad.addColorStop(0.6, p.bg2); grad.addColorStop(1, p.bg1);
+  g.globalAlpha = 0.35; g.fillStyle = grad; g.fillRect(0, 0, W, H);
+  g.globalAlpha = 1;
 
-  // Paper-print noise
-  for (let i = 0; i < 2200; i++) {
-    g.fillStyle = `rgba(255,255,255,${Math.random() * 0.04})`;
+  // Paper noise
+  for (let i = 0; i < 1800; i++) {
+    g.fillStyle = `rgba(255,255,255,${Math.random() * 0.03})`;
     g.fillRect(Math.random() * W, Math.random() * H, 1, 1);
   }
 
-  // Top "publisher" banner
-  g.fillStyle = p.accent;
-  g.fillRect(0, 0, W, 46);
-  g.fillStyle = p.bg1;
-  g.font = "700 14px 'JetBrains Mono', monospace";
-  g.textAlign = 'left'; g.textBaseline = 'middle';
-  g.fillText('T.OU SOFTWARE', 18, 23);
-  g.textAlign = 'right';
-  g.fillText('v1.0', W - 18, 23);
-
-  // Title strip
-  g.fillStyle = p.accent;
-  g.font = "italic 900 72px Georgia, 'Times New Roman', serif";
-  g.textAlign = 'center'; g.textBaseline = 'middle';
-  g.fillText(p.title, W / 2, 110);
-
-  // Image / cover art zone — inset rectangle filled with the loaded image (cover-fit)
-  const ix = 36, iy = 180, iw = W - 72, ih = 300;
-  // Dark frame under the image
-  g.fillStyle = 'rgba(0,0,0,0.45)';
-  g.fillRect(ix, iy, iw, ih);
+  // IMAGE ZONE — near-fullbleed, contained (no crop), centered
+  const ix = 28, iy = 28, iw = W - 56, ih = H - 56;
   if (img) {
-    // Fit-cover: crop to maintain aspect ratio
     const imgAR = img.width / img.height;
     const frameAR = iw / ih;
-    let sx, sy, sw, sh;
+    let dw, dh, dx, dy;
     if (imgAR > frameAR) {
-      sh = img.height;
-      sw = sh * frameAR;
-      sx = (img.width - sw) / 2;
-      sy = 0;
+      // Wider than frame — fit width, letterbox vertically
+      dw = iw; dh = dw / imgAR;
+      dx = ix; dy = iy + (ih - dh) / 2;
     } else {
-      sw = img.width;
-      sh = sw / frameAR;
-      sx = 0;
-      sy = (img.height - sh) / 2;
+      dh = ih; dw = dh * imgAR;
+      dx = ix + (iw - dw) / 2; dy = iy;
     }
-    g.drawImage(img, sx, sy, sw, sh, ix, iy, iw, ih);
+    g.drawImage(img, dx, dy, dw, dh);
   } else {
-    // Fallback — "COMING SOON" treatment in the accent color
-    g.fillStyle = p.accent;
-    g.globalAlpha = 0.2;
-    g.fillRect(ix + 6, iy + 6, iw - 12, ih - 12);
+    // Placeholder — big "COMING" in accent color
+    g.fillStyle = p.accent; g.globalAlpha = 0.15;
+    g.fillRect(ix, iy, iw, ih);
     g.globalAlpha = 1;
     g.fillStyle = p.accent;
-    g.font = "700 18px 'JetBrains Mono', monospace";
+    g.font = "italic 900 72px Georgia, 'Times New Roman', serif";
     g.textAlign = 'center'; g.textBaseline = 'middle';
-    g.fillText('· COMING SOON ·', W / 2, iy + ih / 2);
+    g.fillText('SOON', W / 2, iy + ih / 2);
   }
-  // Hairline around image frame
-  g.strokeStyle = p.accent; g.lineWidth = 2;
-  g.strokeRect(ix, iy, iw, ih);
 
-  // Tagline bar
-  g.fillStyle = p.accent;
-  g.fillRect(36, 510, W - 72, 48);
-  g.fillStyle = p.bg1;
-  g.font = "italic 700 22px Georgia, serif";
-  g.textAlign = 'center'; g.textBaseline = 'middle';
-  g.fillText(p.tagline, W / 2, 534);
+  // Gradient darkening at the bottom so the overlaid title reads against any gif frame
+  const fade = g.createLinearGradient(0, H - 250, 0, H);
+  fade.addColorStop(0, 'rgba(0,0,0,0)');
+  fade.addColorStop(0.7, 'rgba(0,0,0,0.7)');
+  fade.addColorStop(1, 'rgba(0,0,0,0.92)');
+  g.fillStyle = fade; g.fillRect(0, H - 250, W, 250);
 
-  // Footer
+  // Accent color side stripe (runs full vertical height, left edge) — reads from across the room
   g.fillStyle = p.accent;
-  g.fillRect(0, H - 28, W, 28);
-  g.fillStyle = p.bg1;
+  g.fillRect(0, 0, 12, H);
+
+  // Top-left publisher micro-tag
+  g.fillStyle = p.accent;
+  g.fillRect(28, 28, 4, 42);
+  g.fillStyle = '#f5f0e1';
+  g.font = "700 11px 'JetBrains Mono', monospace";
+  g.textAlign = 'left'; g.textBaseline = 'top';
+  g.fillText('T.OU SOFTWARE', 40, 34);
+  g.fillStyle = p.accent;
   g.font = "700 10px 'JetBrains Mono', monospace";
-  g.fillText('MADE · NEW YORK · PHILADELPHIA', W / 2, H - 14);
+  g.fillText('v1.0', 40, 52);
+
+  // HUGE title — italic serif, bottom-left overlay. The single most-readable element.
+  g.fillStyle = p.accent;
+  g.font = "italic 900 92px Georgia, 'Times New Roman', serif";
+  g.textAlign = 'left'; g.textBaseline = 'bottom';
+  g.fillText(p.title, 28, H - 72);
+
+  // Tagline underneath title in monospace
+  g.fillStyle = '#f5f0e1';
+  g.font = "700 14px 'JetBrains Mono', monospace";
+  g.textBaseline = 'bottom';
+  g.fillText(p.tagline, 28, H - 38);
+
+  // Small accent rule right before the footer text
+  g.fillStyle = p.accent;
+  g.fillRect(28, H - 30, 18, 2);
+  g.fillStyle = 'rgba(245,240,225,0.55)';
+  g.font = "700 10px 'JetBrains Mono', monospace";
+  g.fillText('MADE · NEW YORK · PHILADELPHIA', 52, H - 22);
 }
 
 /* Build + return the canvas texture for a single project box.
@@ -959,38 +987,10 @@ function buildProjectsStation() {
   ground.receiveShadow = true;
   scene.add(ground);
 
-  /* -------- FLOATING WOODEN SHELF -------------------------------------- */
-  const SHELF_TOP_Y = 1.05; // top surface of the shelf
-  const SHELF_W = 1.2, SHELF_D = 0.58, SHELF_T = 0.06;
-  const shelfPlank = new THREE.Mesh(
-    new THREE.BoxGeometry(SHELF_W, SHELF_T, SHELF_D),
-    new THREE.MeshStandardMaterial({ color: 0x3a2210, roughness: 0.75, metalness: 0.05 })
-  );
-  shelfPlank.position.set(cx, SHELF_TOP_Y - SHELF_T/2, cz);
-  shelfPlank.castShadow = true; shelfPlank.receiveShadow = true;
-  scene.add(shelfPlank);
-  // Brass trim along the front edge
-  const shelfTrim = new THREE.Mesh(
-    new THREE.BoxGeometry(SHELF_W, 0.012, 0.012),
-    new THREE.MeshStandardMaterial({ color: 0xd4a840, metalness: 0.85, roughness: 0.3 })
-  );
-  shelfTrim.position.set(cx, SHELF_TOP_Y - SHELF_T + 0.006, cz + SHELF_D/2 - 0.006);
-  scene.add(shelfTrim);
-  // Two hanging brackets underneath so the shelf reads as "shelf" not "floor"
-  [-SHELF_W/2 + 0.2, SHELF_W/2 - 0.2].forEach(dx => {
-    const bracket = new THREE.Mesh(
-      new THREE.BoxGeometry(0.05, 0.22, SHELF_D - 0.08),
-      new THREE.MeshStandardMaterial({ color: 0x1a1008, roughness: 0.72 })
-    );
-    bracket.position.set(cx + dx, SHELF_TOP_Y - SHELF_T - 0.11, cz);
-    bracket.castShadow = true;
-    scene.add(bracket);
-  });
-
-  /* -------- STACKED SOFTWARE BOXES (lying flat, covers up) ---------------
-     Boxes are real 3D volumes — 34cm × 12cm thick × 44cm deep — stacked on
-     the shelf like a pile of books. Cover texture sits on the +y (top) face.
-     Hover lifts the box off the pile.
+  /* -------- PROJECT DATA -------------------------------------------------
+     Images load as <img> elements — the browser handles GIF animation
+     natively, so when we drawImage the img to the canvas each render frame,
+     we capture whichever frame the GIF is currently on → the TV plays live.
   ------------------------------------------------------------------------ */
   const projects = [
     { id: 'd4nce',   title: 'D4NCE',    tagline: 'WAVEFORM FIRST',   bg1: '#6a0e38', bg2: '#20081c', accent: '#ff7bc6', img: 'Images/ProjectPhotos/D4NCE.gif'   },
@@ -1000,52 +1000,253 @@ function buildProjectsStation() {
     { id: 'stratos', title: 'STRATOS',  tagline: 'AERO · DATA',      bg1: '#1a1e46', bg2: '#080a24', accent: '#b0b8ff', img: 'Images/ProjectPhotos/STRATOS.png' },
     { id: 'harboros',title: 'HARBOROS', tagline: 'BLUE-WATER CMD',   bg1: '#0a2040', bg2: '#061424', accent: '#7ad2ff', img: null },
   ];
+  // Preload images into Image elements so gifs can animate
+  projects.forEach(p => {
+    if (!p.img) return;
+    const im = new Image();
+    im.crossOrigin = 'anonymous';
+    im.src = p.img;
+    p.imgEl = im;
+  });
 
-  const BOX_W = 0.34, BOX_THICK = 0.09, BOX_D = 0.44;
-  const STACK_GAP = 0.004; // flush pile
+  /* -------- LIBRARY CUBBY UNIT (left side) ------------------------------
+     Smaller scale than the standalone version so it fits beside the TV.
+     3 rows × 4 columns = 12 slots; 6 filled, 6 empty.
+  ------------------------------------------------------------------------ */
+  const UNIT_CX = cx - 1.05; // library lives left of station center
+  const UNIT_W = 1.95, UNIT_H = 2.15, UNIT_D = 0.48;
+  const UNIT_Y_BOTTOM = 0;
+  const UNIT_Y_CENTER = UNIT_Y_BOTTOM + UNIT_H/2;
+  const PLANK_T = 0.035, WALL_T = 0.035, BACK_T = 0.018;
+  const woodMat  = new THREE.MeshStandardMaterial({ color: 0x3a2210, roughness: 0.75, metalness: 0.05 });
+  const woodDark = new THREE.MeshStandardMaterial({ color: 0x2a1810, roughness: 0.8 });
+
+  // 4 horizontal planks (bottom, 2 mid, top)
+  const plankYs = [UNIT_Y_BOTTOM, UNIT_Y_BOTTOM + UNIT_H/3, UNIT_Y_BOTTOM + 2*UNIT_H/3, UNIT_Y_BOTTOM + UNIT_H];
+  plankYs.forEach((y, idx) => {
+    const plank = new THREE.Mesh(new THREE.BoxGeometry(UNIT_W, PLANK_T, UNIT_D), woodMat);
+    plank.position.set(UNIT_CX, y, cz);
+    plank.castShadow = true; plank.receiveShadow = true;
+    scene.add(plank);
+    // Brass trim only on the two middle planks' front edges
+    if (idx > 0 && idx < plankYs.length - 1) {
+      const trim = new THREE.Mesh(
+        new THREE.BoxGeometry(UNIT_W, 0.008, 0.008),
+        new THREE.MeshStandardMaterial({ color: 0xd4a840, metalness: 0.85, roughness: 0.3 })
+      );
+      trim.position.set(UNIT_CX, y + PLANK_T/2 + 0.004, cz + UNIT_D/2 - 0.004);
+      scene.add(trim);
+    }
+  });
+  // Side walls
+  [-UNIT_W/2 + WALL_T/2, UNIT_W/2 - WALL_T/2].forEach(dx => {
+    const wall = new THREE.Mesh(new THREE.BoxGeometry(WALL_T, UNIT_H, UNIT_D), woodMat);
+    wall.position.set(UNIT_CX + dx, UNIT_Y_CENTER, cz);
+    wall.castShadow = true; wall.receiveShadow = true;
+    scene.add(wall);
+  });
+  // Dark back panel
+  const backPanel = new THREE.Mesh(new THREE.BoxGeometry(UNIT_W, UNIT_H, BACK_T), woodDark);
+  backPanel.position.set(UNIT_CX, UNIT_Y_CENTER, cz - UNIT_D/2 + BACK_T/2);
+  backPanel.receiveShadow = true;
+  scene.add(backPanel);
+
+  // Scattered slot layout — most cubbies stay empty
+  const SLOT_LAYOUT = [
+    { col: 1, row: 0 }, // D4NCE
+    { col: 3, row: 0 }, // STR1KE
+    { col: 2, row: 1 }, // R1VER
+    { col: 0, row: 2 }, // PR0XIM
+    { col: 3, row: 1 }, // STRATOS
+    { col: 1, row: 2 }, // HARBOROS
+  ];
+
+  const COLS = 4;
+  const INNER_W = UNIT_W - 2 * WALL_T;
+  const SLOT_W = INNER_W / COLS;
+  const BOX_W = 0.26, BOX_H = 0.38, BOX_D = 0.07;
 
   projectBoxes.length = 0;
   projects.forEach((p, i) => {
+    const { col, row } = SLOT_LAYOUT[i];
     const coverTex = makeProjectBoxTex(p);
-    const sideMat  = new THREE.MeshStandardMaterial({ color: p.bg2,  roughness: 0.6 });
-    const edgeMat  = new THREE.MeshStandardMaterial({ color: p.bg1,  roughness: 0.55 });
+    const sideMat = new THREE.MeshStandardMaterial({ color: p.bg2, roughness: 0.6 });
     const coverMat = new THREE.MeshStandardMaterial({
       map: coverTex, roughness: 0.5, metalness: 0.05,
       emissiveMap: coverTex, emissive: 0x222222, emissiveIntensity: 0.1,
     });
-    // BoxGeometry face order: [+x, -x, +y (TOP — cover art), -y, +z (front edge), -z (back)]
-    // Cover on top face; front/back edges get the accent palette; sides darker.
-    const mats = [sideMat, sideMat, coverMat, sideMat, edgeMat, edgeMat];
-    const box = new THREE.Mesh(new THREE.BoxGeometry(BOX_W, BOX_THICK, BOX_D), mats);
-    // Stacked flat along y. Bottom box rests on the shelf.
-    const y = SHELF_TOP_Y + BOX_THICK/2 + i * (BOX_THICK + STACK_GAP);
-    box.position.set(cx, y, cz);
-    // Deterministic jitter — boxes don't land perfectly stacked
-    const jitter = Math.sin(i * 3.7) * Math.cos(i * 1.9);
-    box.rotation.y = jitter * 0.04;
-    box.position.x += jitter * 0.008;
-    box.position.z += jitter * 0.01;
+    const mats = [sideMat, sideMat, sideMat, sideMat, coverMat, sideMat];
+    const box = new THREE.Mesh(new THREE.BoxGeometry(BOX_W, BOX_H, BOX_D), mats);
+
+    const slotX = UNIT_CX - UNIT_W/2 + WALL_T + SLOT_W/2 + col * SLOT_W;
+    const plankBottomY = plankYs[plankYs.length - 2 - row];
+    const y = plankBottomY + PLANK_T/2 + BOX_H/2 + 0.01;
+    box.position.set(slotX, y, cz - 0.03);
+
+    const jitter = Math.sin(i * 5.1) * Math.cos(i * 2.3);
+    box.rotation.y = jitter * 0.045;
     box.castShadow = true; box.receiveShadow = true;
     box.userData.isInteractive = true;
     box.userData.isProjectBox = true;
     box.userData.project = p;
     box.userData.hoverLabel = '⊙ ' + p.title;
-    // Rest pose snapshots for the hover-pickup animation
     box.userData.restPos = box.position.clone();
-    box.userData.restRotX = 0;
     box.userData.restRotY = box.rotation.y;
     projectBoxes.push(box);
     scene.add(box);
   });
 
-  /* -------- STATION HEADING (above the stack) -------- */
-  const stackTopY = SHELF_TOP_Y + projects.length * (BOX_THICK + STACK_GAP);
+  /* -------- LARGE CRT TV (right of the library) ------------------------- */
+  const TV_CX = cx + 1.15;
+  const TV_CY = 1.25;
+  const TV_W = 1.85, TV_H = 1.20, TV_D = 0.22;
+  // Bezel
+  const bezelMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.55, metalness: 0.2 });
+  const bezel = new THREE.Mesh(new THREE.BoxGeometry(TV_W, TV_H, TV_D), bezelMat);
+  bezel.position.set(TV_CX, TV_CY, cz - 0.06);
+  bezel.castShadow = true; bezel.receiveShadow = true;
+  scene.add(bezel);
+  // Screen inset (dark panel behind the glowing screen for depth)
+  const screenInset = new THREE.Mesh(
+    new THREE.PlaneGeometry(TV_W - 0.16, TV_H - 0.18),
+    new THREE.MeshStandardMaterial({ color: 0x050505, roughness: 0.9 })
+  );
+  screenInset.position.set(TV_CX, TV_CY, cz - 0.06 + TV_D/2 + 0.001);
+  scene.add(screenInset);
+  // The live screen — canvas that redraws each frame with whichever project is hovered
+  const tvCanvas = document.createElement('canvas');
+  tvCanvas.width = 1280; tvCanvas.height = 820;
+  const tvTex = new THREE.CanvasTexture(tvCanvas);
+  tvTex.colorSpace = THREE.SRGBColorSpace;
+  const screenMesh = new THREE.Mesh(
+    new THREE.PlaneGeometry(TV_W - 0.22, TV_H - 0.24),
+    new THREE.MeshStandardMaterial({
+      map: tvTex, roughness: 0.35,
+      emissive: 0xffffff, emissiveMap: tvTex, emissiveIntensity: 0.85,
+    })
+  );
+  screenMesh.position.set(TV_CX, TV_CY, cz - 0.06 + TV_D/2 + 0.004);
+  scene.add(screenMesh);
+  // Stand (post + foot)
+  const stand = new THREE.Mesh(
+    new THREE.BoxGeometry(0.08, 0.25, 0.08),
+    new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.55 })
+  );
+  stand.position.set(TV_CX, TV_CY - TV_H/2 - 0.12, cz - 0.06);
+  stand.castShadow = true;
+  scene.add(stand);
+  const foot = new THREE.Mesh(
+    new THREE.BoxGeometry(0.55, 0.03, 0.32),
+    new THREE.MeshStandardMaterial({ color: 0x0a0a0a, roughness: 0.7 })
+  );
+  foot.position.set(TV_CX, TV_CY - TV_H/2 - 0.27, cz - 0.06);
+  foot.castShadow = true;
+  scene.add(foot);
+  // Label strip on the bezel bottom
+  const labelCanvas = document.createElement('canvas');
+  labelCanvas.width = 600; labelCanvas.height = 52;
+  const lg = labelCanvas.getContext('2d');
+  lg.fillStyle = '#1a1a1a'; lg.fillRect(0, 0, 600, 52);
+  lg.fillStyle = '#daa520';
+  lg.font = "italic 700 28px Georgia, serif";
+  lg.textAlign = 'center'; lg.textBaseline = 'middle';
+  lg.fillText('T.OU CATHODE', 300, 26);
+  const labelTex = new THREE.CanvasTexture(labelCanvas);
+  labelTex.colorSpace = THREE.SRGBColorSpace;
+  const labelPlane = new THREE.Mesh(
+    new THREE.PlaneGeometry(0.6, 0.05),
+    new THREE.MeshBasicMaterial({ map: labelTex, transparent: true })
+  );
+  labelPlane.position.set(TV_CX, TV_CY - TV_H/2 + 0.035, cz - 0.06 + TV_D/2 + 0.002);
+  scene.add(labelPlane);
+
+  // Expose the TV for the render-loop updater
+  projectsTV = {
+    canvas: tvCanvas,
+    ctx: tvCanvas.getContext('2d'),
+    tex: tvTex,
+    lastDrawnState: null, // 'default' | project.id — avoids redundant default repaints
+  };
+  drawProjectsTVDefault(); // initial paint
+
+  /* -------- STATION HEADING (above the tallest element: the library) ------ */
   const heading = new THREE.Mesh(
-    new THREE.PlaneGeometry(2.4, 0.6),
+    new THREE.PlaneGeometry(2.6, 0.65),
     new THREE.MeshBasicMaterial({ map: makeStationHeadingTex('projects', 'T.OU SOFTWARE · HAND TWO'), transparent: true, opacity: 0.9 })
   );
-  heading.position.set(cx, stackTopY + 0.75, cz - 0.25);
+  heading.position.set(cx, UNIT_Y_BOTTOM + UNIT_H + 0.48, cz);
   scene.add(heading);
+}
+
+/* ---------- TV: default "no selection" screen ---------- */
+function drawProjectsTVDefault() {
+  if (!projectsTV) return;
+  const { ctx, canvas, tex } = projectsTV;
+  const W = canvas.width, H = canvas.height;
+  // Dark CRT black with subtle radial vignette
+  const bg = ctx.createRadialGradient(W/2, H/2, 50, W/2, H/2, W*0.7);
+  bg.addColorStop(0, '#0f0f10'); bg.addColorStop(1, '#020202');
+  ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+  // Scanlines for retro feel
+  ctx.fillStyle = 'rgba(255,255,255,0.025)';
+  for (let y = 0; y < H; y += 3) ctx.fillRect(0, y, W, 1);
+  // Title
+  ctx.fillStyle = '#daa520';
+  ctx.font = "italic 900 96px Georgia, 'Times New Roman', serif";
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('T.OU SOFTWARE', W/2, H/2 - 40);
+  // Prompt
+  ctx.fillStyle = 'rgba(245,240,225,0.6)';
+  ctx.font = "700 18px 'JetBrains Mono', monospace";
+  ctx.fillText('◂ HOVER A PROJECT TO VIEW', W/2, H/2 + 60);
+  // Blinking cursor bar (drawn once — not animated, but present)
+  ctx.fillStyle = '#daa520';
+  ctx.fillRect(W/2 - 6, H/2 + 110, 12, 22);
+  tex.needsUpdate = true;
+  projectsTV.lastDrawnState = 'default';
+}
+
+/* ---------- TV: paint the currently-hovered project's GIF frame ---------- */
+function drawProjectsTVImg(img, p) {
+  if (!projectsTV) return;
+  const { ctx, canvas, tex } = projectsTV;
+  const W = canvas.width, H = canvas.height;
+  // Black behind the image
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, W, H);
+  // Contain-fit the image (no crop)
+  const imgAR = img.width / img.height;
+  const frameAR = W / H;
+  let dw, dh, dx, dy;
+  if (imgAR > frameAR) { dw = W; dh = dw / imgAR; dx = 0; dy = (H - dh) / 2; }
+  else                 { dh = H; dw = dh * imgAR; dx = (W - dw) / 2; dy = 0; }
+  try { ctx.drawImage(img, dx, dy, dw, dh); } catch (e) { /* img not ready — skip */ }
+  // Scanline overlay
+  ctx.fillStyle = 'rgba(0,0,0,0.10)';
+  for (let y = 0; y < H; y += 3) ctx.fillRect(0, y, W, 1);
+  // Corner chrome: accent tab top-left, title + tagline bottom-left
+  ctx.fillStyle = p.accent;
+  ctx.fillRect(18, 18, 4, 34);
+  ctx.fillStyle = '#f5f0e1';
+  ctx.font = "700 13px 'JetBrains Mono', monospace";
+  ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+  ctx.fillText('NOW PLAYING', 30, 22);
+  ctx.fillStyle = p.accent;
+  ctx.font = "700 10px 'JetBrains Mono', monospace";
+  ctx.fillText('· LIVE ·', 30, 40);
+  // Bottom-left project caption
+  ctx.fillStyle = p.accent;
+  ctx.fillRect(18, H - 70, 4, 48);
+  ctx.fillStyle = p.accent;
+  ctx.font = "italic 900 48px Georgia, serif";
+  ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
+  ctx.fillText(p.title, 32, H - 40);
+  ctx.fillStyle = '#f5f0e1';
+  ctx.font = "700 14px 'JetBrains Mono', monospace";
+  ctx.fillText(p.tagline, 32, H - 18);
+
+  tex.needsUpdate = true;
+  projectsTV.lastDrawnState = p.id;
 }
 
 /* ============================================================= */
@@ -2999,27 +3200,38 @@ function exitStation() {
   });
 }
 
-/* ---------- Project boxes: hover picks the hovered box up off the stack ---------- */
-const PROJECT_BOX_LIFT_Y   = 0.35;  // how high the hovered box rises
-const PROJECT_BOX_PULL_Z   = 0.12;  // small forward nudge — reads as "picking up"
-const PROJECT_BOX_TILT_X   = -0.28; // tilts the box so the cover faces the camera more
-const PROJECT_BOX_LERP     = 0.16;
+/* ---------- Project boxes: hover highlight + drive the TV display ---------- */
+const PROJECT_BOX_LIFT_Y = 0.045; // tiny lift on hover
+const PROJECT_BOX_PULL_Z = 0.08;  // small forward pull
+const PROJECT_BOX_LERP   = 0.18;
 
 function updateProjectBoxes() {
   if (currentStation !== 'projects') return;
+  // Box hover animations — subtle (boxes are small — they're selectors, not the display)
   projectBoxes.forEach(box => {
     const rest = box.userData.restPos;
     const restRotY = box.userData.restRotY;
     const isHovered = (hoveredObj === box);
-    const targetY  = rest.y + (isHovered ? PROJECT_BOX_LIFT_Y : 0);
-    const targetZ  = rest.z + (isHovered ? PROJECT_BOX_PULL_Z : 0);
-    const targetRx = isHovered ? PROJECT_BOX_TILT_X : 0;
-    const targetRy = isHovered ? 0 : restRotY; // square up to camera while picked up
-    box.position.y += (targetY - box.position.y) * PROJECT_BOX_LERP;
-    box.position.z += (targetZ - box.position.z) * PROJECT_BOX_LERP;
-    box.rotation.x += (targetRx - box.rotation.x) * PROJECT_BOX_LERP;
-    box.rotation.y += (targetRy - box.rotation.y) * PROJECT_BOX_LERP;
+    const ty = rest.y + (isHovered ? PROJECT_BOX_LIFT_Y : 0);
+    const tz = rest.z + (isHovered ? PROJECT_BOX_PULL_Z : 0);
+    const try_ = isHovered ? 0 : restRotY;
+    box.position.y += (ty   - box.position.y) * PROJECT_BOX_LERP;
+    box.position.z += (tz   - box.position.z) * PROJECT_BOX_LERP;
+    box.rotation.y += (try_ - box.rotation.y) * PROJECT_BOX_LERP;
   });
+
+  // TV: paint whichever project the cursor is hovering. Capture the CURRENT gif frame
+  // every render tick → gifs animate on the TV screen live.
+  if (projectsTV) {
+    const hoveredBox = (hoveredObj && hoveredObj.userData && hoveredObj.userData.isProjectBox) ? hoveredObj : null;
+    const p = hoveredBox ? hoveredBox.userData.project : null;
+    if (p && p.imgEl && p.imgEl.complete && p.imgEl.naturalWidth > 0) {
+      drawProjectsTVImg(p.imgEl, p);
+    } else if (!p) {
+      // Avoid redundant default repaints — only redraw when transitioning
+      if (projectsTV.lastDrawnState !== 'default') drawProjectsTVDefault();
+    }
+  }
 }
 
 function updateStationView() {

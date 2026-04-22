@@ -32,15 +32,34 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="styles/index.css" />
   <link rel="stylesheet" href="styles/about.css" />
-  <link rel="stylesheet" href="styles/experience.css" />
+  <link rel="stylesheet" href="styles/experience.css?v=2-cardfix" />
   <link rel="stylesheet" href="styles/spa.css" />
-  <link rel="stylesheet" href="styles/projects-new.css" />
+  <link rel="stylesheet" href="styles/projects-new.css?v=2-cardpolish" />
   <link rel="stylesheet" href="styles/contact.css" />
   <link rel="stylesheet" href="styles/bg-effects.css" />
   <link rel="stylesheet" href="styles/poker.css" />
-  <link rel="stylesheet" href="styles/intro.css?v=25-heffidle" />
+  <link rel="stylesheet" href="styles/intro.css?v=27-viewportlock" />
 </head>
 <body data-current-route="home" class="intro-playing">
+
+  <!-- MODE PICKER SPLASH — first thing visible; user chooses 2D or 3D -->
+  <div id="mode-splash" class="mode-splash" role="dialog" aria-label="Choose experience">
+    <div class="mode-splash-brand">T. Ou</div>
+    <h1 class="mode-splash-title">Welcome.</h1>
+    <p class="mode-splash-sub">Pick your experience.</p>
+    <div class="mode-splash-choices">
+      <button class="mode-choice" data-mode="2d" type="button">
+        <div class="mode-choice-label"><em>2D</em> Site</div>
+        <div class="mode-choice-desc">Clean. Classic. The portfolio.</div>
+      </button>
+      <button class="mode-choice is-wip" data-mode="3d" type="button">
+        <span class="mode-choice-tag">WORK IN PROGRESS</span>
+        <div class="mode-choice-label"><em>3D</em> World</div>
+        <div class="mode-choice-desc">Poker hub, stations, dioramas.</div>
+      </button>
+    </div>
+    <div class="mode-splash-hint">Reload any time to switch.</div>
+  </div>
 
   <!-- INTRO CINEMATIC OVERLAY -->
   <div class="intro-overlay" id="intro-overlay">
@@ -410,11 +429,11 @@
               <div class="card">
                 <div class="card-header">
                   <h3>Software Engineer</h3>
-                  <div class="card-company">Visa</div>
-                  <div class="card-location">Mar 2026 - May 2026</div>
+                  <div class="card-company">Amazon</div>
+                  <div class="card-location">May 2026 - Sept 2026</div>
                 </div>
                 <div class="card-preview">
-                  <p>Building real-time adversarial models to detect and score fraudulent transactions across Visa's global payment network.</p>
+                  <p>Working on Amazon FSx — the managed file-storage service layered on NetApp ONTAP, Lustre, OpenZFS, and Windows File Server — building and scaling the control-plane services that provision, monitor, and heal petabyte-scale file systems for AWS customers.</p>
                 </div>
               </div>
 
@@ -506,44 +525,44 @@
         <div class="projects-wheel projects-only">
           <div class="wheel-container">
             <div class="project-card" data-project="fightvision">
-              <div class="project-image" style="background-image: url('Images/ProjectPhotos/STR1KE1.gif');"></div>
+              <div class="project-image" style="background-image: url('Images/ProjectPhotos/STR1KE.gif');"></div>
               <div class="project-header">
-                <h3>Computer Vision Strike Detection System for MMA</h3>
+                <h3>STR1KE — MMA Strike Detection</h3>
               </div>
             </div>
-            
+
             <div class="project-card" data-project="dj">
               <div class="project-image" style="background-image: url('Images/ProjectPhotos/D4NCE.gif');"></div>
               <div class="project-header">
-                <h3>AI-Powered DJ System</h3>
+                <h3>D4NCE — AI-Powered DJ System</h3>
               </div>
             </div>
-            
+
             <div class="project-card" data-project="fightiq">
-              <div class="project-image" style="background-image: url('Images/ProjectPhotos/STRATOS.png');"></div>
+              <div class="project-image" style="background-image: url('Images/ProjectPhotos/V3RSUS.gif');"></div>
               <div class="project-header">
-                <h3>Predictive Analysis of Fight Outcomes in MMA</h3>
+                <h3>V3RSUS — MMA Predictive Analytics</h3>
               </div>
             </div>
             
-            <div class="project-card" data-project="website">
-              <div class="project-image" style="background-image: url('Images/ProjectPhotos/THOMAS.gif');"></div>
+            <div class="project-card" data-project="harboros">
+              <div class="project-image" style="background-image: url('Images/ProjectPhotos/HARBOROS.gif');"></div>
               <div class="project-header">
-                <h3>Personal Portfolio Website</h3>
+                <h3>HarborOS — Maritime Defense Platform</h3>
               </div>
             </div>
             
             <div class="project-card" data-project="poker">
               <div class="project-image" style="background-image: url('Images/ProjectPhotos/R1VER1.gif');"></div>
               <div class="project-header">
-                <h3>Bayesian Poker Analysis Engine with Monte Carlo CFR</h3>
+                <h3>R1VER — Poker Intelligence (MCCFR Solver)</h3>
               </div>
             </div>
-            
+
             <div class="project-card" data-project="smartcv">
-              <div class="project-image" style="background-image: url('Images/ProjectPhotos/PR0XIM.png');"></div>
+              <div class="project-image" style="background-image: url('Images/ProjectPhotos/DR4FT.gif');"></div>
               <div class="project-header">
-                <h3>AI-Powered Resume Optimizer</h3>
+                <h3>DR4FT — AI Resume Optimizer</h3>
               </div>
             </div>
           </div>
@@ -652,7 +671,7 @@
   <script defer src="js/experience.js"></script>
   <script defer type="module" src="js/contact.js"></script>
   <script defer src="js/poker.js"></script>
-  <script defer type="module" src="js/intro.js?v=67-flatpile"></script>
+  <script defer type="module" src="js/intro.js?v=73-splash"></script>
 
   <!-- Resume notification toast -->
   <div id="resume-toast" class="resume-toast" role="alert" aria-live="polite">

@@ -62,25 +62,27 @@ const projectData = {
     ],
     gallery: ["Images/ProjectPhotos/STRATOS.png"]
   },
-  website: {
-    title: "Personal Portfolio Website",
-    description: "A modern portfolio website showcasing projects and technical expertise through interactive 3D animations and responsive design. Built as a vanilla JavaScript Single Page Application, the site features custom routing, Three.js 3D model rendering, and GSAP animations. The implementation prioritizes performance optimization and cross-device compatibility while demonstrating proficiency in modern web development practices including component architecture, asset management, and progressive enhancement strategies.",
-    tech: ["HTML5", "CSS3", "JavaScript", "GSAP", "Three.js", "Responsive Design", "Web Performance"],
-    image: "Images/ProjectPhotos/THOMAS.gif",
+  harboros: {
+    title: "HarborOS — Maritime Defense Platform",
+    description: "Maritime awareness and operator decision-support platform for contested littoral defense. HarborOS turns raw AIS vessel traffic into actionable operator decisions through a four-stage pipeline: detect suspicious behavior across 11 research-backed anomaly detectors, assess risk with a Mamdani fuzzy inference engine, recommend MARSEC-aligned actions, and verify with Sentinel-2 satellite imagery pulled directly from Copernicus. Every alert is explainable; every risk score shows its work.",
+    tech: ["Python", "FastAPI", "Next.js", "TypeScript", "MapLibre GL", "SQLAlchemy", "Fuzzy Inference", "Sentinel-2"],
+    image: "Images/ProjectPhotos/HARBOROS.gif",
     features: [
-      { title: "Custom 3D Animations and Models", detail: "Three.js-powered 3D model rendering with optimized loading strategies, dynamic model switching, and interactive controls for enhanced visual engagement" },
-      { title: "Single Page Application (SPA) Architecture", detail: "Custom routing and state management system built in vanilla JavaScript, enabling seamless navigation without page reloads and improved user experience" },
-      { title: "Responsive Design for All Device Sizes", detail: "Modern CSS Grid and Flexbox layouts ensure optimal viewing experience across desktop, tablet, and mobile devices with adaptive breakpoints" },
-      { title: "Interactive Project Showcase Wheel", detail: "3D rotating carousel displaying featured projects with drag-to-spin functionality, auto-rotation, and smooth animations using GSAP and CSS transforms" },
-      { title: "Optimized Loading and Performance", detail: "Lazy loading strategies, asset optimization, and progressive enhancement ensure fast initial load times and smooth interactions across all connection speeds" },
-      { title: "Cross-Browser Compatibility", detail: "Progressive enhancement approach guarantees consistent functionality across modern browsers with graceful fallbacks for older browser versions" }
+      { title: "11 Research-Backed Anomaly Detectors", detail: "AIS Gap (IMO Res. A.1106), Loitering (F(c) course-change intensity), Geofence Breach (ray-casting), Kinematic Implausibility (GPS spoofing), Type Mismatch (identity deception), Speed Anomaly, Heading Anomaly, Zone Lingering, Statistical Outlier (z-score vs. regional fleet), Collision Risk (Mou et al. 2021 CPA/TCPA), and Dark Ship optical detection. All vessel-type-aware — thresholds adjust per cargo, tanker, fishing, passenger, military, and high-speed craft." },
+      { title: "Mamdani Fuzzy Risk Scoring", detail: "Three-input fuzzy inference engine (anomaly severity, metadata deficiency, inspection risk) evaluates 16 fuzzy rules and defuzzifies with a blended centroid + weighted-mean-of-maxima approach to produce a continuous 0–100 risk score. Design principle: anomaly drives risk; metadata gaps amplify but don't create suspicion on their own." },
+      { title: "One-Click Sentinel-2 Satellite Verification", detail: "Click any vessel on the map → Request Satellite Imagery → the console pulls the latest Copernicus Sentinel-2 scene for the vessel's bounding box and overlays it on the map. No tab-switch, no handoff — verification happens inline." },
+      { title: "Nine-Sector Global Watch", detail: "Heatmap rendering across nine contested waterways, drilling down into individual vessel tracks as you zoom. Every sector preseeded with geofences, traffic lanes, and sector-specific risk thresholds." },
+      { title: "MARSEC-Aligned Action Tiers", detail: "Score 80–100 → ESCALATE (MARSEC 3, immediate interdiction). 60–79 → VERIFY (MARSEC 2, request satellite). 35–59 → MONITOR (MARSEC 1, log activity). 0–34 → NORMAL. Operator always knows what to do next." },
+      { title: "Signal Aggregation with Diversity Bonus", detail: "Signals weighted by defense priority (Critical 1.00, High 0.85–0.95, Medium 0.70–0.80, Lower 0.40–0.60). Multiple distinct signal types trigger an 8%–18% diversity bonus — converging evidence from different detectors is far more suspicious than repeated signals of one kind." }
     ],
-    technical: "The site implements a custom SPA router with hash-based navigation and dynamic content loading. Three.js handles 3D model rendering with lazy loading and level-of-detail optimization, while GSAP provides hardware-accelerated animations with timeline control. The styling system uses CSS Grid and Flexbox with custom properties for theme customization. Performance optimizations include code splitting, asset preloading, and intersection observers for viewport-based lazy loading.",
+    technical: "FastAPI backend with SQLAlchemy + SQLite persists vessel domain models, anomaly signals, and fuzzy risk scores. The ingestion service streams live AIS data, passes position reports through the 11 detectors, then feeds aggregated signals into the fuzzy inference engine. Frontend is Next.js + TypeScript + Tailwind with MapLibre GL rendering the map, heatmap, and per-sector drill-downs. Data adapters integrate AISStream, Copernicus Sentinel-2, NWS weather, and USCG port state control records. The Sentinel-2 satellite verification path pulls the latest scene for a vessel's bounding box on demand.",
     links: [
-      { text: "Live Website", url: "https://thomasou.com", type: "live" },
-      { text: "Source Code", url: "https://github.com/Smokeybear10/PortfolioWebsite-Ver2.0", type: "github" }
+      { text: "Source Code", url: "https://github.com/Smokeybear10/H4BOR", type: "github" },
+      { text: "Algorithm Reference", url: "#", type: "docs", error: "See docs/ALGORITHM.md in repo" }
     ],
-    gallery: ["Images/ProjectPhotos/THOMAS.gif", "Images/ProjectPhotos/THOMAS2.gif"]
+    gallery: [
+      "Images/ProjectPhotos/HARBOROS.gif"
+    ]
   },
   poker: {
     title: "Bayesian Poker Analysis Engine with Monte Carlo CFR",
