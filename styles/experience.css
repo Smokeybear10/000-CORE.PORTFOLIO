@@ -485,8 +485,27 @@ html, body {
 /* Enhanced card styles with stagger animations */
 .cards-container {
   display: grid;
+  grid-template-columns: 1fr;  /* explicit 1-col so nothing inherits a wider/narrower auto */
   gap: 0.75rem;
   margin: 2rem 0;
+}
+
+/* High-specificity overrides — poker.css sets a global `.card { width: 132px; height: 186px;
+   cursor: pointer; transform-style: preserve-3d; ... }` for the poker playing cards, which
+   cascades into our experience cards and shrinks them. These rules undo that. */
+#experience-content .cards-container > .card {
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0;
+  max-width: none;
+  transform-style: flat;
+  cursor: default;
+  will-change: auto;
+  transition: none;
+}
+#experience-content .cards-container > .card:hover {
+  transform: translateY(0) !important;
+  filter: none !important;
 }
 
 .card {
