@@ -206,20 +206,8 @@ function startExperience(mode) {
   }
 }
 
-const modeSplash = document.getElementById('mode-splash');
-if (modeSplash) {
-  modeSplash.addEventListener('click', (e) => {
-    const btn = e.target.closest('[data-mode]');
-    if (!btn) return;
-    const mode = btn.dataset.mode;
-    modeSplash.classList.add('fading');
-    setTimeout(() => modeSplash.remove(), 820);
-    startExperience(mode);
-  });
-} else {
-  // No splash in the DOM — fall back to the default (3D).
-  startExperience('3d');
-}
+// Splash disabled — auto-start the 3D experience (intro cinematic plays).
+startExperience('3d');
 
 skipBtn?.addEventListener('click', () => {
   mode = MODES.SEATED;
@@ -2003,25 +1991,24 @@ function drawBody(ctx, x, y, w, paragraphs, opts = {}) {
     : "italic 30px Georgia, 'Times New Roman', serif";
   const lineH = tabular ? 42 : 44;
   let cy = y;
-  let dcW = 0;
-  const DROP_SIZE = 132;          // Drop cap height — ~3 body lines
-  const DROP_LINES = 3;           // How many body lines wrap around the drop cap
+  const DROP_SIZE = 132;
 
   if (dropCap) {
     ctx.save();
     ctx.font = `900 italic ${DROP_SIZE}px Georgia, 'Times New Roman', serif`;
     ctx.fillStyle = '#7a1a2e';
     ctx.textBaseline = 'top';
-    dcW = ctx.measureText(dropCap).width + 22;
-    // Italic overshoot — nudge up a hair so the drop cap's visible top lines up with body cap-height
-    ctx.fillText(dropCap, x, y - 10);
+    const m = ctx.measureText(dropCap);
+    const visualRight = m.actualBoundingBoxRight ?? m.width;
+    // Drop cap sits in the left gutter so its visual right edge meets the column
+    // margin. Body text stays at the column margin — every paragraph aligns left.
+    ctx.fillText(dropCap, x - visualRight - 12, y - 10);
     ctx.restore();
   }
 
   ctx.font = bodyFont;
   ctx.fillStyle = '#1a0f08';
   ctx.textAlign = 'left'; ctx.textBaseline = 'top';
-  let linesEmitted = 0;
 
   for (let pIdx = 0; pIdx < paragraphs.length; pIdx++) {
     const p = paragraphs[pIdx];
@@ -2040,28 +2027,11 @@ function drawBody(ctx, x, y, w, paragraphs, opts = {}) {
       continue;
     }
 
-    let pX = x;
-    let pW = w;
-    if (dropCap && linesEmitted < DROP_LINES) {
-      pX = x + dcW;
-      pW = w - dcW;
-    }
-
-    let lines = wrapText(ctx, p, pW);
-    let i = 0;
-    while (i < lines.length) {
+    const lines = wrapText(ctx, p, w);
+    for (const line of lines) {
       ctx.fillStyle = '#1a0f08';
-      ctx.fillText(lines[i], pX, cy);
+      ctx.fillText(line, x, cy);
       cy += lineH;
-      linesEmitted++;
-      i++;
-      // Exiting the drop-cap indent zone — re-wrap remaining text at full column width
-      if (dropCap && linesEmitted === DROP_LINES && i < lines.length) {
-        const remaining = lines.slice(i).join(' ');
-        pX = x; pW = w;
-        lines = wrapText(ctx, remaining, pW);
-        i = 0;
-      }
     }
     cy += lineH * 0.38; // paragraph spacing
   }
