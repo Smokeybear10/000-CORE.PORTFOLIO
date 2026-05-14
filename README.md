@@ -1,8 +1,8 @@
 # THOMAS | Personal Portfolio
 
-A single-page portfolio site with custom SPA routing, interactive 3D models, and scroll-driven animations. No frameworks — vanilla JavaScript, Three.js, and CSS.
+**Live demo: [thomasou.com](https://thomasou.com)**
 
-Live at [thomasou.com](https://thomasou.com)
+A single-page portfolio site with custom SPA routing, interactive 3D models, and scroll-driven animations. No frameworks — vanilla JavaScript, Three.js, and CSS.
 
 ![Portfolio Demo](Images/ProjectPhotos/THOMAS.gif)
 
